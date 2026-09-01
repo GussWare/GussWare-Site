@@ -1,0 +1,42 @@
+/**
+ * Central asset registry using the exact provided Stitch design images and resources
+ */
+
+export const ASSETS = {
+  // Brand Logo Mark
+  logo: 'https://lh3.googleusercontent.com/aida/AEtjO1VEk-nz-v-S6hyBWEuVyO2ecK8-TW6yuRHOSviWcj1AGKnoEmmNDIBBUB9T_d5_J3sDMeItVYQe3It-dc5ksl-y_xQssX4xj0pacUVJGagcnqw8JC3NepL5u5wk8nVuPTdeU0m_Yxned7U4_ZvImDRZACDVAknGjY9UL98Muk5bcJeTqYrv_n8H76Wqp-sz8EhyM_Gf2atuMl2yiUogTeEgRZ_ADPCT6yaeDjuSE9i5lrTK5ei2q25iKT8',
+  
+  // Hero Visual: Business editorial with geometric overlay & diverse tech team
+  heroVisual: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDvGLHYWymJdvRhCXXPwx0SAq-SHzF2Xx_Ly5Qn2EzfsJYgm8348KRnXAWTHFFVr1NWEMUWM-36JCH4dYCsWRLa70Qn0cIODvhIq4MPdy-SuOHkuHoqvoVaZjd0F5ERcZSt2V_3ZBwP56OF_T9NUK4rMoPzhZdRQYvGkxwIeKFrU6UzWZWQgmcp4thNG6ynQw_1Ld2mC-yUlmoUnLe35sa7100VLG994RAVqC_FCph-s_PLw7h4Bdg8',
+  
+  // Author Profile
+  sarahJenkins: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBI1q3UvSneKna_9hbUathxFuEYr6LXiF0KOCxvD0QrhyorK8dJTVHF4OEXWdTp6GlFfKL3cMJftBiJqNmXTJ1Ks4oSO5_c4GaRFXcethPAt_7k5ZSptyUNTI9ukxXEeq1bfygCEbIZNmhbG9_z0xsTbVwnmpvRNRh-Orab8Zy5TL0upvdqQwQM4GRd3Bdd7HRxWIbOGCygT7lvTHNWR1wojDA_dcp78W7QiZEpLkyP-7FARXKZ47Qp',
+  
+  // Blog Post Main Image: Modular node network visualization
+  systemArchitecture: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBbLtMLPCHoyQ6aa2Sk7TDDC-gO1EsuravjG8w1bJD7TKcU7Yh-jAAQX3fzQMXUeyo3j_gq_f2_ynSvUOeJ5biv9DIWiepIKTaHxcQZi0V0yH5f9GiW2-XAUgcSm6gUVsDIqSD6xOThJxpIC5S0UoOFlYi4aWk6Wpvh2B8Bw0xPH6XPHA2U7-p0c6W7Yk6tZFSm-X_vWI1_7kD9WiNs6bJ4nnibCV5Y-bBPJ_RTBT4DTMhnO_RdprTB',
+  
+  // Blog Grid / Related:
+  // 1. Modular components / blocks
+  modularComponents: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC_36O-vq9sQlg_EixM50hZre93LDoFcYyQuUFNBqFZ7-IW0DE8Z9teX6xAh8wKeadJ6oxJ84fL3NjMUYuRHarsSPeANNCNmkY_uLhM87AarL8YzhP6rSarM2EUvBb4AH6CWkk6LxqsleNgZWbF0wJ_JefOze6O78_T-uDb0xfjq8PIYUDEO0Ppk7tnObG1XGnbZU9YO22FNG-E7AV_VtLKhPA6Y2iGVH6sFj_A4XathAvuVG2W2sJ3',
+  // 2. UI Wireframe / Constructivist
+  uiWireframe: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAs4yVv9uAhAmpeqi7B7RHiOQ6B2TZmscQ0dUYQyaHHfFgk4pJcbI5x-0X4ZDg1lvOuiutPHjaZYyLL2Gszcp4_CvwXhosHLS2-uktv80YOKHzkJF1P_sUE1dmVCQOQc1DnCxwa1kWehuapSq13kFkhK0P1w8GgtWLdPH2j40MVifOSu21-gD-yXC2npb2aULKo4I90c-ChA_e-29b28fv2hYnvYKDnFSatjkpIhaawgugG0j4VQasP',
+  // 3. Team Whiteboard Collaboration
+  teamCollaboration: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCK8vpcUThQOaU-3TwsUeVg91O5xsSvchksqD-JJCo5scQvPM_pZSOq8QLlboRRkYnNYWfelGlb6N6GI_2oUqzjVyLcKMLKwDvFODadgfoGc2I8Rz0llKTOmJPiF8s1PImkpup0jNYNyBBP9_EGl3AvqJoeQ8xf97KJk7g06q7TAbp2rOaVDAIWxFOy8zO4mlUt2p-Ragh4an6UIeMxN9_CUsOD7eMC-K_CbIxqlAsQd6yQGRBgp5KJ',
+  
+  // Blog Hero Featured
+  blogHeroWorkspace: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDWvm31uvRXQGcD3ljIodjiY8YVP17Y3k7IchxrsQ--CKJbCnDz-KEnlDFuPfjeov-dc_2G6lXn8w-rsBT6_lgKGOI3dY8a4ZKEiEtMZ9EAvszZNPN2Vjv7CJiNfZxhhTQwha6qRH9txNJZw5ZSRUKEZaoIRIRGOAi0SIRDy3JOG8OJdCIiQ0f7ONzDafJntsZsMQyEntL9rCqzQQ3zWNHvCtRudc-Vr6jk-SVr-IuQQHBg1wI2YcRn',
+  
+  // Blog Card 1: Mobile Apps Cross Platform
+  mobileDevelopment: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB8E7SPLbuqNqRVRr8zuYL0uqzhZPr-9Gl7NgxQvLaBvQtPJYI3A2j5NxZTm9yVBsrEdVIIj_9cf0U7oxvbVty1CLVFq_qXjmk6MAlh9_qNZm0ojvFWFo55qbOYSCToW-3w1GwRVvFRW0xr025pF0YwDO2P74TWVZdMHdNl5H_8cLg7ddNCpui-4uS-O5YnKI8TKKSEjE445PHYYM5fURr_k2biRFd_VBeJfC6ln2qLYEvk2f61pl5e',
+  // Blog Card 2: Conference table blueprints
+  businessFreelance: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA-LoyjCXgWvcRQ7ea5RbqRCiRyuVbNRunMjEwJVDQSkBE6f6IN3GUwSuXUqejVAAHp9f2b8QeVHg1RasCexdI9jpqzKcbXj2uI9Fv1F53qvdHTtIVLwhQ2Lj968T6_fZ_Zcy4oT9RtXJX6FWSDgJBfiE3Z4Dy39f23FNBa8wvJq6fKVy9njBwghWscFl0J-sMKwZOUstmjclg-oZZeYtJVmiLVHkuyboV2Uy544avyIdDGapaUmLUK',
+  // Blog Card 3: Security lock / APIs
+  securityApis: 'https://lh3.googleusercontent.com/aida-public/AB6AXuADLNN7RR9R39AcAA3vuehTNG1T4FbZR-dGytWlMzVoC6AjpWzJqCIQZL_Kc1TSuh8dajMsI8tg6109RnQaJnn33o6SaOw91uKyqnWI5zcWAZE9f0KeVwHCAjgOfIev6kbi69BFaudNM4KYeuEu2ya3X6QwY6_zNV9wq6_RsfKyRXxZ_87uUSTDPjNOu8AvYFDj612xSMX86U29kI4uNWRRJDJUefuqZSV6D6peK2C_LKL3MV7x-TGm',
+  
+  // Featured Project: Enterprise Resource Planner
+  erpProject: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDAOtTufxb9WnCfWgHGC-tB6BZSeGyj3X0EzPkMz5n0d14Qhi8VBBNahdUyIkgOhJlvvlr6NJ_O9HU76ekalQfvVlkw21MvvhUTJ7DkGy1uJjwDWHA0T-mNURPtliaS5XIwpSmlN-YrNLLl9hTWXvoA7y_7wM_zRnKCsXGtORJ5JYvWUhpmwdtNzrBYGcSFDpmYKLGsC0pUh1H81ds-_9l4JAoML6YZhXAhZn8g15sQ9mu1r1LbNbPb',
+  
+  // Process Slides
+  processDiscover: 'https://lh3.googleusercontent.com/aida-public/AB6AXuABI_64x9JyzisEYfa1zmFCPzAP0APTDkdc-Siwo8nPxsNEz-0l5zUq8A2CEHNg0SH74SxzlgfVS-l-drN0yuHKjRJV30gtK9gIIrJDqATkx6mswwcOc1lKNd2KFttBTWUfyzPQ0hTnaU4j7eJ-WqBwXpVsNAXBHTh9JSOcanPjEwZtMyo2rgCPKiObet1hJMSXg8wqXVXfCIeKESfm9FevHIjRFZoqXjiZ0DXR5NVOiZj5ojNrbWoy',
+  processDefine: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDvGLHYWymJdvRhCXXPwx0SAq-SHzF2Xx_Ly5Qn2EzfsJYgm8348KRnXAWTHFFVr1NWEMUWM-36JCH4dYCsWRLa70Qn0cIODvhIq4MPdy-SuOHkuHoqvoVaZjd0F5ERcZSt2V_3ZBwP56OF_T9NUK4rMoPzhZdRQYvGkxwIeKFrU6UzWZWQgmcp4thNG6ynQw_1Ld2mC-yUlmoUnLe35sa7100VLG994RAVqC_FCph-s_PLw7h4Bdg8',
+};
