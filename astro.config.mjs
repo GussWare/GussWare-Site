@@ -3,16 +3,17 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@astrojs/react';
 
 export default {
-  // Modo SSG - por defecto y objetivo de RGW-016
-  // No configurar SSR ni adapters (out of scope de esta tarea)
+  // SSG - Estrategia de rendering explícita (RGW-19)
+  // Astro generará un sitio estático durante el build.
+  // No configurar SSR ni adapters de servidor (out of scope).
   
-  // TypeScript está habilitado por defecto con la configuración existente
+  // TypeScript está habilitado por defecto con la configuración existente.
   
   // Integración de React para Astro (RGW-18)
-  // Permite utilizar React Islands cuando sea necesario
+  // Permite utilizar React Islands cuando sea necesario.
   integrations: [react()],
   
-  // Integración de Tailwind CSS 4 mediante Vite
+  // Integración de Tailwind CSS 4 mediante Vite (RGW-17)
   vite: {
     plugins: [tailwindcss()],
   },
@@ -22,7 +23,12 @@ export default {
   // - RGW-018: React Integration / Islands  
   // - RGW-019: SSG modes
   
-  // ssr: false,  // SSG mode is default
+  // SSG modo explícito -output: "static" o equivalente.
+  // Por defecto Astro genera SSG cuando no hay SSR adapter.
+  // Este campo lo añadimos para hacerla explícita y documentada.
+  output: "static",
   
-  // integrations: []  // No add more adapters yet (RGW-19 will configure SSG)
+  // ssr: false,  // SSG mode is default - commented per spec to avoid redundancy
+  
+  // integrations: [react()]  // React integration maintained for RGW-18
 };
