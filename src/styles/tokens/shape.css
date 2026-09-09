@@ -1,0 +1,8 @@
+:root {
+    /* Border Radius */
+    --radius-none: 0px;
+
+    /* Stroke Width */
+    --stroke-width-default: 1px;
+    --stroke-width-strong: 2px;
+}

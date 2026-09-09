@@ -1,17 +1,26 @@
 ---
-
+import "../styles/global.css";
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>GussWare</title>
+  </head>
+
+  <body>
+    <h1>Astro</h1>
+
+    <div class="bg-brand-primary p-8 text-brand-surface">
+      GussWare Design System
+    </div>
+
+    <div class="bg-gw-action-primary p-8 text-gw-action-primary-on">
+      Semantic token test
+    </div>
+  </body>
 </html>
