@@ -1,0 +1,201 @@
+@theme {
+  /* ============================================================
+     Colors — Brand
+     ============================================================ */
+
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-secondary: var(--brand-secondary);
+  --color-brand-accent: var(--brand-accent);
+  --color-brand-surface: var(--brand-surface);
+  --color-brand-surface-secondary: var(--brand-surface-secondary);
+  --color-brand-highlight: var(--brand-highlight);
+
+  /* ============================================================
+     Colors — Supporting
+     ============================================================ */
+
+  --color-supporting-blue-dark: var(--supporting-blue-dark);
+  --color-supporting-blue-container: var(--supporting-blue-container);
+  --color-supporting-blue-fixed: var(--supporting-blue-fixed);
+  --color-supporting-blue-fixed-dim: var(--supporting-blue-fixed-dim);
+  --color-supporting-blue-fixed-on: var(--supporting-blue-fixed-on);
+  --color-supporting-blue-fixed-on-variant: var(
+    --supporting-blue-fixed-on-variant
+  );
+
+  --color-supporting-secondary-fixed-on: var(--supporting-secondary-fixed-on);
+  --color-supporting-secondary-fixed-on-variant: var(
+    --supporting-secondary-fixed-on-variant
+  );
+
+  --color-supporting-tertiary: var(--supporting-tertiary);
+  --color-supporting-tertiary-container: var(--supporting-tertiary-container);
+  --color-supporting-tertiary-on-container: var(
+    --supporting-tertiary-on-container
+  );
+  --color-supporting-tertiary-fixed: var(--supporting-tertiary-fixed);
+  --color-supporting-tertiary-fixed-dim: var(--supporting-tertiary-fixed-dim);
+  --color-supporting-tertiary-fixed-on: var(--supporting-tertiary-fixed-on);
+  --color-supporting-tertiary-fixed-on-variant: var(
+    --supporting-tertiary-fixed-on-variant
+  );
+
+  --color-supporting-ink: var(--supporting-ink);
+  --color-supporting-neutral: var(--supporting-neutral);
+  --color-supporting-background: var(--supporting-background);
+  --color-supporting-on-background: var(--supporting-on-background);
+  --color-supporting-surface-dim: var(--supporting-surface-dim);
+  --color-supporting-outline: var(--supporting-outline);
+  --color-supporting-outline-variant: var(--supporting-outline-variant);
+  --color-supporting-surface-tint: var(--supporting-surface-tint);
+
+  /* ============================================================
+     Colors — State
+     ============================================================ */
+
+  --color-state-error: var(--state-error);
+  --color-state-error-on: var(--state-error-on);
+  --color-state-error-container: var(--state-error-container);
+  --color-state-error-on-container: var(--state-error-on-container);
+
+  /* ============================================================
+     Colors — Semantic
+     ============================================================ */
+
+  /*
+   * Semantic tokens already exist in semantic.css.
+   * The gw- prefix prevents namespace collisions inside @theme.
+   */
+
+  --color-gw-brand-primary: var(--color-brand-primary);
+  --color-gw-brand-secondary: var(--color-brand-secondary);
+  --color-gw-brand-accent: var(--color-brand-accent);
+
+  --color-gw-surface-primary: var(--color-surface-primary);
+  --color-gw-surface-secondary: var(--color-surface-secondary);
+  --color-gw-surface-auxiliary: var(--color-surface-auxiliary);
+  --color-gw-surface-dim: var(--color-surface-dim);
+
+  --color-gw-highlight: var(--color-highlight);
+
+  --color-gw-text-primary: var(--color-text-primary);
+  --color-gw-text-secondary: var(--color-text-secondary);
+  --color-gw-text-muted: var(--color-text-muted);
+
+  --color-gw-border-default: var(--color-border-default);
+  --color-gw-border-subtle: var(--color-border-subtle);
+
+  --color-gw-action-primary: var(--color-action-primary);
+  --color-gw-action-primary-on: var(--color-action-primary-on);
+  --color-gw-action-secondary: var(--color-action-secondary);
+  --color-gw-action-secondary-on: var(--color-action-secondary-on);
+
+  --color-gw-state-error: var(--color-state-error);
+  --color-gw-state-error-on: var(--color-state-error-on);
+  --color-gw-state-error-container: var(--color-state-error-container);
+  --color-gw-state-error-on-container: var(--color-state-error-on-container);
+
+  /* ============================================================
+     Spacing
+     ============================================================ */
+
+  --spacing-0: var(--space-0);
+  --spacing-1: var(--space-1);
+  --spacing-2: var(--space-2);
+  --spacing-3: var(--space-3);
+  --spacing-4: var(--space-4);
+  --spacing-5: var(--space-5);
+  --spacing-6: var(--space-6);
+  --spacing-8: var(--space-8);
+  --spacing-10: var(--space-10);
+  --spacing-12: var(--space-12);
+  --spacing-16: var(--space-16);
+  --spacing-20: var(--space-20);
+  --spacing-24: var(--space-24);
+  --spacing-30: var(--space-30);
+
+  /* ============================================================
+     Typography — Font Family
+     ============================================================ */
+
+  --font-base: var(--font-family-base);
+
+  /* ============================================================
+     Typography — Font Size
+     ============================================================ */
+
+  --text-display-lg: var(--font-size-display-lg);
+  --text-display-lg--line-height: var(--line-height-display-lg);
+  --text-display-lg--font-weight: var(--font-weight-display-lg);
+  --text-display-lg--letter-spacing: var(--letter-spacing-display-lg);
+
+  --text-headline-lg: var(--font-size-headline-lg);
+  --text-headline-lg--line-height: var(--line-height-headline-lg);
+  --text-headline-lg--font-weight: var(--font-weight-headline);
+  --text-headline-lg--letter-spacing: var(--letter-spacing-headline-lg);
+
+  --text-headline-md: var(--font-size-headline-md);
+  --text-headline-md--line-height: var(--line-height-headline-md);
+  --text-headline-md--font-weight: var(--font-weight-headline);
+
+  --text-body-lg: var(--font-size-body-lg);
+  --text-body-lg--line-height: var(--line-height-body-lg);
+  --text-body-lg--font-weight: var(--font-weight-body);
+
+  --text-body-md: var(--font-size-body-md);
+  --text-body-md--line-height: var(--line-height-body-md);
+  --text-body-md--font-weight: var(--font-weight-body);
+
+  --text-label-bold: var(--font-size-label-bold);
+  --text-label-bold--line-height: var(--line-height-label-bold);
+  --text-label-bold--font-weight: var(--font-weight-label);
+  --text-label-bold--letter-spacing: var(--letter-spacing-label-bold);
+
+  --text-navigation: var(--font-size-navigation);
+  --text-navigation--line-height: var(--line-height-navigation);
+  --text-navigation--font-weight: var(--font-weight-navigation);
+
+  /* ============================================================
+     Typography — Font Weight
+     ============================================================ */
+
+  --font-weight-gw-display-lg: var(--font-weight-display-lg);
+  --font-weight-gw-headline: var(--font-weight-headline);
+  --font-weight-gw-body: var(--font-weight-body);
+  --font-weight-gw-label: var(--font-weight-label);
+  --font-weight-gw-navigation: var(--font-weight-navigation);
+
+  /* ============================================================
+     Typography — Line Height
+     ============================================================ */
+
+  --leading-display-lg: var(--line-height-display-lg);
+  --leading-display-lg-mobile: var(--line-height-display-lg-mobile);
+  --leading-headline-lg: var(--line-height-headline-lg);
+  --leading-headline-md: var(--line-height-headline-md);
+  --leading-body-lg: var(--line-height-body-lg);
+  --leading-body-md: var(--line-height-body-md);
+  --leading-label-bold: var(--line-height-label-bold);
+  --leading-navigation: var(--line-height-navigation);
+
+  /* ============================================================
+     Typography — Letter Spacing
+     ============================================================ */
+
+  --tracking-display-lg: var(--letter-spacing-display-lg);
+  --tracking-display-lg-mobile: var(--letter-spacing-display-lg-mobile);
+  --tracking-headline-lg: var(--letter-spacing-headline-lg);
+  --tracking-label-bold: var(--letter-spacing-label-bold);
+
+  /* ============================================================
+     Shape
+     ============================================================ */
+
+  --radius-gw-none: var(--radius-none);
+
+  /* ============================================================
+     Layout
+     ============================================================ */
+
+  --container-gw: var(--container-max);
+}

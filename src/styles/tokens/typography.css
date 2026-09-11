@@ -1,0 +1,37 @@
+:root {
+  /* Font Family */
+  --font-family-base: 'Source Sans 3', sans-serif;
+
+  /* Font Size */
+  --font-size-display-lg: 64px;
+  --font-size-display-lg-mobile: 40px;
+  --font-size-headline-lg: 48px;
+  --font-size-headline-md: 32px;
+  --font-size-body-lg: 20px;
+  --font-size-body-md: 16px;
+  --font-size-label-bold: 14px;
+  --font-size-navigation: 15px;
+
+  /* Font Weight */
+  --font-weight-display-lg: 700;
+  --font-weight-headline: 600;
+  --font-weight-body: 400;
+  --font-weight-label: 700;
+  --font-weight-navigation: 600;
+
+  /* Line Height */
+  --line-height-display-lg: 72px;
+  --line-height-display-lg-mobile: 48px;
+  --line-height-headline-lg: 56px;
+  --line-height-headline-md: 40px;
+  --line-height-body-lg: 32px;
+  --line-height-body-md: 24px;
+  --line-height-label-bold: 20px;
+  --line-height-navigation: 20px;
+
+  /* Letter Spacing */
+  --letter-spacing-display-lg: -1.28px;
+  --letter-spacing-display-lg-mobile: -0.4px;
+  --letter-spacing-headline-lg: -0.48px;
+  --letter-spacing-label-bold: 0.7px;
+}
