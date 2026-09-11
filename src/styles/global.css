@@ -1,52 +1,52 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-@import "./tokens/brand.css";
-@import "./tokens/supporting.css";
-@import "./tokens/state.css";
-@import "./tokens/semantic.css";
-@import "./tokens/typography.css";
-@import "./tokens/spacing.css";
-@import "./tokens/shape.css";
-@import "./tokens/layout.css";
+@import './tokens/brand.css';
+@import './tokens/supporting.css';
+@import './tokens/state.css';
+@import './tokens/semantic.css';
+@import './tokens/typography.css';
+@import './tokens/spacing.css';
+@import './tokens/shape.css';
+@import './tokens/layout.css';
 
-@import "theme.css";
+@import 'theme.css';
 
 /* ============================================================
    Global Base
    ============================================================ */
 
 :root {
-    font-family: var(--font-family-base);
-    color: var(--color-text-primary);
-    background-color: var(--color-surface-primary);
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
+  font-family: var(--font-family-base);
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-primary);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
 }
 
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 body {
-    min-width: 320px;
-    margin: 0;
-    background-color: var(--color-surface-primary);
-    color: var(--color-text-primary);
+  min-width: 320px;
+  margin: 0;
+  background-color: var(--color-surface-primary);
+  color: var(--color-text-primary);
 }
 
 img,
 svg {
-    display: block;
-    max-width: 100%;
+  display: block;
+  max-width: 100%;
 }
 
 button,
 input,
 textarea,
 select {
-    font: inherit;
+  font: inherit;
 }
 
 button {
-    cursor: pointer;
+  cursor: pointer;
 }

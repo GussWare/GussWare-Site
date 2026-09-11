@@ -1,36 +1,36 @@
 :root {
-    /* Brand */
-    --color-brand-primary: var(--brand-primary);
-    --color-brand-secondary: var(--brand-secondary);
-    --color-brand-accent: var(--brand-accent);
+  /* Brand */
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-secondary: var(--brand-secondary);
+  --color-brand-accent: var(--brand-accent);
 
-    /* Surface */
-    --color-surface-primary: var(--brand-surface);
-    --color-surface-secondary: var(--brand-surface-secondary);
-    --color-surface-auxiliary: var(--supporting-background);
-    --color-surface-dim: var(--supporting-surface-dim);
+  /* Surface */
+  --color-surface-primary: var(--brand-surface);
+  --color-surface-secondary: var(--brand-surface-secondary);
+  --color-surface-auxiliary: var(--supporting-background);
+  --color-surface-dim: var(--supporting-surface-dim);
 
-    /* Highlight */
-    --color-highlight: var(--brand-highlight);
+  /* Highlight */
+  --color-highlight: var(--brand-highlight);
 
-    /* Text */
-    --color-text-primary: var(--supporting-ink);
-    --color-text-secondary: var(--supporting-on-background);
-    --color-text-muted: var(--supporting-outline);
+  /* Text */
+  --color-text-primary: var(--supporting-ink);
+  --color-text-secondary: var(--supporting-on-background);
+  --color-text-muted: var(--supporting-outline);
 
-    /* Border */
-    --color-border-default: var(--supporting-outline);
-    --color-border-subtle: var(--supporting-outline-variant);
+  /* Border */
+  --color-border-default: var(--supporting-outline);
+  --color-border-subtle: var(--supporting-outline-variant);
 
-    /* Action */
-    --color-action-primary: var(--brand-accent);
-    --color-action-primary-on: var(--supporting-ink);
-    --color-action-secondary: var(--brand-secondary);
-    --color-action-secondary-on: var(--brand-surface);
+  /* Action */
+  --color-action-primary: var(--brand-accent);
+  --color-action-primary-on: var(--supporting-ink);
+  --color-action-secondary: var(--brand-secondary);
+  --color-action-secondary-on: var(--brand-surface);
 
-    /* State */
-    --color-state-error: var(--state-error);
-    --color-state-error-on: var(--state-error-on);
-    --color-state-error-container: var(--state-error-container);
-    --color-state-error-on-container: var(--state-error-on-container);
+  /* State */
+  --color-state-error: var(--state-error);
+  --color-state-error-on: var(--state-error-on);
+  --color-state-error-container: var(--state-error-container);
+  --color-state-error-on-container: var(--state-error-on-container);
 }
