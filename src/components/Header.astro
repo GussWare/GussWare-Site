@@ -1,0 +1,72 @@
+---
+/**
+ * Header — Maquetación fiel al diseño Stitch (GussWare Home - Complete Final Flow).
+ * Logo y menú principal dinámicos desde WordPress REST API vía
+ * `src/lib/wordpress` (este componente no llama a WordPress directamente).
+ * Reutiliza tokens existentes: colores, tipografía navigation/label-bold,
+ * espaciados y layout (container-max, gutter), shape rectilinear.
+ */
+import { getHeaderLogo } from '../lib/wordpress/logo';
+import { getHeaderMenu } from '../lib/wordpress/menu';
+
+const [logo, menuItems] = await Promise.all([getHeaderLogo(), getHeaderMenu()]);
+const topLevelItems = menuItems.filter((item) => item.parent === 0);
+---
+
+<header class="bg-gw-surface-primary sticky top-0 z-50 w-full border-b border-gw-border-subtle">
+  <div class="mx-auto flex h-16 w-full max-w-[var(--container-max)] items-center justify-between px-6">
+    <!-- Logo -->
+    <a
+      href="/"
+      aria-label="GussWare Home"
+      class="flex items-center gap-2 rounded focus:outline-none"
+    >
+      {logo ? (
+        <img src={logo.src} alt={logo.alt} class="block h-8 w-auto" />
+      ) : (
+        <span class="text-label-bold text-gw-text-secondary">GussWare</span>
+      )}
+    </a>
+
+    <!-- Desktop Navigation -->
+    <nav aria-label="Main Navigation" class="hidden items-center gap-8 md:flex">
+      {topLevelItems.map((item) => (
+        <a
+          href={item.url}
+          target={item.target || undefined}
+          class="text-navigation text-gw-text-secondary transition-colors duration-200 hover:text-brand-secondary"
+        >
+          {item.title}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Desktop CTA & Mobile Toggle (solo maquetación) -->
+    <div class="flex items-center gap-4">
+      <a
+        href="/contact"
+        class="text-label-bold hidden items-center justify-center rounded-none bg-gw-action-primary px-6 py-3 text-brand-surface transition-opacity hover:opacity-90 md:inline-flex"
+      >
+        Start a Conversation
+      </a>
+      <span class="text-gw-text-secondary p-2 md:hidden" aria-hidden="true">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <line x1="4" x2="20" y1="6" y2="6"></line>
+          <line x1="4" x2="20" y1="12" y2="12"></line>
+          <line x1="4" x2="20" y1="18" y2="18"></line>
+        </svg>
+      </span>
+    </div>
+  </div>
+</header>

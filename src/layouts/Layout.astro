@@ -1,13 +1,14 @@
 ---
+import Header from '../components/Header.astro';
+import '../styles/global.css';
+
 interface Props {
   title: string;
   description?: string;
 }
 
-const {
-  title,
-  description = 'GussWare — Soluciones tecnológicas',
-} = Astro.props;
+const { title, description = 'GussWare — Soluciones tecnológicas' } =
+  Astro.props;
 ---
 
 <!doctype html>
@@ -20,6 +21,7 @@ const {
   </head>
 
   <body>
+    <Header />
     <slot />
   </body>
 </html>
