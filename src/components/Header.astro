@@ -7,6 +7,8 @@
  * espaciados y layout (container-max, gutter), shape rectilinear.
  * Responsive solo visual (sin JS): nav completa en lg+, hamburger visual
  * en Tablet/Mobile, CTA visible desde sm.
+ * El botón hamburguesa abre/cierra el panel móvil con los mismos ítems
+ * de WordPress (único JS del componente, sin framework).
  */
 import { getHeaderLogo } from '../lib/wordpress/logo';
 import { getHeaderMenu } from '../lib/wordpress/menu';
@@ -46,7 +48,7 @@ const topLevelItems = menuItems.filter((item) => item.parent === 0);
       ))}
     </nav>
 
-    <!-- Desktop CTA & Mobile Toggle (solo maquetación, sin interacción) -->
+    <!-- Desktop CTA & Mobile Toggle -->
     <div class="flex items-center gap-4">
       <a
         href="/contact"
@@ -54,7 +56,14 @@ const topLevelItems = menuItems.filter((item) => item.parent === 0);
       >
         Start a Conversation
       </a>
-      <span class="text-gw-text-secondary p-2 lg:hidden" aria-hidden="true">
+      <button
+        type="button"
+        id="header-menu-toggle"
+        aria-expanded="false"
+        aria-controls="header-mobile-menu"
+        aria-label="Menú"
+        class="text-gw-text-secondary p-2 lg:hidden"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -71,7 +80,48 @@ const topLevelItems = menuItems.filter((item) => item.parent === 0);
           <line x1="4" x2="20" y1="12" y2="12"></line>
           <line x1="4" x2="20" y1="18" y2="18"></line>
         </svg>
-      </span>
+      </button>
     </div>
   </div>
+
+  <!-- Mobile Navigation (Tablet/Mobile; la abre el botón hamburguesa) -->
+  <div
+    id="header-mobile-menu"
+    class="border-gw-border-subtle bg-gw-surface-primary hidden border-t lg:hidden"
+  >
+    <nav
+      aria-label="Mobile Navigation"
+      class="mx-auto flex w-full max-w-[var(--container-max)] flex-col px-4 py-2 md:px-6"
+    >
+      {topLevelItems.map((item) => (
+        <a
+          href={item.url}
+          target={item.target || undefined}
+          class="text-navigation text-gw-text-secondary py-3 transition-colors duration-200 hover:text-brand-secondary"
+        >
+          {item.title}
+        </a>
+      ))}
+    </nav>
+  </div>
 </header>
+
+<script>
+  const toggle = document.getElementById('header-menu-toggle');
+  const menu = document.getElementById('header-mobile-menu');
+
+  if (toggle instanceof HTMLButtonElement && menu instanceof HTMLElement) {
+    const setOpen = (open) => {
+      menu.classList.toggle('hidden', !open);
+      toggle.setAttribute('aria-expanded', String(open));
+    };
+
+    toggle.addEventListener('click', () => {
+      setOpen(menu.classList.contains('hidden'));
+    });
+
+    menu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => setOpen(false));
+    });
+  }
+</script>
