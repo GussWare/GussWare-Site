@@ -10,8 +10,10 @@
  * El botón hamburguesa abre/cierra el panel móvil con los mismos ítems
  * de WordPress (único JS del componente, sin framework).
  */
-import { getHeaderLogo } from '../lib/wordpress/logo';
-import { getHeaderMenu } from '../lib/wordpress/menu';
+import { getHeaderLogo } from '../../lib/wordpress/logo';
+import { getHeaderMenu } from '../../lib/wordpress/menu';
+import Button from '../ui/Button.astro';
+import MenuButton from '../ui/MenuButton.astro';
 
 const [logo, menuItems] = await Promise.all([getHeaderLogo(), getHeaderMenu()]);
 const topLevelItems = menuItems.filter((item) => item.parent === 0);
@@ -50,37 +52,17 @@ const topLevelItems = menuItems.filter((item) => item.parent === 0);
 
     <!-- Desktop CTA & Mobile Toggle -->
     <div class="flex items-center gap-4">
-      <a
-        href="/contact"
-        class="text-label-bold hidden items-center justify-center rounded-none bg-gw-action-primary px-6 py-3 text-brand-surface transition-opacity hover:opacity-90 sm:inline-flex"
-      >
+      <Button href="/contact" variant="primary" class="hidden sm:inline-flex">
         Start a Conversation
-      </a>
-      <button
-        type="button"
+      </Button>
+
+      <MenuButton
         id="header-menu-toggle"
-        aria-expanded="false"
-        aria-controls="header-mobile-menu"
-        aria-label="Menú"
+        expanded={false}
+        controls="header-mobile-menu"
+        label="Menú"
         class="text-gw-text-secondary p-2 lg:hidden"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <line x1="4" x2="20" y1="6" y2="6"></line>
-          <line x1="4" x2="20" y1="12" y2="12"></line>
-          <line x1="4" x2="20" y1="18" y2="18"></line>
-        </svg>
-      </button>
+      />
     </div>
   </div>
 
@@ -102,12 +84,9 @@ const topLevelItems = menuItems.filter((item) => item.parent === 0);
           {item.title}
         </a>
       ))}
-      <a
-        href="/contact"
-        class="text-label-bold mt-2 flex items-center justify-center rounded-none bg-gw-action-primary px-6 py-3 text-brand-surface transition-opacity hover:opacity-90 md:hidden"
-      >
+      <Button href="/contact" variant="primary" class="mt-2 flex md:hidden">
         Start a Conversation
-      </a>
+      </Button>
     </nav>
   </div>
 </header>
