@@ -1,0 +1,44 @@
+---
+/**
+ * RGW-105 — Link global reutilizable.
+ *
+ * Siempre renderiza `<a>` semántico (nunca un Button). Variantes tomadas de
+ * los patrones de enlaces ya existentes en el proyecto:
+ * - nav → navegación del Header (`text-navigation`, hover secondary);
+ * - body → enlaces del Footer (`text-body-md`, hover blue-dark);
+ * - accent → enlace destacado del Footer (`text-gw-text-primary`, hover
+ *   `text-brand-accent`).
+ * Focus visible con anillo `supporting-blue-dark` (estado de Stitch).
+ * Stitch no define visited, active ni disabled → no se implementan.
+ */
+interface Props {
+  href: string;
+  target?: string;
+  variant?: 'nav' | 'body' | 'accent';
+  class?: string;
+}
+
+const {
+  href,
+  target = undefined,
+  variant = 'body',
+  class: className = '',
+} = Astro.props;
+
+const base =
+  'rounded-none transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
+
+const variants: Record<NonNullable<Props['variant']>, string> = {
+  nav: 'text-navigation text-gw-text-secondary hover:text-brand-secondary',
+  body: 'text-body-md text-gw-text-secondary hover:text-supporting-blue-dark',
+  accent: 'text-body-md text-gw-text-primary hover:text-brand-accent',
+};
+---
+
+<a
+  href={href}
+  target={target}
+  class={`${base} ${variants[variant]} ${className}`}
+>
+  <slot />
+</a>

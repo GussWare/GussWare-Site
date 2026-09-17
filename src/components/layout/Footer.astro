@@ -16,15 +16,15 @@
  * legal y copyright como secciones apiladas (legal primero);
  * Desktop lg+ intacto.
  */
-import { getHeaderLogo } from '../lib/wordpress/logo';
-import { getFooterMenu, getLegalMenu } from '../lib/wordpress/menu';
-import { getFooterDescription } from '../lib/wordpress/footer';
+import { getHeaderLogo } from '../../lib/wordpress/logo';
+import { getFooterMenu, getLegalMenu } from '../../lib/wordpress/menu';
+import { getFooterDescription } from '../../lib/wordpress/footer';
 
 const [logo, footerMenuItems, legalMenuItems, footer] = await Promise.all([
   getHeaderLogo(),
   getFooterMenu(),
   getLegalMenu(),
-  getFooterDescription()
+  getFooterDescription(),
 ]);
 
 const footerColumns = footerMenuItems

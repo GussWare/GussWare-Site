@@ -1,0 +1,58 @@
+---
+/**
+ * RGW-104 — Button global reutilizable.
+ *
+ * Variantes de Stitch con tokens existentes:
+ * - primary → `bg-gw-action-primary` + `text-brand-surface` (idéntico al CTA
+ *   del Header, incluido `hover:opacity-90`);
+ * - secondary → borde 2px `border-gw-text-primary`, hover con fondo ink y
+ *   texto `text-brand-surface`;
+ * - ghost → texto `text-brand-secondary` con subrayado en hover.
+ * Tipografía `text-label-bold`, `rounded-none`, spacing `px-6 py-3`.
+ * Focus visible con anillo `supporting-blue-dark` (estado de Stitch).
+ *
+ * Diferencias documentadas (regla 10, sin inventar valores):
+ * - el hover primario oscuro de Stitch no existe como token → se reutiliza
+ *   `hover:opacity-90`, patrón ya usado en el proyecto;
+ * - padding Stitch (12/24 y 10/22) → ritmo `px-6 py-3` del proyecto.
+ *
+ * Semántica: renderiza `<a>` si recibe `href`, `<button>` en otro caso.
+ */
+interface Props {
+  variant?: 'primary' | 'secondary' | 'ghost';
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  class?: string;
+}
+
+const {
+  variant = 'primary',
+  href = undefined,
+  type = 'button',
+  class: className = '',
+} = Astro.props;
+
+const base =
+  'inline-flex items-center justify-center rounded-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
+
+const variants: Record<NonNullable<Props['variant']>, string> = {
+  primary:
+    'text-label-bold bg-gw-action-primary text-brand-surface px-6 py-3 transition-opacity hover:opacity-90',
+  secondary:
+    'text-label-bold border-gw-text-primary text-gw-text-primary px-6 py-3 border-2 transition-colors duration-200 hover:bg-gw-text-primary hover:text-brand-surface',
+  ghost:
+    'text-navigation text-brand-secondary transition-colors duration-200 hover:underline',
+};
+
+const classes = `${base} ${variants[variant]} ${className}`;
+---
+
+{href ? (
+  <a href={href} class={classes}>
+    <slot />
+  </a>
+) : (
+  <button type={type} class={classes}>
+    <slot />
+  </button>
+)}

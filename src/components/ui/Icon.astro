@@ -1,0 +1,57 @@
+---
+/**
+ * RGW-107 — Icon global reutilizable.
+ *
+ * El proyecto no dispone de Lucide ni de otra biblioteca compatible y las
+ * reglas prohíben agregar dependencias, por lo que el componente resuelve
+ * los iconos necesarios para Button/Link con trazados inline estilo Lucide
+ * (viewBox 24, `stroke="currentColor"`, extremos redondeados):
+ * - `arrow-right` (acciones y enlaces internos);
+ * - `arrow-outward` (enlaces externos, patrón del Footer).
+ * No se agregan más iconos que estos.
+ *
+ * Tamaños del sistema (`size-3/4/5/6/8/10`, clases literales para que
+ * Tailwind las genere) y pesos (`standard` 1.5px, `emphasis` 2px).
+ * El color se hereda del texto (`currentColor`, como en Stitch).
+ */
+interface Props {
+  name: 'arrow-right' | 'arrow-outward';
+  size?: 3 | 4 | 5 | 6 | 8 | 10;
+  weight?: 'standard' | 'emphasis';
+  class?: string;
+}
+
+const {
+  name,
+  size = 4,
+  weight = 'standard',
+  class: className = '',
+} = Astro.props;
+
+const sizes: Record<NonNullable<Props['size']>, string> = {
+  3: 'size-3',
+  4: 'size-4',
+  5: 'size-5',
+  6: 'size-6',
+  8: 'size-8',
+  10: 'size-10',
+};
+
+const paths: Record<Props['name'], string> = {
+  'arrow-right': '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+  'arrow-outward': '<path d="M7 7h10v10"/><path d="M7 17 17 7"/>',
+};
+---
+
+<svg
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width={weight === 'emphasis' ? 2 : 1.5}
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class={`${sizes[size]} ${className}`}
+  aria-hidden="true"
+>
+  <Fragment set:html={paths[name]} />
+</svg>

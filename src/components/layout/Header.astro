@@ -10,8 +10,8 @@
  * El botón hamburguesa abre/cierra el panel móvil con los mismos ítems
  * de WordPress (único JS del componente, sin framework).
  */
-import { getHeaderLogo } from '../lib/wordpress/logo';
-import { getHeaderMenu } from '../lib/wordpress/menu';
+import { getHeaderLogo } from '../../lib/wordpress/logo';
+import { getHeaderMenu } from '../../lib/wordpress/menu';
 
 const [logo, menuItems] = await Promise.all([getHeaderLogo(), getHeaderMenu()]);
 const topLevelItems = menuItems.filter((item) => item.parent === 0);
