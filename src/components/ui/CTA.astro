@@ -1,0 +1,55 @@
+---
+/**
+ * RGW-114 — CTA global reutilizable (composición de contenido).
+ *
+ * Compone `SectionHeading` (eyebrow, título, descripción, alineación) con
+ * una fila de acciones que reutiliza `Button.astro` (sin duplicar botones).
+ * Fila `mt-8 flex flex-wrap gap-4` con tokens de spacing existentes.
+ */
+import Button from './Button.astro';
+import SectionHeading from './SectionHeading.astro';
+
+interface CtaAction {
+  label: string;
+  href: string;
+  variant?: 'primary' | 'secondary' | 'ghost';
+}
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  align?: 'left' | 'center';
+  actions?: CtaAction[];
+  class?: string;
+}
+
+const {
+  eyebrow = undefined,
+  title,
+  description = undefined,
+  align = 'left',
+  actions = [],
+  class: className = '',
+} = Astro.props;
+---
+
+<div class={className}>
+  <SectionHeading
+    eyebrow={eyebrow}
+    title={title}
+    description={description}
+    align={align}
+  />
+  {actions.length > 0 && (
+    <div
+      class={`mt-8 flex flex-wrap gap-4 ${align === 'center' ? 'justify-center' : 'justify-start'}`}
+    >
+      {actions.map((action) => (
+        <Button href={action.href} variant={action.variant ?? 'primary'}>
+          {action.label}
+        </Button>
+      ))}
+    </div>
+  )}
+</div>

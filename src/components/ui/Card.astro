@@ -1,0 +1,70 @@
+---
+/**
+ * RGW-113 — Card global reutilizable (tarjeta editorial de Stitch).
+ *
+ * Estructura de Stitch con tokens existentes: contenedor
+ * `bg-gw-surface-primary` + borde `border-gw-border-subtle` + `rounded-none`,
+ * imagen `4/3` con `Badge` superpuesto (`top-4 left-4`), cuerpo `p-6`,
+ * título `text-headline-md`, descripción `text-body-md`, metadatos
+ * `text-body-md text-gw-text-muted`.
+ * Hover con tokens (`group-hover:text-supporting-blue-dark`) y escala de
+ * imagen de Stitch; sin sombras (el sistema usa capas tonales, no sombras).
+ *
+ * Diferencia documentada: Stitch fija el título a 20px con un override sin
+ * token equivalente; se usa `headline-md` para conservar la jerarquía.
+ */
+import Badge from './Badge.astro';
+import Image from './Image.astro';
+
+interface Props {
+  image: { src: string; alt: string };
+  badge?: string;
+  title: string;
+  description?: string;
+  date?: string;
+  readingTime?: string;
+  class?: string;
+}
+
+const {
+  image,
+  badge = undefined,
+  title,
+  description = undefined,
+  date = undefined,
+  readingTime = undefined,
+  class: className = '',
+} = Astro.props;
+---
+
+<article
+  class={`bg-gw-surface-primary border-gw-border-subtle group flex h-full flex-col overflow-hidden rounded-none border ${className}`}
+>
+  <div class="relative">
+    <Image
+      src={image.src}
+      alt={image.alt}
+      ratio="4/3"
+      class="transition-transform duration-500 group-hover:scale-105"
+    />
+    {badge && (
+      <div class="absolute top-4 left-4">
+        <Badge>{badge}</Badge>
+      </div>
+    )}
+  </div>
+  <div class="flex flex-col p-6">
+    <h3 class="text-gw-text-primary text-headline-md group-hover:text-supporting-blue-dark mb-4 transition-colors duration-200">
+      {title}
+    </h3>
+    {description && (
+      <p class="text-gw-text-secondary text-body-md mb-6">{description}</p>
+    )}
+    {(date || readingTime) && (
+      <p class="text-gw-text-muted text-body-md mt-auto flex justify-between gap-4">
+        <span>{date}</span>
+        <span>{readingTime}</span>
+      </p>
+    )}
+  </div>
+</article>

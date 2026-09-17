@@ -1,0 +1,53 @@
+---
+/**
+ * RGW-112 — Image global reutilizable (elemento `<img>` nativo).
+ *
+ * El proyecto no utiliza `astro:assets` y las imágenes provienen de URLs
+ * remotas (WordPress), por lo que no se agrega integración nueva.
+ * Cubre lo definido por Stitch: `src`/`alt` (alt siempre requerido),
+ * proporciones (`4/3` tarjetas, `16/9` video, `1/1`), ajuste
+ * (`cover`/`contain`, ambos usados en Stitch), carga (`lazy`/`eager`) y
+ * esquinas `rounded-none` del sistema rectilinear.
+ */
+interface Props {
+  src: string;
+  alt: string;
+  ratio?: '4/3' | '16/9' | '1/1';
+  fit?: 'cover' | 'contain';
+  loading?: 'lazy' | 'eager';
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  ratio = undefined,
+  fit = 'cover',
+  loading = 'lazy',
+  class: className = '',
+} = Astro.props;
+
+const ratios: Record<NonNullable<Props['ratio']>, string> = {
+  '4/3': 'aspect-[4/3]',
+  '16/9': 'aspect-video',
+  '1/1': 'aspect-square',
+};
+
+const fits: Record<NonNullable<Props['fit']>, string> = {
+  cover: 'object-cover',
+  contain: 'object-contain',
+};
+---
+
+{ratio ? (
+  <div class={`${ratios[ratio]} w-full overflow-hidden rounded-none`}>
+    <img
+      src={src}
+      alt={alt}
+      loading={loading}
+      class={`h-full w-full ${fits[fit]} ${className}`}
+    />
+  </div>
+) : (
+  <img src={src} alt={alt} loading={loading} class={className} />
+)}
