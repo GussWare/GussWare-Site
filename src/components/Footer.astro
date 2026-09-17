@@ -11,17 +11,22 @@
  * ink-dark → gw-text-primary, outline-variant → gw-border-subtle,
  * primary (#00346e) → supporting-blue-dark, on-surface-variant →
  * gw-text-secondary, accent-orange → brand-accent.
+ * Responsive (propio, tokens existentes): marca 1 columna centrada;
+ * menú en 4 columnas en Mobile/Tablet (gap-4, md:gap-6);
+ * legal y copyright como secciones apiladas (legal primero);
+ * Desktop lg+ intacto.
  */
 import { getHeaderLogo } from '../lib/wordpress/logo';
 import { getFooterMenu, getLegalMenu } from '../lib/wordpress/menu';
 import { getFooterDescription } from '../lib/wordpress/footer';
 
-const [logo, footerMenuItems, legalMenuItems] = await Promise.all([
+const [logo, footerMenuItems, legalMenuItems, footer] = await Promise.all([
   getHeaderLogo(),
   getFooterMenu(),
   getLegalMenu(),
+  getFooterDescription()
 ]);
-const footer = await getFooterDescription();
+
 const footerColumns = footerMenuItems
   .filter((item) => item.parent === 0)
   .map((column) => ({
@@ -30,12 +35,16 @@ const footerColumns = footerMenuItems
   }));
 ---
 
-<footer class="border-gw-border-subtle bg-gw-surface-secondary text-gw-text-primary border-t pt-20 pb-10">
+<footer class="border-gw-border-subtle bg-gw-surface-secondary text-gw-text-primary border-t pt-8 pb-8 md:pt-10 md:pb-10 lg:pt-20 lg:pb-10">
   <div class="mx-auto w-full max-w-[var(--container-max)] px-4 md:px-6">
-    <div class="mb-16 grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-6">
-      <div class="pr-8 lg:col-span-2">
+    <div class="mb-16 grid grid-cols-1 gap-6 md:gap-12 lg:grid-cols-6">
+      <div class="col-span-full flex flex-col items-center text-center lg:col-span-2 lg:items-start lg:pr-8 lg:text-left">
         {logo ? (
-          <img src={logo.src} alt={logo.alt} class="mb-6 block h-8 w-auto" />
+          <img
+            src={logo.src}
+            alt={logo.alt}
+            class="mx-auto mb-6 block h-8 w-auto lg:mx-0"
+          />
         ) : (
           <div class="text-supporting-blue-dark text-headline-md mb-6">
             GussWare
@@ -47,39 +56,70 @@ const footerColumns = footerMenuItems
             {footer.footer_description}
           </p>
         )}
+
+        <a
+          href="/contact"
+          class="text-label-bold text-brand-accent hover:text-brand-primary transition-colors duration-200 lg:hidden"
+        >
+          Start a Conversation
+        </a>
       </div>
 
-      {footerColumns.map((column) => (
-        <div>
-          <h4
-            set:html={column.title}
-            class="text-supporting-blue-dark text-label-bold mb-6 uppercase"
-          />
-          <ul class="space-y-4">
-            {column.links.map((link) => (
-              <li>
-                <a
-                  href={link.url}
-                  target={link.target || undefined}
-                  set:html={link.title}
-                  class="text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200"
-                />
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+      <div class="col-span-full hidden grid-cols-4 gap-4 md:grid md:gap-6 lg:hidden">
+        {footerColumns.map((column) => (
+          <div class="flex flex-col items-center text-center">
+            <h4
+              set:html={column.title}
+              class="text-supporting-blue-dark text-label-bold mb-6 uppercase"
+            />
+            <ul class="space-y-4">
+              {column.links.map((link) => (
+                <li>
+                  <a
+                    href={link.url}
+                    target={link.target || undefined}
+                    set:html={link.title}
+                    class="text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200"
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <div class="hidden lg:contents">
+        {footerColumns.map((column) => (
+          <div class="flex flex-col items-center text-center lg:items-start lg:text-left">
+            <h4
+              set:html={column.title}
+              class="text-supporting-blue-dark text-label-bold mb-6 uppercase"
+            />
+            <ul class="space-y-4">
+              {column.links.map((link) => (
+                <li>
+                  <a
+                    href={link.url}
+                    target={link.target || undefined}
+                    set:html={link.title}
+                    class="text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200"
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
     </div>
 
-    <div class="border-gw-border-subtle flex flex-col items-center justify-between gap-4 border-t pt-8 md:flex-row">
-
+    <div class="border-gw-border-subtle flex flex-col items-center gap-6 border-t pt-8 lg:flex-row lg:justify-between lg:gap-4">
       {footer && footer.footer_copyright && (
-        <p class="text-gw-text-secondary text-body-md">
+        <p class="text-gw-text-secondary text-body-md order-2 lg:order-1">
           {footer.footer_copyright}
         </p>
       )}
 
-      <div class="flex gap-6">
+      <div class="order-1 flex gap-6 lg:order-2">
         {legalMenuItems.map((link) => (
           <a
             href={link.url}
