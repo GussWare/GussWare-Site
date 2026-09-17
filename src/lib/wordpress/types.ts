@@ -59,3 +59,8 @@ export interface HeaderMenuItem {
   menu_order: number;
   target: string;
 }
+
+export interface FooterDescription {
+  footer_description: string;
+  footer_copyright: string;
+}

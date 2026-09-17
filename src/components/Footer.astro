@@ -2,174 +2,92 @@
 /**
  * Footer global — Estructura del diseño Stitch adaptada al Design System
  * del proyecto (sin valores nuevos: solo tokens y variables existentes).
- * La columna Explore reutiliza el menú principal de WordPress vía
- * `src/lib/wordpress` (este componente no llama a WordPress directamente).
+ * La navegación del Footer (columnas y enlaces) proviene del menú
+ * `Footer` de WordPress y la marca reutiliza el logotipo de WordPress,
+ * ambos vía `src/lib/wordpress` (este componente no llama a WordPress
+ * directamente). Los `parent === 0` son títulos de columna y sus hijos
+ * los enlaces, ordenados por `menu_order`.
  * Mapeo Stitch → tokens: surface-secondary → gw-surface-secondary,
  * ink-dark → gw-text-primary, outline-variant → gw-border-subtle,
  * primary (#00346e) → supporting-blue-dark, on-surface-variant →
  * gw-text-secondary, accent-orange → brand-accent.
  */
-import { getHeaderMenu } from '../lib/wordpress/menu';
+import { getHeaderLogo } from '../lib/wordpress/logo';
+import { getFooterMenu, getLegalMenu } from '../lib/wordpress/menu';
+import { getFooterDescription } from '../lib/wordpress/footer';
 
-const menuItems = await getHeaderMenu();
-const exploreItems = menuItems.filter((item) => item.parent === 0);
+const [logo, footerMenuItems, legalMenuItems] = await Promise.all([
+  getHeaderLogo(),
+  getFooterMenu(),
+  getLegalMenu(),
+]);
+const footer = await getFooterDescription();
+const footerColumns = footerMenuItems
+  .filter((item) => item.parent === 0)
+  .map((column) => ({
+    ...column,
+    links: footerMenuItems.filter((child) => child.parent === column.id),
+  }));
 ---
 
 <footer class="border-gw-border-subtle bg-gw-surface-secondary text-gw-text-primary border-t pt-20 pb-10">
   <div class="mx-auto w-full max-w-[var(--container-max)] px-4 md:px-6">
     <div class="mb-16 grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-6">
       <div class="pr-8 lg:col-span-2">
-        <div class="text-supporting-blue-dark text-headline-md mb-6">
-          GussWare
+        {logo ? (
+          <img src={logo.src} alt={logo.alt} class="mb-6 block h-8 w-auto" />
+        ) : (
+          <div class="text-supporting-blue-dark text-headline-md mb-6">
+            GussWare
+          </div>
+        )}
+
+        {footer && footer.footer_description && (
+          <p class="text-gw-text-secondary text-body-md mb-6">
+            {footer.footer_description}
+          </p>
+        )}
+      </div>
+
+      {footerColumns.map((column) => (
+        <div>
+          <h4
+            set:html={column.title}
+            class="text-supporting-blue-dark text-label-bold mb-6 uppercase"
+          />
+          <ul class="space-y-4">
+            {column.links.map((link) => (
+              <li>
+                <a
+                  href={link.url}
+                  target={link.target || undefined}
+                  set:html={link.title}
+                  class="text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200"
+                />
+              </li>
+            ))}
+          </ul>
         </div>
-        <p class="text-gw-text-secondary text-body-md mb-6">
-          Technology built by people. A collaborative freelance community
-          delivering high-impact digital solutions with industrial precision and
-          human-centric warmth.
-        </p>
-      </div>
-
-      <div>
-        <h4 class="text-supporting-blue-dark text-label-bold mb-6 uppercase">
-          Explore
-        </h4>
-        <ul class="space-y-4">
-          {exploreItems.map((item) => (
-            <li>
-              <a
-                href={item.url}
-                target={item.target || undefined}
-                class="text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200"
-              >
-                {item.title}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div>
-        <h4 class="text-supporting-blue-dark text-label-bold mb-6 uppercase">
-          Services
-        </h4>
-        <ul class="space-y-4">
-          <li>
-            <a
-              href="#"
-              class="text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200"
-            >
-              Web Development
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              class="text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200"
-            >
-              Mobile Development
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              class="text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200"
-            >
-              Custom Software
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              class="text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200"
-            >
-              APIs &amp; Integrations
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              class="text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200"
-            >
-              DevOps
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              class="text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200"
-            >
-              Consulting
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <div>
-        <h4 class="text-supporting-blue-dark text-label-bold mb-6 uppercase">
-          Resources
-        </h4>
-        <ul class="space-y-4">
-          <li>
-            <a
-              href="#"
-              class="text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200"
-            >
-              Projects
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              class="text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200"
-            >
-              Blog
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              class="text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200"
-            >
-              Community
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <div>
-        <h4 class="text-supporting-blue-dark text-label-bold mb-6 uppercase">
-          Contact
-        </h4>
-        <ul class="space-y-4">
-          <li>
-            <a
-              href="/contact"
-              class="text-gw-text-primary text-body-md hover:text-brand-accent transition-colors duration-200"
-            >
-              Start a Conversation
-            </a>
-          </li>
-        </ul>
-      </div>
+      ))}
     </div>
 
     <div class="border-gw-border-subtle flex flex-col items-center justify-between gap-4 border-t pt-8 md:flex-row">
-      <p class="text-gw-text-secondary text-body-md">
-        © 2024 GussWare. All rights reserved.
-      </p>
+
+      {footer && footer.footer_copyright && (
+        <p class="text-gw-text-secondary text-body-md">
+          {footer.footer_copyright}
+        </p>
+      )}
+
       <div class="flex gap-6">
-        <a
-          href="#"
-          class="text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200"
-        >
-          Privacy Policy
-        </a>
-        <a
-          href="#"
-          class="text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200"
-        >
-          Terms of Service
-        </a>
+        {legalMenuItems.map((link) => (
+          <a
+            href={link.url}
+            target={link.target || undefined}
+            set:html={link.title}
+            class="text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200"
+          />
+        ))}
       </div>
     </div>
   </div>
