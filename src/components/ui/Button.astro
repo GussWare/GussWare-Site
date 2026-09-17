@@ -17,6 +17,10 @@
  * - padding Stitch (12/24 y 10/22) → ritmo `px-6 py-3` del proyecto.
  *
  * Semántica: renderiza `<a>` si recibe `href`, `<button>` en otro caso.
+ * La base solo aporta `display: inline-flex` cuando `class` no define su
+ * propio `display`: en la cascada de Tailwind `.inline-flex` se emite
+ * después de `.hidden` (misma especificidad), por lo que un `inline-flex`
+ * interno dejaría sin efecto un `hidden` externo responsive.
  */
 interface Props {
   variant?: 'primary' | 'secondary' | 'ghost';
@@ -32,8 +36,14 @@ const {
   class: className = '',
 } = Astro.props;
 
-const base =
-  'inline-flex items-center justify-center rounded-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
+const EXTERNAL_DISPLAY_PATTERN =
+  /\b(hidden|block|inline|inline-block|flex|inline-flex|grid|inline-grid|contents|table)\b/;
+
+const baseDisplay = EXTERNAL_DISPLAY_PATTERN.test(className)
+  ? ''
+  : 'inline-flex';
+
+const base = `${baseDisplay} items-center justify-center rounded-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark`;
 
 const variants: Record<NonNullable<Props['variant']>, string> = {
   primary:
