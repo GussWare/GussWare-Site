@@ -1,0 +1,42 @@
+---
+/**
+ * RGW-111 — Logo del sitio (presentacional).
+ *
+ * Representa el logo con la información de WordPress (`src`, `alt` según
+ * `HeaderLogo` de `src/lib/wordpress/types.ts`, resuelta con `getHeaderLogo`
+ * —RGW-110 reutiliza ese sistema sin cambios ni duplicados—).
+ * Enlace a la página principal, tamaño `h-8` del Header y fallback al
+ * nombre del sitio cuando no hay logo (precedente del Footer).
+ */
+interface Props {
+  /** URL del logo (WordPress `source_url`). Si falta, usa el fallback. */
+  src?: string | null;
+  /** Texto alternativo (WordPress `alt_text` o título del sitio). */
+  alt?: string;
+  /** Nombre del sitio para el fallback y el `aria-label`. */
+  siteName?: string;
+  /** Destino del enlace (página principal por defecto). */
+  href?: string;
+  class?: string;
+}
+
+const {
+  src = undefined,
+  alt = undefined,
+  siteName = 'GussWare',
+  href = '/',
+  class: className = '',
+} = Astro.props;
+---
+
+<a
+  href={href}
+  aria-label={`${siteName} Home`}
+  class={`flex items-center gap-2 rounded focus:outline-none ${className}`}
+>
+  {src ? (
+    <img src={src} alt={alt ?? siteName} class="block h-8 w-auto" />
+  ) : (
+    <span class="text-supporting-blue-dark text-headline-md">{siteName}</span>
+  )}
+</a>
