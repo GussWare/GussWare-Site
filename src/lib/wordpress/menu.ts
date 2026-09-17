@@ -25,24 +25,45 @@ function toHeaderMenuItem(item: WpMenuItem): HeaderMenuItem {
   };
 }
 
-function toHeaderMenuItems(items: WpMenuItem[]): HeaderMenuItem[] {
-  return items
-    .filter((item) => item.status === 'publish')
-    .map(toHeaderMenuItem)
-    .sort((a, b) => a.menu_order - b.menu_order);
+function isValidMenuItem(item: WpMenuItem): boolean {
+  return (
+    !!item &&
+    typeof item.id === 'number' &&
+    typeof item.title?.rendered === 'string' &&
+    item.title.rendered !== '' &&
+    typeof item.url === 'string' &&
+    typeof item.parent === 'number' &&
+    typeof item.menu_order === 'number' &&
+    typeof item.target === 'string'
+  );
 }
 
-function toFooterLegalMenuItems(items: WpMenuItem[]): HeaderMenuItem[] {
+function toHeaderMenuItems(items: WpMenuItem[]): HeaderMenuItem[] {
   return items
+    .filter(isValidMenuItem)
     .filter((item) => item.status === 'publish')
     .map(toHeaderMenuItem)
     .sort((a, b) => a.menu_order - b.menu_order);
 }
 
 async function getMenuItemsByMenuId(menuId: number): Promise<HeaderMenuItem[]> {
-  const items = await wpFetch<WpMenuItem[]>(wpRoutes.menuItems(menuId, 100));
+  const allItems: WpMenuItem[] = [];
+  let page = 1;
 
-  return toHeaderMenuItems(items);
+  while (true) {
+    const items = await wpFetch<WpMenuItem[]>(
+      wpRoutes.menuItems(menuId, 100, page),
+    );
+    allItems.push(...items);
+
+    if (items.length < 100) {
+      break;
+    }
+
+    page += 1;
+  }
+
+  return toHeaderMenuItems(allItems);
 }
 
 export async function getHeaderMenu(): Promise<HeaderMenuItem[]> {
@@ -65,7 +86,9 @@ export async function getHeaderMenu(): Promise<HeaderMenuItem[]> {
 export async function getFooterMenu(): Promise<HeaderMenuItem[]> {
   try {
     const menus = await wpFetch<WpMenu[]>(wpRoutes.menus);
-    const menu = menus.find((candidate) => candidate.name === wpConstants.menuNames.footer);
+    const menu = menus.find(
+      (candidate) => candidate.name === wpConstants.menuNames.footer,
+    );
 
     if (!menu) {
       return [];
@@ -80,7 +103,9 @@ export async function getFooterMenu(): Promise<HeaderMenuItem[]> {
 export async function getLegalMenu(): Promise<HeaderMenuItem[]> {
   try {
     const menus = await wpFetch<WpMenu[]>(wpRoutes.menus);
-    const menu = menus.find((candidate) => candidate.name === wpConstants.menuNames.legal);
+    const menu = menus.find(
+      (candidate) => candidate.name === wpConstants.menuNames.legal,
+    );
 
     if (!menu) {
       return [];

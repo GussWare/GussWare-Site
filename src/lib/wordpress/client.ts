@@ -35,7 +35,6 @@ function getAuthHeaders(): Record<string, string> {
 
 export async function wpFetch<T>(path: string): Promise<T> {
   const url = `${getWpApiUrl()}/wp-json${path}`;
-  console.log(`Fetching from WordPress API: ${url}`);
   const response = await fetch(url, {
     headers: {
       Accept: 'application/json',
