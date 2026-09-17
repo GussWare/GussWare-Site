@@ -7,7 +7,8 @@
  * los iconos necesarios para Button/Link con trazados inline estilo Lucide
  * (viewBox 24, `stroke="currentColor"`, extremos redondeados):
  * - `arrow-right` (acciones y enlaces internos);
- * - `arrow-outward` (enlaces externos, patrón del Footer).
+ * - `arrow-outward` (enlaces externos, patrón del Footer);
+ * - `chevron-right` (separador de `Breadcrumbs`, patrón de Stitch).
  * No se agregan más iconos que estos.
  *
  * Tamaños del sistema (`size-3/4/5/6/8/10`, clases literales para que
@@ -15,7 +16,7 @@
  * El color se hereda del texto (`currentColor`, como en Stitch).
  */
 interface Props {
-  name: 'arrow-right' | 'arrow-outward';
+  name: 'arrow-right' | 'arrow-outward' | 'chevron-right';
   size?: 3 | 4 | 5 | 6 | 8 | 10;
   weight?: 'standard' | 'emphasis';
   class?: string;
@@ -40,6 +41,7 @@ const sizes: Record<NonNullable<Props['size']>, string> = {
 const paths: Record<Props['name'], string> = {
   'arrow-right': '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
   'arrow-outward': '<path d="M7 7h10v10"/><path d="M7 17 17 7"/>',
+  'chevron-right': '<path d="m9 18 6-6-6-6"/>',
 };
 ---
 
