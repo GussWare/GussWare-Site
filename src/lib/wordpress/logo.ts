@@ -34,16 +34,12 @@ export async function getHeaderLogo(): Promise<HeaderLogo | null> {
   try {
     const settings = await wpFetch<WpSettings>('/wp/v2/settings');
 
-    console.log('Settings obtenidos de WordPress:', settings);
-
     if (!settings || !settings.site_logo) {
       return null;
     }
 
     const media = await getMediaById(settings.site_logo);
     const relatedPostId = media.post;
-
-    console.log('Media obtenida de WordPress:', media);
 
     if (
       typeof relatedPostId === 'number' &&
@@ -59,7 +55,6 @@ export async function getHeaderLogo(): Promise<HeaderLogo | null> {
         }
       } catch {
         // Si el original no se puede resolver, se usa el attachment de site_logo.
-        console.log("No se pudo resolver el original del logo, se usará el attachment de site_logo.");
       }
     }
 
