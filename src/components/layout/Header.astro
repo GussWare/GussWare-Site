@@ -13,6 +13,7 @@
 import { getHeaderLogo } from '../../lib/wordpress/logo';
 import { getHeaderMenu } from '../../lib/wordpress/menu';
 import Button from '../ui/Button.astro';
+import Logo from '../ui/Logo.astro';
 import MenuButton from '../ui/MenuButton.astro';
 
 const [logo, menuItems] = await Promise.all([getHeaderLogo(), getHeaderMenu()]);
@@ -22,17 +23,7 @@ const topLevelItems = menuItems.filter((item) => item.parent === 0);
 <header class="bg-gw-surface-primary sticky top-0 z-50 w-full border-b border-gw-border-subtle">
   <div class="mx-auto flex h-16 w-full max-w-[var(--container-max)] items-center justify-between px-4 md:px-6">
     <!-- Logo -->
-    <a
-      href="/"
-      aria-label="GussWare Home"
-      class="flex items-center gap-2 rounded focus:outline-none"
-    >
-      {logo ? (
-        <img src={logo.src} alt={logo.alt} class="block h-8 w-auto" />
-      ) : (
-        <span class="text-label-bold text-gw-text-secondary">GussWare</span>
-      )}
-    </a>
+    <Logo src={logo?.src} alt={logo?.alt} />
 
     <!-- Desktop Navigation (visible desde lg; en Tablet/Mobile la oculta el hamburger visual) -->
     <nav
