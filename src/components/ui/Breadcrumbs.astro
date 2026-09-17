@@ -1,0 +1,59 @@
+---
+/**
+ * Breadcrumbs global reutilizable (RGW-117/118), independiente de
+ * `SectionHeading` (no lo importa ni depende de él; conviven como
+ * hermanos: la ruta sobre el encabezado, con el mismo lenguaje
+ * `label-bold` uppercase).
+ *
+ * Estructura de Stitch: `nav[aria-label]` > `ol` > `li` con enlaces en los
+ * niveles navegables, separador chevron (`Icon`) y `span[aria-current]`
+ * en la página actual. El último ítem sin `href` es la página actual.
+ * Tokens existentes: `text-label-bold` + `uppercase`,
+ * `text-gw-text-secondary` (enlaces), `text-supporting-blue-dark`
+ * (actual, como el `text-primary` de Stitch), `hover:text-brand-secondary`,
+ * `gap-2` y `mb-8`. `flex-wrap` evita overflow en mobile.
+ */
+import Icon from './Icon.astro';
+
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+  class?: string;
+}
+
+const { items, class: className = '' } = Astro.props;
+---
+
+{items.length > 0 && (
+  <nav aria-label="Breadcrumb" class={`flex ${className}`}>
+    <ol class="flex flex-wrap items-center gap-2">
+      {items.map((item, index) => {
+        const isLast = index === items.length - 1;
+        return (
+          <li class="flex items-center gap-2">
+            {index > 0 && <Icon name="chevron-right" size={4} />}
+            {item.href && !isLast ? (
+              <a
+                href={item.href}
+                class="text-label-bold text-gw-text-secondary uppercase transition-colors duration-200 hover:text-brand-secondary"
+              >
+                {item.label}
+              </a>
+            ) : (
+              <span
+                aria-current={isLast ? 'page' : undefined}
+                class="text-label-bold text-supporting-blue-dark uppercase"
+              >
+                {item.label}
+              </span>
+            )}
+          </li>
+        );
+      })}
+    </ol>
+  </nav>
+)}
