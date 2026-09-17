@@ -7,7 +7,7 @@ export interface WpSettings {
   title: string;
   description: string;
   url: string;
-  site_logo: number;
+  site_logo: number | null;
   site_icon: number;
 }
 

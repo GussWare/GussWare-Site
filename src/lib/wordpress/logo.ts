@@ -10,10 +10,11 @@
  */
 
 import { wpFetch } from './client';
+import { wpRoutes } from './routes';
 import type { HeaderLogo, WpMedia, WpSettings } from './types';
 
 async function getMediaById(id: number): Promise<WpMedia> {
-  return wpFetch<WpMedia>(`/wp/v2/media/${id}`);
+  return wpFetch<WpMedia>(wpRoutes.media(id));
 }
 
 function toHeaderLogo(
@@ -32,7 +33,7 @@ function toHeaderLogo(
 
 export async function getHeaderLogo(): Promise<HeaderLogo | null> {
   try {
-    const settings = await wpFetch<WpSettings>('/wp/v2/settings');
+    const settings = await wpFetch<WpSettings>(wpRoutes.settings);
 
     if (!settings || !settings.site_logo) {
       return null;
