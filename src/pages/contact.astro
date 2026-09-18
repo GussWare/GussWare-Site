@@ -11,6 +11,7 @@
  */
 import Layout from '../layouts/Layout.astro';
 import Section from '../components/ui/Section.astro';
+import Icon from '../components/ui/Icon.astro';
 ---
 
 <Layout
@@ -19,8 +20,46 @@ import Section from '../components/ui/Section.astro';
 >
   <Section id="contact">
     <div class="flex flex-col gap-16 lg:flex-row lg:gap-24">
-      <div class="lg:w-1/2">
-        {/* RGW-032: columna de información de contacto. */}
+      <div class="flex flex-col justify-center lg:w-1/2">
+        <p class="text-label-bold text-brand-secondary mb-4 uppercase">
+          Get in touch
+        </p>
+        <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6">
+          Let's Build Something Together
+        </h1>
+        <p class="text-body-lg text-gw-text-secondary">
+          We prefer real conversations over sterile contact forms. Tell us about
+          your project and we'll connect you with the right minds.
+        </p>
+        <div class="border-gw-border-subtle mt-8 border-t pt-8">
+          <p class="text-body-md text-gw-text-secondary mb-6">
+            Connect with us on social media to see our latest projects and
+            community insights.
+          </p>
+          <div class="flex gap-4">
+            <a
+              aria-label="Facebook"
+              href="#"
+              class="bg-brand-primary text-brand-surface flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 hover:bg-supporting-blue-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+            >
+              <Icon name="facebook" size={4} />
+            </a>
+            <a
+              aria-label="Twitter (X)"
+              href="#"
+              class="bg-brand-primary text-brand-surface flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 hover:bg-supporting-blue-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+            >
+              <Icon name="x" size={4} />
+            </a>
+            <a
+              aria-label="TikTok"
+              href="#"
+              class="bg-brand-primary text-brand-surface flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 hover:bg-supporting-blue-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+            >
+              <Icon name="tiktok" size={4} />
+            </a>
+          </div>
+        </div>
       </div>
       <div class="lg:w-1/2">{/* RGW-033: formulario de contacto. */}</div>
     </div>
