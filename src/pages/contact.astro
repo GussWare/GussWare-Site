@@ -12,13 +12,15 @@
 import Layout from '../layouts/Layout.astro';
 import Section from '../components/ui/Section.astro';
 import Icon from '../components/ui/Icon.astro';
+import FormField from '../components/ui/FormField.astro';
+import Button from '../components/ui/Button.astro';
 ---
 
 <Layout
   title="Contact — GussWare"
   description="Contact GussWare — Start a conversation about your project."
 >
-  <Section id="contact">
+  <Section id="contact" class="bg-gw-surface-auxiliary">
     <div class="flex flex-col gap-16 lg:flex-row lg:gap-24">
       <div class="flex flex-col justify-center lg:w-1/2">
         <p class="text-label-bold text-brand-secondary mb-4 uppercase">
@@ -61,7 +63,92 @@ import Icon from '../components/ui/Icon.astro';
           </div>
         </div>
       </div>
-      <div class="lg:w-1/2">{/* RGW-033: formulario de contacto. */}</div>
+      <div class="bg-gw-surface-primary rounded-none p-8 md:p-12 lg:w-1/2">
+        <form id="contact-form" novalidate class="flex flex-col gap-8">
+          <FormField
+            id="name"
+            label="Name"
+            placeholder="Your full name"
+            required
+            autocomplete="name"
+          />
+          <FormField
+            id="email"
+            label="Email"
+            type="email"
+            placeholder="hello@company.com"
+            required
+            autocomplete="email"
+          />
+          <FormField
+            id="phone"
+            label="Phone Number"
+            type="tel"
+            placeholder="+1 (555) 000-0000"
+            autocomplete="tel"
+          />
+          <div class="pt-6">
+            <Button type="submit" variant="primary" class="w-full">
+              Start a Conversation
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   </Section>
 </Layout>
+
+<script>
+  import { contactSchema } from '../lib/contact/schema';
+
+  const form = document.getElementById('contact-form');
+
+  const setError = (id, message) => {
+    const input = document.getElementById(id);
+    const error = document.getElementById(`${id}-error`);
+
+    if (
+      !(input instanceof HTMLInputElement) ||
+      !(error instanceof HTMLElement)
+    ) {
+      return;
+    }
+
+    if (message) {
+      error.textContent = message;
+      error.hidden = false;
+      input.setAttribute('aria-invalid', 'true');
+    } else {
+      error.textContent = '';
+      error.hidden = true;
+      input.removeAttribute('aria-invalid');
+    }
+  };
+
+  if (form instanceof HTMLFormElement) {
+    form.addEventListener('submit', (event) => {
+      const data = new FormData(form);
+      const result = contactSchema.safeParse({
+        name: data.get('name'),
+        email: data.get('email'),
+        phone: data.get('phone'),
+      });
+
+      setError('name');
+      setError('email');
+      setError('phone');
+
+      if (!result.success) {
+        event.preventDefault();
+
+        for (const issue of result.error.issues) {
+          const field = issue.path[0];
+
+          if (field === 'name' || field === 'email' || field === 'phone') {
+            setError(field, issue.message);
+          }
+        }
+      }
+    });
+  }
+</script>
