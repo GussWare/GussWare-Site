@@ -1,0 +1,28 @@
+---
+/**
+ * RGW-031 — Página de Contacto (estructura base).
+ *
+ * Utiliza `Layout` (Header + Footer existentes) y `Section` (spacing
+ * vertical y `Container` con tokens). El split reproduce el layout de
+ * Stitch `GussWare Contact-V0.1.0`: apilado en mobile, dos columnas en
+ * desktop (`lg:flex-row`, `gap-16`/`lg:gap-24`, mitades `lg:w-1/2`).
+ * El contenido específico (info RGW-032, formulario RGW-033) se incorpora
+ * en sus historias correspondientes.
+ */
+import Layout from '../layouts/Layout.astro';
+import Section from '../components/ui/Section.astro';
+---
+
+<Layout
+  title="Contact — GussWare"
+  description="Contact GussWare — Start a conversation about your project."
+>
+  <Section id="contact">
+    <div class="flex flex-col gap-16 lg:flex-row lg:gap-24">
+      <div class="lg:w-1/2">
+        {/* RGW-032: columna de información de contacto. */}
+      </div>
+      <div class="lg:w-1/2">{/* RGW-033: formulario de contacto. */}</div>
+    </div>
+  </Section>
+</Layout>
