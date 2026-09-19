@@ -9,11 +9,19 @@
  * El contenido específico (info RGW-032, formulario RGW-033) se incorpora
  * en sus historias correspondientes.
  */
+
 import Layout from '../layouts/Layout.astro';
 import Section from '../components/ui/Section.astro';
 import Icon from '../components/ui/Icon.astro';
 import FormField from '../components/ui/FormField.astro';
 import Button from '../components/ui/Button.astro';
+import { getSocialMedia } from '../lib/wordpress/socialMedia';
+import { getContact } from '../lib/wordpress/contact';
+
+const [socialMedia, contact] = await Promise.all([
+  getSocialMedia(),
+  getContact(),
+]);
 ---
 
 <Layout
@@ -23,47 +31,49 @@ import Button from '../components/ui/Button.astro';
   <Section id="contact" class="bg-gw-surface-auxiliary">
     <div class="flex flex-col gap-16 lg:flex-row lg:gap-24">
       <div class="flex flex-col justify-center lg:w-1/2">
-        <p class="text-label-bold text-brand-secondary mb-4 uppercase">
-          Get in touch
-        </p>
-        <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6 leading-display-lg-mobile md:leading-display-lg">
-          Let's Build Something Together
-        </h1>
-        <p class="text-body-lg text-gw-text-secondary">
-          We prefer real conversations over sterile contact forms. Tell us about
-          your project and we'll connect you with the right minds.
-        </p>
-        <div class="border-gw-border-subtle mt-8 border-t pt-8">
-          <p class="text-body-md text-gw-text-secondary mb-6">
-            Connect with us on social media to see our latest projects and
-            community insights.
+        {contact?.contenido_de_la_seccion?.eyebrow && (
+          <p class="text-label-bold text-brand-secondary mb-4 uppercase">
+            {contact.contenido_de_la_seccion.eyebrow}
           </p>
-          <div class="flex gap-4">
-            <a
-              aria-label="Facebook"
-              href="#"
-              class="bg-brand-primary text-brand-surface flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 hover:bg-supporting-blue-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
-            >
-              <Icon name="facebook" size={4} />
-            </a>
-            <a
-              aria-label="Twitter (X)"
-              href="#"
-              class="bg-brand-primary text-brand-surface flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 hover:bg-supporting-blue-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
-            >
-              <Icon name="x" size={4} />
-            </a>
-            <a
-              aria-label="TikTok"
-              href="#"
-              class="bg-brand-primary text-brand-surface flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 hover:bg-supporting-blue-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
-            >
-              <Icon name="tiktok" size={4} />
-            </a>
-          </div>
+        )}
+
+        {contact?.contenido_de_la_seccion?.titulo && (
+          <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6 leading-display-lg-mobile md:leading-display-lg">
+            {contact.contenido_de_la_seccion.titulo}
+          </h1>
+        )}
+
+        {contact?.contenido_de_la_seccion?.descripcion && (
+          <p class="text-body-lg text-gw-text-secondary">
+            {contact.contenido_de_la_seccion.descripcion}
+          </p>
+        )}
+
+        <div class="border-gw-border-subtle mt-8 border-t pt-8">
+          {contact?.contenido_de_la_seccion?.texto_de_redes_sociales && (
+            <p class="text-body-md text-gw-text-secondary mb-6">
+              {contact.contenido_de_la_seccion.texto_de_redes_sociales}
+            </p>
+          )}
+
+          {socialMedia && (
+            <div class="flex gap-4">
+              {socialMedia.map((social) => (
+                <a
+                  aria-label={social.nombre}
+                  href={social.url}
+                  target="_blank"
+                  class="bg-brand-primary text-brand-surface flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 hover:bg-supporting-blue-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+                >
+                  <Icon name={social.icono} size={4} />
+                </a>
+              ))}
+            </div>
+          )}
         </div>
       </div>
-      <div class="bg-gw-surface-primary rounded-none p-8 shadow-sm rounded-sm md:p-12 lg:w-1/2">
+
+      <div class="bg-gw-surface-primary rounded-sm p-8 shadow-sm md:p-12 lg:w-1/2">
         <form id="contact-form" novalidate class="flex flex-col gap-8">
           <FormField
             id="name"
@@ -72,6 +82,7 @@ import Button from '../components/ui/Button.astro';
             required
             autocomplete="name"
           />
+
           <FormField
             id="email"
             label="Email"
@@ -80,6 +91,7 @@ import Button from '../components/ui/Button.astro';
             required
             autocomplete="email"
           />
+
           <FormField
             id="phone"
             label="Phone Number"
@@ -87,6 +99,7 @@ import Button from '../components/ui/Button.astro';
             placeholder="+1 (555) 000-0000"
             autocomplete="tel"
           />
+
           <div class="pt-6">
             <Button type="submit" variant="primary" class="w-full py-4">
               Start a Conversation
@@ -128,6 +141,7 @@ import Button from '../components/ui/Button.astro';
   if (form instanceof HTMLFormElement) {
     form.addEventListener('submit', (event) => {
       const data = new FormData(form);
+
       const result = contactSchema.safeParse({
         name: data.get('name'),
         email: data.get('email'),

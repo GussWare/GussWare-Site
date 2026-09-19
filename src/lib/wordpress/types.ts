@@ -64,3 +64,33 @@ export interface FooterDescription {
   footer_description: string;
   footer_copyright: string;
 }
+
+export interface SocialMedia {
+  redes_sociales: SocialMediaItem[];
+}
+
+export interface SocialMediaItem {
+  nombre: string;
+  url: string;
+  estado: boolean;
+  icono: string;
+  orden: number;
+}
+
+export interface Contact {
+  contenido_de_la_seccion: ContactSection;
+  informacion_de_contacto: ContactInformation;
+}
+
+export interface ContactSection {
+  eyebrow: string;
+  titulo: string;
+  descripcion: string;
+  texto_de_redes_sociales: string;
+}
+
+export interface ContactInformation {
+  telefono: string | null;
+  email: string | null;
+  horario_de_atencion: string | null;
+}

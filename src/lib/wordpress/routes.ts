@@ -5,4 +5,6 @@ export const wpRoutes = {
   settings: '/wp/v2/settings',
   media: (mediaId: number) => `/wp/v2/media/${mediaId}`,
   footer: '/gussware/v1/footer',
+  socialMedia: '/gussware/v1/redes-sociales',
+  contact: '/gussware/v1/contacto',
 } as const;
