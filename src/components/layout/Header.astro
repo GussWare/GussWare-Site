@@ -12,11 +12,12 @@
  */
 import { getHeaderLogo } from '../../lib/wordpress/logo';
 import { getHeaderMenu } from '../../lib/wordpress/menu';
+import { getHeader } from '../../lib/wordpress/header';
 import Button from '../ui/Button.astro';
 import Logo from '../ui/Logo.astro';
 import MenuButton from '../ui/MenuButton.astro';
 
-const [logo, menuItems] = await Promise.all([getHeaderLogo(), getHeaderMenu()]);
+const [logo, menuItems, header] = await Promise.all([getHeaderLogo(), getHeaderMenu(), getHeader()]);
 const topLevelItems = menuItems.filter((item) => item.parent === 0);
 ---
 
@@ -43,9 +44,11 @@ const topLevelItems = menuItems.filter((item) => item.parent === 0);
 
     <!-- Desktop CTA & Mobile Toggle -->
     <div class="flex items-center gap-4">
-      <Button href="/contact" variant="primary" class="hidden sm:inline-flex">
-        Start a Conversation
-      </Button>
+      {header?.estado && (
+        <Button href={header.url} variant="primary" class="hidden sm:inline-flex">
+          {header.texto_del_boton}
+        </Button>
+      )}
 
       <MenuButton
         id="header-menu-toggle"

@@ -7,4 +7,5 @@ export const wpRoutes = {
   footer: '/gussware/v1/footer',
   socialMedia: '/gussware/v1/redes-sociales',
   contact: '/gussware/v1/contacto',
+  header: '/gussware/v1/header',
 } as const;

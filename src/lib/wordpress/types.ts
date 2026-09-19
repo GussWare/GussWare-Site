@@ -60,6 +60,12 @@ export interface HeaderMenuItem {
   target: string;
 }
 
+export interface Header {
+  texto_del_boton: string;
+  url: string;
+  estado: boolean;
+}
+
 export interface FooterDescription {
   footer_description: string;
   footer_copyright: string;
