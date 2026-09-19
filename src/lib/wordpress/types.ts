@@ -64,3 +64,15 @@ export interface FooterDescription {
   footer_description: string;
   footer_copyright: string;
 }
+
+export interface SocialMedia {
+  redes_sociales: SocialMediaItem[];
+}
+
+export interface SocialMediaItem {
+  nombre: string;
+  url: string;
+  estado: boolean;
+  icono: string;
+  orden: number;
+}

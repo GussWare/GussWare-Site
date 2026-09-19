@@ -14,6 +14,12 @@ import Section from '../components/ui/Section.astro';
 import Icon from '../components/ui/Icon.astro';
 import FormField from '../components/ui/FormField.astro';
 import Button from '../components/ui/Button.astro';
+
+import {getSocialMedia} from '../lib/wordpress/socialMedia';
+
+const [socialMedia] = await Promise.all([
+  getSocialMedia(),
+]);
 ---
 
 <Layout
@@ -38,31 +44,24 @@ import Button from '../components/ui/Button.astro';
             Connect with us on social media to see our latest projects and
             community insights.
           </p>
-          <div class="flex gap-4">
-            <a
-              aria-label="Facebook"
-              href="#"
-              class="bg-brand-primary text-brand-surface flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 hover:bg-supporting-blue-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
-            >
-              <Icon name="facebook" size={4} />
-            </a>
-            <a
-              aria-label="Twitter (X)"
-              href="#"
-              class="bg-brand-primary text-brand-surface flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 hover:bg-supporting-blue-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
-            >
-              <Icon name="x" size={4} />
-            </a>
-            <a
-              aria-label="TikTok"
-              href="#"
-              class="bg-brand-primary text-brand-surface flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 hover:bg-supporting-blue-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
-            >
-              <Icon name="tiktok" size={4} />
-            </a>
-          </div>
+
+          {socialMedia && (
+              <div class="flex gap-4">
+                {socialMedia.map((social) => (
+                  <a
+                    aria-label={social.nombre}
+                    href={social.url}
+                    target="_blank"
+                    class="bg-brand-primary text-brand-surface flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 hover:bg-supporting-blue-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+                  >
+                    <Icon name={social.icono} size={4} />
+                  </a>
+                ))}
+              </div>  
+          )}
         </div>
       </div>
+
       <div class="bg-gw-surface-primary rounded-none p-8 shadow-sm rounded-sm md:p-12 lg:w-1/2">
         <form id="contact-form" novalidate class="flex flex-col gap-8">
           <FormField
