@@ -30,7 +30,7 @@ html {
 body {
   min-width: 320px;
   margin: 0;
-  background-color: var(--color-surface-primary);
+  background-color: var(--color-surface-auxiliary);
   color: var(--color-text-primary);
 }
 
