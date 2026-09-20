@@ -1,0 +1,88 @@
+---
+/**
+ * RGW-182/RGW-183 — Página de Blog (maquetación inicial).
+ *
+ * Utiliza `Layout` (Header + Footer existentes) y `Container`.
+ * Hero según Stitch `GussWare Blog-V0.1.0`: banda `bg-gw-surface-secondary`
+ * con `Breadcrumbs` (Home, Blog) y título `display` con tokens.
+ * Barra de filtros estática (RGW-183, sin conexión WordPress todavía):
+ * pills con tokens (`supporting-blue-dark` activo, `surface-secondary` +
+ * borde `subtle` inactivos, hover `highlight`) e input de búsqueda con
+ * `Icon`. Solo maquetación; el contenido dinámico llega en sus tareas.
+ */
+import Layout from '../layouts/Layout.astro';
+import Container from '../components/ui/Container.astro';
+import Breadcrumbs from '../components/ui/Breadcrumbs.astro';
+import Icon from '../components/ui/Icon.astro';
+---
+
+<Layout
+  title="Blog — GussWare"
+  description="GussWare blog and insights on technology and development."
+>
+  <header class="bg-gw-surface-secondary mb-12 py-16 md:py-24">
+    <Container>
+      <Breadcrumbs
+        items={[{ label: 'Home', href: '/' }, { label: 'Blog' }]}
+        class="mb-4"
+      />
+      <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary">
+        Blog & Insights
+      </h1>
+    </Container>
+  </header>
+
+  <div class="bg-gw-surface-auxiliary mb-16">
+    <Container>
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex flex-wrap items-center gap-2 md:gap-4">
+          <button
+            type="button"
+            class="text-label-bold bg-supporting-blue-dark text-brand-surface rounded-full px-6 py-2 transition-colors duration-200"
+          >
+            All
+          </button>
+          <button
+            type="button"
+            class="text-label-bold bg-gw-surface-secondary text-gw-text-secondary border-gw-border-subtle rounded-full border px-6 py-2 transition-colors duration-200 hover:border-gw-highlight hover:bg-gw-highlight"
+          >
+            Development
+          </button>
+          <button
+            type="button"
+            class="text-label-bold bg-gw-surface-secondary text-gw-text-secondary border-gw-border-subtle rounded-full border px-6 py-2 transition-colors duration-200 hover:border-gw-highlight hover:bg-gw-highlight"
+          >
+            Technology
+          </button>
+          <button
+            type="button"
+            class="text-label-bold bg-gw-surface-secondary text-gw-text-secondary border-gw-border-subtle rounded-full border px-6 py-2 transition-colors duration-200 hover:border-gw-highlight hover:bg-gw-highlight"
+          >
+            Business
+          </button>
+          <button
+            type="button"
+            class="text-label-bold bg-gw-surface-secondary text-gw-text-secondary border-gw-border-subtle rounded-full border px-6 py-2 transition-colors duration-200 hover:border-gw-highlight hover:bg-gw-highlight"
+          >
+            Guides
+          </button>
+        </div>
+        <div class="relative mt-4 w-full md:mt-0 md:w-72">
+          <Icon
+            name="search"
+            size={4}
+            class="text-gw-text-secondary absolute top-1/2 left-3 -translate-y-1/2"
+          />
+          <input
+            type="text"
+            placeholder="Search articles..."
+            aria-label="Search articles"
+            class="text-body-md text-gw-text-secondary border-gw-border-subtle bg-gw-surface-primary w-full rounded-lg border py-2 pr-4 pl-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+          />
+        </div>
+      </div>
+    </Container>
+  </div>
+
+  {/* Espacio reservado para el contenido del Blog (destacado, grid, load more). */}
+</Layout>
