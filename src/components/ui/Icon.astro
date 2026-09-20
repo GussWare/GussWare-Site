@@ -11,7 +11,8 @@
  * - `chevron-right` (separador de `Breadcrumbs`, patrón de Stitch);
  * - `facebook`, `x`, `tiktok` (redes sociales de Contacto; glyphs de marca
  *   con `fill="currentColor"`, sin stroke);
- * - `search` (buscador del Blog, patrón de Stitch).
+ * - `search` (buscador del Blog, patrón de Stitch);
+ * - `clock` (tiempo de lectura del destacado, patrón de Stitch).
  * No se agregan más iconos que estos.
  *
  * Tamaños del sistema (`size-3/4/5/6/8/10`, clases literales para que
@@ -46,6 +47,8 @@ const paths: Record<Props['name'], string> = {
   'arrow-outward': '<path d="M7 7h10v10"/><path d="M7 17 17 7"/>',
   'chevron-right': '<path d="m9 18 6-6-6-6"/>',
   search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+  clock:
+    '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
   facebook:
     '<path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z" fill="currentColor" stroke="none"/>',
   x: '<path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z" fill="currentColor" stroke="none"/>',
