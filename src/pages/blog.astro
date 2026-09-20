@@ -13,6 +13,7 @@
 import Layout from '../layouts/Layout.astro';
 import Container from '../components/ui/Container.astro';
 import Breadcrumbs from '../components/ui/Breadcrumbs.astro';
+import Badge from '../components/ui/Badge.astro';
 import Icon from '../components/ui/Icon.astro';
 ---
 
@@ -84,5 +85,45 @@ import Icon from '../components/ui/Icon.astro';
     </Container>
   </div>
 
-  {/* Espacio reservado para el contenido del Blog (destacado, grid, load more). */}
+  {/* RGW-185: artículo destacado (maquetación con datos mock de Stitch; sin WordPress todavía). */}
+  <div class="mb-30">
+    <Container>
+      <div class="bg-gw-surface-primary border-gw-border-subtle grid grid-cols-1 items-center gap-8 overflow-hidden rounded-none border md:grid-cols-2">
+        <div class="relative h-64 w-full md:h-full md:min-h-96">
+          <div
+            aria-hidden="true"
+            class="bg-gw-surface-secondary absolute inset-0 h-full w-full"
+          ></div>
+        </div>
+        <div class="p-8 md:p-12">
+          <div class="mb-4 flex items-center gap-4">
+            <Badge>Technology</Badge>
+            <span class="text-body-md text-gw-text-secondary flex items-center gap-1">
+              <Icon name="clock" size={4} />5 min read
+            </span>
+          </div>
+          <h2 class="text-headline-lg text-gw-text-primary mb-4">
+            The Future of Collaborative Development
+          </h2>
+          <p class="text-body-lg text-gw-text-secondary mb-8">
+            How distributed teams are shaping the next generation of digital
+            products.
+          </p>
+          <a
+            href="#"
+            class="text-label-bold text-supporting-blue-dark hover:text-brand-accent group inline-flex items-center gap-2 transition-colors duration-200"
+          >
+            Read Article
+            <Icon
+              name="arrow-right"
+              size={4}
+              class="transition-transform duration-200 group-hover:translate-x-1"
+            />
+          </a>
+        </div>
+      </div>
+    </Container>
+  </div>
+
+  {/* Espacio reservado para el grid de artículos y load more. */}
 </Layout>
