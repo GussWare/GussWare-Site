@@ -17,6 +17,19 @@ import Badge from '../components/ui/Badge.astro';
 import Button from '../components/ui/Button.astro';
 import Card from '../components/ui/Card.astro';
 import Icon from '../components/ui/Icon.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+
+interface FeaturedMock {
+  badge: string;
+  readingTime: string;
+  title: string;
+  description: string;
+  url: string;
+}
+
+// SIMULACIÓN TEMPORAL (revertir tras revisión): null = hay noticias pero
+// ninguna está marcada como destacada. No commitear.
+const featuredPost: FeaturedMock | null = null;
 ---
 
 <Layout
@@ -88,44 +101,46 @@ import Icon from '../components/ui/Icon.astro';
   </div>
 
   {/* RGW-185: artículo destacado (maquetación con datos mock de Stitch; sin WordPress todavía). */}
-  <div class="mb-30">
-    <Container>
-      <div class="bg-gw-surface-primary border-gw-border-subtle grid grid-cols-1 items-center gap-8 overflow-hidden rounded-none border md:grid-cols-2">
-        <div class="relative h-64 w-full md:h-full md:min-h-96">
-          <div
-            aria-hidden="true"
-            class="bg-gw-surface-secondary absolute inset-0 h-full w-full"
-          ></div>
-        </div>
-        <div class="p-8 md:p-12">
-          <div class="mb-4 flex items-center gap-4">
-            <Badge>Technology</Badge>
-            <span class="text-body-md text-gw-text-secondary flex items-center gap-1">
-              <Icon name="clock" size={4} />5 min read
-            </span>
+  {featuredPost && (
+    <div class="mb-30">
+      <Container>
+        <div class="bg-gw-surface-primary border-gw-border-subtle grid grid-cols-1 items-center gap-8 overflow-hidden rounded-none border md:grid-cols-2">
+          <div class="relative h-64 w-full md:h-full md:min-h-96">
+            <div
+              aria-hidden="true"
+              class="bg-gw-surface-secondary absolute inset-0 h-full w-full"
+            ></div>
           </div>
-          <h2 class="text-headline-lg text-gw-text-primary mb-4">
-            The Future of Collaborative Development
-          </h2>
-          <p class="text-body-lg text-gw-text-secondary mb-8">
-            How distributed teams are shaping the next generation of digital
-            products.
-          </p>
-          <a
-            href="#"
-            class="text-label-bold text-supporting-blue-dark hover:text-brand-accent group inline-flex items-center gap-2 transition-colors duration-200"
-          >
-            Read Article
-            <Icon
-              name="arrow-right"
-              size={4}
-              class="transition-transform duration-200 group-hover:translate-x-1"
-            />
-          </a>
+          <div class="p-8 md:p-12">
+            <div class="mb-4 flex items-center gap-4">
+              <Badge>{featuredPost.badge}</Badge>
+              <span class="text-body-md text-gw-text-secondary flex items-center gap-1">
+                <Icon name="clock" size={4} />
+                {featuredPost.readingTime}
+              </span>
+            </div>
+            <h2 class="text-headline-lg text-gw-text-primary mb-4">
+              {featuredPost.title}
+            </h2>
+            <p class="text-body-lg text-gw-text-secondary mb-8">
+              {featuredPost.description}
+            </p>
+            <a
+              href={featuredPost.url}
+              class="text-label-bold text-supporting-blue-dark hover:text-brand-accent group inline-flex items-center gap-2 transition-colors duration-200"
+            >
+              Read Article
+              <Icon
+                name="arrow-right"
+                size={4}
+                class="transition-transform duration-200 group-hover:translate-x-1"
+              />
+            </a>
+          </div>
         </div>
-      </div>
-    </Container>
-  </div>
+      </Container>
+    </div>
+  )}
 
   {/* RGW-189 grid + RGW-191/192/193 load more simulado con mock local (sin WordPress todavía). */}
   <div class="mb-16">
@@ -213,6 +228,20 @@ import Icon from '../components/ui/Icon.astro';
       <div id="load-more" class="mt-12 flex justify-center">
         <Button variant="secondary">Load More Articles</Button>
       </div>
+      <div id="blog-empty" class="hidden py-8 text-center">
+        <SectionHeading
+          title="No articles found"
+          description="Try adjusting your search or filter."
+          align="center"
+        />
+      </div>
+      <div id="blog-error" class="hidden py-8 text-center" role="alert">
+        <SectionHeading
+          title="Something went wrong"
+          description="Please try again later."
+          align="center"
+        />
+      </div>
     </Container>
   </div>
 </Layout>
@@ -220,9 +249,50 @@ import Icon from '../components/ui/Icon.astro';
 <script>
   const grid = document.getElementById('blog-grid');
   const loadMore = document.getElementById('load-more');
+  const emptyState = document.getElementById('blog-empty');
+  const errorState = document.getElementById('blog-error');
+
+  const setVisible = (element, visible) => {
+    if (element instanceof HTMLElement) {
+      element.classList.toggle('hidden', !visible);
+    }
+  };
+
+  const visibleArticles = () =>
+    grid instanceof HTMLElement
+      ? [...grid.querySelectorAll('article')].filter(
+          (card) =>
+            card instanceof HTMLElement && !card.classList.contains('hidden'),
+        )
+      : [];
+
+  const updateEmptyState = () => {
+    const isEmpty = visibleArticles().length === 0;
+    setVisible(grid, !isEmpty);
+    setVisible(emptyState, isEmpty);
+
+    if (isEmpty && loadMore instanceof HTMLElement) {
+      loadMore.classList.add('hidden');
+    }
+  };
+
+  const showErrorState = () => {
+    setVisible(grid, false);
+    setVisible(emptyState, false);
+
+    if (loadMore instanceof HTMLElement) {
+      loadMore.classList.add('hidden');
+    }
+
+    setVisible(errorState, true);
+  };
 
   if (grid instanceof HTMLElement && loadMore instanceof HTMLElement) {
     const button = loadMore.querySelector('button');
+
+    // SIMULACIÓN TEMPORAL (revertir tras revisión): error en carga inicial.
+    // No commitear.
+    showErrorState();
 
     loadMore.addEventListener('click', () => {
       if (button instanceof HTMLButtonElement) {
@@ -238,18 +308,24 @@ import Icon from '../components/ui/Icon.astro';
       });
 
       window.setTimeout(() => {
-        skeletons.forEach((skeleton) => {
-          if (skeleton instanceof HTMLElement) {
-            skeleton.classList.add('hidden');
-          }
-        });
-        grid.querySelectorAll('.is-more').forEach((card) => {
-          if (card instanceof HTMLElement) {
-            card.classList.remove('hidden');
-          }
-        });
-        grid.removeAttribute('aria-busy');
-        loadMore.classList.add('hidden');
+        try {
+          skeletons.forEach((skeleton) => {
+            if (skeleton instanceof HTMLElement) {
+              skeleton.classList.add('hidden');
+            }
+          });
+          grid.querySelectorAll('.is-more').forEach((card) => {
+            if (card instanceof HTMLElement) {
+              card.classList.remove('hidden');
+            }
+          });
+          grid.removeAttribute('aria-busy');
+          loadMore.classList.add('hidden');
+          updateEmptyState();
+        } catch {
+          grid.removeAttribute('aria-busy');
+          showErrorState();
+        }
       }, 1200);
     });
   }
