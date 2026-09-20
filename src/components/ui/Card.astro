@@ -4,35 +4,54 @@
  *
  * Estructura de Stitch con tokens existentes: contenedor
  * `bg-gw-surface-primary` + borde `border-gw-border-subtle` + `rounded-none`,
- * imagen `4/3` con `Badge` superpuesto (`top-4 left-4`), cuerpo `p-6`,
- * título `text-headline-md`, descripción `text-body-md`, metadatos
- * `text-body-md text-gw-text-muted`.
+ * imagen (`4/3` o altura fija), cuerpo `p-6`, Badge en flujo sobre el
+ * título (`mb-3`), título `text-headline-md`, descripción `text-body-md`,
+ * metadatos `text-body-md text-gw-text-muted`.
  * Hover con tokens (`group-hover:text-supporting-blue-dark`) y escala de
  * imagen de Stitch; sin sombras (el sistema usa capas tonales, no sombras).
  *
  * Diferencia documentada: Stitch fija el título a 20px con un override sin
  * token equivalente; se usa `headline-md` para conservar la jerarquía.
+ *
+ * RGW-188 — Adaptación para tarjetas de artículos del Blog (Stitch
+ * `GussWare Blog-V0.1.0`), compatible hacia atrás (todo opcional):
+ * - `href` + `linkLabel` (defecto `Read more`): fila de enlace
+ *   `label-bold` color `supporting-blue-dark`, hover `brand-accent`, con
+ *   icono `arrow-right`;
+ * - `image` opcional: sin imagen se muestra un bloque `h-48`
+ *   `bg-gw-surface-secondary` (maquetación/mock, sin assets);
+ * - `imageHeight` (p. ej. `h-48`): altura fija de Stitch para el grid
+ *   en lugar de la proporción `4/3` por defecto;
+ * - con `href`, el cuerpo llena la tarjeta (`flex-grow`, como en Stitch)
+ *   y el título crece para alinear los enlaces abajo.
  */
 import Badge from './Badge.astro';
+import Icon from './Icon.astro';
 import Image from './Image.astro';
 
 interface Props {
-  image: { src: string; alt: string };
+  image?: { src: string; alt: string };
+  imageHeight?: string;
   badge?: string;
   title: string;
   description?: string;
   date?: string;
   readingTime?: string;
+  href?: string;
+  linkLabel?: string;
   class?: string;
 }
 
 const {
-  image,
+  image = undefined,
+  imageHeight = undefined,
   badge = undefined,
   title,
   description = undefined,
   date = undefined,
   readingTime = undefined,
+  href = undefined,
+  linkLabel = 'Read more',
   class: className = '',
 } = Astro.props;
 ---
@@ -41,20 +60,40 @@ const {
   class={`bg-gw-surface-primary border-gw-border-subtle group flex h-full flex-col overflow-hidden rounded-none border ${className}`}
 >
   <div class="relative">
-    <Image
-      src={image.src}
-      alt={image.alt}
-      ratio="4/3"
-      class="transition-transform duration-500 group-hover:scale-105"
-    />
-    {badge && (
-      <div class="absolute top-4 left-4">
-        <Badge>{badge}</Badge>
-      </div>
+    {image ? (
+      imageHeight ? (
+        <div class={`w-full overflow-hidden rounded-none ${imageHeight}`}>
+          <img
+            src={image.src}
+            alt={image.alt}
+            loading="lazy"
+            class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+      ) : (
+        <Image
+          src={image.src}
+          alt={image.alt}
+          ratio="4/3"
+          class="transition-transform duration-500 group-hover:scale-105"
+        />
+      )
+    ) : (
+      <div
+        aria-hidden="true"
+        class={`bg-gw-surface-secondary w-full overflow-hidden rounded-none ${imageHeight ?? 'aspect-[4/3]'}`}
+      />
     )}
   </div>
-  <div class="flex flex-col p-6">
-    <h3 class="text-gw-text-primary text-headline-md group-hover:text-supporting-blue-dark mb-4 transition-colors duration-200">
+  <div class="flex flex-grow flex-col p-6">
+    {badge && (
+      <div class="mb-3">
+        <Badge class="rounded! font-normal">{badge}</Badge>
+      </div>
+    )}
+    <h3
+      class={`text-gw-text-primary text-headline-md group-hover:text-supporting-blue-dark mb-4 transition-colors duration-200 ${href ? 'flex-grow' : ''}`}
+    >
       {title}
     </h3>
     {description && (
@@ -65,6 +104,15 @@ const {
         <span>{date}</span>
         <span>{readingTime}</span>
       </p>
+    )}
+    {href && (
+      <a
+        href={href}
+        class="text-label-bold text-supporting-blue-dark hover:text-brand-accent mt-4 inline-flex items-center gap-2 transition-colors duration-200"
+      >
+        {linkLabel}
+        <Icon name="arrow-right" size={4} />
+      </a>
     )}
   </div>
 </article>
