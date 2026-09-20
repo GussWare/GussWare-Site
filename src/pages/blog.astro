@@ -14,6 +14,7 @@ import Layout from '../layouts/Layout.astro';
 import Container from '../components/ui/Container.astro';
 import Breadcrumbs from '../components/ui/Breadcrumbs.astro';
 import Badge from '../components/ui/Badge.astro';
+import Card from '../components/ui/Card.astro';
 import Icon from '../components/ui/Icon.astro';
 ---
 
@@ -125,5 +126,31 @@ import Icon from '../components/ui/Icon.astro';
     </Container>
   </div>
 
-  {/* Espacio reservado para el grid de artículos y load more. */}
+  {/* RGW-189: grid de artículos (maquetación con datos mock de Stitch; sin WordPress todavía). */}
+  <div class="mb-16">
+    <Container>
+      <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <Card
+          imageHeight="h-48"
+          badge="Development"
+          title="Scaling Mobile Apps with Cross-Platform Solutions"
+          href="#"
+        />
+        <Card
+          imageHeight="h-48"
+          badge="Business"
+          title="The Business of Freelance Communities"
+          href="#"
+        />
+        <Card
+          imageHeight="h-48"
+          badge="Guides"
+          title="Security Best Practices for Modern APIs"
+          href="#"
+        />
+      </div>
+    </Container>
+  </div>
+
+  {/* Espacio reservado para load more. */}
 </Layout>
