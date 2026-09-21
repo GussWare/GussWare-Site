@@ -7,4 +7,7 @@ export const wpConstants = {
     footerEnglish: 'Footer English',
     legal: 'Legal',
   },
+  blog: {
+    postsPerPage: 9,
+  },
 } as const;
