@@ -19,7 +19,7 @@ import {
   getCategories,
   normalizeBlogCard,
 } from '../lib/wordpress/post';
-import { wpConstants } from '../lib/wordpress/constants';
+import { WP_BLOG_POSTS_PER_PAGE } from '../lib/wordpress/constants';
 import type { BlogCard } from '../lib/wordpress/types';
 
 const wpApiUrl = import.meta.env.WP_API_URL as string | undefined;
@@ -29,7 +29,7 @@ const [initialPage, initialCategories] = await Promise.all([
     ? fetchPostPage({
         baseUrl: wpApiUrl,
         page: 1,
-        perPage: wpConstants.blog.postsPerPage,
+        perPage: WP_BLOG_POSTS_PER_PAGE,
         query: '',
         catId: 0,
       }).catch(() => null)
@@ -189,7 +189,7 @@ const featuredPost: FeaturedMock | null = {
               href={card.href}
             />
           ))}
-          {Array.from({ length: wpConstants.blog.postsPerPage }).map(() => (
+          {Array.from({ length: WP_BLOG_POSTS_PER_PAGE }).map(() => (
             <div
               aria-hidden="true"
               class="skeleton-card bg-gw-surface-primary border-gw-border-subtle hidden overflow-hidden rounded-none border"
@@ -271,7 +271,7 @@ const featuredPost: FeaturedMock | null = {
 
 <script>
   import { fetchPostPage, normalizeBlogCard } from '../lib/wordpress/post';
-  import { wpConstants } from '../lib/wordpress/constants';
+  import { WP_BLOG_POSTS_PER_PAGE } from '../lib/wordpress/constants';
 
   const grid = document.getElementById('blog-grid');
   const pagination = document.getElementById('blog-pagination');
@@ -292,7 +292,7 @@ const featuredPost: FeaturedMock | null = {
     query: '',
     catId: 0,
     loading: false,
-    perPage: wpConstants.blog.postsPerPage,
+    perPage: WP_BLOG_POSTS_PER_PAGE,
     wpUrl: '',
     cats: {},
   };
