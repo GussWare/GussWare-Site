@@ -100,3 +100,34 @@ export interface ContactInformation {
   email: string | null;
   horario_de_atencion: string | null;
 }
+
+export interface WpListPost {
+  id: number;
+  date: string;
+  slug: string;
+  link: string;
+  title: {
+    rendered: string;
+  };
+  excerpt: {
+    rendered: string;
+  };
+  featured_media: number;
+  categories: number[];
+  tags: number[];
+}
+
+export interface WpCategory {
+  id: number;
+  name: string;
+  slug: string;
+  count: number;
+}
+
+/** Tarjeta del listado del Blog lista para renderizar. */
+export interface BlogCard {
+  id: number;
+  badge: string | null;
+  title: string;
+  href: string;
+}

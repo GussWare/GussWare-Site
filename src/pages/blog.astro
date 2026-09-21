@@ -1,14 +1,11 @@
 ---
 /**
- * RGW-182/RGW-183 — Página de Blog (maquetación inicial).
+ * Página de Blog: listado real de WordPress.
  *
  * Utiliza `Layout` (Header + Footer existentes) y `Container`.
- * Hero según Stitch `GussWare Blog-V0.1.0`: banda `bg-gw-surface-secondary`
- * con `Breadcrumbs` (Home, Blog) y título `display` con tokens.
- * Barra de filtros estática (RGW-183, sin conexión WordPress todavía):
- * pills con tokens (`supporting-blue-dark` activo, `surface-secondary` +
- * borde `subtle` inactivos, hover `highlight`) e input de búsqueda con
- * `Icon`. Solo maquetación; el contenido dinámico llega en sus tareas.
+ * Hero según Stitch `GussWare Blog-V0.1.0` y barra de filtros/búsqueda.
+ * La página 1 se renderiza en SSR con `getListPosts`; búsqueda, filtros y
+ * paginación operan en el cliente contra la misma API (`wpRoutes`).
  */
 import Layout from '../layouts/Layout.astro';
 import Container from '../components/ui/Container.astro';
@@ -18,43 +15,30 @@ import Button from '../components/ui/Button.astro';
 import Card from '../components/ui/Card.astro';
 import Icon from '../components/ui/Icon.astro';
 import SectionHeading from '../components/ui/SectionHeading.astro';
+import {
+  getCategories,
+  getListPosts,
+  normalizeBlogCard,
+} from '../lib/wordpress/post';
+import type { BlogCard } from '../lib/wordpress/types';
 
-interface MockPost {
-  badge: string;
-  title: string;
-  href: string;
+const PER_PAGE = 3;
+const wpApiUrl = import.meta.env.WP_API_URL as string | undefined;
+
+const [initialPosts, initialCategories] = await Promise.all([
+  getListPosts(1, PER_PAGE, '', 'publish', 0, [], [], 'date', 'desc'),
+  getCategories(),
+]);
+
+const catMap: Record<number, string> = {};
+for (const category of initialCategories ?? []) {
+  catMap[category.id] = category.name;
 }
 
-// Mock local del listado (RGW-199 lo sustituirá por la respuesta del
-// backend sin cambiar la lógica visual): [] muestra el estado de error.
-const posts: MockPost[] = [
-  {
-    badge: 'Development',
-    title: 'Scaling Mobile Apps with Cross-Platform Solutions',
-    href: '#',
-  },
-  {
-    badge: 'Business',
-    title: 'The Business of Freelance Communities',
-    href: '#',
-  },
-  {
-    badge: 'Guides',
-    title: 'Security Best Practices for Modern APIs',
-    href: '#',
-  },
-  {
-    badge: 'Technology',
-    title: 'AI-Assisted Development Workflows',
-    href: '#',
-  },
-  {
-    badge: 'Development',
-    title: 'Testing Strategies for Modern Teams',
-    href: '#',
-  },
-  { badge: 'Business', title: 'Remote Culture That Scales', href: '#' },
-];
+const initialCards: BlogCard[] = (initialPosts ?? []).map((post) =>
+  normalizeBlogCard(post, catMap),
+);
+const initialError = initialPosts === null;
 
 interface FeaturedMock {
   badge: string;
@@ -75,7 +59,6 @@ const featuredPost: FeaturedMock | null = {
     'How distributed teams are shaping the next generation of digital products.',
   url: '#',
 };
-
 ---
 
 <Layout
@@ -97,37 +80,28 @@ const featuredPost: FeaturedMock | null = {
   <div class="bg-gw-surface-auxiliary mb-16">
     <Container>
       <div class="flex flex-wrap items-center justify-between gap-4">
-        <div class="flex flex-wrap items-center gap-2 md:gap-4">
+        <div
+          id="blog-filters"
+          class="flex flex-wrap items-center gap-2 md:gap-4"
+        >
           <button
             type="button"
+            data-cat-id="0"
+            aria-pressed="true"
             class="text-label-bold bg-supporting-blue-dark text-brand-surface rounded-full px-6 py-2 transition-colors duration-200"
           >
             All
           </button>
-          <button
-            type="button"
-            class="text-label-bold bg-gw-surface-secondary text-gw-text-secondary border-gw-border-subtle rounded-full border px-6 py-2 transition-colors duration-200 hover:border-gw-highlight hover:bg-gw-highlight"
-          >
-            Development
-          </button>
-          <button
-            type="button"
-            class="text-label-bold bg-gw-surface-secondary text-gw-text-secondary border-gw-border-subtle rounded-full border px-6 py-2 transition-colors duration-200 hover:border-gw-highlight hover:bg-gw-highlight"
-          >
-            Technology
-          </button>
-          <button
-            type="button"
-            class="text-label-bold bg-gw-surface-secondary text-gw-text-secondary border-gw-border-subtle rounded-full border px-6 py-2 transition-colors duration-200 hover:border-gw-highlight hover:bg-gw-highlight"
-          >
-            Business
-          </button>
-          <button
-            type="button"
-            class="text-label-bold bg-gw-surface-secondary text-gw-text-secondary border-gw-border-subtle rounded-full border px-6 py-2 transition-colors duration-200 hover:border-gw-highlight hover:bg-gw-highlight"
-          >
-            Guides
-          </button>
+          {(initialCategories ?? []).map((category) => (
+            <button
+              type="button"
+              data-cat-id={category.id}
+              aria-pressed="false"
+              class="text-label-bold bg-gw-surface-secondary text-gw-text-secondary border-gw-border-subtle rounded-full border px-6 py-2 transition-colors duration-200 hover:border-gw-highlight hover:bg-gw-highlight"
+            >
+              {category.name}
+            </button>
+          ))}
         </div>
         <div class="relative mt-4 w-full md:mt-0 md:w-72">
           <Icon
@@ -136,6 +110,7 @@ const featuredPost: FeaturedMock | null = {
             class="text-gw-text-secondary absolute top-1/2 left-3 -translate-y-1/2"
           />
           <input
+            id="blog-search"
             type="text"
             placeholder="Search articles..."
             aria-label="Search articles"
@@ -188,70 +163,69 @@ const featuredPost: FeaturedMock | null = {
     </div>
   )}
 
-  {/* RGW-189 grid + RGW-191/192/193 load more simulado con mock local (sin WordPress todavía). */}
+  {/* Listado real de WordPress: página 1 en SSR, resto por fetch. */}
   <div class="mb-16">
     <Container>
-      <div
-        id="blog-grid"
-        class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
-      >
-        {posts.slice(0, 3).map((post) => (
-          <Card
-            imageHeight="h-48"
-            badge={post.badge}
-            title={post.title}
-            href={post.href}
-          />
-        ))}
-        {posts.slice(3).map((post) => (
-          <Card
-            imageHeight="h-48"
-            badge={post.badge}
-            title={post.title}
-            href={post.href}
-            class="is-more hidden"
-          />
-        ))}
+      {!initialError && (
         <div
-          aria-hidden="true"
-          class="skeleton-card bg-gw-surface-primary border-gw-border-subtle hidden overflow-hidden rounded-none border"
+          id="blog-grid"
+          class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
+          data-wp-url={wpApiUrl ?? ''}
+          data-per-page={String(PER_PAGE)}
+          data-cats={JSON.stringify(catMap)}
+          data-ids={JSON.stringify(initialCards.map((card) => card.id))}
         >
-          <div class="bg-gw-surface-secondary motion-safe:animate-pulse h-48 w-full"></div>
-          <div class="flex flex-col p-6">
-            <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-3 h-6 w-24 rounded-none"></div>
-            <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-4 h-8 w-full rounded-none"></div>
-            <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-4 h-8 w-3/4 rounded-none"></div>
-            <div class="bg-gw-surface-secondary motion-safe:animate-pulse mt-4 h-5 w-28 rounded-none"></div>
+          {initialCards.map((card) => (
+            <Card
+              imageHeight="h-48"
+              badge={card.badge ?? undefined}
+              title={card.title}
+              href={card.href}
+            />
+          ))}
+          <div
+            aria-hidden="true"
+            class="skeleton-card bg-gw-surface-primary border-gw-border-subtle hidden overflow-hidden rounded-none border"
+          >
+            <div class="bg-gw-surface-secondary motion-safe:animate-pulse h-48 w-full"></div>
+            <div class="flex flex-col p-6">
+              <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-3 h-6 w-24 rounded-none"></div>
+              <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-4 h-8 w-full rounded-none"></div>
+              <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-4 h-8 w-3/4 rounded-none"></div>
+              <div class="bg-gw-surface-secondary motion-safe:animate-pulse mt-4 h-5 w-28 rounded-none"></div>
+            </div>
+          </div>
+          <div
+            aria-hidden="true"
+            class="skeleton-card bg-gw-surface-primary border-gw-border-subtle hidden overflow-hidden rounded-none border"
+          >
+            <div class="bg-gw-surface-secondary motion-safe:animate-pulse h-48 w-full"></div>
+            <div class="flex flex-col p-6">
+              <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-3 h-6 w-24 rounded-none"></div>
+              <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-4 h-8 w-full rounded-none"></div>
+              <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-4 h-8 w-3/4 rounded-none"></div>
+              <div class="bg-gw-surface-secondary motion-safe:animate-pulse mt-4 h-5 w-28 rounded-none"></div>
+            </div>
+          </div>
+          <div
+            aria-hidden="true"
+            class="skeleton-card bg-gw-surface-primary border-gw-border-subtle hidden overflow-hidden rounded-none border"
+          >
+            <div class="bg-gw-surface-secondary motion-safe:animate-pulse h-48 w-full"></div>
+            <div class="flex flex-col p-6">
+              <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-3 h-6 w-24 rounded-none"></div>
+              <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-4 h-8 w-full rounded-none"></div>
+              <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-4 h-8 w-3/4 rounded-none"></div>
+              <div class="bg-gw-surface-secondary motion-safe:animate-pulse mt-4 h-5 w-28 rounded-none"></div>
+            </div>
           </div>
         </div>
-        <div
-          aria-hidden="true"
-          class="skeleton-card bg-gw-surface-primary border-gw-border-subtle hidden overflow-hidden rounded-none border"
-        >
-          <div class="bg-gw-surface-secondary motion-safe:animate-pulse h-48 w-full"></div>
-          <div class="flex flex-col p-6">
-            <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-3 h-6 w-24 rounded-none"></div>
-            <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-4 h-8 w-full rounded-none"></div>
-            <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-4 h-8 w-3/4 rounded-none"></div>
-            <div class="bg-gw-surface-secondary motion-safe:animate-pulse mt-4 h-5 w-28 rounded-none"></div>
-          </div>
+      )}
+      {!initialError && (
+        <div id="load-more" class="mt-12 flex justify-center">
+          <Button variant="secondary">Load More Articles</Button>
         </div>
-        <div
-          aria-hidden="true"
-          class="skeleton-card bg-gw-surface-primary border-gw-border-subtle hidden overflow-hidden rounded-none border"
-        >
-          <div class="bg-gw-surface-secondary motion-safe:animate-pulse h-48 w-full"></div>
-          <div class="flex flex-col p-6">
-            <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-3 h-6 w-24 rounded-none"></div>
-            <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-4 h-8 w-full rounded-none"></div>
-            <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-4 h-8 w-3/4 rounded-none"></div>
-            <div class="bg-gw-surface-secondary motion-safe:animate-pulse mt-4 h-5 w-28 rounded-none"></div>
-          </div>
-        </div>
-      </div>
-      <div id="load-more" class="mt-12 flex justify-center">
-        <Button variant="secondary">Load More Articles</Button>
-      </div>
+      )}
       <div id="blog-empty" class="hidden py-8 text-center">
         <SectionHeading
           title="No articles found"
@@ -259,7 +233,11 @@ const featuredPost: FeaturedMock | null = {
           align="center"
         />
       </div>
-      <div id="blog-error" class="hidden py-8 text-center" role="alert">
+      <div
+        id="blog-error"
+        class={`py-8 text-center${initialError ? '' : ' hidden'}`}
+        role="alert"
+      >
         <SectionHeading
           title="Something went wrong"
           description="Please try again later."
@@ -271,10 +249,14 @@ const featuredPost: FeaturedMock | null = {
 </Layout>
 
 <script>
+  import { fetchPostPage, normalizeBlogCard } from '../lib/wordpress/post';
+
   const grid = document.getElementById('blog-grid');
   const loadMore = document.getElementById('load-more');
   const emptyState = document.getElementById('blog-empty');
   const errorState = document.getElementById('blog-error');
+  const searchInput = document.getElementById('blog-search');
+  const filters = document.getElementById('blog-filters');
 
   const setVisible = (element, visible) => {
     if (element instanceof HTMLElement) {
@@ -282,75 +264,275 @@ const featuredPost: FeaturedMock | null = {
     }
   };
 
-  const visibleArticles = () =>
-    grid instanceof HTMLElement
-      ? [...grid.querySelectorAll('article')].filter(
-          (card) =>
-            card instanceof HTMLElement && !card.classList.contains('hidden'),
-        )
-      : [];
-
-  // Sin artículos en el array → estado de error RGW-196 (nunca vacío).
-  const updateEmptyState = () => {
-    const isEmpty = visibleArticles().length === 0;
-    setVisible(grid, !isEmpty);
-    setVisible(emptyState, false);
-    setVisible(errorState, isEmpty);
-
-    if (isEmpty && loadMore instanceof HTMLElement) {
-      loadMore.classList.add('hidden');
-    }
+  const state = {
+    page: 1,
+    totalPages: 1,
+    query: '',
+    catId: 0,
+    loading: false,
+    perPage: 3,
+    wpUrl: '',
+    cats: {},
+    renderedIds: new Set(),
   };
 
-  const showErrorState = () => {
+  if (grid instanceof HTMLElement) {
+    state.wpUrl = (grid.dataset.wpUrl ?? '').replace(/\/+$/, '');
+    state.perPage = Number(grid.dataset.perPage ?? '3') || 3;
+
+    try {
+      state.cats = JSON.parse(grid.dataset.cats ?? '{}');
+    } catch {
+      state.cats = {};
+    }
+
+    try {
+      for (const id of JSON.parse(grid.dataset.ids ?? '[]')) {
+        state.renderedIds.add(id);
+      }
+    } catch {
+      // Sin ids iniciales: la protección de duplicados parte vacía.
+    }
+  }
+
+  const pillActive =
+    'text-label-bold bg-supporting-blue-dark text-brand-surface rounded-full px-6 py-2 transition-colors duration-200';
+  const pillInactive =
+    'text-label-bold bg-gw-surface-secondary text-gw-text-secondary border-gw-border-subtle rounded-full border px-6 py-2 transition-colors duration-200 hover:border-gw-highlight hover:bg-gw-highlight';
+
+  // Nodos <article> reutilizables (única fuente visual: Card.astro).
+  const cardPool = [];
+
+  function bindCard(node, card) {
+    const title = node.querySelector('h3');
+
+    if (title) {
+      title.textContent = card.title;
+    }
+
+    const badgeWrap = node.querySelector('div.mb-3');
+
+    if (badgeWrap instanceof HTMLElement) {
+      if (card.badge) {
+        badgeWrap.classList.remove('hidden');
+
+        const badgeText = badgeWrap.querySelector('span');
+
+        if (badgeText) {
+          badgeText.textContent = card.badge;
+        }
+      } else {
+        badgeWrap.classList.add('hidden');
+      }
+    }
+
+    const link = node.querySelector('a');
+
+    if (link instanceof HTMLAnchorElement) {
+      link.href = card.href;
+    }
+  }
+
+  function setLoading(on) {
+    if (!(grid instanceof HTMLElement)) {
+      return;
+    }
+
+    grid.querySelectorAll('.skeleton-card').forEach((skeleton) => {
+      if (skeleton instanceof HTMLElement) {
+        skeleton.classList.toggle('hidden', !on);
+      }
+    });
+
+    if (on) {
+      grid.setAttribute('aria-busy', 'true');
+    } else {
+      grid.removeAttribute('aria-busy');
+    }
+
+    const button = loadMore?.querySelector('button');
+
+    if (button instanceof HTMLButtonElement) {
+      button.disabled = on;
+    }
+  }
+
+  function updateLoadMore() {
+    if (loadMore instanceof HTMLElement) {
+      setVisible(loadMore, state.page < state.totalPages);
+    }
+  }
+
+  function showContent() {
+    setVisible(grid, true);
+    setVisible(emptyState, false);
+    setVisible(errorState, false);
+    updateLoadMore();
+  }
+
+  function showEmpty() {
+    setVisible(grid, false);
+    setVisible(emptyState, true);
+    setVisible(errorState, false);
+    setVisible(loadMore, false);
+  }
+
+  function showError() {
     setVisible(grid, false);
     setVisible(emptyState, false);
-
-    if (loadMore instanceof HTMLElement) {
-      loadMore.classList.add('hidden');
-    }
-
+    setVisible(loadMore, false);
     setVisible(errorState, true);
-  };
+  }
 
-  if (grid instanceof HTMLElement && loadMore instanceof HTMLElement) {
-    const button = loadMore.querySelector('button');
-
-    updateEmptyState();
-
-    loadMore.addEventListener('click', () => {
-      if (button instanceof HTMLButtonElement) {
-        button.disabled = true;
-      }
-      grid.setAttribute('aria-busy', 'true');
-
-      const skeletons = [...grid.querySelectorAll('.skeleton-card')];
-      skeletons.forEach((skeleton) => {
-        if (skeleton instanceof HTMLElement) {
-          skeleton.classList.remove('hidden');
-        }
-      });
-
-      window.setTimeout(() => {
-        try {
-          skeletons.forEach((skeleton) => {
-            if (skeleton instanceof HTMLElement) {
-              skeleton.classList.add('hidden');
-            }
-          });
-          grid.querySelectorAll('.is-more').forEach((card) => {
-            if (card instanceof HTMLElement) {
-              card.classList.remove('hidden');
-            }
-          });
-          grid.removeAttribute('aria-busy');
-          loadMore.classList.add('hidden');
-          updateEmptyState();
-        } catch {
-          grid.removeAttribute('aria-busy');
-          showErrorState();
-        }
-      }, 1200);
+  async function fetchPosts(page) {
+    return fetchPostPage({
+      baseUrl: state.wpUrl,
+      page,
+      perPage: state.perPage,
+      query: state.query,
+      catId: state.catId,
     });
   }
+
+  function appendCards(items) {
+    if (!(grid instanceof HTMLElement)) {
+      return 0;
+    }
+
+    let added = 0;
+
+    for (const item of items) {
+      const card = normalizeBlogCard(item, state.cats);
+
+      if (state.renderedIds.has(card.id)) {
+        continue;
+      }
+
+      state.renderedIds.add(card.id);
+
+      let node = cardPool.pop();
+
+      if (!(node instanceof HTMLElement)) {
+        const template = grid.querySelector('article');
+
+        if (!(template instanceof HTMLElement)) {
+          continue;
+        }
+
+        node = template.cloneNode(true);
+      }
+
+      bindCard(node, card);
+      node.classList.remove('hidden');
+      grid.appendChild(node);
+      added += 1;
+    }
+
+    return added;
+  }
+
+  function clearCards() {
+    grid?.querySelectorAll('article').forEach((card) => {
+      if (card instanceof HTMLElement) {
+        card.remove();
+        cardPool.push(card);
+      }
+    });
+    state.renderedIds.clear();
+  }
+
+  async function loadPosts({ reset }) {
+    if (!(grid instanceof HTMLElement) || state.loading) {
+      return;
+    }
+
+    if (!state.wpUrl) {
+      showError();
+      return;
+    }
+
+    state.loading = true;
+    setLoading(true);
+    setVisible(errorState, false);
+    setVisible(emptyState, false);
+
+    try {
+      if (reset) {
+        state.page = 1;
+        clearCards();
+      }
+
+      const { items, totalPages } = await fetchPosts(state.page);
+      state.totalPages = totalPages;
+      appendCards(items);
+      setLoading(false);
+
+      if (grid.querySelectorAll('article').length === 0) {
+        showEmpty();
+      } else {
+        showContent();
+      }
+    } catch {
+      // Fuera de rango (página > 1): fin de datos, se conserva el contenido.
+      // En primera página: error real.
+      setLoading(false);
+
+      if (state.page > 1) {
+        state.page -= 1;
+        showContent();
+      } else {
+        showError();
+      }
+    }
+
+    state.loading = false;
+  }
+
+  loadMore?.addEventListener('click', () => {
+    if (state.page >= state.totalPages) {
+      updateLoadMore();
+      return;
+    }
+
+    state.page += 1;
+    loadPosts({ reset: false });
+  });
+
+  filters?.addEventListener('click', (event) => {
+    const pill =
+      event.target instanceof HTMLElement
+        ? event.target.closest('button')
+        : null;
+
+    if (!(pill instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    state.catId = Number(pill.dataset.catId ?? '0') || 0;
+
+    filters.querySelectorAll('button').forEach((other) => {
+      const isActive = other === pill;
+      other.className = isActive ? pillActive : pillInactive;
+      other.setAttribute('aria-pressed', String(isActive));
+    });
+
+    loadPosts({ reset: true });
+  });
+
+  let searchTimer;
+
+  searchInput?.addEventListener('input', () => {
+    window.clearTimeout(searchTimer);
+    searchTimer = window.setTimeout(() => {
+      const value =
+        searchInput instanceof HTMLInputElement ? searchInput.value.trim() : '';
+
+      if (value === state.query) {
+        return;
+      }
+
+      state.query = value;
+      loadPosts({ reset: true });
+    }, 400);
+  });
 </script>

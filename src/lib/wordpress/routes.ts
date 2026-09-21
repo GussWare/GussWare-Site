@@ -8,4 +8,45 @@ export const wpRoutes = {
   socialMedia: '/gussware/v1/redes-sociales',
   contact: '/gussware/v1/contacto',
   header: '/gussware/v1/header',
+  posts: (
+    page: number,
+    per_page: number,
+    search: string,
+    status: string,
+    author: number,
+    categories: number[],
+    tags: number[],
+    orderby: string,
+    order: string,
+  ) => {
+    const params = new URLSearchParams({
+      page: String(page),
+      per_page: String(per_page),
+      orderby,
+      order,
+    });
+
+    if (search) {
+      params.set('search', search);
+    }
+
+    if (status) {
+      params.set('status', status);
+    }
+
+    if (author) {
+      params.set('author', String(author));
+    }
+
+    if (categories.length > 0) {
+      params.set('categories', categories.join(','));
+    }
+
+    if (tags.length > 0) {
+      params.set('tags', tags.join(','));
+    }
+
+    return `/wp/v2/posts?${params.toString()}`;
+  },
+  categories: '/wp/v2/categories?per_page=100',
 } as const;
