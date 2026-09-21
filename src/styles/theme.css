@@ -129,6 +129,13 @@
   --text-display-lg--font-weight: var(--font-weight-display-lg);
   --text-display-lg--letter-spacing: var(--letter-spacing-display-lg);
 
+  --text-display-lg-mobile: var(--font-size-display-lg-mobile);
+  --text-display-lg-mobile--line-height: var(--line-height-display-lg-mobile);
+  --text-display-lg-mobile--font-weight: var(--font-weight-display-lg);
+  --text-display-lg-mobile--letter-spacing: var(
+    --letter-spacing-display-lg-mobile
+  );
+
   --text-headline-lg: var(--font-size-headline-lg);
   --text-headline-lg--line-height: var(--line-height-headline-lg);
   --text-headline-lg--font-weight: var(--font-weight-headline);
