@@ -19,6 +19,43 @@ import Card from '../components/ui/Card.astro';
 import Icon from '../components/ui/Icon.astro';
 import SectionHeading from '../components/ui/SectionHeading.astro';
 
+interface MockPost {
+  badge: string;
+  title: string;
+  href: string;
+}
+
+// Mock local del listado (RGW-199 lo sustituirá por la respuesta del
+// backend sin cambiar la lógica visual): [] muestra el estado de error.
+const posts: MockPost[] = [
+  {
+    badge: 'Development',
+    title: 'Scaling Mobile Apps with Cross-Platform Solutions',
+    href: '#',
+  },
+  {
+    badge: 'Business',
+    title: 'The Business of Freelance Communities',
+    href: '#',
+  },
+  {
+    badge: 'Guides',
+    title: 'Security Best Practices for Modern APIs',
+    href: '#',
+  },
+  {
+    badge: 'Technology',
+    title: 'AI-Assisted Development Workflows',
+    href: '#',
+  },
+  {
+    badge: 'Development',
+    title: 'Testing Strategies for Modern Teams',
+    href: '#',
+  },
+  { badge: 'Business', title: 'Remote Culture That Scales', href: '#' },
+];
+
 interface FeaturedMock {
   badge: string;
   readingTime: string;
@@ -27,9 +64,18 @@ interface FeaturedMock {
   url: string;
 }
 
-// SIMULACIÓN TEMPORAL (revertir tras revisión): null = hay noticias pero
-// ninguna está marcada como destacada. No commitear.
-const featuredPost: FeaturedMock | null = null;
+// Mock local de la destacada (null = sin destacada, el bloque no se
+// renderiza y no activa ningún estado; el listado sigue independiente).
+
+const featuredPost: FeaturedMock | null = {
+  badge: 'Technology',
+  readingTime: '5 min read',
+  title: 'The Future of Collaborative Development',
+  description:
+    'How distributed teams are shaping the next generation of digital products.',
+  url: '#',
+};
+
 ---
 
 <Layout
@@ -149,45 +195,23 @@ const featuredPost: FeaturedMock | null = null;
         id="blog-grid"
         class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
       >
-        <Card
-          imageHeight="h-48"
-          badge="Development"
-          title="Scaling Mobile Apps with Cross-Platform Solutions"
-          href="#"
-        />
-        <Card
-          imageHeight="h-48"
-          badge="Business"
-          title="The Business of Freelance Communities"
-          href="#"
-        />
-        <Card
-          imageHeight="h-48"
-          badge="Guides"
-          title="Security Best Practices for Modern APIs"
-          href="#"
-        />
-        <Card
-          imageHeight="h-48"
-          badge="Technology"
-          title="AI-Assisted Development Workflows"
-          href="#"
-          class="is-more hidden"
-        />
-        <Card
-          imageHeight="h-48"
-          badge="Development"
-          title="Testing Strategies for Modern Teams"
-          href="#"
-          class="is-more hidden"
-        />
-        <Card
-          imageHeight="h-48"
-          badge="Business"
-          title="Remote Culture That Scales"
-          href="#"
-          class="is-more hidden"
-        />
+        {posts.slice(0, 3).map((post) => (
+          <Card
+            imageHeight="h-48"
+            badge={post.badge}
+            title={post.title}
+            href={post.href}
+          />
+        ))}
+        {posts.slice(3).map((post) => (
+          <Card
+            imageHeight="h-48"
+            badge={post.badge}
+            title={post.title}
+            href={post.href}
+            class="is-more hidden"
+          />
+        ))}
         <div
           aria-hidden="true"
           class="skeleton-card bg-gw-surface-primary border-gw-border-subtle hidden overflow-hidden rounded-none border"
@@ -266,10 +290,12 @@ const featuredPost: FeaturedMock | null = null;
         )
       : [];
 
+  // Sin artículos en el array → estado de error RGW-196 (nunca vacío).
   const updateEmptyState = () => {
     const isEmpty = visibleArticles().length === 0;
     setVisible(grid, !isEmpty);
-    setVisible(emptyState, isEmpty);
+    setVisible(emptyState, false);
+    setVisible(errorState, isEmpty);
 
     if (isEmpty && loadMore instanceof HTMLElement) {
       loadMore.classList.add('hidden');
@@ -290,9 +316,7 @@ const featuredPost: FeaturedMock | null = null;
   if (grid instanceof HTMLElement && loadMore instanceof HTMLElement) {
     const button = loadMore.querySelector('button');
 
-    // SIMULACIÓN TEMPORAL (revertir tras revisión): error en carga inicial.
-    // No commitear.
-    showErrorState();
+    updateEmptyState();
 
     loadMore.addEventListener('click', () => {
       if (button instanceof HTMLButtonElement) {
