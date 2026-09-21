@@ -1,6 +1,13 @@
 import { wpFetch } from './client';
 import { wpRoutes } from './routes';
-import type { BlogCard, WpCategory, WpListPost } from './types';
+import type {
+  BlogCard,
+  WpCategory,
+  WpListPost,
+  WpPost,
+  WpTag,
+  WpUser,
+} from './types';
 
 export async function getListPosts(
   page: number,
@@ -54,7 +61,7 @@ export function normalizeBlogCard(
     id: post.id,
     badge: categoryId != null ? (categories[categoryId] ?? null) : null,
     title: post.title.rendered,
-    href: post.link,
+    href: `/blog/${post.slug}`,
   };
 }
 
@@ -111,4 +118,57 @@ export async function fetchPostPage(params: PostPageParams): Promise<PostPage> {
     items: data as WpListPost[],
     totalPages: Number(response.headers.get('X-WP-TotalPages') ?? '1') || 1,
   };
+}
+
+export async function getPostById(id: number): Promise<WpPost | null> {
+  try {
+    const data = await wpFetch<WpPost>(wpRoutes.post(id));
+    return data;
+  } catch (error) {
+    console.error('Error fetching post by ID:', error);
+    return null;
+  }
+}
+
+export async function getPostBySlug(slug: string): Promise<WpPost | null> {
+  try {
+    const data = await wpFetch<WpPost[]>(wpRoutes.postBySlug(slug));
+    const post = Array.isArray(data)
+      ? data.find((item) => item.slug === slug && item.status === 'publish')
+      : undefined;
+    return post ?? null;
+  } catch (error) {
+    console.error('Error fetching post by slug:', error);
+    return null;
+  }
+}
+
+export async function getUser(id: number): Promise<WpUser | null> {
+  try {
+    const data = await wpFetch<WpUser>(wpRoutes.user(id));
+    return data ?? null;
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    return null;
+  }
+}
+
+export async function getTags(): Promise<WpTag[] | null> {
+  try {
+    const data = await wpFetch<WpTag[]>(wpRoutes.tags);
+    return Array.isArray(data) ? data : null;
+  } catch (error) {
+    console.error('Error fetching tags:', error);
+    return null;
+  }
+}
+
+export async function getBlogFeatured() {
+  try {
+    const data = await wpFetch<WpListPost>(wpRoutes.blogFeatured);
+    return data;
+  } catch (error) {
+    console.error('Error fetching blog featured posts:', error);
+    return null;
+  }
 }

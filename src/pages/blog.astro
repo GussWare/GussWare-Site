@@ -13,18 +13,22 @@ import Breadcrumbs from '../components/ui/Breadcrumbs.astro';
 import Badge from '../components/ui/Badge.astro';
 import Card from '../components/ui/Card.astro';
 import Icon from '../components/ui/Icon.astro';
+import Image from '../components/ui/Image.astro';
 import SectionHeading from '../components/ui/SectionHeading.astro';
 import {
   fetchPostPage,
+  getBlogFeatured,
   getCategories,
   normalizeBlogCard,
 } from '../lib/wordpress/post';
+import { wpFetch } from '../lib/wordpress/client';
+import { wpRoutes } from '../lib/wordpress/routes';
 import { WP_BLOG_POSTS_PER_PAGE } from '../lib/wordpress/constants';
-import type { BlogCard } from '../lib/wordpress/types';
+import type { BlogCard, WpMedia } from '../lib/wordpress/types';
 
 const wpApiUrl = import.meta.env.WP_API_URL as string | undefined;
 
-const [initialPage, initialCategories] = await Promise.all([
+const [initialPage, initialCategories, featuredRaw] = await Promise.all([
   wpApiUrl
     ? fetchPostPage({
         baseUrl: wpApiUrl,
@@ -35,6 +39,7 @@ const [initialPage, initialCategories] = await Promise.all([
       }).catch(() => null)
     : null,
   getCategories(),
+  getBlogFeatured().catch(() => null),
 ]);
 
 const catMap: Record<number, string> = {};
@@ -48,25 +53,59 @@ const initialCards: BlogCard[] = (initialPage?.items ?? []).map((post) =>
 const initialTotalPages = initialPage?.totalPages ?? 1;
 const initialError = initialPage === null;
 
-interface FeaturedMock {
+interface FeaturedPost {
   badge: string;
   readingTime: string;
   title: string;
   description: string;
   url: string;
+  image: { src: string; alt: string } | null;
 }
 
-// Mock local de la destacada (null = sin destacada, el bloque no se
-// renderiza y no activa ningún estado; el listado sigue independiente).
+const stripHtml = (html: string): string =>
+  html
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 
-const featuredPost: FeaturedMock | null = {
-  badge: 'Technology',
-  readingTime: '5 min read',
-  title: 'The Future of Collaborative Development',
-  description:
-    'How distributed teams are shaping the next generation of digital products.',
-  url: '#',
+// Destacada real de WordPress (null = sin destacada: el bloque no se
+// renderiza y no activa ningún estado; el listado sigue independiente).
+let featuredImage: FeaturedPost['image'] = null;
+
+if (featuredRaw?.featured_media) {
+  try {
+    const media = await wpFetch<WpMedia>(
+      wpRoutes.media(featuredRaw.featured_media),
+    );
+
+    if (media?.source_url) {
+      featuredImage = {
+        src: media.source_url,
+        alt:
+          media.alt_text ||
+          media.title?.rendered ||
+          stripHtml(featuredRaw.title.rendered),
+      };
+    }
+  } catch {
+    // Sin imagen destacada: se conserva el bloque de color existente.
+  }
+}
+
+const toReadingTime = (text: string): string => {
+  const words = stripHtml(text).split(' ').filter(Boolean).length;
+  return `${Math.max(1, Math.round(words / 200))} min read`;
 };
+
+const featuredPost: FeaturedPost | null = featuredRaw
+  ? {
+      badge: catMap[featuredRaw.categories?.[0]] ?? 'Blog',
+      readingTime: toReadingTime(featuredRaw.excerpt.rendered),
+      title: stripHtml(featuredRaw.title.rendered),
+      description: stripHtml(featuredRaw.excerpt.rendered),
+      url: `/blog/${featuredRaw.slug}`,
+    }
+  : null;
 ---
 
 <Layout
@@ -135,10 +174,18 @@ const featuredPost: FeaturedMock | null = {
       <Container>
         <div class="bg-gw-surface-primary border-gw-border-subtle grid grid-cols-1 items-center gap-8 overflow-hidden rounded-none border md:grid-cols-2">
           <div class="relative h-64 w-full md:h-full md:min-h-96">
-            <div
-              aria-hidden="true"
-              class="bg-gw-surface-secondary absolute inset-0 h-full w-full"
-            ></div>
+            {featuredImage ? (
+              <Image
+                src={featuredImage.src}
+                alt={featuredImage.alt}
+                class="absolute inset-0 h-full w-full object-cover"
+              />
+            ) : (
+              <div
+                aria-hidden="true"
+                class="bg-gw-surface-secondary absolute inset-0 h-full w-full"
+              ></div>
+            )}
           </div>
           <div class="p-8 md:p-12">
             <div class="mb-4 flex items-center gap-4">
