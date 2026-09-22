@@ -11,7 +11,11 @@
 
 import { wpFetch } from './client';
 import { wpRoutes } from './routes';
-import { wpConstants } from './constants';
+import {
+  WP_MENU_LOCATION_HEADER,
+  WP_MENU_NAME_FOOTER,
+  WP_MENU_NAME_LEGAL,
+} from './constants';
 import type { HeaderMenuItem, WpMenu, WpMenuItem } from './types';
 
 function toHeaderMenuItem(item: WpMenuItem): HeaderMenuItem {
@@ -70,7 +74,7 @@ export async function getHeaderMenu(): Promise<HeaderMenuItem[]> {
   try {
     const menus = await wpFetch<WpMenu[]>(wpRoutes.menus);
     const menu = menus.find((candidate) =>
-      candidate.locations?.includes(wpConstants.menuLocations.header),
+      candidate.locations?.includes(WP_MENU_LOCATION_HEADER),
     );
 
     if (!menu) {
@@ -87,7 +91,7 @@ export async function getFooterMenu(): Promise<HeaderMenuItem[]> {
   try {
     const menus = await wpFetch<WpMenu[]>(wpRoutes.menus);
     const menu = menus.find(
-      (candidate) => candidate.name === wpConstants.menuNames.footer,
+      (candidate) => candidate.name === WP_MENU_NAME_FOOTER,
     );
 
     if (!menu) {
@@ -104,7 +108,7 @@ export async function getLegalMenu(): Promise<HeaderMenuItem[]> {
   try {
     const menus = await wpFetch<WpMenu[]>(wpRoutes.menus);
     const menu = menus.find(
-      (candidate) => candidate.name === wpConstants.menuNames.legal,
+      (candidate) => candidate.name === WP_MENU_NAME_LEGAL,
     );
 
     if (!menu) {

@@ -13,11 +13,16 @@
 import { getHeaderLogo } from '../../lib/wordpress/logo';
 import { getHeaderMenu } from '../../lib/wordpress/menu';
 import { getHeader } from '../../lib/wordpress/header';
+import { routes } from '../../lib/routes';
 import Button from '../ui/Button.astro';
 import Logo from '../ui/Logo.astro';
 import MenuButton from '../ui/MenuButton.astro';
 
-const [logo, menuItems, header] = await Promise.all([getHeaderLogo(), getHeaderMenu(), getHeader()]);
+const [logo, menuItems, header] = await Promise.all([
+  getHeaderLogo(),
+  getHeaderMenu(),
+  getHeader(),
+]);
 const topLevelItems = menuItems.filter((item) => item.parent === 0);
 ---
 
@@ -45,7 +50,11 @@ const topLevelItems = menuItems.filter((item) => item.parent === 0);
     <!-- Desktop CTA & Mobile Toggle -->
     <div class="flex items-center gap-4">
       {header?.estado && (
-        <Button href={header.url} variant="primary" class="hidden sm:inline-flex">
+        <Button
+          href={header.url}
+          variant="primary"
+          class="hidden sm:inline-flex"
+        >
           {header.texto_del_boton}
         </Button>
       )}
@@ -78,7 +87,11 @@ const topLevelItems = menuItems.filter((item) => item.parent === 0);
           {item.title}
         </a>
       ))}
-      <Button href="/contact" variant="primary" class="mt-2 flex md:hidden">
+      <Button
+        href={routes.contact}
+        variant="primary"
+        class="mt-2 flex md:hidden"
+      >
         Start a Conversation
       </Button>
     </nav>

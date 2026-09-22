@@ -1,0 +1,242 @@
+---
+/**
+ * Detalle de artículo `/blog/[slug]` (Stitch `GussWare Blog-Article-V0.1.0`).
+ *
+ * Ruta SSR bajo demanda (`prerender = false`): el `slug` se obtiene de
+ * `Astro.params` y el artículo con `getPostBySlug` (sin `getStaticPaths`,
+ * para que un artículo nuevo sea resoluble sin rebuild). Autor, tags e
+ * imagen con rutas/tipos nativos. Estilos del contenido con tokens en
+ * `<style>` acotado (el proyecto no tiene sistema de prosa).
+ */
+import Layout from '../../layouts/Layout.astro';
+import Container from '../../components/ui/Container.astro';
+import Breadcrumbs from '../../components/ui/Breadcrumbs.astro';
+import Badge from '../../components/ui/Badge.astro';
+import Icon from '../../components/ui/Icon.astro';
+import Image from '../../components/ui/Image.astro';
+import RelatedArticles from '../../components/blog/RelatedArticles.astro';
+import {
+  buildCategoryMap,
+  getPostBySlug,
+  getCategories,
+  getTags,
+  getUser,
+} from '../../lib/wordpress/post';
+import { stripHtml } from '../../lib/wordpress/text';
+import { routes } from '../../lib/routes';
+import { wpFetch } from '../../lib/wordpress/client';
+import { wpRoutes } from '../../lib/wordpress/routes';
+import type { WpMedia } from '../../lib/wordpress/types';
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+const wpApiUrl = import.meta.env.WP_API_URL as string | undefined;
+const post =
+  typeof slug === 'string' ? await getPostBySlug(slug).catch(() => null) : null;
+
+if (!post) {
+  return Astro.redirect(routes.notFound);
+}
+
+const formatDate = (iso: string): string => {
+  const date = new Date(iso);
+  return Number.isNaN(date.getTime())
+    ? iso
+    : date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      });
+};
+
+const [author, allTags, categories] = await Promise.all([
+  getUser(post.author).catch(() => null),
+  getTags().catch(() => null),
+  getCategories().catch(() => null),
+]);
+
+const catMap = buildCategoryMap(categories);
+const categoryId = post.categories?.[0];
+const categoryName = categoryId != null ? (catMap[categoryId] ?? null) : null;
+const tagNames = (allTags ?? []).filter((tag) => post.tags?.includes(tag.id));
+
+let featuredImage: { src: string; alt: string } | null = null;
+
+if (post.featured_media) {
+  try {
+    const media = await wpFetch<WpMedia>(wpRoutes.media(post.featured_media));
+
+    if (media?.source_url) {
+      featuredImage = {
+        src: media.source_url,
+        alt: media.alt_text || media.title?.rendered || post.title.rendered,
+      };
+    }
+  } catch {
+    // Sin imagen destacada: el artículo se renderiza igual.
+  }
+}
+
+const title = stripHtml(post.title.rendered);
+const lede = stripHtml(post.excerpt.rendered);
+const description = stripHtml(post.excerpt.rendered).slice(0, 160);
+const rawMinutes = post.acf?.informacion_del_articulo?.minutos_de_lectura;
+const readingTime: number | null =
+  typeof rawMinutes === 'number' && Number.isInteger(rawMinutes)
+    ? rawMinutes
+    : null;
+const avatar =
+  author?.avatar_urls?.['96'] ?? author?.avatar_urls?.['48'] ?? null;
+---
+
+<Layout title={`${title} — GussWare`} description={description}>
+  <Container>
+    <article class="mx-auto w-full max-w-[800px] pt-16 md:pt-24 pb-16 md:pb-24">
+      <Breadcrumbs
+        items={[
+          { label: 'Home', href: routes.home },
+          { label: 'Blog', href: routes.blog },
+          { label: categoryName ?? title },
+        ]}
+        class="mb-8"
+      />
+      {categoryName && (
+        <div class="mb-6">
+          <Badge>{categoryName}</Badge>
+        </div>
+      )}
+      <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6">
+        {title}
+      </h1>
+      {lede && <p class="text-body-lg text-gw-text-secondary mb-8">{lede}</p>}
+      <div class="border-gw-border-subtle mb-12 flex items-center border-t border-b py-6">
+        <div class="mr-8 flex items-center">
+          {avatar && (
+            <img
+              src={avatar}
+              alt={author?.name ?? ''}
+              width="48"
+              height="48"
+              loading="lazy"
+              class="mr-4 h-12 w-12 rounded-full object-cover"
+            />
+          )}
+          <div class="flex flex-col">
+            {author && (
+              <span class="text-label-bold text-gw-text-primary">
+                {author.name}
+              </span>
+            )}
+          </div>
+        </div>
+        <div class="text-body-md text-gw-text-secondary flex items-center">
+          <Icon name="calendar" size={4} class="mr-2" />
+          <span class="mr-6">{formatDate(post.date)}</span>
+          {readingTime !== null && (
+            <>
+              <Icon name="clock" size={4} class="mr-2" />
+              <span>{readingTime} min read</span>
+            </>
+          )}
+        </div>
+      </div>
+      {featuredImage && (
+        <figure class="mb-16">
+          <Image
+            src={featuredImage.src}
+            alt={featuredImage.alt}
+            class="h-auto w-full rounded-none"
+          />
+        </figure>
+      )}
+      <div class="article-content" set:html={post.content.rendered} />
+      {tagNames.length > 0 && (
+        <div class="mt-8 flex flex-wrap gap-2">
+          {tagNames.map((tag) => (
+            <Badge>{tag.name}</Badge>
+          ))}
+        </div>
+      )}
+    </article>
+    <RelatedArticles
+      currentId={post.id}
+      categories={post.categories ?? []}
+      tags={post.tags ?? []}
+      baseUrl={wpApiUrl ?? ''}
+      catMap={buildCategoryMap(categories)}
+    />
+  </Container>
+</Layout>
+
+<style>
+  .article-content {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-lg);
+    line-height: var(--line-height-body-lg);
+  }
+  .article-content p {
+    margin-bottom: var(--space-6);
+  }
+  .article-content h2 {
+    font-size: var(--font-size-headline-md);
+    font-weight: var(--font-weight-headline);
+    line-height: var(--line-height-headline-md);
+    color: var(--color-text-primary);
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-6);
+  }
+  .article-content h3 {
+    font-size: var(--font-size-headline-md);
+    font-weight: var(--font-weight-headline);
+    line-height: var(--line-height-headline-md);
+    color: var(--color-text-primary);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-4);
+  }
+  .article-content ul,
+  .article-content ol {
+    padding-left: var(--space-6);
+    margin-bottom: var(--space-6);
+  }
+  .article-content li {
+    margin-bottom: var(--space-2);
+  }
+  .article-content a {
+    color: var(--color-brand-secondary);
+    text-decoration: underline;
+  }
+  .article-content a:hover {
+    color: var(--color-brand-accent);
+  }
+  .article-content blockquote {
+    border-left: 4px solid var(--color-brand-accent);
+    padding-left: var(--space-6);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-8);
+    font-style: italic;
+    color: var(--color-text-primary);
+  }
+  .article-content pre {
+    background-color: var(--color-text-primary);
+    color: var(--color-surface-primary);
+    padding: var(--space-6);
+    overflow-x: auto;
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-8);
+    font-size: var(--font-size-body-md);
+  }
+  .article-content code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  .article-content img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-none);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-8);
+  }
+  .article-content strong {
+    font-weight: var(--font-weight-headline);
+  }
+</style>

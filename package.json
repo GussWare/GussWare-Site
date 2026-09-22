@@ -15,9 +15,11 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
+    "@astrojs/node": "^11.1.6",
     "@astrojs/sitemap": "^3.7.4",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.3.2",
+    "embla-carousel": "^8.6.0",
     "tailwindcss": "^4.3.3",
     "zod": "^4.6.5"
   },
