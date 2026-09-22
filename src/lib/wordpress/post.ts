@@ -1,45 +1,18 @@
 import { wpFetch } from './client';
 import { wpRoutes } from './routes';
+import { stripHtml } from './text';
 import type {
   BlogCard,
+  FeaturedPost,
+  FeaturedPostImage,
   WpCategory,
+  WpFeaturedPost,
   WpListPost,
+  WpMedia,
   WpPost,
   WpTag,
   WpUser,
 } from './types';
-
-export async function getListPosts(
-  page: number,
-  per_page: number,
-  search: string,
-  status: string,
-  author: number,
-  categories: number[],
-  tags: number[],
-  orderby: string,
-  order: string,
-): Promise<WpListPost[] | null> {
-  try {
-    const data = await wpFetch<WpListPost[]>(
-      wpRoutes.posts(
-        page,
-        per_page,
-        search,
-        status,
-        author,
-        categories,
-        tags,
-        orderby,
-        order,
-      ),
-    );
-    return Array.isArray(data) ? data : null;
-  } catch (error) {
-    console.error('Error fetching list of posts:', error);
-    return null;
-  }
-}
 
 export async function getCategories(): Promise<WpCategory[] | null> {
   try {
@@ -63,6 +36,22 @@ export function normalizeBlogCard(
     title: post.title.rendered,
     href: `/blog/${post.slug}`,
   };
+}
+
+/**
+ * Mapa `id -> nombre` de categorías para resolver insignias sin recorrer
+ * el listado en la página.
+ */
+export function buildCategoryMap(
+  categories: WpCategory[] | null | undefined,
+): Record<number, string> {
+  const map: Record<number, string> = {};
+
+  for (const category of categories ?? []) {
+    map[category.id] = category.name;
+  }
+
+  return map;
 }
 
 export interface PostPageParams {
@@ -120,16 +109,6 @@ export async function fetchPostPage(params: PostPageParams): Promise<PostPage> {
   };
 }
 
-export async function getPostById(id: number): Promise<WpPost | null> {
-  try {
-    const data = await wpFetch<WpPost>(wpRoutes.post(id));
-    return data;
-  } catch (error) {
-    console.error('Error fetching post by ID:', error);
-    return null;
-  }
-}
-
 export async function getPostBySlug(slug: string): Promise<WpPost | null> {
   try {
     const data = await wpFetch<WpPost[]>(wpRoutes.postBySlug(slug));
@@ -163,12 +142,72 @@ export async function getTags(): Promise<WpTag[] | null> {
   }
 }
 
-export async function getBlogFeatured() {
+export async function getBlogFeatured(): Promise<WpFeaturedPost | null> {
   try {
-    const data = await wpFetch<WpListPost>(wpRoutes.blogFeatured);
+    const data = await wpFetch<WpFeaturedPost>(wpRoutes.blogFeatured);
     return data;
   } catch (error) {
     console.error('Error fetching blog featured posts:', error);
+    return null;
+  }
+}
+
+/**
+ * Normaliza el artículo destacado para el Blog: insignia por categoría,
+ * título/descripción como texto plano, URL y tiempo de lectura consumido
+ * directamente desde `acf.informacion_del_articulo.minutos_de_lectura`
+ * (entero; `null` si el endpoint no lo proporciona).
+ */
+export function normalizeBlogFeatured(
+  post: WpFeaturedPost | null | undefined,
+  categories: Record<number, string>,
+): FeaturedPost | null {
+  if (!post) {
+    return null;
+  }
+
+  const categoryId = post.categories?.[0];
+  const rawMinutes = post.acf?.informacion_del_articulo?.minutos_de_lectura;
+
+  return {
+    badge: categoryId != null ? (categories[categoryId] ?? 'Blog') : 'Blog',
+    readingTime:
+      typeof rawMinutes === 'number' && Number.isInteger(rawMinutes)
+        ? rawMinutes
+        : null,
+    title: stripHtml(post.title.rendered),
+    description: stripHtml(post.excerpt.rendered),
+    url: `/blog/${post.slug}`,
+  };
+}
+
+/**
+ * Imagen del artículo destacado (`null` = sin imagen: se conserva el
+ * bloque de color existente y el listado sigue independiente).
+ */
+export async function getBlogFeaturedImage(
+  post: WpFeaturedPost | null | undefined,
+): Promise<FeaturedPostImage | null> {
+  if (!post?.featured_media) {
+    return null;
+  }
+
+  try {
+    const media = await wpFetch<WpMedia>(wpRoutes.media(post.featured_media));
+
+    if (!media?.source_url) {
+      return null;
+    }
+
+    return {
+      src: media.source_url,
+      alt:
+        media.alt_text ||
+        media.title?.rendered ||
+        stripHtml(post.title.rendered),
+    };
+  } catch (error) {
+    console.error('Error fetching blog featured image:', error);
     return null;
   }
 }

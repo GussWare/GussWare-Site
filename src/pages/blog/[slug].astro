@@ -2,8 +2,9 @@
 /**
  * Detalle de artículo `/blog/[slug]` (Stitch `GussWare Blog-Article-V0.1.0`).
  *
- * Slugs desde WordPress (`getListPosts`); artículo por `slug` con
- * `getPostBySlug` (sin descargar todo para buscar local). Autor, tags e
+ * Ruta SSR bajo demanda (`prerender = false`): el `slug` se obtiene de
+ * `Astro.params` y el artículo con `getPostBySlug` (sin `getStaticPaths`,
+ * para que un artículo nuevo sea resoluble sin rebuild). Autor, tags e
  * imagen con rutas/tipos nativos. Estilos del contenido con tokens en
  * `<style>` acotado (el proyecto no tiene sistema de prosa).
  */
@@ -15,31 +16,18 @@ import Icon from '../../components/ui/Icon.astro';
 import Image from '../../components/ui/Image.astro';
 import RelatedArticles from '../../components/blog/RelatedArticles.astro';
 import {
-  getListPosts,
+  buildCategoryMap,
   getPostBySlug,
   getCategories,
   getTags,
   getUser,
 } from '../../lib/wordpress/post';
+import { stripHtml } from '../../lib/wordpress/text';
 import { wpFetch } from '../../lib/wordpress/client';
 import { wpRoutes } from '../../lib/wordpress/routes';
 import type { WpMedia } from '../../lib/wordpress/types';
 
-export async function getStaticPaths() {
-  const posts = await getListPosts(
-    1,
-    100,
-    '',
-    'publish',
-    0,
-    [],
-    [],
-    'date',
-    'desc',
-  );
-
-  return (posts ?? []).map((post) => ({ params: { slug: post.slug } }));
-}
+export const prerender = false;
 
 const { slug } = Astro.params;
 const wpApiUrl = import.meta.env.WP_API_URL as string | undefined;
@@ -49,17 +37,6 @@ const post =
 if (!post) {
   return Astro.redirect('/404');
 }
-
-const stripHtml = (html: string): string =>
-  html
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-
-const toReadingTime = (html: string): string => {
-  const words = stripHtml(html).split(' ').filter(Boolean).length;
-  return `${Math.max(1, Math.round(words / 200))} min read`;
-};
 
 const formatDate = (iso: string): string => {
   const date = new Date(iso);
@@ -78,9 +55,9 @@ const [author, allTags, categories] = await Promise.all([
   getCategories().catch(() => null),
 ]);
 
-const categoryName =
-  categories?.find((category) => category.id === post.categories?.[0])?.name ??
-  null;
+const catMap = buildCategoryMap(categories);
+const categoryId = post.categories?.[0];
+const categoryName = categoryId != null ? (catMap[categoryId] ?? null) : null;
 const tagNames = (allTags ?? []).filter((tag) => post.tags?.includes(tag.id));
 
 let featuredImage: { src: string; alt: string } | null = null;
@@ -103,7 +80,11 @@ if (post.featured_media) {
 const title = stripHtml(post.title.rendered);
 const lede = stripHtml(post.excerpt.rendered);
 const description = stripHtml(post.excerpt.rendered).slice(0, 160);
-const readingTime = toReadingTime(post.content.rendered);
+const rawMinutes = post.acf?.informacion_del_articulo?.minutos_de_lectura;
+const readingTime: number | null =
+  typeof rawMinutes === 'number' && Number.isInteger(rawMinutes)
+    ? rawMinutes
+    : null;
 const avatar =
   author?.avatar_urls?.['96'] ?? author?.avatar_urls?.['48'] ?? null;
 ---
@@ -151,8 +132,12 @@ const avatar =
         <div class="text-body-md text-gw-text-secondary flex items-center">
           <Icon name="calendar" size={4} class="mr-2" />
           <span class="mr-6">{formatDate(post.date)}</span>
-          <Icon name="clock" size={4} class="mr-2" />
-          <span>{readingTime}</span>
+          {readingTime !== null && (
+            <>
+              <Icon name="clock" size={4} class="mr-2" />
+              <span>{readingTime} min read</span>
+            </>
+          )}
         </div>
       </div>
       {featuredImage && (
@@ -178,9 +163,7 @@ const avatar =
       categories={post.categories ?? []}
       tags={post.tags ?? []}
       baseUrl={wpApiUrl ?? ''}
-      catMap={Object.fromEntries(
-        (categories ?? []).map((category) => [category.id, category.name]),
-      )}
+      catMap={buildCategoryMap(categories)}
     />
   </Container>
 </Layout>

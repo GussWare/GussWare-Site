@@ -149,6 +149,41 @@ export interface BlogCard {
   href: string;
 }
 
+/** Grupo ACF `informacion_del_articulo` expuesto por la REST API. */
+export interface WpArticleInfo {
+  minutos_de_lectura: number;
+}
+
+/** Campo `acf` de la respuesta del endpoint destacado del Blog. */
+export interface WpFeaturedAcf {
+  informacion_del_articulo: WpArticleInfo;
+}
+
+/** Respuesta del endpoint destacado (`/gussware/v1/blog/featured`). */
+export interface WpFeaturedPost extends WpListPost {
+  acf: WpFeaturedAcf;
+}
+
+/** Artículo destacado del Blog listo para renderizar. */
+export interface FeaturedPost {
+  badge: string;
+  /**
+   * Minutos de lectura desde WordPress
+   * (`acf.informacion_del_articulo.minutos_de_lectura`); `null` si el
+   * endpoint no lo proporciona.
+   */
+  readingTime: number | null;
+  title: string;
+  description: string;
+  url: string;
+}
+
+/** Imagen del artículo destacado lista para renderizar. */
+export interface FeaturedPostImage {
+  src: string;
+  alt: string;
+}
+
 export interface WpPostRendered {
   rendered: string;
 }
