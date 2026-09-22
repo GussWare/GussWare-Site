@@ -13,6 +13,7 @@ import Breadcrumbs from '../../components/ui/Breadcrumbs.astro';
 import Badge from '../../components/ui/Badge.astro';
 import Icon from '../../components/ui/Icon.astro';
 import Image from '../../components/ui/Image.astro';
+import RelatedArticles from '../../components/blog/RelatedArticles.astro';
 import {
   getListPosts,
   getPostBySlug,
@@ -41,6 +42,7 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
+const wpApiUrl = import.meta.env.WP_API_URL as string | undefined;
 const post =
   typeof slug === 'string' ? await getPostBySlug(slug).catch(() => null) : null;
 
@@ -99,6 +101,7 @@ if (post.featured_media) {
 }
 
 const title = stripHtml(post.title.rendered);
+const lede = stripHtml(post.excerpt.rendered);
 const description = stripHtml(post.excerpt.rendered).slice(0, 160);
 const readingTime = toReadingTime(post.content.rendered);
 const avatar =
@@ -116,40 +119,44 @@ const avatar =
         ]}
         class="mb-8"
       />
-      <div class="mb-6 flex items-center gap-4">
-        {categoryName && <Badge>{categoryName}</Badge>}
-        <span class="text-body-md text-gw-text-secondary flex items-center gap-1">
-          <Icon name="clock" size={4} />
-          {readingTime}
-        </span>
-      </div>
+      {categoryName && (
+        <div class="mb-6">
+          <Badge>{categoryName}</Badge>
+        </div>
+      )}
       <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6">
         {title}
       </h1>
-      <div class="mb-8 flex items-center gap-4">
-        {avatar && (
-          <img
-            src={avatar}
-            alt={author?.name ?? ''}
-            width="48"
-            height="48"
-            loading="lazy"
-            class="h-12 w-12 rounded-full object-cover"
-          />
-        )}
-        <div class="flex flex-col">
-          {author && (
-            <span class="text-label-bold text-gw-text-primary">
-              {author.name}
-            </span>
+      {lede && <p class="text-body-lg text-gw-text-secondary mb-8">{lede}</p>}
+      <div class="border-gw-border-subtle mb-12 flex items-center border-t border-b py-6">
+        <div class="mr-8 flex items-center">
+          {avatar && (
+            <img
+              src={avatar}
+              alt={author?.name ?? ''}
+              width="48"
+              height="48"
+              loading="lazy"
+              class="mr-4 h-12 w-12 rounded-full object-cover"
+            />
           )}
-          <span class="text-body-md text-gw-text-secondary">
-            {formatDate(post.date)}
-          </span>
+          <div class="flex flex-col">
+            {author && (
+              <span class="text-label-bold text-gw-text-primary">
+                {author.name}
+              </span>
+            )}
+          </div>
+        </div>
+        <div class="text-body-md text-gw-text-secondary flex items-center">
+          <Icon name="calendar" size={4} class="mr-2" />
+          <span class="mr-6">{formatDate(post.date)}</span>
+          <Icon name="clock" size={4} class="mr-2" />
+          <span>{readingTime}</span>
         </div>
       </div>
       {featuredImage && (
-        <figure class="mb-8">
+        <figure class="mb-16">
           <Image
             src={featuredImage.src}
             alt={featuredImage.alt}
@@ -166,6 +173,15 @@ const avatar =
         </div>
       )}
     </article>
+    <RelatedArticles
+      currentId={post.id}
+      categories={post.categories ?? []}
+      tags={post.tags ?? []}
+      baseUrl={wpApiUrl ?? ''}
+      catMap={Object.fromEntries(
+        (categories ?? []).map((category) => [category.id, category.name]),
+      )}
+    />
   </Container>
 </Layout>
 
