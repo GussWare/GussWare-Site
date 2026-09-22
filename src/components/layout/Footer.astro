@@ -20,6 +20,7 @@ import { getHeaderLogo } from '../../lib/wordpress/logo';
 import Logo from '../ui/Logo.astro';
 import { getFooterMenu, getLegalMenu } from '../../lib/wordpress/menu';
 import { getFooterDescription } from '../../lib/wordpress/footer';
+import { routes } from '../../lib/routes';
 
 const [logo, footerMenuItems, legalMenuItems, footer] = await Promise.all([
   getHeaderLogo(),
@@ -49,7 +50,7 @@ const footerColumns = footerMenuItems
         )}
 
         <a
-          href="/contact"
+          href={routes.contact}
           class="text-label-bold text-brand-accent hover:text-brand-primary transition-colors duration-200 lg:hidden"
         >
           Start a Conversation

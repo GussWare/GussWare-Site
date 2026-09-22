@@ -23,6 +23,7 @@ import {
   getUser,
 } from '../../lib/wordpress/post';
 import { stripHtml } from '../../lib/wordpress/text';
+import { routes } from '../../lib/routes';
 import { wpFetch } from '../../lib/wordpress/client';
 import { wpRoutes } from '../../lib/wordpress/routes';
 import type { WpMedia } from '../../lib/wordpress/types';
@@ -35,7 +36,7 @@ const post =
   typeof slug === 'string' ? await getPostBySlug(slug).catch(() => null) : null;
 
 if (!post) {
-  return Astro.redirect('/404');
+  return Astro.redirect(routes.notFound);
 }
 
 const formatDate = (iso: string): string => {
@@ -94,8 +95,8 @@ const avatar =
     <article class="mx-auto w-full max-w-[800px] pt-16 md:pt-24 pb-16 md:pb-24">
       <Breadcrumbs
         items={[
-          { label: 'Home', href: '/' },
-          { label: 'Blog', href: '/blog' },
+          { label: 'Home', href: routes.home },
+          { label: 'Blog', href: routes.blog },
           { label: categoryName ?? title },
         ]}
         class="mb-8"

@@ -1,5 +1,6 @@
 import { wpFetch } from './client';
 import { wpRoutes } from './routes';
+import { routes } from '../routes';
 import { stripHtml } from './text';
 import type {
   BlogCard,
@@ -34,7 +35,7 @@ export function normalizeBlogCard(
     id: post.id,
     badge: categoryId != null ? (categories[categoryId] ?? null) : null,
     title: post.title.rendered,
-    href: `/blog/${post.slug}`,
+    href: routes.blogPost(post.slug),
   };
 }
 
@@ -177,7 +178,7 @@ export function normalizeBlogFeatured(
         : null,
     title: stripHtml(post.title.rendered),
     description: stripHtml(post.excerpt.rendered),
-    url: `/blog/${post.slug}`,
+    url: routes.blogPost(post.slug),
   };
 }
 
