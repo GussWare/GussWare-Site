@@ -49,13 +49,13 @@ const topLevelItems = menuItems.filter((item) => item.parent === 0);
 
     <!-- Desktop CTA & Mobile Toggle -->
     <div class="flex items-center gap-4">
-      {header?.estado && (
+      {header?.status && (
         <Button
           href={header.url}
           variant="primary"
           class="hidden sm:inline-flex"
         >
-          {header.texto_del_boton}
+          {header.button_text}
         </Button>
       )}
 
