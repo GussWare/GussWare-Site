@@ -26,3 +26,4 @@ pnpm-debug.log*
 opencode.json
 
 .playwright-mcp
+.opencode
