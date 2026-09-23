@@ -13,6 +13,14 @@ export default defineConfig({
     mode: 'standalone',
   }),
 
+  i18n: {
+    defaultLocale: 'es',
+    locales: ['es', 'en'],
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
+
   vite: {
     plugins: [tailwindcss()],
   },

@@ -1,0 +1,27 @@
+---
+/**
+ * RGW-54 — Ruta comodín multi-idioma.
+ *
+ * Captura las URLs que no corresponden a páginas Astro existentes
+ * (p. ej. `/contacto/`, `/en/`, `/en/contact/`) sin duplicar páginas
+ * por idioma: las rutas existentes (`/`, `/contact`, `/blog`,
+ * `/blog/[slug]`) tienen prioridad y conservan su comportamiento.
+ *
+ * Distingue `locale` (vía `Astro.currentLocale`, según la
+ * configuración `i18n` de Astro) y `uri` (ruta sin el prefijo de
+ * idioma). La resolución de qué página de WordPress corresponde a
+ * cada traducción se implementa en RGW-55; hasta entonces, los slugs
+ * redirigen a `/404`, igual que los slugs inexistentes de
+ * `/blog/[slug]`.
+ */
+import { routes } from '../lib/routes';
+
+export const prerender = false;
+
+const locale = Astro.currentLocale ?? 'es';
+const rawUri = (Astro.params.uri ?? '').replace(/^\/+|\/+$/g, '');
+const uri = locale === 'es' ? rawUri : rawUri.split('/').slice(1).join('/');
+
+// RGW-55: resolver `{ locale, uri }` contra las traducciones de WordPress.
+return Astro.redirect(routes.notFound);
+---
