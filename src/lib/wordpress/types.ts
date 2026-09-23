@@ -66,9 +66,14 @@ export interface HeaderMenuItem {
 }
 
 export interface Header {
-  texto_del_boton: string;
+  button_text: string;
   url: string;
-  estado: boolean;
+  status: boolean;
+}
+
+/** Respuesta de `/gussware/v1/header`. */
+export interface HeaderResponse {
+  button_section: Header | null;
 }
 
 export interface FooterDescription {
@@ -76,34 +81,37 @@ export interface FooterDescription {
   footer_copyright: string;
 }
 
+/** Respuesta de `/gussware/v1/footer`. */
+export interface FooterResponse {
+  footer_section: FooterDescription | null;
+}
+
 export interface SocialMedia {
-  redes_sociales: SocialMediaItem[];
+  social_media: SocialMediaItem[];
 }
 
 export interface SocialMediaItem {
-  nombre: string;
+  name: string;
   url: string;
-  estado: boolean;
-  icono: string;
-  orden: number;
+  status: boolean;
+  icon: string;
+  order: string;
 }
 
+/**
+ * Configuración global de Contact (`/gussware/v1/contact`).
+ * No mezclar con el contenido editorial de la Page Contact, que vive
+ * en `/wp/v2/pages` (`acf.section_content`).
+ */
 export interface Contact {
-  contenido_de_la_seccion: ContactSection;
-  informacion_de_contacto: ContactInformation;
-}
-
-export interface ContactSection {
-  eyebrow: string;
-  titulo: string;
-  descripcion: string;
-  texto_de_redes_sociales: string;
-}
-
-export interface ContactInformation {
-  telefono: string | null;
+  phone: string | null;
   email: string | null;
-  horario_de_atencion: string | null;
+  business_hours: string | null;
+}
+
+/** Respuesta de `/gussware/v1/contact` (`null` si no hay configuración). */
+export interface ContactResponse {
+  contact_information: Contact | null;
 }
 
 export interface WpListPost {
@@ -161,7 +169,7 @@ export interface WpFeaturedAcf {
 
 /** Respuesta del endpoint destacado (`/gussware/v1/blog/featured`). */
 export interface WpFeaturedPost extends WpListPost {
-  acf: WpFeaturedAcf;
+  acf?: WpFeaturedAcf;
 }
 
 /** Artículo destacado del Blog listo para renderizar. */
@@ -194,8 +202,33 @@ export interface WpPage {
   content: WpPostProtectedContent;
   excerpt: WpPostProtectedContent;
 
+  acf: WpPageAcf;
+
   lang: string;
   translations: Record<string, number>;
+}
+
+/** Contenido editorial de una Page (`acf.section_content`). */
+export interface WpSectionContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  social_media_text: string;
+}
+
+/** Campo `acf` de una Page de WordPress. */
+export interface WpPageAcf {
+  section_content: WpSectionContent;
+}
+
+/** Idioma de Polylang (`/pll/v1/languages`). */
+export interface WpLanguage {
+  slug: string;
+  locale: string;
+  name: string;
+  w3c: string;
+  home_url: string;
+  is_default: boolean;
 }
 
 export interface WpPostRendered {
