@@ -50,6 +50,8 @@ export const wpRoutes = {
   },
   post: (postId: number) => `/wp/v2/posts/${postId}?context=view`,
   postBySlug: (slug: string) => `/wp/v2/posts?slug=${encodeURIComponent(slug)}`,
+  pageBySlug: (slug: string, lang: string) =>
+    `/wp/v2/pages?slug=${encodeURIComponent(slug)}&lang=${encodeURIComponent(lang)}`,
   user: (userId: number) => `/wp/v2/users/${userId}`,
   tags: '/wp/v2/tags?per_page=100',
   categories: '/wp/v2/categories?per_page=100',

@@ -184,6 +184,20 @@ export interface FeaturedPostImage {
   alt: string;
 }
 
+/** Page de WordPress con campos Polylang (`lang`, `translations`). */
+export interface WpPage {
+  id: number;
+  slug: string;
+  status: string;
+
+  title: WpPostRendered;
+  content: WpPostProtectedContent;
+  excerpt: WpPostProtectedContent;
+
+  lang: string;
+  translations: Record<string, number>;
+}
+
 export interface WpPostRendered {
   rendered: string;
 }

@@ -1,6 +1,7 @@
 ---
 /**
  * RGW-54 — Ruta comodín multi-idioma.
+ * RGW-55 — Resolución de traducciones vía WordPress + Polylang.
  *
  * Captura las URLs que no corresponden a páginas Astro existentes
  * (p. ej. `/contacto/`, `/en/`, `/en/contact/`) sin duplicar páginas
@@ -9,12 +10,18 @@
  *
  * Distingue `locale` (vía `Astro.currentLocale`, según la
  * configuración `i18n` de Astro) y `uri` (ruta sin el prefijo de
- * idioma). La resolución de qué página de WordPress corresponde a
- * cada traducción se implementa en RGW-55; hasta entonces, los slugs
- * redirigen a `/404`, igual que los slugs inexistentes de
- * `/blog/[slug]`.
+ * idioma), y resuelve la Page correspondiente con
+ * `getPageBySlug(uri, locale)` contra `/wp/v2/pages` (parámetros
+ * `slug` + `lang` de Polylang, sin mapas manuales ni fallback entre
+ * idiomas). Sin contenido para `{ locale, uri }`, redirige a `/404`,
+ * igual que los slugs inexistentes de `/blog/[slug]`.
  */
+import Layout from '../layouts/Layout.astro';
+import Container from '../components/ui/Container.astro';
+import Breadcrumbs from '../components/ui/Breadcrumbs.astro';
 import { routes } from '../lib/routes';
+import { getPageBySlug } from '../lib/wordpress/pages';
+import { stripHtml } from '../lib/wordpress/text';
 
 export const prerender = false;
 
@@ -22,6 +29,27 @@ const locale = Astro.currentLocale ?? 'es';
 const rawUri = (Astro.params.uri ?? '').replace(/^\/+|\/+$/g, '');
 const uri = locale === 'es' ? rawUri : rawUri.split('/').slice(1).join('/');
 
-// RGW-55: resolver `{ locale, uri }` contra las traducciones de WordPress.
-return Astro.redirect(routes.notFound);
+const page = uri ? await getPageBySlug(uri, locale).catch(() => null) : null;
+
+if (!page) {
+  return Astro.redirect(routes.notFound);
+}
+
+const title = stripHtml(page.title.rendered);
+const description = stripHtml(page.excerpt.rendered).slice(0, 160);
 ---
+
+<Layout title={`${title} — GussWare`} description={description}>
+  <Container>
+    <article class="mx-auto w-full max-w-[800px] pt-16 md:pt-24 pb-16 md:pb-24">
+      <Breadcrumbs
+        items={[{ label: 'Home', href: routes.home }, { label: title }]}
+        class="mb-8"
+      />
+      <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6">
+        {title}
+      </h1>
+      <div set:html={page.content.rendered} />
+    </article>
+  </Container>
+</Layout>
