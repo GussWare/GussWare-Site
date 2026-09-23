@@ -5,9 +5,10 @@ export const wpRoutes = {
   settings: '/wp/v2/settings',
   media: (mediaId: number) => `/wp/v2/media/${mediaId}`,
   footer: '/gussware/v1/footer',
-  socialMedia: '/gussware/v1/redes-sociales',
-  contact: '/gussware/v1/contacto',
+  socialMedia: '/gussware/v1/social-media',
+  contact: '/gussware/v1/contact',
   header: '/gussware/v1/header',
+  languages: '/pll/v1/languages',
   posts: (
     page: number,
     per_page: number,
@@ -50,6 +51,8 @@ export const wpRoutes = {
   },
   post: (postId: number) => `/wp/v2/posts/${postId}?context=view`,
   postBySlug: (slug: string) => `/wp/v2/posts?slug=${encodeURIComponent(slug)}`,
+  pageBySlug: (slug: string, lang: string) =>
+    `/wp/v2/pages?slug=${encodeURIComponent(slug)}&lang=${encodeURIComponent(lang)}`,
   user: (userId: number) => `/wp/v2/users/${userId}`,
   tags: '/wp/v2/tags?per_page=100',
   categories: '/wp/v2/categories?per_page=100',
