@@ -2,6 +2,10 @@
 /**
  * RGW-54 — Ruta comodín multi-idioma.
  * RGW-55 — Resolución de traducciones vía WordPress + Polylang.
+ * RGW-57 — Páginas de contenido: el editorial proviene de
+ * `page.acf.section_content` y se renderiza con la UI existente de
+ * Contacto (sin rediseño); las Pages sin `section_content` conservan
+ * el render genérico.
  *
  * Captura las URLs que no corresponden a páginas Astro existentes
  * (p. ej. `/contacto/`, `/en/`, `/en/contact/`) sin duplicar páginas
@@ -19,8 +23,13 @@
 import Layout from '../layouts/Layout.astro';
 import Container from '../components/ui/Container.astro';
 import Breadcrumbs from '../components/ui/Breadcrumbs.astro';
+import Section from '../components/ui/Section.astro';
+import Icon from '../components/ui/Icon.astro';
+import FormField from '../components/ui/FormField.astro';
+import Button from '../components/ui/Button.astro';
 import { routes } from '../lib/routes';
 import { getPageBySlug } from '../lib/wordpress/pages';
+import { getSocialMedia } from '../lib/wordpress/socialMedia';
 import { stripHtml } from '../lib/wordpress/text';
 
 export const prerender = false;
@@ -29,7 +38,10 @@ const locale = Astro.currentLocale ?? 'es';
 const rawUri = (Astro.params.uri ?? '').replace(/^\/+|\/+$/g, '');
 const uri = locale === 'es' ? rawUri : rawUri.split('/').slice(1).join('/');
 
-const page = uri ? await getPageBySlug(uri, locale).catch(() => null) : null;
+const [page, socialMedia] = await Promise.all([
+  uri ? getPageBySlug(uri, locale).catch(() => null) : null,
+  getSocialMedia(),
+]);
 
 if (!page) {
   return Astro.redirect(routes.notFound);
@@ -37,19 +49,160 @@ if (!page) {
 
 const title = stripHtml(page.title.rendered);
 const description = stripHtml(page.excerpt.rendered).slice(0, 160);
+const sectionContent = page.acf?.section_content ?? null;
 ---
 
 <Layout title={`${title} — GussWare`} description={description}>
-  <Container>
-    <article class="mx-auto w-full max-w-[800px] pt-16 md:pt-24 pb-16 md:pb-24">
-      <Breadcrumbs
-        items={[{ label: 'Home', href: routes.home }, { label: title }]}
-        class="mb-8"
-      />
-      <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6">
-        {title}
-      </h1>
-      <div set:html={page.content.rendered} />
-    </article>
-  </Container>
+  {sectionContent ? (
+    <Section id="contact" class="bg-gw-surface-auxiliary">
+      <div class="flex flex-col gap-16 lg:flex-row lg:gap-24">
+        <div class="flex flex-col justify-center lg:w-1/2">
+          {sectionContent.eyebrow && (
+            <p class="text-label-bold text-brand-secondary mb-4 uppercase">
+              {sectionContent.eyebrow}
+            </p>
+          )}
+
+          {sectionContent.title && (
+            <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6 leading-display-lg-mobile md:leading-display-lg">
+              {sectionContent.title}
+            </h1>
+          )}
+
+          {sectionContent.description && (
+            <p class="text-body-lg text-gw-text-secondary">
+              {sectionContent.description}
+            </p>
+          )}
+
+          <div class="border-gw-border-subtle mt-8 border-t pt-8">
+            {sectionContent.social_media_text && (
+              <p class="text-body-md text-gw-text-secondary mb-6">
+                {sectionContent.social_media_text}
+              </p>
+            )}
+
+            {socialMedia && (
+              <div class="flex gap-4">
+                {socialMedia.map((social) => (
+                  <a
+                    aria-label={social.name}
+                    href={social.url}
+                    target="_blank"
+                    class="bg-brand-primary text-brand-surface flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 hover:bg-supporting-blue-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+                  >
+                    <Icon name={social.icon} size={4} />
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div class="bg-gw-surface-primary rounded-sm p-8 shadow-sm md:p-12 lg:w-1/2">
+          <form id="contact-form" novalidate class="flex flex-col gap-8">
+            <FormField
+              id="name"
+              label="Name"
+              placeholder="Your full name"
+              required
+              autocomplete="name"
+            />
+
+            <FormField
+              id="email"
+              label="Email"
+              type="email"
+              placeholder="hello@company.com"
+              required
+              autocomplete="email"
+            />
+
+            <FormField
+              id="phone"
+              label="Phone Number"
+              type="tel"
+              placeholder="+1 (555) 000-0000"
+              autocomplete="tel"
+            />
+
+            <div class="pt-6">
+              <Button type="submit" variant="primary" class="w-full py-4">
+                Start a Conversation
+              </Button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </Section>
+  ) : (
+    <Container>
+      <article class="mx-auto w-full max-w-[800px] pt-16 md:pt-24 pb-16 md:pb-24">
+        <Breadcrumbs
+          items={[{ label: 'Home', href: routes.home }, { label: title }]}
+          class="mb-8"
+        />
+        <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6">
+          {title}
+        </h1>
+        <div set:html={page.content.rendered} />
+      </article>
+    </Container>
+  )}
 </Layout>
+
+<script>
+  import { contactSchema } from '../lib/contact/schema';
+
+  const form = document.getElementById('contact-form');
+
+  const setError = (id, message) => {
+    const input = document.getElementById(id);
+    const error = document.getElementById(`${id}-error`);
+
+    if (
+      !(input instanceof HTMLInputElement) ||
+      !(error instanceof HTMLElement)
+    ) {
+      return;
+    }
+
+    if (message) {
+      error.textContent = message;
+      error.hidden = false;
+      input.setAttribute('aria-invalid', 'true');
+    } else {
+      error.textContent = '';
+      error.hidden = true;
+      input.removeAttribute('aria-invalid');
+    }
+  };
+
+  if (form instanceof HTMLFormElement) {
+    form.addEventListener('submit', (event) => {
+      const data = new FormData(form);
+
+      const result = contactSchema.safeParse({
+        name: data.get('name'),
+        email: data.get('email'),
+        phone: data.get('phone'),
+      });
+
+      setError('name');
+      setError('email');
+      setError('phone');
+
+      if (!result.success) {
+        event.preventDefault();
+
+        for (const issue of result.error.issues) {
+          const field = issue.path[0];
+
+          if (field === 'name' || field === 'email' || field === 'phone') {
+            setError(field, issue.message);
+          }
+        }
+      }
+    });
+  }
+</script>
