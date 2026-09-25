@@ -12,3 +12,9 @@ export const routes = {
   notFound: '/404',
   blogPost: (slug: string) => `/blog/${encodeURIComponent(slug)}`,
 } as const;
+
+/** URLs de una misma página en cada locale (para el selector de idioma). */
+export interface LocaleUrls {
+  es: string;
+  en: string;
+}

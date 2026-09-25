@@ -1,15 +1,20 @@
 ---
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
+import type { LocaleUrls } from '../lib/routes';
 import '../styles/global.css';
 
 interface Props {
   title: string;
   description?: string;
+  localeUrls?: LocaleUrls;
 }
 
-const { title, description = 'GussWare — Soluciones tecnológicas' } =
-  Astro.props;
+const {
+  title,
+  description = 'GussWare — Soluciones tecnológicas',
+  localeUrls = undefined,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -28,7 +33,7 @@ const { title, description = 'GussWare — Soluciones tecnológicas' } =
   </head>
 
   <body class="flex min-h-screen flex-col">
-    <Header />
+    <Header localeUrls={localeUrls} />
     <main class="flex-1">
       <slot />
     </main>

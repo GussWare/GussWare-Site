@@ -4,10 +4,13 @@ export const wpRoutes = {
     `/wp/v2/menu-items?menus=${menuId}&per_page=${per_page}&page=${page}`,
   settings: '/wp/v2/settings',
   media: (mediaId: number) => `/wp/v2/media/${mediaId}`,
-  footer: '/gussware/v1/footer',
+  footer: (lang: string) =>
+    `/gussware/v1/footer?lang=${encodeURIComponent(lang)}`,
   socialMedia: '/gussware/v1/social-media',
-  contact: '/gussware/v1/contact',
-  header: '/gussware/v1/header',
+  contact: (lang: string) =>
+    `/gussware/v1/contact?lang=${encodeURIComponent(lang)}`,
+  header: (lang: string) =>
+    `/gussware/v1/header?lang=${encodeURIComponent(lang)}`,
   languages: '/pll/v1/languages',
   posts: (
     page: number,
@@ -53,6 +56,7 @@ export const wpRoutes = {
   postBySlug: (slug: string) => `/wp/v2/posts?slug=${encodeURIComponent(slug)}`,
   pageBySlug: (slug: string, lang: string) =>
     `/wp/v2/pages?slug=${encodeURIComponent(slug)}&lang=${encodeURIComponent(lang)}`,
+  page: (pageId: number) => `/wp/v2/pages/${pageId}`,
   user: (userId: number) => `/wp/v2/users/${userId}`,
   tags: '/wp/v2/tags?per_page=100',
   categories: '/wp/v2/categories?per_page=100',

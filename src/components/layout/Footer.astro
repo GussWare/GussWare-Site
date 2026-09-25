@@ -26,7 +26,7 @@ const [logo, footerMenuItems, legalMenuItems, footer] = await Promise.all([
   getHeaderLogo(),
   getFooterMenu(),
   getLegalMenu(),
-  getFooterDescription(),
+  getFooterDescription(Astro.currentLocale ?? undefined),
 ]);
 
 const footerColumns = footerMenuItems

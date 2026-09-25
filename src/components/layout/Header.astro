@@ -14,15 +14,22 @@ import { getHeaderLogo } from '../../lib/wordpress/logo';
 import { getHeaderMenu } from '../../lib/wordpress/menu';
 import { getHeader } from '../../lib/wordpress/header';
 import { routes } from '../../lib/routes';
+import type { LocaleUrls } from '../../lib/routes';
 import Button from '../ui/Button.astro';
 import LanguageSelector from '../ui/LanguageSelector.astro';
 import Logo from '../ui/Logo.astro';
 import MenuButton from '../ui/MenuButton.astro';
 
+interface Props {
+  localeUrls?: LocaleUrls;
+}
+
+const { localeUrls = undefined } = Astro.props;
+
 const [logo, menuItems, header] = await Promise.all([
   getHeaderLogo(),
   getHeaderMenu(),
-  getHeader(),
+  getHeader(Astro.currentLocale ?? undefined),
 ]);
 const topLevelItems = menuItems.filter((item) => item.parent === 0);
 const desktopLogo = header?.logo ?? logo;
@@ -61,7 +68,7 @@ const mobileLogo = header?.mobileLogo ?? desktopLogo;
 
     <!-- Desktop CTA & Mobile Toggle -->
     <div class="flex items-center gap-4">
-      <LanguageSelector />
+      <LanguageSelector localeUrls={localeUrls} />
       {header?.status && (
         <Button
           href={header.url}
@@ -100,7 +107,7 @@ const mobileLogo = header?.mobileLogo ?? desktopLogo;
           {item.title}
         </a>
       ))}
-      <LanguageSelector variant="panel" />
+      <LanguageSelector variant="panel" localeUrls={localeUrls} />
       <Button
         href={routes.contact}
         variant="primary"

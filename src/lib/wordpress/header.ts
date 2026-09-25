@@ -1,5 +1,6 @@
 import { wpFetch } from './client';
 import { wpRoutes } from './routes';
+import { getDefaultLocale } from './languages';
 import type {
   HeaderData,
   HeaderLogo,
@@ -17,9 +18,10 @@ function toHeaderLogo(
   return { src: media.url, alt: media.alt ?? '' };
 }
 
-export async function getHeader(): Promise<HeaderData | null> {
+export async function getHeader(lang?: string): Promise<HeaderData | null> {
   try {
-    const data = await wpFetch<HeaderResponse>(wpRoutes.header);
+    const locale = lang ?? (await getDefaultLocale());
+    const data = await wpFetch<HeaderResponse>(wpRoutes.header(locale));
     const button = data.button_section;
 
     if (!button) {

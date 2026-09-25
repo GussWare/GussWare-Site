@@ -1,7 +1,46 @@
 ---
+/**
+ * Portada ES (`/`): renderiza la Page configurada como portada en
+ * WordPress (`getFrontPage('es')`, con respaldo `inicio`) mediante el
+ * render genérico (título + contenido). Sin contenido, conserva la
+ * estructura mínima anterior. La contraparte EN es la raíz `/en/`
+ * (convención i18n, sin conocimiento de la página concreta).
+ */
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import Layout from '../layouts/Layout.astro';
+import Container from '../components/ui/Container.astro';
+import type { LocaleUrls } from '../lib/routes';
+import { getFrontPage } from '../lib/wordpress/pages';
+import { stripHtml } from '../lib/wordpress/text';
+
+export const prerender = false;
+
+const page = await getFrontPage('es').catch(() => null);
+
+const localeUrls: LocaleUrls = {
+  es: Astro.url.pathname,
+  en: getRelativeLocaleUrl('en', '/'),
+};
+
+const title = page ? stripHtml(page.title.rendered) : 'GussWare';
+const description = page
+  ? stripHtml(page.excerpt.rendered).slice(0, 160)
+  : undefined;
 ---
 
-<Layout title="GussWare — Design System">
-  
+<Layout
+  title={page ? `${title} — GussWare` : 'GussWare — Design System'}
+  description={description}
+  localeUrls={localeUrls}
+>
+  {page && (
+    <Container>
+      <article class="mx-auto w-full max-w-[800px] pt-16 md:pt-24 pb-16 md:pb-24">
+        <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6">
+          {title}
+        </h1>
+        <div set:html={page.content.rendered} />
+      </article>
+    </Container>
+  )}
 </Layout>

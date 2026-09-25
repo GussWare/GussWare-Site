@@ -9,6 +9,8 @@ export interface WpSettings {
   url: string;
   site_logo: number | null;
   site_icon: number;
+  show_on_front: string;
+  page_on_front: number;
 }
 
 export interface WpMedia {
@@ -252,6 +254,7 @@ export interface WpLanguage {
   w3c: string;
   home_url: string;
   is_default: boolean;
+  page_on_front: number;
 }
 
 export interface WpPostRendered {

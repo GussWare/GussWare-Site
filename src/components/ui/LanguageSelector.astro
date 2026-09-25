@@ -3,15 +3,21 @@
  * Selector de idioma — Maquetación según Stitch `GussWare Home-V0.1.0`
  * (grupo ES | EN del Header, variantes `header` y `panel` móvil).
  *
- * Solo visual: muestra los idiomas con sus estados (`aria-pressed`,
- * activo/inactivo, hover, focus) sin realizar el cambio real de idioma
- * (sin Polylang, WordPress, rutas ni navegación).
+ * Navega a la URL equivalente en el idioma elegido: usa `localeUrls`
+ * (resueltas por la página vía traducciones de WordPress/Polylang)
+ * cuando se proporcionan, o la ruta equivalente genérica en su defecto.
+ * El idioma activo se obtiene de `Astro.currentLocale`.
  * Reutiliza tokens existentes: `supporting-blue-dark`, `brand-surface`,
  * `gw-surface-primary/secondary`, `gw-text-primary`, `gw-border-subtle`.
  */
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import type { LocaleUrls } from '../../lib/routes';
+
 interface Props {
   /** Idioma marcado visualmente como activo. */
   current?: 'es' | 'en';
+  /** URLs equivalentes por locale (traducciones resueltas por la página). */
+  localeUrls?: LocaleUrls;
   /**
    * `header`: grupo compacto en línea (cluster del Header).
    * `panel`: bloque de ancho completo con etiqueta (panel móvil).
@@ -21,19 +27,29 @@ interface Props {
 }
 
 const {
-  current = 'es',
+  current = Astro.currentLocale === 'en' ? 'en' : 'es',
+  localeUrls = undefined,
   variant = 'header',
   class: className = '',
 } = Astro.props;
+
+// Ruta equivalente genérica: mismo path con/sin el prefijo `/en/`.
+const barePath = Astro.url.pathname.replace(/^\/en(?=\/|$)/, '') || '/';
+const fallbackUrls: LocaleUrls = {
+  es: getRelativeLocaleUrl('es', barePath === '/' ? '/' : barePath.slice(1)),
+  en: getRelativeLocaleUrl('en', barePath === '/' ? '/' : barePath.slice(1)),
+};
+
+const hrefs: LocaleUrls = localeUrls ?? fallbackUrls;
 
 const languages = [
   { code: 'es', label: 'ES' },
   { code: 'en', label: 'EN' },
 ] as const;
 
-const buttonBase =
-  'text-xs font-bold uppercase tracking-wider focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
-const buttonActive = 'bg-supporting-blue-dark text-brand-surface';
+const linkBase =
+  'inline-flex items-center justify-center text-xs font-bold uppercase tracking-wider focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
+const linkActive = 'bg-supporting-blue-dark text-brand-surface';
 const desktopInactive =
   'bg-transparent text-gw-text-primary hover:bg-gw-surface-secondary hover:text-supporting-blue-dark hover:underline';
 const panelInactive =
@@ -47,13 +63,13 @@ const panelInactive =
     class={`inline-flex overflow-hidden rounded-none border border-gw-border-subtle bg-gw-surface-primary ${className}`}
   >
     {languages.map((language) => (
-      <button
-        type="button"
+      <a
+        href={hrefs[language.code]}
         aria-pressed={current === language.code ? 'true' : 'false'}
-        class={`${buttonBase} min-h-[38px] px-3 py-1.5 ${current === language.code ? buttonActive : desktopInactive}`}
+        class={`${linkBase} min-h-[38px] px-3 py-1.5 ${current === language.code ? linkActive : desktopInactive}`}
       >
         {language.label}
-      </button>
+      </a>
     ))}
   </div>
 ) : (
@@ -67,13 +83,13 @@ const panelInactive =
       class="flex overflow-hidden rounded-none border border-gw-border-subtle bg-gw-surface-primary"
     >
       {languages.map((language) => (
-        <button
-          type="button"
+        <a
+          href={hrefs[language.code]}
           aria-pressed={current === language.code ? 'true' : 'false'}
-          class={`${buttonBase} min-h-[44px] flex-1 py-2 ${current === language.code ? buttonActive : panelInactive}`}
+          class={`${linkBase} min-h-[44px] flex-1 py-2 ${current === language.code ? linkActive : panelInactive}`}
         >
           {language.label}
-        </button>
+        </a>
       ))}
     </div>
   </div>

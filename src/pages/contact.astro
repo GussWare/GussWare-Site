@@ -20,7 +20,7 @@ import { getContact } from '../lib/wordpress/contact';
 
 const [socialMedia, contact] = await Promise.all([
   getSocialMedia(),
-  getContact(),
+  getContact(Astro.currentLocale ?? undefined),
 ]);
 ---
 
