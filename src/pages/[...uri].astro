@@ -30,6 +30,7 @@ import FormField from '../components/ui/FormField.astro';
 import Button from '../components/ui/Button.astro';
 import { routes } from '../lib/routes';
 import type { LocaleUrls } from '../lib/routes';
+import { getBreadcrumbHome } from '../lib/routes';
 import {
   getPageById,
   getPageBySlug,
@@ -56,6 +57,7 @@ if (!page) {
 const title = stripHtml(page.title.rendered);
 const description = stripHtml(page.excerpt.rendered).slice(0, 160);
 const sectionContent = page.acf?.section_content ?? null;
+const homeCrumb = getBreadcrumbHome(locale);
 
 // URLs del selector de idioma: la del locale actual es la URL en curso;
 // la del otro locale usa el slug de la traducción (`translations` de
@@ -94,6 +96,10 @@ if (uri === '') {
 >
   {sectionContent ? (
     <Section id="contact" class="bg-gw-surface-auxiliary">
+      <Breadcrumbs
+        items={[homeCrumb, { label: sectionContent.title }]}
+        class="mb-8"
+      />
       <div class="flex flex-col gap-16 lg:flex-row lg:gap-24">
         <div class="flex flex-col justify-center lg:w-1/2">
           {sectionContent.eyebrow && (
@@ -177,10 +183,7 @@ if (uri === '') {
   ) : (
     <Container>
       <article class="mx-auto w-full max-w-[800px] pt-16 md:pt-24 pb-16 md:pb-24">
-        <Breadcrumbs
-          items={[{ label: 'Home', href: routes.home }, { label: title }]}
-          class="mb-8"
-        />
+        <Breadcrumbs items={[homeCrumb, { label: title }]} class="mb-8" />
         <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6">
           {title}
         </h1>

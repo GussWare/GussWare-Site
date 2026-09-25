@@ -24,11 +24,14 @@ import {
 } from '../../lib/wordpress/post';
 import { stripHtml } from '../../lib/wordpress/text';
 import { routes } from '../../lib/routes';
+import { getBreadcrumbHome } from '../../lib/routes';
 import { wpFetch } from '../../lib/wordpress/client';
 import { wpRoutes } from '../../lib/wordpress/routes';
 import type { WpMedia } from '../../lib/wordpress/types';
 
 export const prerender = false;
+
+const homeCrumb = getBreadcrumbHome(Astro.currentLocale ?? 'es');
 
 const { slug } = Astro.params;
 const wpApiUrl = import.meta.env.WP_API_URL as string | undefined;
@@ -95,7 +98,7 @@ const avatar =
     <article class="mx-auto w-full max-w-[800px] pt-16 md:pt-24 pb-16 md:pb-24">
       <Breadcrumbs
         items={[
-          { label: 'Home', href: routes.home },
+          homeCrumb,
           { label: 'Blog', href: routes.blog },
           { label: categoryName ?? title },
         ]}
