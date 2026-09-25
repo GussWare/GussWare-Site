@@ -9,6 +9,8 @@ export interface WpSettings {
   url: string;
   site_logo: number | null;
   site_icon: number;
+  show_on_front: string;
+  page_on_front: number;
 }
 
 export interface WpMedia {
@@ -71,9 +73,32 @@ export interface Header {
   status: boolean;
 }
 
+/** Medio de logo de `logo_section` (`/gussware/v1/header`). */
+export interface HeaderLogoMedia {
+  id: number;
+  url: string;
+  alt: string | null;
+  width: number;
+  height: number;
+  mime_type: string;
+}
+
+/** Sección de logos del Header (`logo_section`). */
+export interface HeaderLogoSection {
+  logo: HeaderLogoMedia | null;
+  mobile_logo: HeaderLogoMedia | null;
+}
+
 /** Respuesta de `/gussware/v1/header`. */
 export interface HeaderResponse {
   button_section: Header | null;
+  logo_section: HeaderLogoSection | null;
+}
+
+/** Header listo para renderizar: CTA + logos. */
+export interface HeaderData extends Header {
+  logo: HeaderLogo | null;
+  mobileLogo: HeaderLogo | null;
 }
 
 export interface FooterDescription {
@@ -229,6 +254,7 @@ export interface WpLanguage {
   w3c: string;
   home_url: string;
   is_default: boolean;
+  page_on_front: number;
 }
 
 export interface WpPostRendered {

@@ -14,22 +14,41 @@ import { getHeaderLogo } from '../../lib/wordpress/logo';
 import { getHeaderMenu } from '../../lib/wordpress/menu';
 import { getHeader } from '../../lib/wordpress/header';
 import { routes } from '../../lib/routes';
+import type { LocaleUrls } from '../../lib/routes';
 import Button from '../ui/Button.astro';
+import LanguageSelector from '../ui/LanguageSelector.astro';
 import Logo from '../ui/Logo.astro';
 import MenuButton from '../ui/MenuButton.astro';
+
+interface Props {
+  localeUrls?: LocaleUrls;
+}
+
+const { localeUrls = undefined } = Astro.props;
 
 const [logo, menuItems, header] = await Promise.all([
   getHeaderLogo(),
   getHeaderMenu(),
-  getHeader(),
+  getHeader(Astro.currentLocale ?? undefined),
 ]);
 const topLevelItems = menuItems.filter((item) => item.parent === 0);
+const desktopLogo = header?.logo ?? logo;
+const mobileLogo = header?.mobileLogo ?? desktopLogo;
 ---
 
 <header class="bg-gw-surface-primary sticky top-0 z-50 w-full border-b border-gw-border-subtle">
   <div class="mx-auto flex h-16 w-full max-w-[var(--container-max)] items-center justify-between px-4 md:px-6">
-    <!-- Logo -->
-    <Logo src={logo?.src} alt={logo?.alt} />
+    <!-- Logo: logo_section.logo en >=425px (fluido, sin overflow), logo_section.mobile_logo solo en <425px -->
+    <Logo
+      src={desktopLogo?.src}
+      alt={desktopLogo?.alt}
+      class="hidden min-w-0 min-[425px]:flex [&_img]:h-auto [&_img]:max-h-8 [&_img]:max-w-full"
+    />
+    <Logo
+      src={mobileLogo?.src}
+      alt={mobileLogo?.alt}
+      class="min-[425px]:hidden"
+    />
 
     <!-- Desktop Navigation (visible desde lg; en Tablet/Mobile la oculta el hamburger visual) -->
     <nav
@@ -49,6 +68,7 @@ const topLevelItems = menuItems.filter((item) => item.parent === 0);
 
     <!-- Desktop CTA & Mobile Toggle -->
     <div class="flex items-center gap-4">
+      <LanguageSelector localeUrls={localeUrls} />
       {header?.status && (
         <Button
           href={header.url}
@@ -87,6 +107,7 @@ const topLevelItems = menuItems.filter((item) => item.parent === 0);
           {item.title}
         </a>
       ))}
+      <LanguageSelector variant="panel" localeUrls={localeUrls} />
       <Button
         href={routes.contact}
         variant="primary"

@@ -16,3 +16,19 @@ export async function getLanguages(): Promise<WpLanguage[] | null> {
     return null;
   }
 }
+
+/**
+ * Idioma predeterminado según WordPress/Polylang (`is_default`).
+ * Solo acepta locales soportados (`es`, `en`); sin default válido,
+ * respalda a `es` (único punto con este fallback).
+ */
+export async function getDefaultLocale(): Promise<string> {
+  const languages = await getLanguages().catch(() => null);
+  const entry = languages?.find((item) => item.is_default === true);
+
+  if (entry && (entry.slug === 'es' || entry.slug === 'en')) {
+    return entry.slug;
+  }
+
+  return 'es';
+}

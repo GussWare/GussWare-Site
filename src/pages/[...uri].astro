@@ -20,6 +20,7 @@
  * idiomas). Sin contenido para `{ locale, uri }`, redirige a `/404`,
  * igual que los slugs inexistentes de `/blog/[slug]`.
  */
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import Layout from '../layouts/Layout.astro';
 import Container from '../components/ui/Container.astro';
 import Breadcrumbs from '../components/ui/Breadcrumbs.astro';
@@ -28,7 +29,12 @@ import Icon from '../components/ui/Icon.astro';
 import FormField from '../components/ui/FormField.astro';
 import Button from '../components/ui/Button.astro';
 import { routes } from '../lib/routes';
-import { getPageBySlug } from '../lib/wordpress/pages';
+import type { LocaleUrls } from '../lib/routes';
+import {
+  getPageById,
+  getPageBySlug,
+  getFrontPage,
+} from '../lib/wordpress/pages';
 import { getSocialMedia } from '../lib/wordpress/socialMedia';
 import { stripHtml } from '../lib/wordpress/text';
 
@@ -39,7 +45,7 @@ const rawUri = (Astro.params.uri ?? '').replace(/^\/+|\/+$/g, '');
 const uri = locale === 'es' ? rawUri : rawUri.split('/').slice(1).join('/');
 
 const [page, socialMedia] = await Promise.all([
-  uri ? getPageBySlug(uri, locale).catch(() => null) : null,
+  uri ? getPageBySlug(uri, locale).catch(() => null) : getFrontPage(locale),
   getSocialMedia(),
 ]);
 
@@ -50,9 +56,42 @@ if (!page) {
 const title = stripHtml(page.title.rendered);
 const description = stripHtml(page.excerpt.rendered).slice(0, 160);
 const sectionContent = page.acf?.section_content ?? null;
+
+// URLs del selector de idioma: la del locale actual es la URL en curso;
+// la del otro locale usa el slug de la traducción (`translations` de
+// Polylang) cuando existe, o la ruta equivalente genérica en su defecto.
+const otherLocale = locale === 'es' ? 'en' : 'es';
+const translationId = page.translations?.[otherLocale];
+const translatedSlug =
+  typeof translationId === 'number'
+    ? ((await getPageById(translationId).catch(() => null))?.slug ?? null)
+    : null;
+
+const localeUrls: LocaleUrls = {
+  es: Astro.url.pathname,
+  en: Astro.url.pathname,
+};
+
+if (uri === '') {
+  // URL raíz: la contraparte es la raíz del otro locale (sin slugs).
+  localeUrls.es = getRelativeLocaleUrl('es', '/');
+  localeUrls.en = getRelativeLocaleUrl('en', '/');
+} else if (locale === 'es') {
+  localeUrls.en = translatedSlug
+    ? getRelativeLocaleUrl('en', translatedSlug)
+    : getRelativeLocaleUrl('en', uri);
+} else {
+  localeUrls.es = translatedSlug
+    ? getRelativeLocaleUrl('es', translatedSlug)
+    : getRelativeLocaleUrl('es', uri);
+}
 ---
 
-<Layout title={`${title} — GussWare`} description={description}>
+<Layout
+  title={`${title} — GussWare`}
+  description={description}
+  localeUrls={localeUrls}
+>
   {sectionContent ? (
     <Section id="contact" class="bg-gw-surface-auxiliary">
       <div class="flex flex-col gap-16 lg:flex-row lg:gap-24">
