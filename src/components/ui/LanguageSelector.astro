@@ -1,0 +1,80 @@
+---
+/**
+ * Selector de idioma — Maquetación según Stitch `GussWare Home-V0.1.0`
+ * (grupo ES | EN del Header, variantes `header` y `panel` móvil).
+ *
+ * Solo visual: muestra los idiomas con sus estados (`aria-pressed`,
+ * activo/inactivo, hover, focus) sin realizar el cambio real de idioma
+ * (sin Polylang, WordPress, rutas ni navegación).
+ * Reutiliza tokens existentes: `supporting-blue-dark`, `brand-surface`,
+ * `gw-surface-primary/secondary`, `gw-text-primary`, `gw-border-subtle`.
+ */
+interface Props {
+  /** Idioma marcado visualmente como activo. */
+  current?: 'es' | 'en';
+  /**
+   * `header`: grupo compacto en línea (cluster del Header).
+   * `panel`: bloque de ancho completo con etiqueta (panel móvil).
+   */
+  variant?: 'header' | 'panel';
+  class?: string;
+}
+
+const {
+  current = 'es',
+  variant = 'header',
+  class: className = '',
+} = Astro.props;
+
+const languages = [
+  { code: 'es', label: 'ES' },
+  { code: 'en', label: 'EN' },
+] as const;
+
+const buttonBase =
+  'text-xs font-bold uppercase tracking-wider focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
+const buttonActive = 'bg-supporting-blue-dark text-brand-surface';
+const desktopInactive =
+  'bg-transparent text-gw-text-primary hover:bg-gw-surface-secondary hover:text-supporting-blue-dark hover:underline';
+const panelInactive =
+  'bg-transparent text-gw-text-primary hover:bg-gw-surface-secondary';
+---
+
+{variant === 'header' ? (
+  <div
+    role="group"
+    aria-label="Language selector"
+    class={`inline-flex overflow-hidden rounded-none border border-gw-border-subtle bg-gw-surface-primary ${className}`}
+  >
+    {languages.map((language) => (
+      <button
+        type="button"
+        aria-pressed={current === language.code ? 'true' : 'false'}
+        class={`${buttonBase} min-h-[38px] px-3 py-1.5 ${current === language.code ? buttonActive : desktopInactive}`}
+      >
+        {language.label}
+      </button>
+    ))}
+  </div>
+) : (
+  <div class={`border-t border-gw-border-subtle/40 pt-4 ${className}`}>
+    <span class="text-gw-text-primary/70 mb-2 block text-xs font-bold uppercase tracking-wider">
+      IDIOMA / LANGUAGE
+    </span>
+    <div
+      role="group"
+      aria-label="Language selector mobile"
+      class="flex overflow-hidden rounded-none border border-gw-border-subtle bg-gw-surface-primary"
+    >
+      {languages.map((language) => (
+        <button
+          type="button"
+          aria-pressed={current === language.code ? 'true' : 'false'}
+          class={`${buttonBase} min-h-[44px] flex-1 py-2 ${current === language.code ? buttonActive : panelInactive}`}
+        >
+          {language.label}
+        </button>
+      ))}
+    </div>
+  </div>
+)}
