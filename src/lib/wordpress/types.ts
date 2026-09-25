@@ -29,26 +29,27 @@ export interface WpMedia {
   };
 }
 
-export interface WpMenu {
+/** Menú de `/gussware/v1/menus` (ítems embebidos). */
+export interface WpCustomMenu {
   id: number;
   name: string;
   slug: string;
-  locations: string[];
+  /** Idioma del menú (ACF `menu_language`), fuente de verdad. */
+  language: string;
+  items: WpCustomMenuItem[];
 }
 
-export interface WpMenuItem {
-  id: number;
-
-  title: {
-    rendered: string;
-  };
-
-  status: string;
+/** Ítem embebido de `/gussware/v1/menus`. */
+export interface WpCustomMenuItem {
+  ID: number;
+  /** ID del ítem padre como cadena (`"0"` = nivel superior). */
+  menu_item_parent: string;
+  title: string;
   url: string;
-  parent: number;
-  menu_order: number;
   target: string;
-  menus: number;
+  type: string;
+  menu_order: number;
+  post_status: string;
 }
 
 /** Logo del Header listo para renderizar. */
