@@ -21,6 +21,46 @@ export interface LocaleUrls {
   en: string;
 }
 
+/** Base del listado del Blog (`/blog`, `/en/blog`) según locale. */
+export function blogBaseUrl(locale: string): string {
+  return removeBlogTrailingSlash(getRelativeLocaleUrl(locale, 'blog'));
+}
+
+/** URL de una página del listado con sus parámetros de consulta. */
+export function blogListUrl(
+  locale: string,
+  page: number,
+  search: string,
+  catId: number,
+): string {
+  const params = new URLSearchParams();
+
+  if (search) {
+    params.set('search', search);
+  }
+
+  if (catId) {
+    params.set('category', String(catId));
+  }
+
+  if (page > 1) {
+    params.set('page', String(page));
+  }
+
+  const base = blogBaseUrl(locale);
+  const query = params.toString();
+  return query ? `${base}?${query}` : base;
+}
+
+/** URL del detalle de un artículo (`/blog/[slug]`, `/en/blog/[slug]`). */
+export function blogPostUrl(locale: string, slug: string): string {
+  return removeBlogTrailingSlash(getRelativeLocaleUrl(locale, `blog/${slug}`));
+}
+
+function removeBlogTrailingSlash(url: string): string {
+  return url.length > 1 && url.endsWith('/') ? url.slice(0, -1) : url;
+}
+
 /** Raíz del breadcrumb (`Inicio`/`Home`) según el locale actual. */
 export interface BreadcrumbRoot {
   label: string;

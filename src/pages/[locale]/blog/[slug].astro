@@ -1,19 +1,19 @@
 ---
 /**
- * Detalle de artículo en español (`/blog/[slug]`).
+ * Detalle de artículo por locale (`/en/blog/[slug]`, ...).
  *
  * Ruta fina: resuelve el artículo (`getBlogArticle`, con `lang`) y lo
- * renderiza con `BlogArticleView` (compartida con `/en/blog/[slug]`,
- * sin duplicar lógica). Sin artículo, redirige a `/404`.
+ * renderiza con `BlogArticleView` (compartida con `/blog/[slug]`, sin
+ * duplicar lógica). Sin artículo, redirige a `/404`.
  */
-import Layout from '../../layouts/Layout.astro';
-import BlogArticleView from '../../components/blog/BlogArticleView.astro';
-import { getBlogArticle } from '../../lib/wordpress/post';
-import { routes } from '../../lib/routes';
+import Layout from '../../../layouts/Layout.astro';
+import BlogArticleView from '../../../components/blog/BlogArticleView.astro';
+import { getBlogArticle } from '../../../lib/wordpress/post';
+import { routes } from '../../../lib/routes';
 
 export const prerender = false;
 
-const locale = Astro.currentLocale ?? 'es';
+const locale = Astro.params.locale ?? 'es';
 const { slug } = Astro.params;
 const data =
   typeof slug === 'string'
