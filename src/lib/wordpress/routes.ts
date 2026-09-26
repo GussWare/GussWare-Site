@@ -71,5 +71,6 @@ export const wpRoutes = {
     `/wp/v2/tags?per_page=100${lang ? `&lang=${encodeURIComponent(lang)}` : ''}`,
   categories: (lang?: string) =>
     `/wp/v2/categories?per_page=100${lang ? `&lang=${encodeURIComponent(lang)}` : ''}`,
-  blogFeatured: '/gussware/v1/blog/featured',
+  blogFeatured: (lang?: string) =>
+    `/gussware/v1/blog/featured${lang ? `?lang=${encodeURIComponent(lang)}` : ''}`,
 } as const;
