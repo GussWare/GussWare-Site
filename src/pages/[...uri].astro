@@ -23,7 +23,6 @@
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import Layout from '../layouts/Layout.astro';
 import Container from '../components/ui/Container.astro';
-import Breadcrumbs from '../components/ui/Breadcrumbs.astro';
 import Section from '../components/ui/Section.astro';
 import Icon from '../components/ui/Icon.astro';
 import FormField from '../components/ui/FormField.astro';
@@ -177,10 +176,6 @@ if (uri === '') {
   ) : (
     <Container>
       <article class="mx-auto w-full max-w-[800px] pt-16 md:pt-24 pb-16 md:pb-24">
-        <Breadcrumbs
-          items={[{ label: 'Home', href: routes.home }, { label: title }]}
-          class="mb-8"
-        />
         <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6">
           {title}
         </h1>

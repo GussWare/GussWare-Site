@@ -14,7 +14,7 @@ import SectionHeading from '../ui/SectionHeading.astro';
 import Button from '../ui/Button.astro';
 import Icon from '../ui/Icon.astro';
 import { fetchPostPage, normalizeBlogCard } from '../../lib/wordpress/post';
-import { routes } from '../../lib/routes';
+import { blogBaseUrl } from '../../lib/routes';
 import type { BlogCard } from '../../lib/wordpress/types';
 
 interface Props {
@@ -23,9 +23,10 @@ interface Props {
   tags: number[];
   baseUrl: string;
   catMap: Record<number, string>;
+  lang: string;
 }
 
-const { currentId, categories, tags, baseUrl, catMap } = Astro.props;
+const { currentId, categories, tags, baseUrl, catMap, lang } = Astro.props;
 
 let slides: BlogCard[] = [];
 let sectionTitle = 'Related Reading';
@@ -38,6 +39,7 @@ try {
     perPage: 15,
     query: '',
     catId: 0,
+    lang,
   });
   hasMore = totalPages > 1;
 
@@ -51,7 +53,7 @@ try {
     }
 
     seen.add(item.id);
-    const card = normalizeBlogCard(item, catMap);
+    const card = normalizeBlogCard(item, catMap, lang);
     const isRelated =
       item.categories?.some((category) => categories.includes(category)) ||
       item.tags?.some((tag) => tags.includes(tag));
@@ -83,7 +85,7 @@ try {
     <div class="mb-8 flex items-end justify-between gap-4">
       <SectionHeading title={sectionTitle} />
       <a
-        href={routes.blog}
+        href={blogBaseUrl(lang)}
         class="text-label-bold text-supporting-blue-dark hover:text-brand-accent hidden items-center gap-2 transition-colors duration-200 md:inline-flex"
       >
         View All
@@ -107,7 +109,7 @@ try {
         {hasMore && (
           <div class="min-w-0 shrink-0 grow-0 basis-full pl-6 md:basis-1/2 md:pl-8 lg:basis-1/3">
             <a
-              href={routes.blog}
+              href={blogBaseUrl(lang)}
               class="border-gw-border-subtle text-label-bold text-supporting-blue-dark hover:text-brand-accent flex h-full min-h-48 flex-col items-center justify-center gap-2 rounded-none border transition-colors duration-200"
             >
               Ver todos
@@ -146,7 +148,7 @@ try {
       </button>
     </div>
     <div class="mt-8 md:hidden">
-      <Button href={routes.blog} variant="secondary" class="w-full">
+      <Button href={blogBaseUrl(lang)} variant="secondary" class="w-full">
         View All Articles
       </Button>
     </div>

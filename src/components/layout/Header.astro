@@ -28,7 +28,7 @@ const { localeUrls = undefined } = Astro.props;
 
 const [logo, menuItems, header] = await Promise.all([
   getHeaderLogo(),
-  getHeaderMenu(),
+  getHeaderMenu(Astro.currentLocale ?? undefined),
   getHeader(Astro.currentLocale ?? undefined),
 ]);
 const topLevelItems = menuItems.filter((item) => item.parent === 0);

@@ -24,8 +24,8 @@ import { routes } from '../../lib/routes';
 
 const [logo, footerMenuItems, legalMenuItems, footer] = await Promise.all([
   getHeaderLogo(),
-  getFooterMenu(),
-  getLegalMenu(),
+  getFooterMenu(Astro.currentLocale ?? undefined),
+  getLegalMenu(Astro.currentLocale ?? undefined),
   getFooterDescription(Astro.currentLocale ?? undefined),
 ]);
 
