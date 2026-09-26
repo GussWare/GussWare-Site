@@ -170,9 +170,11 @@ export async function getTags(lang?: string): Promise<WpTag[] | null> {
   }
 }
 
-export async function getBlogFeatured(): Promise<WpFeaturedPost | null> {
+export async function getBlogFeatured(
+  lang?: string,
+): Promise<WpFeaturedPost | null> {
   try {
-    const data = await wpFetch<WpFeaturedPost>(wpRoutes.blogFeatured);
+    const data = await wpFetch<WpFeaturedPost>(wpRoutes.blogFeatured(lang));
     return data;
   } catch (error) {
     console.error('Error fetching blog featured posts:', error);
@@ -292,7 +294,7 @@ export async function getBlogListing(
         }).catch(() => null)
       : null,
     getCategories(query.locale),
-    getBlogFeatured().catch(() => null),
+    getBlogFeatured(query.locale).catch(() => null),
   ]);
 
   const catMap = buildCategoryMap(initialCategories);
