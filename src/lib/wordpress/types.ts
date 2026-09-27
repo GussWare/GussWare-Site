@@ -232,6 +232,8 @@ export interface WpPage {
 
   lang: string;
   translations: Record<string, number>;
+
+  yoast_head_json: WpPostYoastHeadJson;
 }
 
 /** Contenido editorial de una Page (`acf.section_content`). */
@@ -289,6 +291,7 @@ export interface WpPostYoastTwitterMisc {
 
 export interface WpPostYoastHeadJson {
   title: string;
+  description?: string;
   robots: WpPostYoastRobots;
   canonical: string;
   og_locale: string;
@@ -297,16 +300,28 @@ export interface WpPostYoastHeadJson {
   og_description: string;
   og_url: string;
   og_site_name: string;
+  og_image?: WpYoastImage[];
   article_published_time: string;
   article_modified_time: string;
   author: string;
   twitter_card: string;
+  twitter_title?: string;
+  twitter_description?: string;
+  twitter_image?: string;
   twitter_misc: WpPostYoastTwitterMisc;
 
   schema: {
     '@context': string;
     '@graph': unknown[];
   };
+}
+
+/** Imagen de `og_image` en `yoast_head_json`. */
+export interface WpYoastImage {
+  url: string;
+  width: number;
+  height: number;
+  type: string;
 }
 
 export interface WpPostLink {
