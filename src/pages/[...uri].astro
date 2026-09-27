@@ -34,6 +34,7 @@ import {
   getPageBySlug,
   getFrontPage,
 } from '../lib/wordpress/pages';
+import { getLanguages } from '../lib/wordpress/languages';
 import { getSocialMedia } from '../lib/wordpress/socialMedia';
 import { stripHtml } from '../lib/wordpress/text';
 
@@ -43,9 +44,10 @@ const locale = Astro.currentLocale ?? 'es';
 const rawUri = (Astro.params.uri ?? '').replace(/^\/+|\/+$/g, '');
 const uri = locale === 'es' ? rawUri : rawUri.split('/').slice(1).join('/');
 
-const [page, socialMedia] = await Promise.all([
+const [page, socialMedia, languages] = await Promise.all([
   uri ? getPageBySlug(uri, locale).catch(() => null) : getFrontPage(locale),
   getSocialMedia(),
+  getLanguages().catch(() => null),
 ]);
 
 if (!page) {
@@ -84,12 +86,32 @@ if (uri === '') {
     ? getRelativeLocaleUrl('es', translatedSlug)
     : getRelativeLocaleUrl('es', uri);
 }
+
+// hreflang: solo traducciones existentes (la actual siempre existe;
+// la otra, solo si se resolvió su slug). Sin URLs inventadas.
+const alternateUrls: Record<string, string> = {
+  [locale]: Astro.url.pathname,
+};
+
+if (translatedSlug) {
+  alternateUrls[otherLocale] =
+    locale === 'es'
+      ? getRelativeLocaleUrl('en', translatedSlug)
+      : getRelativeLocaleUrl('es', translatedSlug);
+}
 ---
 
 <Layout
   title={`${title} — GussWare`}
   description={description}
   localeUrls={localeUrls}
+  lang={page.lang}
+  seo={{
+    lang: page.lang,
+    yoast: page.yoast_head_json,
+    alternateUrls,
+    languages: languages ?? undefined,
+  }}
 >
   {sectionContent ? (
     <Section id="contact" class="bg-gw-surface-auxiliary">
