@@ -246,7 +246,121 @@ export interface WpSectionContent {
 
 /** Campo `acf` de una Page de WordPress. */
 export interface WpPageAcf {
-  section_content: WpSectionContent;
+  section_content?: WpSectionContent;
+}
+
+/** Botón opcional del Hero (`primary_button` / `secondary_button`). */
+export interface WpHomeButton {
+  button_text: string;
+  button_url: string;
+}
+
+export interface WpHomeHero {
+  eyebrow: string;
+  title: string;
+  description: string;
+  image: number | null;
+  primary_button?: WpHomeButton | null;
+  secondary_button?: WpHomeButton | null;
+}
+
+export interface WpExpertiseItem {
+  icon: string;
+  title: string;
+  description: string;
+}
+
+export interface WpFiabilityItem {
+  icon: string;
+  text: string;
+}
+
+export interface WpFiability {
+  title: string;
+  description: string;
+  fiability_items: WpFiabilityItem[];
+}
+
+export interface WpExpertise {
+  eyebrow: string;
+  title: string;
+  description: string;
+  expertice_items: WpExpertiseItem[];
+  fiability: WpFiability;
+}
+
+export interface WpValuePoint {
+  icon: string;
+  title: string;
+  description: string;
+}
+
+export interface WpTechnology {
+  eyebrow: string;
+  title: string;
+  description: string;
+  value_points: WpValuePoint[];
+}
+
+export interface WpServiceItem {
+  title: string;
+  description: string;
+}
+
+export interface WpServices {
+  eyebrow: string;
+  title: string;
+  description: string;
+  items: WpServiceItem[];
+}
+
+export interface WpProcessStep {
+  label: string;
+  title: string;
+  description: string;
+  image: number | null;
+}
+
+export interface WpProcess {
+  eyebrow: string;
+  title: string;
+  description: string;
+  steps: WpProcessStep[];
+}
+
+export interface WpFaqItem {
+  pregunta: string;
+  respuesta: string;
+}
+
+export interface WpFaq {
+  eyebrow: string;
+  titulo: string;
+  descripcion: string;
+  preguntas: WpFaqItem[];
+}
+
+export interface WpFinalCta {
+  title: string;
+  description: string;
+  button_text: string;
+  button_url: string;
+}
+
+/** Campo `acf` de la Page portada del Home. */
+export interface WpHomeAcf {
+  hero: WpHomeHero;
+  expertise: WpExpertise;
+  technology: WpTechnology;
+  services: WpServices;
+  process: WpProcess;
+  faq: WpFaq;
+  final_cta: WpFinalCta;
+}
+
+/** Page portada del Home (mismos campos base que `WpPage`). */
+export interface WpHomePage extends Omit<WpPage, 'acf'> {
+  acf: WpHomeAcf;
 }
 
 /** Idioma de Polylang (`/pll/v1/languages`). */

@@ -56,7 +56,10 @@ if (!page) {
 
 const title = stripHtml(page.title.rendered);
 const description = stripHtml(page.excerpt.rendered).slice(0, 160);
-const sectionContent = page.acf?.section_content ?? null;
+const sectionContent =
+  page.acf && 'section_content' in page.acf
+    ? (page.acf.section_content ?? null)
+    : null;
 
 // URLs del selector de idioma: la del locale actual es la URL en curso;
 // la del otro locale usa el slug de la traducción (`translations` de

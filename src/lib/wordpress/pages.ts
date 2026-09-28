@@ -1,7 +1,7 @@
 import { wpFetch } from './client';
 import { wpRoutes } from './routes';
 import { getLanguages } from './languages';
-import type { WpPage, WpSettings } from './types';
+import type { WpHomePage, WpPage, WpSettings } from './types';
 
 /**
  * RGW-55 — Resuelve una Page de WordPress por slug e idioma.
@@ -11,12 +11,12 @@ import type { WpPage, WpSettings } from './types';
  * manuales de IDs, la relación entre traducciones (`translations`)
  * proviene de WordPress. No aplica fallback entre idiomas.
  */
-export async function getPageBySlug(
+export async function getPageBySlug<T extends WpPage | WpHomePage = WpPage>(
   slug: string,
   lang: string,
-): Promise<WpPage | null> {
+): Promise<T | null> {
   try {
-    const data = await wpFetch<WpPage[]>(wpRoutes.pageBySlug(slug, lang));
+    const data = await wpFetch<T[]>(wpRoutes.pageBySlug(slug, lang));
     const page = Array.isArray(data)
       ? data.find(
           (item) =>
@@ -37,9 +37,11 @@ export async function getPageBySlug(
  * `translations`). Sin mapas manuales: el ID siempre proviene de
  * WordPress/Polylang.
  */
-export async function getPageById(id: number): Promise<WpPage | null> {
+export async function getPageById<T extends WpPage | WpHomePage = WpPage>(
+  id: number,
+): Promise<T | null> {
   try {
-    const data = await wpFetch<WpPage>(wpRoutes.page(id));
+    const data = await wpFetch<T>(wpRoutes.page(id));
     return data && data.status === 'publish' ? data : null;
   } catch (error) {
     console.error('Error fetching page by ID:', error);
@@ -90,11 +92,11 @@ async function getFrontPageId(locale: string): Promise<number | null> {
  * hay designación válida, los slugs `inicio` (es) / `home` (en).
  * Sin IDs hardcodeados ni lógica específica por página.
  */
-export async function getFrontPage(locale: string): Promise<WpPage | null> {
+export async function getFrontPage(locale: string): Promise<WpHomePage | null> {
   const frontPageId = await getFrontPageId(locale).catch(() => null);
 
   if (frontPageId) {
-    const page = await getPageById(frontPageId);
+    const page = await getPageById<WpHomePage>(frontPageId);
 
     if (page && page.lang === locale) {
       return page;
@@ -104,5 +106,5 @@ export async function getFrontPage(locale: string): Promise<WpPage | null> {
   // Respaldo: slugs de portada por locale (la designación de WordPress
   // es siempre la fuente primaria).
   const slug = locale === 'en' ? 'home' : 'inicio';
-  return getPageBySlug(slug, locale);
+  return getPageBySlug<WpHomePage>(slug, locale);
 }
