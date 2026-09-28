@@ -9,9 +9,13 @@
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import Layout from '../layouts/Layout.astro';
 import Container from '../components/ui/Container.astro';
+import Hero from '../components/home/Hero.astro';
 import type { LocaleUrls } from '../lib/routes';
 import { getFrontPage } from '../lib/wordpress/pages';
+import { wpFetch } from '../lib/wordpress/client';
+import { wpRoutes } from '../lib/wordpress/routes';
 import { stripHtml } from '../lib/wordpress/text';
+import type { WpMedia } from '../lib/wordpress/types';
 
 export const prerender = false;
 
@@ -26,6 +30,28 @@ const title = page ? stripHtml(page.title.rendered) : 'GussWare';
 const description = page
   ? stripHtml(page.excerpt.rendered).slice(0, 160)
   : undefined;
+const hero = page?.acf?.hero ?? null;
+
+const heroImageId = hero?.image ?? null;
+let heroImage: { src: string; alt: string } | null = null;
+
+if (heroImageId) {
+  try {
+    const media = await wpFetch<WpMedia>(wpRoutes.media(heroImageId));
+
+    if (media?.source_url) {
+      heroImage = {
+        src: media.source_url,
+        alt:
+          media.alt_text ||
+          media.title?.rendered ||
+          stripHtml(page?.title?.rendered ?? ''),
+      };
+    }
+  } catch {
+    // Sin imagen: el Hero se renderiza sin bloque visual.
+  }
+}
 ---
 
 <Layout
@@ -33,14 +59,18 @@ const description = page
   description={description}
   localeUrls={localeUrls}
 >
-  {page && (
-    <Container>
-      <article class="mx-auto w-full max-w-[800px] pt-16 md:pt-24 pb-16 md:pb-24">
-        <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6">
-          {title}
-        </h1>
-        <div set:html={page.content.rendered} />
-      </article>
-    </Container>
+  {page && hero ? (
+    <Hero hero={hero} image={heroImage} />
+  ) : (
+    page && (
+      <Container>
+        <article class="mx-auto w-full max-w-[800px] pt-16 md:pt-24 pb-16 md:pb-24">
+          <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6">
+            {title}
+          </h1>
+          <div set:html={page.content.rendered} />
+        </article>
+      </Container>
+    )
   )}
 </Layout>

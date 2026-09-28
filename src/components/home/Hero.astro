@@ -1,0 +1,89 @@
+---
+/**
+ * Hero del Home (RGW-224) según Stitch `GussWare Home-V0.1.0`.
+ *
+ * Grid 55/45 en desktop (contenido + imagen) y apilado en mobile
+ * (contenido, imagen). Consume el grupo ACF `hero`: eyebrow, título,
+ * descripción, imagen resuelta y botones opcionales (`primary_button` /
+ * `secondary_button` solo se renderizan con `button_text`).
+ * Solo visualización: sin navegación ni lógica más allá de mostrar
+ * los datos recibidos.
+ */
+import Section from '../ui/Section.astro';
+import Image from '../ui/Image.astro';
+import Button from '../ui/Button.astro';
+import type { WpHomeHero } from '../../lib/wordpress/types';
+
+interface Props {
+  hero: WpHomeHero;
+  image: { src: string; alt: string } | null;
+}
+
+const { hero, image } = Astro.props;
+---
+
+<Section>
+  <div class="flex flex-col items-center gap-8 md:flex-row md:gap-12">
+    <div class="flex w-full flex-col gap-6 md:w-[55%]">
+      <div class="flex flex-col gap-4">
+        {hero.eyebrow && (
+          <span class="text-label-bold text-brand-accent font-bold tracking-widest uppercase">
+            {hero.eyebrow}
+          </span>
+        )}
+        {hero.title && (
+          <h1 class="text-display-lg-mobile md:text-display-lg text-supporting-blue-dark leading-display-lg-mobile md:leading-display-lg font-bold">
+            {hero.title}
+          </h1>
+        )}
+      </div>
+      {hero.description && (
+        <p class="text-body-lg text-gw-text-secondary max-w-2xl">
+          {hero.description}
+        </p>
+      )}
+      {(hero.primary_button?.button_text ||
+        hero.secondary_button?.button_text) && (
+        <div class="mt-4 flex flex-wrap gap-4">
+          {hero.primary_button?.button_text && (
+            <Button
+              variant="primary"
+              href={hero.primary_button.button_url || undefined}
+            >
+              {hero.primary_button.button_text}
+            </Button>
+          )}
+          {hero.secondary_button?.button_text && (
+            <Button
+              variant="secondary"
+              href={hero.secondary_button.button_url || undefined}
+            >
+              {hero.secondary_button.button_text}
+            </Button>
+          )}
+        </div>
+      )}
+    </div>
+    {image && (
+      <div class="relative isolate w-full md:w-[45%]">
+        <div class="relative z-10 overflow-hidden rounded-xl shadow-lg">
+          <Image
+            src={image.src}
+            alt={image.alt}
+            fit="contain"
+            loading="eager"
+            class="h-auto w-full"
+          />
+        </div>
+        <div
+          aria-hidden="true"
+          class="bg-supporting-blue-fixed-dim absolute -right-6 -bottom-6 -z-10 h-32 w-32 rounded-full opacity-20"
+        ></div>
+        <div
+          aria-hidden="true"
+          class="border-brand-accent absolute -top-6 -left-6 -z-10 h-24 w-24 border-2 opacity-20"
+        ></div>
+      </div>
+    )}
+  </div>
+</Section>
