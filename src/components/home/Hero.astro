@@ -65,7 +65,7 @@ const { hero, image } = Astro.props;
       )}
     </div>
     {image && (
-      <div class="relative w-full md:w-[45%]">
+      <div class="relative isolate w-full md:w-[45%]">
         <div class="relative z-10 overflow-hidden rounded-xl shadow-lg">
           <Image
             src={image.src}
