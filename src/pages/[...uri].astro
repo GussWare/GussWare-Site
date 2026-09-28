@@ -24,6 +24,7 @@ import { getRelativeLocaleUrl } from 'astro:i18n';
 import Layout from '../layouts/Layout.astro';
 import Container from '../components/ui/Container.astro';
 import Section from '../components/ui/Section.astro';
+import Hero from '../components/home/Hero.astro';
 import Icon from '../components/ui/Icon.astro';
 import FormField from '../components/ui/FormField.astro';
 import Button from '../components/ui/Button.astro';
@@ -35,8 +36,11 @@ import {
   getFrontPage,
 } from '../lib/wordpress/pages';
 import { getLanguages } from '../lib/wordpress/languages';
+import { wpFetch } from '../lib/wordpress/client';
+import { wpRoutes } from '../lib/wordpress/routes';
 import { getSocialMedia } from '../lib/wordpress/socialMedia';
 import { stripHtml } from '../lib/wordpress/text';
+import type { WpMedia } from '../lib/wordpress/types';
 
 export const prerender = false;
 
@@ -60,6 +64,28 @@ const sectionContent =
   page.acf && 'section_content' in page.acf
     ? (page.acf.section_content ?? null)
     : null;
+const hero = page.acf && 'hero' in page.acf ? (page.acf.hero ?? null) : null;
+
+const heroImageId = hero?.image ?? null;
+let heroImage: { src: string; alt: string } | null = null;
+
+if (heroImageId) {
+  try {
+    const media = await wpFetch<WpMedia>(wpRoutes.media(heroImageId));
+
+    if (media?.source_url) {
+      heroImage = {
+        src: media.source_url,
+        alt:
+          media.alt_text ||
+          media.title?.rendered ||
+          stripHtml(page?.title?.rendered ?? ''),
+      };
+    }
+  } catch {
+    // Sin imagen: el Hero se renderiza sin bloque visual.
+  }
+}
 
 // URLs del selector de idioma: la del locale actual es la URL en curso;
 // la del otro locale usa el slug de la traducción (`translations` de
@@ -116,7 +142,9 @@ if (translatedSlug) {
     languages: languages ?? undefined,
   }}
 >
-  {sectionContent ? (
+  {hero ? (
+    <Hero hero={hero} image={heroImage} />
+  ) : sectionContent ? (
     <Section id="contact" class="bg-gw-surface-auxiliary">
       <div class="flex flex-col gap-16 lg:flex-row lg:gap-24">
         <div class="flex flex-col justify-center lg:w-1/2">
