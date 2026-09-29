@@ -1,0 +1,134 @@
+---
+/**
+ * FAQ del Home según Stitch `GussWare Home-V0.1.0`
+ * (`GussWare Home - Complete Final Flow`, bloque FAQ).
+ *
+ * Grid intro (4) + acordeón (8): `faq.eyebrow`, `faq.titulo`
+ * (`headline-lg`) y `faq.descripcion` (`body-lg`) con tokens
+ * existentes (la composición de Stitch no corresponde a
+ * `SectionHeading`: tamaños y color de eyebrow distintos).
+ * `faq.preguntas[]` se renderiza dinámicamente con numeración
+ * automática (`01`, `02`, …), divisores `border-b`, pregunta
+ * `headline-md` con hover a `supporting-blue-dark` y toggle textual
+ * `+`/`−` (sin glifo apropiado en `Icon.astro`, según Stitch
+ * `add`/`remove`). Respuesta `body-md` (`pb-8 pl-16 pr-4`).
+ *
+ * Todo el contenido llega de WordPress; sin fallbacks de contenido.
+ * Lista vacía: solo intro, sin errores (script con guards).
+ * Interacción encapsulada en el `<script>` del componente:
+ * `aria-expanded`, `hidden`, icono y control asociados por id.
+ */
+import Section from '../ui/Section.astro';
+import type { WpFaq } from '../../lib/wordpress/types';
+
+interface Props {
+  faq: WpFaq;
+}
+
+const { faq } = Astro.props;
+
+const preguntas = faq.preguntas ?? [];
+const pad = (n: number): string => String(n).padStart(2, '0');
+---
+
+<Section>
+  <div data-faq>
+    <div class="grid grid-cols-1 items-start gap-12 md:grid-cols-12">
+      <div class="md:col-span-4">
+        {faq.eyebrow && (
+          <p
+            class="text-label-bold text-supporting-blue-dark mb-4 block uppercase tracking-widest"
+          >
+            {faq.eyebrow}
+          </p>
+        )}
+        {faq.titulo && (
+          <h2 class="text-gw-text-primary text-headline-lg mb-6">
+            {faq.titulo}
+          </h2>
+        )}
+        {faq.descripcion && (
+          <p class="text-gw-text-secondary text-body-lg">{faq.descripcion}</p>
+        )}
+      </div>
+      {preguntas.length > 0 && (
+        <div data-faq-list class="space-y-4 md:col-span-8">
+          {preguntas.map((item, index) => (
+            <div
+              data-faq-item
+              class="border-gw-border-subtle border-b"
+            >
+              <button
+                type="button"
+                data-faq-button
+                id={`faq-button-${index}`}
+                aria-expanded="false"
+                aria-controls={`faq-panel-${index}`}
+                class="group flex w-full items-center justify-between py-6 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+              >
+                <span class="flex items-center gap-6">
+                  <span class="text-gw-text-muted text-headline-md opacity-50">
+                    {pad(index + 1)}
+                  </span>
+                  <span class="text-gw-text-primary text-headline-md transition-colors duration-200 group-hover:text-supporting-blue-dark">
+                    {item.pregunta}
+                  </span>
+                </span>
+                <span
+                  data-faq-icon
+                  aria-hidden="true"
+                  class="text-supporting-blue-dark text-body-lg font-bold"
+                >
+                  +
+                </span>
+              </button>
+              <div
+                data-faq-panel
+                id={`faq-panel-${index}`}
+                role="region"
+                aria-labelledby={`faq-button-${index}`}
+                hidden
+                class="hidden"
+              >
+                <div class="pr-4 pb-8 pl-16">
+                  <p class="text-gw-text-secondary text-body-md">
+                    {item.respuesta}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</Section>
+
+<script>
+  const root = document.querySelector('[data-faq]');
+
+  if (root instanceof HTMLElement) {
+    root.querySelectorAll('[data-faq-button]').forEach((button) => {
+      if (!(button instanceof HTMLButtonElement)) return;
+
+      const panelId = button.getAttribute('aria-controls');
+      const panel = panelId ? root.querySelector(`#${panelId}`) : null;
+
+      button.addEventListener('click', () => {
+        const next =
+          button.getAttribute('aria-expanded') !== 'true';
+        button.setAttribute('aria-expanded', String(next));
+
+        if (panel instanceof HTMLElement) {
+          panel.hidden = !next;
+          panel.classList.toggle('hidden', !next);
+        }
+
+        const icon = button.querySelector('[data-faq-icon]');
+        if (icon instanceof HTMLElement) {
+          icon.textContent = next ? '−' : '+';
+        }
+      });
+    });
+  }
+</script>
