@@ -23,8 +23,8 @@ const { hero, image } = Astro.props;
 ---
 
 <Section>
-  <div class="flex flex-col items-center gap-8 md:flex-row md:gap-12">
-    <div class="flex w-full flex-col gap-6 md:w-[55%]">
+  <div class="flex flex-col items-center gap-8 lg:flex-row lg:gap-12">
+    <div class="flex w-full flex-col gap-6 lg:w-[55%]">
       <div class="flex flex-col gap-4">
         {hero.eyebrow && (
           <span class="text-label-bold text-brand-accent font-bold tracking-widest uppercase">
@@ -65,7 +65,7 @@ const { hero, image } = Astro.props;
       )}
     </div>
     {image && (
-      <div class="relative isolate w-full md:w-[45%]">
+      <div class="relative isolate mt-4 w-full md:mx-auto md:w-2/3 lg:mx-0 lg:mt-0 lg:w-[45%]">
         <div class="relative z-10 overflow-hidden rounded-xl shadow-lg">
           <Image
             src={image.src}
