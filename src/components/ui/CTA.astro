@@ -5,6 +5,12 @@
  * Compone `SectionHeading` (eyebrow, título, descripción, alineación) con
  * una fila de acciones que reutiliza `Button.astro` (sin duplicar botones).
  * Fila `mt-8 flex flex-wrap gap-4` con tokens de spacing existentes.
+ *
+ * `tone="dark"` (Final CTA del Home, Stitch `GussWare Home-V0.1.0`):
+ * encabezado en tonos superficie con jerarquía `display`/`body-lg`
+ * (tokens existentes); la rama `light` queda exactamente igual.
+ * `title` es opcional: sin contenido no se renderiza el encabezado
+ * (la rama `light` con `title` conserva su salida actual).
  */
 import Button from './Button.astro';
 import SectionHeading from './SectionHeading.astro';
@@ -17,30 +23,50 @@ interface CtaAction {
 
 interface Props {
   eyebrow?: string;
-  title: string;
+  title?: string;
   description?: string;
   align?: 'left' | 'center';
+  tone?: 'light' | 'dark';
   actions?: CtaAction[];
   class?: string;
 }
 
 const {
   eyebrow = undefined,
-  title,
+  title = '',
   description = undefined,
   align = 'left',
+  tone = 'light',
   actions = [],
   class: className = '',
 } = Astro.props;
 ---
 
 <div class={className}>
-  <SectionHeading
-    eyebrow={eyebrow}
-    title={title}
-    description={description}
-    align={align}
-  />
+  {tone === 'dark' ? (
+    <div class={`flex flex-col ${align === 'center' ? 'items-center text-center' : 'items-start text-left'}`}>
+      {eyebrow && (
+        <p class="text-label-bold text-brand-surface mb-4 uppercase">{eyebrow}</p>
+      )}
+      {title && (
+        <h2 class="text-brand-surface text-display-lg-mobile md:text-display-lg mb-6 leading-display-lg-mobile md:leading-display-lg">
+          {title}
+        </h2>
+      )}
+      {description && (
+        <p class="text-brand-surface text-body-lg max-w-2xl opacity-90">
+          {description}
+        </p>
+      )}
+    </div>
+  ) : (
+    <SectionHeading
+      eyebrow={eyebrow}
+      title={title}
+      description={description}
+      align={align}
+    />
+  )}
   {actions.length > 0 && (
     <div
       class={`mt-8 flex flex-wrap gap-4 ${align === 'center' ? 'justify-center' : 'justify-start'}`}

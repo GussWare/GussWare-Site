@@ -11,6 +11,7 @@ import Layout from '../layouts/Layout.astro';
 import Container from '../components/ui/Container.astro';
 import Hero from '../components/home/Hero.astro';
 import Expertise from '../components/home/Expertise.astro';
+import FinalCta from '../components/home/FinalCta.astro';
 import type { LocaleUrls } from '../lib/routes';
 import { getFrontPage } from '../lib/wordpress/pages';
 import { wpFetch } from '../lib/wordpress/client';
@@ -33,6 +34,7 @@ const description = page
   : undefined;
 const hero = page?.acf?.hero ?? null;
 const expertise = page?.acf?.expertise ?? null;
+const finalCta = page?.acf?.final_cta ?? null;
 
 const heroImageId = hero?.image ?? null;
 let heroImage: { src: string; alt: string } | null = null;
@@ -65,6 +67,7 @@ if (heroImageId) {
     <>
       <Hero hero={hero} image={heroImage} />
       {expertise && <Expertise expertise={expertise} />}
+      {finalCta && <FinalCta finalCta={finalCta} />}
     </>
   ) : (
     page && (
