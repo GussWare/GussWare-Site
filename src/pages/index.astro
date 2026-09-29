@@ -10,6 +10,7 @@ import { getRelativeLocaleUrl } from 'astro:i18n';
 import Layout from '../layouts/Layout.astro';
 import Container from '../components/ui/Container.astro';
 import Hero from '../components/home/Hero.astro';
+import Expertise from '../components/home/Expertise.astro';
 import type { LocaleUrls } from '../lib/routes';
 import { getFrontPage } from '../lib/wordpress/pages';
 import { wpFetch } from '../lib/wordpress/client';
@@ -31,6 +32,7 @@ const description = page
   ? stripHtml(page.excerpt.rendered).slice(0, 160)
   : undefined;
 const hero = page?.acf?.hero ?? null;
+const expertise = page?.acf?.expertise ?? null;
 
 const heroImageId = hero?.image ?? null;
 let heroImage: { src: string; alt: string } | null = null;
@@ -60,7 +62,10 @@ if (heroImageId) {
   localeUrls={localeUrls}
 >
   {page && hero ? (
-    <Hero hero={hero} image={heroImage} />
+    <>
+      <Hero hero={hero} image={heroImage} />
+      {expertise && <Expertise expertise={expertise} />}
+    </>
   ) : (
     page && (
       <Container>

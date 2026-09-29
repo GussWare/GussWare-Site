@@ -1,0 +1,172 @@
+---
+/**
+ * Expertise / Capacidades del Home según Stitch `GussWare Home-V0.1.0`
+ * (`GussWare Home - Complete Final Flow`).
+ *
+ * Intro en split layout (título `display` + descripción `body-lg` con
+ * borde lateral), grid 3×2 de `expertice_items` (glifo `brand-primary` +
+ * título + descripción, hover a `surface-secondary` con esquina
+ * decorativa) y bloque Trust/Fiability (`fiability.title`,
+ * `fiability.description`, 2×2 de `fiability_items` como mini-cards
+ * `surface-secondary`). Solo visualización: sin navegación ni lógica más
+ * allá de mostrar los datos recibidos.
+ *
+ * Mapeo visual Stitch → tokens existentes (sin valores nuevos):
+ * - tarjeta `bg-gw-surface-primary` + borde `border-gw-border-subtle` +
+ *   `rounded-none` (patrón de `Card.astro`);
+ * - icono `text-brand-primary` sin círculo (Stitch muestra el glifo
+ *   directo en `primary-container` = `brand-primary`);
+ * - hover `hover:bg-gw-surface-secondary` + esquina decorativa
+ *   `bg-gw-surface-secondary` (Stitch, sin sombras como en `Card.astro`);
+ * - banda Trust con `border-t border-gw-border-subtle` y mini-cards
+ *   `bg-gw-surface-secondary` sin borde (Stitch).
+ *
+ * El campo `icon` (string, solo el nombre) llega desde WordPress y
+ * se resuelve contra los glifos locales de `Icon.astro` (SVG dentro
+ * del proyecto, sin WordPress ni recursos externos): un nombre
+ * conocido usa su glifo; un nombre desconocido usa el fallback
+ * genérico `arrow-right`. Sin lógica posicional ni valores
+ * hardcodeados.
+ */
+import Section from '../ui/Section.astro';
+import Icon from '../ui/Icon.astro';
+import type {
+  WpExpertise,
+  WpExpertiseItem,
+  WpFiabilityItem,
+} from '../../lib/wordpress/types';
+
+interface Props {
+  expertise: WpExpertise & { expertise_items?: WpExpertiseItem[] };
+}
+
+const { expertise } = Astro.props;
+
+/** Glifos disponibles en `Icon.astro` (claves de `paths`). */
+const KNOWN_ICONS = new Set([
+  'arrow-right',
+  'arrow-outward',
+  'chevron-right',
+  'search',
+  'clock',
+  'calendar',
+  'facebook',
+  'x',
+  'tiktok',
+  'web-development',
+  'mobile-development',
+  'custom-software',
+  'api-integration',
+  'devops-infrastructure',
+  'consulting',
+  'verified-talent',
+  'secure-design',
+  'domain-expertise',
+  'scalable-solutions',
+]);
+
+/** Icono fallback genérico para nombres desconocidos. */
+const FALLBACK_ICON = 'arrow-right';
+
+/** Resuelve el nombre recibido desde WordPress contra el catálogo local. */
+const resolveIcon = (name: string): string =>
+  KNOWN_ICONS.has(name) ? name : FALLBACK_ICON;
+
+// `WpExpertise` expone los ítems como `expertice_items`; se acepta
+// también `expertise_items` por compatibilidad con la fuente de datos.
+const items: WpExpertiseItem[] =
+  expertise.expertise_items ?? expertise.expertice_items ?? [];
+const fiabilityItems: WpFiabilityItem[] =
+  expertise.fiability?.fiability_items ?? [];
+---
+
+<Section>
+  <div data-expertise>
+    <div
+      class="mb-16 flex flex-col items-start justify-between gap-8 md:flex-row md:items-end"
+    >
+      <div class="max-w-2xl">
+        {expertise.eyebrow && (
+          <p class="text-label-bold text-brand-primary mb-4 uppercase">
+            {expertise.eyebrow}
+          </p>
+        )}
+        {expertise.title && (
+          <h2
+            class="text-gw-text-primary text-display-lg-mobile md:text-display-lg"
+          >
+            {expertise.title}
+          </h2>
+        )}
+      </div>
+      {expertise.description && (
+        <div class="max-w-xl md:border-l md:pl-12 border-gw-border-subtle">
+          <p class="text-gw-text-secondary text-body-lg">
+            {expertise.description}
+          </p>
+        </div>
+      )}
+    </div>
+    {items.length > 0 && (
+      <div
+        data-expertise-grid
+        class="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3"
+      >
+        {items.map((item) => (
+          <article
+            data-expertise-card
+            class="bg-gw-surface-primary border-gw-border-subtle group relative overflow-hidden rounded-none border p-8 transition-colors duration-200 hover:bg-gw-surface-secondary md:p-10"
+          >
+            <div
+              aria-hidden="true"
+              class="bg-gw-surface-secondary absolute top-0 right-0 -z-10 h-24 w-24 rounded-bl-full opacity-0 transition-opacity group-hover:opacity-100"
+            ></div>
+            <div class="text-brand-primary mb-6">
+              <Icon name={resolveIcon(item.icon)} size={8} />
+            </div>
+            <h3 class="text-gw-text-primary text-headline-md mb-4">
+              {item.title}
+            </h3>
+            <p class="text-gw-text-secondary text-body-md">
+              {item.description}
+            </p>
+          </article>
+        ))}
+      </div>
+    )}
+    {expertise.fiability && (
+      <div
+        data-fiability
+        class="border-gw-border-subtle mt-24 grid grid-cols-1 items-center gap-12 border-t pt-12 md:grid-cols-2"
+      >
+        <div>
+          {expertise.fiability.title && (
+            <h3 class="text-gw-text-primary text-headline-lg mb-4">
+              {expertise.fiability.title}
+            </h3>
+          )}
+          {expertise.fiability.description && (
+            <p class="text-gw-text-secondary text-body-lg">
+              {expertise.fiability.description}
+            </p>
+          )}
+        </div>
+        {fiabilityItems.length > 0 && (
+          <div data-fiability-grid class="grid grid-cols-2 gap-4">
+            {fiabilityItems.map((item) => (
+              <div
+                data-fiability-card
+                class="bg-gw-surface-secondary flex flex-col items-start rounded-none p-6"
+              >
+                <div class="text-brand-primary mb-2">
+                  <Icon name={resolveIcon(item.icon)} size={6} />
+                </div>
+                <p class="text-gw-text-primary text-label-bold">{item.text}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    )}
+  </div>
+</Section>
