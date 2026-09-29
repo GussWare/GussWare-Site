@@ -1,0 +1,134 @@
+---
+/**
+ * Expertise / Capacidades del Home según ACF `expertise`.
+ *
+ * Intro con `SectionHeading` (eyebrow, título, descripción), grid 3×2
+ * de `expertice_items` (círculo con icono + título + descripción, hover
+ * con tokens) y bloque Trust/Fiability (`fiability.title`,
+ * `fiability.description`, mini-grid de `fiability_items` como
+ * mini-cards). Solo visualización: sin navegación ni lógica más allá
+ * de mostrar los datos recibidos.
+ *
+ * Mapeo visual Stitch → tokens existentes (sin valores nuevos):
+ * - tarjeta `bg-gw-surface-primary` + borde `border-gw-border-subtle` +
+ *   `rounded-none` (patrón de `Card.astro`);
+ * - círculo de icono `bg-brand-primary` + `text-brand-surface` +
+ *   `rounded-full` (patrón de los sociales de Contacto en `[...uri]`);
+ * - hover `hover:border-gw-highlight hover:bg-gw-highlight` + título
+ *   `group-hover:text-supporting-blue-dark` (patrones de `Card.astro` /
+ *   `RelatedArticles.astro`), `transition-colors duration-200`;
+ * - banda Trust `bg-gw-surface-secondary` (capa tonal, sin sombras como
+ *   en `Card.astro`).
+ *
+ * El campo `icon` (string) se resuelve contra los glifos de
+ * `Icon.astro`; los no encontrados usan el fallback `arrow-right`.
+ */
+import Section from '../ui/Section.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Icon from '../ui/Icon.astro';
+import type {
+  WpExpertise,
+  WpExpertiseItem,
+  WpFiabilityItem,
+} from '../../lib/wordpress/types';
+
+interface Props {
+  expertise: WpExpertise & { expertise_items?: WpExpertiseItem[] };
+}
+
+const { expertise } = Astro.props;
+
+/** Glifos disponibles en `Icon.astro` (claves de `paths`). */
+const KNOWN_ICONS = new Set([
+  'arrow-right',
+  'arrow-outward',
+  'chevron-right',
+  'search',
+  'clock',
+  'calendar',
+  'facebook',
+  'x',
+  'tiktok',
+]);
+
+/** Icono fallback para valores no encontrados en `Icon.astro`. */
+const FALLBACK_ICON = 'arrow-right';
+
+const resolveIcon = (name: string): string =>
+  KNOWN_ICONS.has(name) ? name : FALLBACK_ICON;
+
+// `WpExpertise` expone los ítems como `expertice_items`; se acepta
+// también `expertise_items` por compatibilidad con la fuente de datos.
+const items: WpExpertiseItem[] =
+  expertise.expertise_items ?? expertise.expertice_items ?? [];
+const fiabilityItems: WpFiabilityItem[] =
+  expertise.fiability?.fiability_items ?? [];
+---
+
+<Section>
+  <div data-expertise>
+    <SectionHeading
+      eyebrow={expertise.eyebrow}
+      title={expertise.title}
+      description={expertise.description}
+    />
+    {items.length > 0 && (
+      <div
+        data-expertise-grid
+        class="mt-8 grid grid-cols-1 gap-6 md:mt-12 md:grid-cols-2 md:gap-8 lg:grid-cols-3"
+      >
+        {items.map((item) => (
+          <article
+            data-expertise-card
+            class="bg-gw-surface-primary border-gw-border-subtle group rounded-none border p-6 transition-colors duration-200 hover:border-gw-highlight hover:bg-gw-highlight"
+          >
+            <div class="bg-brand-primary text-brand-surface mb-6 flex h-12 w-12 items-center justify-center rounded-full">
+              <Icon name={resolveIcon(item.icon)} size={6} />
+            </div>
+            <h3 class="text-gw-text-primary text-headline-md group-hover:text-supporting-blue-dark mb-4 transition-colors duration-200">
+              {item.title}
+            </h3>
+            <p class="text-gw-text-secondary text-body-md">
+              {item.description}
+            </p>
+          </article>
+        ))}
+      </div>
+    )}
+    {expertise.fiability && (
+      <div
+        data-fiability
+        class="bg-gw-surface-secondary mt-8 rounded-none p-6 md:mt-12 md:p-8"
+      >
+        {expertise.fiability.title && (
+          <h3 class="text-gw-text-primary text-headline-md mb-4">
+            {expertise.fiability.title}
+          </h3>
+        )}
+        {expertise.fiability.description && (
+          <p class="text-gw-text-secondary text-body-md mb-6">
+            {expertise.fiability.description}
+          </p>
+        )}
+        {fiabilityItems.length > 0 && (
+          <div
+            data-fiability-grid
+            class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4"
+          >
+            {fiabilityItems.map((item) => (
+              <div
+                data-fiability-card
+                class="bg-gw-surface-primary border-gw-border-subtle flex items-center gap-4 rounded-none border p-6"
+              >
+                <div class="bg-brand-primary text-brand-surface flex h-10 w-10 shrink-0 items-center justify-center rounded-full">
+                  <Icon name={resolveIcon(item.icon)} size={4} />
+                </div>
+                <p class="text-gw-text-primary text-body-md">{item.text}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    )}
+  </div>
+</Section>

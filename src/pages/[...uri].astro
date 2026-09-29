@@ -25,6 +25,7 @@ import Layout from '../layouts/Layout.astro';
 import Container from '../components/ui/Container.astro';
 import Section from '../components/ui/Section.astro';
 import Hero from '../components/home/Hero.astro';
+import Expertise from '../components/home/Expertise.astro';
 import Icon from '../components/ui/Icon.astro';
 import FormField from '../components/ui/FormField.astro';
 import Button from '../components/ui/Button.astro';
@@ -65,6 +66,8 @@ const sectionContent =
     ? (page.acf.section_content ?? null)
     : null;
 const hero = page.acf && 'hero' in page.acf ? (page.acf.hero ?? null) : null;
+const expertise =
+  page.acf && 'expertise' in page.acf ? (page.acf.expertise ?? null) : null;
 
 const heroImageId = hero?.image ?? null;
 let heroImage: { src: string; alt: string } | null = null;
@@ -143,7 +146,10 @@ if (translatedSlug) {
   }}
 >
   {hero ? (
-    <Hero hero={hero} image={heroImage} />
+    <>
+      <Hero hero={hero} image={heroImage} />
+      {expertise && <Expertise expertise={expertise} />}
+    </>
   ) : sectionContent ? (
     <Section id="contact" class="bg-gw-surface-auxiliary">
       <div class="flex flex-col gap-16 lg:flex-row lg:gap-24">
