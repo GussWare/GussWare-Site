@@ -26,6 +26,7 @@ import Container from '../components/ui/Container.astro';
 import Section from '../components/ui/Section.astro';
 import Hero from '../components/home/Hero.astro';
 import Expertise from '../components/home/Expertise.astro';
+import Faq from '../components/home/Faq.astro';
 import FinalCta from '../components/home/FinalCta.astro';
 import Icon from '../components/ui/Icon.astro';
 import FormField from '../components/ui/FormField.astro';
@@ -71,6 +72,8 @@ const expertise =
   page.acf && 'expertise' in page.acf ? (page.acf.expertise ?? null) : null;
 const finalCta =
   page.acf && 'final_cta' in page.acf ? (page.acf.final_cta ?? null) : null;
+const faq =
+  page.acf && 'faq' in page.acf ? (page.acf.faq ?? null) : null;
 
 const heroImageId = hero?.image ?? null;
 let heroImage: { src: string; alt: string } | null = null;
@@ -152,6 +155,7 @@ if (translatedSlug) {
     <>
       <Hero hero={hero} image={heroImage} />
       {expertise && <Expertise expertise={expertise} />}
+      {faq && <Faq faq={faq} />}
       {finalCta && <FinalCta finalCta={finalCta} />}
     </>
   ) : sectionContent ? (
