@@ -10,6 +10,7 @@ import Section from '../ui/Section.astro';
 import SectionHeading from '../ui/SectionHeading.astro';
 import Breadcrumbs from '../ui/Breadcrumbs.astro';
 import Image from '../ui/Image.astro';
+import Button from '../ui/Button.astro';
 import { getBreadcrumbHome } from '../../lib/routes';
 import { stripHtml } from '../../lib/wordpress/text';
 import type { WpService } from '../../lib/wordpress/types';
@@ -69,6 +70,57 @@ const title = stripHtml(service.title.rendered);
           {acf.development_content}
         </p>
       )}
+    </div>
+  </Section>
+)}
+
+{/* RGW-EP09-06-03 — Soluciones dinámicas (`solutions[]`, N elementos). */}
+{(acf.solutions ?? []).length > 0 && (
+  <Section>
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-6 mb-12 items-start">
+      <div class="md:col-span-5">
+        <h2 class="text-gw-text-primary text-display-lg-mobile md:text-display-lg">
+          {acf.solutions_title}
+        </h2>
+      </div>
+      <div class="md:col-span-6 md:col-start-7 pt-2 md:pt-4">
+        <p class="text-gw-text-secondary text-body-lg max-w-lg">
+          {acf.solutions_description}
+        </p>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {(acf.solutions ?? []).map((solution) => (
+        <article class="bg-gw-surface-primary border-gw-border-subtle rounded-none border p-8 transition-colors duration-200 hover:bg-gw-surface-secondary md:p-10">
+          <h3 class="text-gw-text-primary text-headline-md mb-4">
+            {solution.title}
+          </h3>
+          <p class="text-gw-text-secondary text-body-md mb-6">
+            {solution.description}
+          </p>
+          {(solution.features ?? []).length > 0 && (
+            <ul class="mb-6 flex flex-col gap-2">
+              {(solution.features ?? []).map((feature) => (
+                <li class="text-gw-text-secondary text-body-md flex items-center gap-2">
+                  <span
+                    aria-hidden="true"
+                    class="bg-brand-accent inline-block h-1.5 w-1.5"
+                  ></span>
+                  {feature.feature}
+                </li>
+              ))}
+            </ul>
+          )}
+          {solution.link?.text && (
+            <Button
+              variant="secondary"
+              href={solution.link.url || undefined}
+            >
+              {solution.link.text}
+            </Button>
+          )}
+        </article>
+      ))}
     </div>
   </Section>
 )}
