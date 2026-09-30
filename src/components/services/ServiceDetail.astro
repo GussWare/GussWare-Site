@@ -9,6 +9,7 @@
 import Section from '../ui/Section.astro';
 import SectionHeading from '../ui/SectionHeading.astro';
 import Breadcrumbs from '../ui/Breadcrumbs.astro';
+import Image from '../ui/Image.astro';
 import { getBreadcrumbHome } from '../../lib/routes';
 import { stripHtml } from '../../lib/wordpress/text';
 import type { WpService } from '../../lib/wordpress/types';
@@ -43,4 +44,31 @@ const title = stripHtml(service.title.rendered);
     level={1}
     description={acf.intro_description}
   />
+  {image && (
+    <div class="relative z-10 mt-8 overflow-hidden rounded-xl shadow-lg">
+      <Image
+        src={image.src}
+        alt={image.alt}
+        fit="contain"
+        loading="eager"
+        class="h-auto w-full"
+      />
+    </div>
+  )}
 </Section>
+
+{/* RGW-EP09-06-02 — Desarrollo editorial desde WordPress. */}
+{acf.development_title && (
+  <Section>
+    <div class="max-w-3xl">
+      <h2 class="text-gw-text-primary text-display-lg-mobile md:text-display-lg mb-6">
+        {acf.development_title}
+      </h2>
+      {acf.development_content && (
+        <p class="text-gw-text-secondary text-body-lg">
+          {acf.development_content}
+        </p>
+      )}
+    </div>
+  </Section>
+)}
