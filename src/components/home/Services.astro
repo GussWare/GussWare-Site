@@ -49,41 +49,40 @@ const pad = (n: number): string => String(n).padStart(2, '0');
     </div>
     {items.length > 0 && (
       <div data-services-list class="border-gw-border-subtle border-t">
-        {items.map((item, index) => (
-          <div
-            data-service-row
-            class="group block border-gw-border-subtle border-b py-8 md:py-12 cursor-pointer transition-colors duration-300 hover:bg-gw-surface-secondary"
-          >
-            <div
-              class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 items-center px-4 md:px-0"
+        {items.map((item, index) => {
+          // RGW-EP09-07-03: fila navegable cuando hay URL de detalle.
+          const Tag = item.url ? 'a' : 'div';
+          return (
+            <Tag
+              data-service-row
+              href={item.url}
+              class="group block border-gw-border-subtle border-b py-8 md:py-12 cursor-pointer transition-colors duration-300 hover:bg-gw-surface-secondary"
             >
-              <div class="md:col-span-2">
-                <span class="text-gw-text-muted text-headline-md font-light">
-                  {pad(index + 1)}
-                </span>
+              <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 items-center px-4 md:px-0">
+                <div class="md:col-span-2">
+                  <span class="text-gw-text-muted text-headline-md font-light">
+                    {pad(index + 1)}
+                  </span>
+                </div>
+                <div class="md:col-span-4">
+                  <h3 class="text-gw-text-primary text-headline-lg transition-colors duration-300">
+                    {item.title}
+                  </h3>
+                </div>
+                <div class="md:col-span-5">
+                  <p class="text-gw-text-secondary text-body-md">
+                    {item.description}
+                  </p>
+                </div>
+                <div class="md:col-span-1 flex justify-end items-center mt-4 md:mt-0">
+                  <span aria-hidden="true" class="text-gw-text-muted">
+                    <Icon name="arrow-right" size={8} />
+                  </span>
+                </div>
               </div>
-              <div class="md:col-span-4">
-                <h3
-                  class="text-gw-text-primary text-headline-lg transition-colors duration-300"
-                >
-                  {item.title}
-                </h3>
-              </div>
-              <div class="md:col-span-5">
-                <p class="text-gw-text-secondary text-body-md">
-                  {item.description}
-                </p>
-              </div>
-              <div
-                class="md:col-span-1 flex justify-end items-center mt-4 md:mt-0"
-              >
-                <span aria-hidden="true" class="text-gw-text-muted">
-                  <Icon name="arrow-right" size={8} />
-                </span>
-              </div>
-            </div>
-          </div>
-        ))}
+            </Tag>
+          );
+        })}
       </div>
     )}
   </div>

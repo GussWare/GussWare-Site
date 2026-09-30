@@ -17,6 +17,7 @@ import Process from '../components/home/Process.astro';
 import Faq from '../components/home/Faq.astro';
 import FinalCta from '../components/home/FinalCta.astro';
 import type { LocaleUrls } from '../lib/routes';
+import { serviceDetailUrl } from '../lib/routes';
 import { getFrontPage } from '../lib/wordpress/pages';
 import { wpFetch } from '../lib/wordpress/client';
 import { wpRoutes } from '../lib/wordpress/routes';
@@ -53,6 +54,8 @@ if (servicesAcf) {
       serviceItems = list.map((item) => ({
         title: stripHtml(item.title.rendered),
         description: stripHtml(item.excerpt.rendered),
+        // RGW-EP09-07-03: cada fila enlaza a su detalle.
+        url: serviceDetailUrl('es', item.slug),
       }));
     }
   } catch {

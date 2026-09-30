@@ -305,6 +305,8 @@ export interface WpTechnology {
 export interface WpServiceItem {
   title: string;
   description: string;
+  /** URL opcional al detalle (RGW-EP09-07-03; ausente en ACF legacy). */
+  url?: string;
 }
 
 export interface WpServices {
