@@ -1,0 +1,348 @@
+---
+/**
+ * Community Model del Home según Stitch `GussWare Home-V0.1.0`
+ * (`GussWare Home - Complete Final Flow`, sección Community Model).
+ *
+ * Intro (`technology.eyebrow`, `technology.title` con jerarquía
+ * `headline-lg` → `display-lg`, `technology.description`) con tokens
+ * existentes, diagrama geométrico estático de 5 etapas
+ * (`hidden md:block`, conectores `supporting-neutral` exacto de
+ * Stitch), fallback mobile apilado (`md:hidden`) y bento dinámico de
+ * `value_points[]` (parrilla 1/2/4 con alternancia par/impar como en
+ * Stitch, iconos por nombre con fallback). Solo visualización.
+ *
+ * Las etiquetas del diagrama son geometría fija de Stitch (no datos de
+ * WordPress). El contenido del bento llega íntegro de WordPress.
+ */
+import Section from '../ui/Section.astro';
+import Icon from '../ui/Icon.astro';
+import type {
+  WpTechnology,
+  WpValuePoint,
+} from '../../lib/wordpress/types';
+
+interface Props {
+  technology: WpTechnology;
+}
+
+const { technology } = Astro.props;
+
+const points: WpValuePoint[] = technology.value_points ?? [];
+
+/** Glifos disponibles en `Icon.astro` (claves de `paths`). */
+const KNOWN_ICONS = new Set([
+  'arrow-right',
+  'arrow-outward',
+  'chevron-right',
+  'search',
+  'clock',
+  'calendar',
+  'facebook',
+  'x',
+  'tiktok',
+  'flexible-teams',
+  'specialized-skills',
+  'direct-collaboration',
+  'agile-structure',
+]);
+
+/** Icono fallback genérico para nombres desconocidos. */
+const FALLBACK_ICON = 'arrow-right';
+
+/** Resuelve el nombre recibido desde WordPress contra el catálogo local. */
+const resolveIcon = (name: string): string =>
+  KNOWN_ICONS.has(name) ? name : FALLBACK_ICON;
+---
+
+<Section class="overflow-hidden">
+  <div data-community-model>
+    <div class="max-w-3xl mb-20 md:mb-32">
+      {technology.eyebrow && (
+        <p
+          class="text-label-bold text-gw-text-muted mb-4 block uppercase tracking-wider"
+        >
+          {technology.eyebrow}
+        </p>
+      )}
+      {technology.title && (
+        <h2
+          class="text-gw-text-primary text-headline-lg md:text-display-lg mb-6"
+        >
+          {technology.title}
+        </h2>
+      )}
+      {technology.description && (
+        <p class="text-gw-text-secondary text-body-lg max-w-2xl">
+          {technology.description}
+        </p>
+      )}
+    </div>
+    <div data-cm-diagram class="w-full mb-32 hidden md:block">
+      <div class="grid grid-cols-5 gap-8 items-stretch min-h-[400px]">
+        <div
+          class="bg-gw-surface-secondary rounded-xl flex items-center justify-center relative p-8"
+        >
+          <div
+            class="bg-brand-surface border-gw-border-subtle p-6 w-32 h-32 flex flex-col items-center justify-center shadow-sm"
+          >
+            <span class="text-supporting-blue-dark mb-2">
+              <Icon name="building" size={8} />
+            </span>
+            <span
+              class="text-label-bold text-gw-text-primary uppercase text-center"
+            >
+              Client
+            </span>
+          </div>
+          <div
+            aria-hidden="true"
+            class="bg-supporting-neutral absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 w-8 h-px"
+          ></div>
+        </div>
+        <div
+          class="bg-gw-surface-secondary rounded-xl flex items-center justify-center relative p-8"
+        >
+          <div
+            aria-hidden="true"
+            class="bg-supporting-neutral absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-px"
+          ></div>
+          <div
+            class="bg-brand-primary p-8 w-40 h-40 flex flex-col items-center justify-center rounded shadow-lg -translate-y-2 border-2 border-supporting-blue-fixed"
+          >
+            <span class="text-brand-surface mb-2">
+              <Icon name="network" size={10} />
+            </span>
+            <span
+              class="text-label-bold text-brand-surface uppercase text-center"
+            >
+              GussWare<br />Core
+            </span>
+          </div>
+          <div
+            aria-hidden="true"
+            class="bg-supporting-neutral absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 w-8 h-px"
+          ></div>
+        </div>
+        <div
+          class="bg-gw-surface-secondary rounded-xl flex flex-col items-center justify-between py-12 relative"
+        >
+          <div
+            aria-hidden="true"
+            class="bg-supporting-neutral absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-px"
+          ></div>
+          <div
+            aria-hidden="true"
+            class="bg-supporting-neutral absolute left-[-16px] top-1/2 -translate-y-1/2 h-[60%] w-px"
+          ></div>
+          <div
+            aria-hidden="true"
+            class="bg-supporting-neutral absolute left-[-16px] top-[20%] w-8 h-px"
+          ></div>
+          <div
+            aria-hidden="true"
+            class="bg-supporting-neutral absolute left-[-16px] top-[80%] w-8 h-px"
+          ></div>
+          <div
+            class="bg-brand-surface border-gw-border-subtle border p-4 w-32 flex flex-col items-center justify-center z-20 shadow-sm relative"
+          >
+            <div
+              aria-hidden="true"
+              class="bg-supporting-neutral absolute left-[-32px] top-1/2 w-8 h-px -z-10"
+            ></div>
+            <span class="text-brand-secondary mb-1">
+              <Icon name="code" size={6} />
+            </span>
+            <span
+              class="text-label-bold text-[12px] text-gw-text-primary uppercase text-center"
+            >
+              Developer
+            </span>
+          </div>
+          <div
+            class="bg-brand-surface border-gw-border-subtle border p-4 w-32 flex flex-col items-center justify-center z-20 shadow-sm relative"
+          >
+            <div
+              aria-hidden="true"
+              class="bg-supporting-neutral absolute left-[-32px] top-1/2 w-8 h-px -z-10"
+            ></div>
+            <div
+              aria-hidden="true"
+              class="bg-supporting-neutral absolute right-[-32px] top-1/2 w-8 h-px -z-10"
+            ></div>
+            <span class="text-brand-secondary mb-1">
+              <Icon name="pen-tool" size={6} />
+            </span>
+            <span
+              class="text-label-bold text-[12px] text-gw-text-primary uppercase text-center"
+            >
+              Designer
+            </span>
+          </div>
+          <div
+            class="bg-brand-surface border-gw-border-subtle border p-4 w-32 flex flex-col items-center justify-center z-20 shadow-sm relative"
+          >
+            <div
+              aria-hidden="true"
+              class="bg-supporting-neutral absolute left-[-32px] top-1/2 w-8 h-px -z-10"
+            ></div>
+            <span class="text-brand-secondary mb-1">
+              <Icon name="database" size={6} />
+            </span>
+            <span
+              class="text-label-bold text-[12px] text-gw-text-primary uppercase text-center"
+            >
+              Backend
+            </span>
+          </div>
+          <div
+            aria-hidden="true"
+            class="bg-supporting-neutral absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 w-8 h-px"
+          ></div>
+        </div>
+        <div
+          class="bg-gw-surface-secondary rounded-xl flex items-center justify-center relative p-8"
+        >
+          <div
+            aria-hidden="true"
+            class="bg-supporting-neutral absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-px"
+          ></div>
+          <div
+            class="bg-brand-surface border-l-4 border-l-brand-primary p-6 w-full flex flex-col items-start justify-center shadow-sm"
+          >
+            <span
+              class="text-label-bold text-[12px] text-gw-text-muted uppercase tracking-wider mb-2"
+            >
+              Project Team
+            </span>
+            <span class="text-body-md text-gw-text-primary font-semibold">
+              Equipo A:<br />Backend + Mobile
+            </span>
+          </div>
+          <div
+            aria-hidden="true"
+            class="bg-supporting-neutral absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 w-8 h-px"
+          ></div>
+        </div>
+        <div
+          class="bg-gw-surface-secondary rounded-xl flex items-center justify-center relative p-8"
+        >
+          <div
+            aria-hidden="true"
+            class="bg-supporting-neutral absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-px"
+          ></div>
+          <div
+            class="bg-gw-text-primary p-6 w-32 h-32 flex flex-col items-center justify-center rounded shadow-md"
+          >
+            <span class="text-brand-surface mb-2">
+              <Icon name="rocket" size={8} />
+            </span>
+            <span
+              class="text-label-bold text-brand-surface uppercase text-center"
+            >
+              Solution
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      data-cm-fallback
+      class="bg-gw-surface-secondary flex flex-col gap-8 mb-20 md:hidden p-8 rounded-xl"
+    >
+      <div
+        class="bg-brand-surface border-gw-border-subtle border p-6 text-center shadow-sm"
+      >
+        <span class="text-supporting-blue-dark mb-2 block">
+          <Icon name="building" size={6} class="mx-auto" />
+        </span>
+        <span class="text-label-bold text-gw-text-primary uppercase">
+          Client
+        </span>
+      </div>
+      <div class="flex justify-center">
+        <span class="text-gw-text-muted">
+          <Icon name="arrow-down" size={6} />
+        </span>
+      </div>
+      <div class="bg-brand-primary p-8 text-center rounded shadow-lg border-2 border-supporting-blue-fixed">
+        <span class="text-brand-surface mb-2 block">
+          <Icon name="network" size={8} class="mx-auto" />
+        </span>
+        <span class="text-label-bold text-brand-surface uppercase">
+          GussWare Core
+        </span>
+      </div>
+      <div class="flex justify-center">
+        <span class="text-gw-text-muted">
+          <Icon name="arrow-down" size={6} />
+        </span>
+      </div>
+      <div
+        class="bg-brand-surface border-gw-border-subtle border p-4 text-center shadow-sm"
+      >
+        <span
+          class="text-label-bold text-[12px] text-gw-text-primary uppercase block"
+        >
+          Specialist Community
+        </span>
+        <p class="text-gw-text-secondary text-sm mt-2">
+          Dev, Design, DevOps, QA...
+        </p>
+      </div>
+      <div class="flex justify-center">
+        <span class="text-gw-text-muted">
+          <Icon name="arrow-down" size={6} />
+        </span>
+      </div>
+      <div class="bg-gw-text-primary p-6 text-center rounded shadow-md">
+        <span class="text-brand-surface mb-2 block">
+          <Icon name="rocket" size={6} class="mx-auto" />
+        </span>
+        <span class="text-label-bold text-brand-surface uppercase">
+          Solution
+        </span>
+      </div>
+    </div>
+    {points.length > 0 && (
+      <div
+        data-cm-bento
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24 mt-16"
+      >
+        {points.map((point, index) => (
+          <div
+            data-cm-point
+            class:list={[
+              'group flex flex-col justify-between items-start p-8 transition-all duration-300 border',
+              index % 2 === 0
+                ? 'bg-gw-surface-secondary border-transparent hover:bg-gw-highlight hover:border-gw-border-subtle'
+                : 'bg-gw-surface-primary border-gw-border-subtle hover:border-brand-primary',
+            ]}
+          >
+            <div
+              class:list={[
+                'w-12 h-12 rounded-full flex items-center justify-center mb-16',
+                index % 2 === 0
+                  ? 'bg-gw-surface-primary shadow-sm'
+                  : 'bg-gw-surface-secondary',
+              ]}
+            >
+              <span class="text-supporting-blue-dark">
+                <Icon name={resolveIcon(point.icon)} size={6} />
+              </span>
+            </div>
+            <div>
+              <h3 class="text-gw-text-primary text-headline-md mb-3">
+                {point.title}
+              </h3>
+              <p
+                class="text-gw-text-secondary text-body-md group-hover:text-gw-text-primary transition-colors"
+              >
+                {point.description}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</Section>
