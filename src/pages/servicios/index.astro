@@ -1,0 +1,68 @@
+---
+/**
+ * RGW-EP09-07-01 — Índice de servicios ES (`/servicios`).
+ *
+ * Encabezado desde `Home.acf.services` (título/descripción); tarjetas
+ * desde el CPT `service` (`getServices('es')`) con enlace al detalle.
+ * Sin contenido hardcodeado.
+ */
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/ui/Section.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import Breadcrumbs from '../../components/ui/Breadcrumbs.astro';
+import Card from '../../components/ui/Card.astro';
+import { getFrontPage } from '../../lib/wordpress/pages';
+import { getServices } from '../../lib/wordpress/services';
+import {
+  routes,
+  servicesBaseUrl,
+  serviceDetailUrl,
+} from '../../lib/routes';
+import { stripHtml } from '../../lib/wordpress/text';
+
+export const prerender = false;
+
+const page = await getFrontPage('es').catch(() => null);
+const header = page?.acf?.services ?? null;
+const services = await getServices('es');
+
+const localeUrls = {
+  es: servicesBaseUrl('es'),
+  en: servicesBaseUrl('en'),
+};
+---
+
+<Layout
+  title={`Servicios — GussWare`}
+  description={
+    header ? stripHtml(header.description).slice(0, 160) : undefined
+  }
+  localeUrls={localeUrls}
+>
+  <Section>
+    <Breadcrumbs
+      items={[
+        { label: 'Inicio', href: routes.home },
+        { label: 'Servicios' },
+      ]}
+      class="mb-8"
+    />
+    {header && (
+      <SectionHeading
+        title={header.title}
+        description={header.description}
+      />
+    )}
+    {services.length > 0 && (
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 mt-12">
+        {services.map((service) => (
+          <Card
+            title={stripHtml(service.title.rendered)}
+            description={stripHtml(service.excerpt.rendered)}
+            href={serviceDetailUrl('es', service.slug)}
+          />
+        ))}
+      </div>
+    )}
+  </Section>
+</Layout>
