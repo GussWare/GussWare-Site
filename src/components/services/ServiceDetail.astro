@@ -12,6 +12,8 @@ import Breadcrumbs from '../ui/Breadcrumbs.astro';
 import Image from '../ui/Image.astro';
 import Button from '../ui/Button.astro';
 import ServiceApproach from './ServiceApproach.astro';
+import Faq from '../home/Faq.astro';
+import FinalCta from '../home/FinalCta.astro';
 import { getBreadcrumbHome } from '../../lib/routes';
 import { stripHtml } from '../../lib/wordpress/text';
 import type { WpService } from '../../lib/wordpress/types';
@@ -131,4 +133,58 @@ const title = stripHtml(service.title.rendered);
   title={acf.approach_title}
   description={acf.approach_description}
   items={acf.approach ?? []}
+/>
+
+{/* RGW-EP09-06-05 — Tecnologías dinámicas (sin hardcodear). */}
+{(acf.tech_groups ?? []).length > 0 && (
+  <Section>
+    <div class="max-w-3xl mb-12">
+      <h2 class="text-gw-text-primary text-display-lg-mobile md:text-display-lg mb-6">
+        {acf.tech_title}
+      </h2>
+      {acf.tech_description && (
+        <p class="text-gw-text-secondary text-body-lg">
+          {acf.tech_description}
+        </p>
+      )}
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {(acf.tech_groups ?? []).map((group) => (
+        <div class="bg-gw-surface-secondary rounded-none p-8">
+          <h3 class="text-gw-text-primary text-headline-md mb-4">
+            {group.title}
+          </h3>
+          <ul class="flex flex-wrap gap-2">
+            {(group.items ?? []).map((tech) => (
+              <li class="bg-gw-surface-primary border-gw-border-subtle text-gw-text-secondary text-body-md rounded-none border px-3 py-1">
+                {tech.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </Section>
+)}
+
+{/* RGW-EP09-06-05 — FAQ opcional reutilizando `Faq` del Home. */}
+{(acf.faq_items ?? []).length > 0 && (
+  <Faq
+    faq={{
+      eyebrow: '',
+      titulo: '',
+      descripcion: '',
+      preguntas: acf.faq_items,
+    }}
+  />
+)}
+
+{/* RGW-EP09-06-05 — CTA reutilizando `FinalCta` del Home. */}
+<FinalCta
+  finalCta={{
+    title: acf.cta.title,
+    description: acf.cta.description,
+    button_text: acf.cta.button_text,
+    button_url: acf.cta.button_url,
+  }}
 />
