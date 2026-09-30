@@ -1,0 +1,70 @@
+---
+/**
+ * RGW-EP09-07-02 — Índice de servicios por locale (`/en/servicios`).
+ *
+ * Réplica de `servicios/index.astro` con `getFrontPage(locale)` y
+ * `getServices(locale)`; cada tarjeta enlaza a su detalle localizado.
+ */
+import Layout from '../../../layouts/Layout.astro';
+import Section from '../../../components/ui/Section.astro';
+import SectionHeading from '../../../components/ui/SectionHeading.astro';
+import Breadcrumbs from '../../../components/ui/Breadcrumbs.astro';
+import Card from '../../../components/ui/Card.astro';
+import { getFrontPage } from '../../../lib/wordpress/pages';
+import { getServices } from '../../../lib/wordpress/services';
+import {
+  servicesBaseUrl,
+  serviceDetailUrl,
+  getBreadcrumbHome,
+} from '../../../lib/routes';
+import { stripHtml } from '../../../lib/wordpress/text';
+
+export const prerender = false;
+
+const locale = Astro.params.locale ?? 'es';
+const page = await getFrontPage(locale).catch(() => null);
+const header = page?.acf?.services ?? null;
+const services = await getServices(locale);
+const home = getBreadcrumbHome(locale);
+
+const localeUrls = {
+  es: servicesBaseUrl('es'),
+  en: servicesBaseUrl('en'),
+};
+---
+
+<Layout
+  title={`${header ? stripHtml(header.title) : 'Services'} — GussWare`}
+  description={
+    header ? stripHtml(header.description).slice(0, 160) : undefined
+  }
+  localeUrls={localeUrls}
+  lang={page?.lang ?? locale}
+>
+  <Section>
+    <Breadcrumbs
+      items={[
+        { label: home.label, href: home.href },
+        { label: header ? stripHtml(header.title) : 'Services' },
+      ]}
+      class="mb-8"
+    />
+    {header && (
+      <SectionHeading
+        title={header.title}
+        description={header.description}
+      />
+    )}
+    {services.length > 0 && (
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 mt-12">
+        {services.map((service) => (
+          <Card
+            title={stripHtml(service.title.rendered)}
+            description={stripHtml(service.excerpt.rendered)}
+            href={serviceDetailUrl(locale, service.slug)}
+          />
+        ))}
+      </div>
+    )}
+  </Section>
+</Layout>
