@@ -1,6 +1,6 @@
 import { wpFetch } from './client';
 import { wpRoutes } from './routes';
-import type { WpService, WpServiceSummary } from './types';
+import type { WpMedia, WpService, WpServiceSummary } from './types';
 
 /**
  * RGW-EP09-05-02 — Listado de servicios publicados de un locale.
@@ -59,4 +59,35 @@ export function toServiceSummary(service: WpService): WpServiceSummary {
     lang: service.lang,
     translations: service.translations,
   };
+}
+
+/**
+ * RGW-EP09-05-03 — Imagen destacada de un servicio (`featured_media`).
+ *
+ * Patrón de `index.astro`: resuelve `source_url` + `alt`, `null` si no
+ * hay imagen (el detalle renderiza bloque neutro).
+ */
+export async function getServiceImage(
+  service: WpService,
+): Promise<{ src: string; alt: string } | null> {
+  if (!service.featured_media) {
+    return null;
+  }
+
+  try {
+    const media = await wpFetch<WpMedia>(
+      wpRoutes.media(service.featured_media),
+    );
+
+    if (media?.source_url) {
+      return {
+        src: media.source_url,
+        alt: media.alt_text || service.title.rendered,
+      };
+    }
+  } catch {
+    // Sin imagen: el detalle se renderiza sin bloque visual.
+  }
+
+  return null;
 }
