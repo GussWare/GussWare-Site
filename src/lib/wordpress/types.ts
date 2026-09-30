@@ -364,6 +364,82 @@ export interface WpHomePage extends Omit<WpPage, 'acf'> {
   acf: WpHomeAcf;
 }
 
+/** Enlace opcional `{text, url}` (patrón `WpHomeButton`). */
+export interface WpServiceLink {
+  text: string;
+  url: string;
+}
+
+/** Feature de una solución (`solutions[].features[]`). */
+export interface WpSolutionFeature {
+  feature: string;
+}
+
+/** Solución de un servicio (`solutions[]`). */
+export interface WpSolutionItem {
+  title: string;
+  description: string;
+  features: WpSolutionFeature[];
+  link: WpServiceLink | null;
+}
+
+/** Elemento del acordeón de enfoque (`approach[]`). */
+export interface WpApproachItem {
+  title: string;
+  description: string;
+}
+
+/** Grupo de tecnologías (`tech_groups[]`). */
+export interface WpTechGroup {
+  title: string;
+  items: { name: string }[];
+}
+
+/** CTA del servicio (forma de `WpFinalCta`). */
+export interface WpServiceCta {
+  title: string;
+  description: string;
+  button_text: string;
+  button_url: string;
+}
+
+/**
+ * Campo `acf` del CPT `service` (grupo `Service Detail`, plano en REST).
+ * Preguntas reutilizan `WpFaqItem` (`{pregunta, respuesta}`).
+ */
+export interface WpServiceAcf {
+  intro_eyebrow: string;
+  intro_title: string;
+  intro_description: string;
+  development_title: string;
+  development_content: string;
+  solutions_title: string;
+  solutions_description: string;
+  solutions: WpSolutionItem[];
+  approach_title: string;
+  approach_description: string;
+  approach: WpApproachItem[];
+  tech_title: string;
+  tech_description: string;
+  tech_groups: WpTechGroup[];
+  faq_items: WpFaqItem[];
+  cta: WpServiceCta;
+}
+
+/** Ítem del CPT `service` (`/wp/v2/services`). */
+export interface WpService {
+  id: number;
+  slug: string;
+  status: string;
+  title: WpPostRendered;
+  content: WpPostProtectedContent;
+  excerpt: WpPostRendered;
+  featured_media: number;
+  acf: WpServiceAcf;
+  lang: string;
+  translations: Record<string, number>;
+}
+
 /** Idioma de Polylang (`/pll/v1/languages`). */
 export interface WpLanguage {
   slug: string;
