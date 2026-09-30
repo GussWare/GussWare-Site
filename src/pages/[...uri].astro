@@ -26,6 +26,9 @@ import Container from '../components/ui/Container.astro';
 import Section from '../components/ui/Section.astro';
 import Hero from '../components/home/Hero.astro';
 import Expertise from '../components/home/Expertise.astro';
+import CommunityModel from '../components/home/CommunityModel.astro';
+import Services from '../components/home/Services.astro';
+import Process from '../components/home/Process.astro';
 import Faq from '../components/home/Faq.astro';
 import FinalCta from '../components/home/FinalCta.astro';
 import Icon from '../components/ui/Icon.astro';
@@ -70,6 +73,14 @@ const sectionContent =
 const hero = page.acf && 'hero' in page.acf ? (page.acf.hero ?? null) : null;
 const expertise =
   page.acf && 'expertise' in page.acf ? (page.acf.expertise ?? null) : null;
+const technology =
+  page.acf && 'technology' in page.acf
+    ? (page.acf.technology ?? null)
+    : null;
+const services =
+  page.acf && 'services' in page.acf ? (page.acf.services ?? null) : null;
+const process =
+  page.acf && 'process' in page.acf ? (page.acf.process ?? null) : null;
 const finalCta =
   page.acf && 'final_cta' in page.acf ? (page.acf.final_cta ?? null) : null;
 const faq =
@@ -95,6 +106,25 @@ if (heroImageId) {
     // Sin imagen: el Hero se renderiza sin bloque visual.
   }
 }
+
+const stepImages = await Promise.all(
+  (process?.steps ?? []).map(async (step) => {
+    if (!step.image) return null;
+    try {
+      const media = await wpFetch<WpMedia>(wpRoutes.media(step.image));
+
+      if (media?.source_url) {
+        return {
+          src: media.source_url,
+          alt: media.alt_text || step.title,
+        };
+      }
+    } catch {
+      // Sin imagen: el paso se renderiza con bloque neutro.
+    }
+    return null;
+  }),
+);
 
 // URLs del selector de idioma: la del locale actual es la URL en curso;
 // la del otro locale usa el slug de la traducción (`translations` de
@@ -155,6 +185,9 @@ if (translatedSlug) {
     <>
       <Hero hero={hero} image={heroImage} />
       {expertise && <Expertise expertise={expertise} />}
+      {technology && <CommunityModel technology={technology} />}
+      {services && <Services services={services} />}
+      {process && <Process process={process} images={stepImages} />}
       {faq && <Faq faq={faq} />}
       {finalCta && <FinalCta finalCta={finalCta} />}
     </>

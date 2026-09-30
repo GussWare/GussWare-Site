@@ -1,0 +1,343 @@
+---
+/**
+ * Process / Cómo trabajamos del Home según Stitch
+ * `GussWare Home-V0.1.0` (`GussWare Home - Complete Final Flow`).
+ *
+ * Intro (`process.eyebrow` acento, título `display`, descripción),
+ * stepper (`hidden lg:block`) con línea, nodos numerados derivados
+ * del índice y tarjeta del paso (badge, título, descripción, imagen
+ * `aspect-video`) con botones Previous/Next y barra de progreso.
+ * Todo el contenido llega de WordPress; números (`01`, …) y
+ * porcentajes se derivan de índice/`steps.length` (sin hardcodear).
+ * Las imágenes se resuelven en la página (`images`, paralelas a
+ * `steps`); sin imagen se muestra un bloque neutro (patrón de
+ * `Card.astro`). Sin pasos: solo intro, sin errores.
+ * Interacción encapsulada en el `<script>` (nodos, botones, línea,
+ * tarjeta, imagen y progreso sincronizados; Previous/Next
+ * deshabilitados en los extremos).
+ */
+import Section from '../ui/Section.astro';
+import Icon from '../ui/Icon.astro';
+import type { WpProcess, WpProcessStep } from '../../lib/wordpress/types';
+
+interface Props {
+  process: WpProcess;
+  images: Array<{ src: string; alt: string } | null>;
+}
+
+const { process, images } = Astro.props;
+
+const steps: WpProcessStep[] = process.steps ?? [];
+const pad = (n: number): string => String(n).padStart(2, '0');
+
+const NODE_ACTIVE =
+  'w-14 h-14 rounded-full bg-brand-accent text-brand-surface flex items-center justify-center font-bold text-xl shadow-lg transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
+const NODE_IDLE =
+  'w-9 h-9 rounded-full bg-brand-surface border-2 border-gw-border-subtle text-gw-text-muted flex items-center justify-center font-bold text-sm transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
+const CAPTION_ACTIVE =
+  'text-label-bold text-supporting-blue-dark absolute -bottom-12 whitespace-nowrap';
+const CAPTION_IDLE =
+  'text-body-md text-gw-text-muted absolute -bottom-10 whitespace-nowrap';
+
+const firstImage = steps.length > 0 ? (images[0] ?? null) : null;
+const firstPct = steps.length > 0 ? Math.round((1 / steps.length) * 100) : 0;
+const firstLine = steps.length > 1 ? 0 : 100;
+
+const slides = steps.map((step, index) => ({
+  num: pad(index + 1),
+  label: step.label,
+  title: step.title,
+  description: step.description,
+  image: images[index] ?? null,
+}));
+---
+
+<Section class="border-gw-border-subtle border-t">
+  <div data-process>
+    <div class="mb-16 lg:mb-24">
+      {process.eyebrow && (
+        <p
+          class="text-label-bold text-brand-accent font-bold tracking-widest uppercase mb-4"
+        >
+          {process.eyebrow}
+        </p>
+      )}
+      {process.title && (
+        <h2
+          class="text-gw-text-primary text-display-lg-mobile md:text-display-lg max-w-3xl mb-6"
+        >
+          {process.title}
+        </h2>
+      )}
+      {process.description && (
+        <p class="text-gw-text-secondary text-body-lg max-w-2xl">
+          {process.description}
+        </p>
+      )}
+    </div>
+    {steps.length > 0 && (
+      <>
+        <div
+          data-process-stepper
+          class="hidden lg:block w-full mb-24 relative px-8"
+        >
+          <div
+            class="absolute top-1/2 left-0 right-0 h-[2px] bg-gw-surface-dim -translate-y-1/2"
+          >
+            <div
+              data-process-line
+              class="h-full bg-brand-accent transition-all duration-500"
+              style={`width: ${firstLine}%`}
+            ></div>
+          </div>
+          <div class="relative flex items-center justify-between w-full h-16">
+            {steps.map((step, index) => (
+              <div class="relative flex flex-col items-center">
+                <button
+                  type="button"
+                  data-process-node={index}
+                  aria-label={step.label || `Step ${pad(index + 1)}`}
+                  aria-current={index === 0 ? 'step' : undefined}
+                  class={index === 0 ? NODE_ACTIVE : NODE_IDLE}
+                >
+                  {pad(index + 1)}
+                </button>
+                <span
+                  data-process-caption
+                  class={index === 0 ? CAPTION_ACTIVE : CAPTION_IDLE}
+                >
+                  {step.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div
+          class="relative overflow-hidden bg-gw-surface-secondary rounded-xl p-8 lg:p-16 min-h-[500px] flex flex-col justify-center"
+        >
+          <div class="relative z-10">
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+              <div class="w-full lg:w-1/2">
+                <span
+                  data-process-badge
+                  class="inline-block px-3 py-1 bg-supporting-blue-dark text-brand-surface text-label-bold rounded mb-6 uppercase"
+                >
+                  {steps[0].label}
+                </span>
+                <h3
+                  data-process-title
+                  class="text-supporting-blue-dark text-headline-md lg:text-headline-lg mb-6"
+                >
+                  {steps[0].title}
+                </h3>
+                <p
+                  data-process-desc
+                  class="text-gw-text-secondary text-body-lg lg:text-xl max-w-xl"
+                >
+                  {steps[0].description}
+                </p>
+              </div>
+              <div class="w-full lg:w-1/2">
+                <div
+                  class="aspect-video bg-brand-surface rounded-xl shadow-lg border border-gw-border-subtle overflow-hidden"
+                >
+                  {firstImage ? (
+                    <img
+                      data-process-image
+                      src={firstImage.src}
+                      alt={firstImage.alt}
+                      loading="lazy"
+                      class="w-full h-full object-cover"
+                    />
+                    <div
+                      data-process-image-empty
+                      hidden
+                      class="hidden w-full h-full bg-gw-surface-secondary"
+                    ></div>
+                  ) : (
+                    <img
+                      data-process-image
+                      hidden
+                      class="hidden w-full h-full object-cover"
+                      alt=""
+                    />
+                    <div
+                      data-process-image-empty
+                      class="w-full h-full bg-gw-surface-secondary"
+                    ></div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 mt-12 lg:mt-16 relative z-20">
+            <button
+              type="button"
+              data-process-prev
+              disabled={steps.length < 2}
+              class="group flex items-center justify-center gap-2 px-6 py-3 rounded-none border-2 border-gw-border-subtle text-gw-text-secondary text-label-bold transition-all duration-200 hover:bg-gw-surface-secondary hover:text-supporting-blue-dark hover:border-supporting-blue-dark disabled:opacity-30 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+            >
+              <Icon name="arrow-left" size={4} />
+              <span>Previous</span>
+            </button>
+            <button
+              type="button"
+              data-process-next
+              disabled={steps.length < 2}
+              class="flex items-center justify-center gap-3 px-8 py-3 rounded-none bg-brand-primary text-brand-surface text-label-bold transition-all duration-200 hover:opacity-90 shadow-lg disabled:opacity-30 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+            >
+              <span>Next Step</span>
+              <Icon name="arrow-right" size={4} />
+            </button>
+          </div>
+        </div>
+        <div
+          class="mt-12 flex flex-col md:flex-row md:items-center justify-between gap-6 px-4"
+        >
+          <div class="flex items-center gap-4">
+            <div
+              role="progressbar"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={firstPct}
+              data-process-progressbar
+              class="w-32 h-1 bg-gw-border-subtle rounded-full overflow-hidden"
+            >
+              <div
+                data-process-bar
+                class="h-full bg-brand-accent transition-all duration-500"
+                style={`width: ${firstPct}%`}
+              ></div>
+            </div>
+            <span
+              data-process-text
+              class="text-label-bold text-supporting-blue-dark uppercase"
+            >
+              {steps[0].label} → {firstPct}%
+            </span>
+          </div>
+        </div>
+        <script
+          type="application/json"
+          data-process-data
+          set:html={JSON.stringify(slides).replace(/</g, '\\u003c')}
+        />
+      </>
+    )}
+  </div>
+</Section>
+
+<script>
+  const root = document.querySelector('[data-process]');
+
+  if (root instanceof HTMLElement) {
+    const dataEl = root.querySelector('[data-process-data]');
+    let slides = [];
+    try {
+      slides = JSON.parse(dataEl?.textContent ?? '[]');
+    } catch {
+      slides = [];
+    }
+    if (!Array.isArray(slides)) slides = [];
+
+    const nodes = Array.from(root.querySelectorAll('[data-process-node]'));
+    const captions = Array.from(
+      root.querySelectorAll('[data-process-caption]'),
+    );
+    const line = root.querySelector('[data-process-line]');
+    const badge = root.querySelector('[data-process-badge]');
+    const title = root.querySelector('[data-process-title]');
+    const desc = root.querySelector('[data-process-desc]');
+    const image = root.querySelector('[data-process-image]');
+    const imageEmpty = root.querySelector('[data-process-image-empty]');
+    const prev = root.querySelector('[data-process-prev]');
+    const next = root.querySelector('[data-process-next]');
+    const bar = root.querySelector('[data-process-bar]');
+    const progressbar = root.querySelector('[data-process-progressbar]');
+    const progressText = root.querySelector('[data-process-text]');
+
+    const NODE_ACTIVE =
+      'w-14 h-14 rounded-full bg-brand-accent text-brand-surface flex items-center justify-center font-bold text-xl shadow-lg transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
+    const NODE_IDLE =
+      'w-9 h-9 rounded-full bg-brand-surface border-2 border-gw-border-subtle text-gw-text-muted flex items-center justify-center font-bold text-sm transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
+    const CAPTION_ACTIVE =
+      'text-label-bold text-supporting-blue-dark absolute -bottom-12 whitespace-nowrap';
+    const CAPTION_IDLE =
+      'text-body-md text-gw-text-muted absolute -bottom-10 whitespace-nowrap';
+
+    const currentIndex = () => Number(root.dataset.processIndex ?? '0');
+
+    const render = (index) => {
+      const total = slides.length;
+      if (total === 0) return;
+      const current = Math.min(Math.max(index, 0), total - 1);
+      const slide = slides[current];
+      const linePct = total > 1 ? (current / (total - 1)) * 100 : 100;
+      const barPct = Math.round(((current + 1) / total) * 100);
+
+      nodes.forEach((node, i) => {
+        if (!(node instanceof HTMLButtonElement)) return;
+        const active = i === current;
+        node.className = active ? NODE_ACTIVE : NODE_IDLE;
+        if (active) node.setAttribute('aria-current', 'step');
+        else node.removeAttribute('aria-current');
+        const caption = captions[i];
+        if (caption instanceof HTMLElement) {
+          caption.className = active ? CAPTION_ACTIVE : CAPTION_IDLE;
+        }
+      });
+
+      if (line instanceof HTMLElement) {
+        line.style.width = `${linePct}%`;
+      }
+      if (badge instanceof HTMLElement) badge.textContent = slide.label;
+      if (title instanceof HTMLElement) title.textContent = slide.title;
+      if (desc instanceof HTMLElement) desc.textContent = slide.description;
+
+      if (image instanceof HTMLImageElement) {
+        if (slide.image) {
+          image.src = slide.image.src;
+          image.alt = slide.image.alt;
+          image.hidden = false;
+          image.classList.remove('hidden');
+        } else {
+          image.removeAttribute('src');
+          image.hidden = true;
+          image.classList.add('hidden');
+        }
+      }
+      if (imageEmpty instanceof HTMLElement) {
+        const empty = !slide.image;
+        imageEmpty.hidden = !empty;
+        imageEmpty.classList.toggle('hidden', !empty);
+      }
+
+      if (prev instanceof HTMLButtonElement) prev.disabled = current === 0;
+      if (next instanceof HTMLButtonElement) {
+        next.disabled = current === total - 1;
+      }
+      if (bar instanceof HTMLElement) bar.style.width = `${barPct}%`;
+      if (progressbar instanceof HTMLElement) {
+        progressbar.setAttribute('aria-valuenow', String(barPct));
+      }
+      if (progressText instanceof HTMLElement) {
+        progressText.textContent = `${slide.label} → ${barPct}%`;
+      }
+
+      root.dataset.processIndex = String(current);
+    };
+
+    nodes.forEach((node, i) => {
+      if (!(node instanceof HTMLButtonElement)) return;
+      node.addEventListener('click', () => render(i));
+    });
+    if (prev instanceof HTMLButtonElement) {
+      prev.addEventListener('click', () => render(currentIndex() - 1));
+    }
+    if (next instanceof HTMLButtonElement) {
+      next.addEventListener('click', () => render(currentIndex() + 1));
+    }
+
+    render(0);
+  }
+</script>

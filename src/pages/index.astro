@@ -11,6 +11,9 @@ import Layout from '../layouts/Layout.astro';
 import Container from '../components/ui/Container.astro';
 import Hero from '../components/home/Hero.astro';
 import Expertise from '../components/home/Expertise.astro';
+import CommunityModel from '../components/home/CommunityModel.astro';
+import Services from '../components/home/Services.astro';
+import Process from '../components/home/Process.astro';
 import Faq from '../components/home/Faq.astro';
 import FinalCta from '../components/home/FinalCta.astro';
 import type { LocaleUrls } from '../lib/routes';
@@ -35,6 +38,9 @@ const description = page
   : undefined;
 const hero = page?.acf?.hero ?? null;
 const expertise = page?.acf?.expertise ?? null;
+const technology = page?.acf?.technology ?? null;
+const services = page?.acf?.services ?? null;
+const process = page?.acf?.process ?? null;
 const finalCta = page?.acf?.final_cta ?? null;
 const faq = page?.acf?.faq ?? null;
 
@@ -58,6 +64,25 @@ if (heroImageId) {
     // Sin imagen: el Hero se renderiza sin bloque visual.
   }
 }
+
+const stepImages = await Promise.all(
+  (process?.steps ?? []).map(async (step) => {
+    if (!step.image) return null;
+    try {
+      const media = await wpFetch<WpMedia>(wpRoutes.media(step.image));
+
+      if (media?.source_url) {
+        return {
+          src: media.source_url,
+          alt: media.alt_text || step.title,
+        };
+      }
+    } catch {
+      // Sin imagen: el paso se renderiza con bloque neutro.
+    }
+    return null;
+  }),
+);
 ---
 
 <Layout
@@ -69,6 +94,9 @@ if (heroImageId) {
     <>
       <Hero hero={hero} image={heroImage} />
       {expertise && <Expertise expertise={expertise} />}
+      {technology && <CommunityModel technology={technology} />}
+      {services && <Services services={services} />}
+      {process && <Process process={process} images={stepImages} />}
       {faq && <Faq faq={faq} />}
       {finalCta && <FinalCta finalCta={finalCta} />}
     </>
