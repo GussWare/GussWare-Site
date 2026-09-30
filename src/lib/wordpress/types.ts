@@ -326,6 +326,7 @@ export interface WpProcess {
   title: string;
   description: string;
   steps: WpProcessStep[];
+  footnote?: string;
 }
 
 export interface WpFaqItem {

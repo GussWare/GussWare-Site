@@ -5,14 +5,17 @@
  *
  * Intro (`process.eyebrow` acento, título `display`, descripción),
  * stepper (`hidden lg:block`) con línea, nodos numerados derivados
- * del índice y tarjeta del paso (badge, título, descripción, imagen
- * `aspect-video`) con botones Previous/Next y barra de progreso.
+ * del índice (tres estados Stitch: completado, activo, pendiente)
+ * y tarjeta del paso (badge, título, descripción, imagen
+ * `aspect-video`) con botones Previous/Next, barra de progreso y
+ * leyenda final (`process.footnote` íntegra dentro de la fila de
+ * progreso, como en Stitch; sin render si viene vacía).
  * Todo el contenido llega de WordPress; números (`01`, …) y
  * porcentajes se derivan de índice/`steps.length` (sin hardcodear).
  * Las imágenes se resuelven en la página (`images`, paralelas a
  * `steps`); sin imagen se muestra un bloque neutro (patrón de
  * `Card.astro`). Sin pasos: solo intro, sin errores.
- * Interacción encapsulada en el `<script>` (nodos, botones, línea,
+ * Interacción encapsulada en el `script` (nodos, botones, línea,
  * tarjeta, imagen y progreso sincronizados; Previous/Next
  * deshabilitados en los extremos).
  */
@@ -30,8 +33,18 @@ const { process, images } = Astro.props;
 const steps: WpProcessStep[] = process.steps ?? [];
 const pad = (n: number): string => String(n).padStart(2, '0');
 
+/**
+ * Leyenda final (`process.footnote`) tal como llega de WordPress:
+ * se renderiza el valor íntegro (las comillas forman parte del
+ * diseño Stitch). Vacía o ausente: no se renderiza (fallback,
+ * p. ej. Home EN).
+ */
+const footnote = process.footnote ?? '';
+
 const NODE_ACTIVE =
   'w-14 h-14 rounded-full bg-brand-accent text-brand-surface flex items-center justify-center font-bold text-xl shadow-lg transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
+const NODE_COMPLETED =
+  'w-9 h-9 rounded-full bg-brand-surface border-2 border-brand-accent text-brand-accent flex items-center justify-center font-bold text-sm transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
 const NODE_IDLE =
   'w-9 h-9 rounded-full bg-brand-surface border-2 border-gw-border-subtle text-gw-text-muted flex items-center justify-center font-bold text-sm transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
 const CAPTION_ACTIVE =
@@ -175,7 +188,7 @@ const slides = steps.map((step, index) => ({
               type="button"
               data-process-prev
               disabled={steps.length < 2}
-              class="group flex items-center justify-center gap-2 px-6 py-3 rounded-none border-2 border-gw-border-subtle text-gw-text-secondary text-label-bold transition-all duration-200 hover:bg-gw-surface-secondary hover:text-supporting-blue-dark hover:border-supporting-blue-dark disabled:opacity-30 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+              class="group flex items-center justify-center gap-2 px-6 py-3.5 rounded-none border-2 border-gw-border-subtle text-gw-text-secondary text-label-bold transition-all duration-200 hover:bg-gw-surface-secondary hover:text-supporting-blue-dark hover:border-supporting-blue-dark disabled:opacity-30 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
             >
               <Icon name="arrow-left" size={4} />
               <span>Previous</span>
@@ -184,7 +197,7 @@ const slides = steps.map((step, index) => ({
               type="button"
               data-process-next
               disabled={steps.length < 2}
-              class="flex items-center justify-center gap-3 px-8 py-3 rounded-none bg-brand-primary text-brand-surface text-label-bold transition-all duration-200 hover:opacity-90 shadow-lg disabled:opacity-30 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+              class="flex items-center justify-center gap-3 px-8 py-3.5 rounded-none bg-brand-primary text-brand-surface text-label-bold transition-all duration-200 hover:opacity-90 shadow-lg disabled:opacity-30 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
             >
               <span>Next Step</span>
               <Icon name="arrow-right" size={4} />
@@ -216,6 +229,13 @@ const slides = steps.map((step, index) => ({
               {steps[0].label} → {firstPct}%
             </span>
           </div>
+          {footnote.trim() && (
+            <p
+              class="text-gw-text-secondary text-body-md italic [font-synthesis:style]"
+            >
+              {footnote}
+            </p>
+          )}
         </div>
         <script
           type="application/json"
@@ -223,6 +243,13 @@ const slides = steps.map((step, index) => ({
           set:html={JSON.stringify(slides).replace(/</g, '\\u003c')}
         />
       </>
+    )}
+    {steps.length === 0 && footnote.trim() && (
+      <p
+        class="text-gw-text-secondary text-body-md italic mt-12 [font-synthesis:style]"
+      >
+        {footnote}
+      </p>
     )}
   </div>
 </Section>
@@ -258,6 +285,8 @@ const slides = steps.map((step, index) => ({
 
     const NODE_ACTIVE =
       'w-14 h-14 rounded-full bg-brand-accent text-brand-surface flex items-center justify-center font-bold text-xl shadow-lg transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
+    const NODE_COMPLETED =
+      'w-9 h-9 rounded-full bg-brand-surface border-2 border-brand-accent text-brand-accent flex items-center justify-center font-bold text-sm transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
     const NODE_IDLE =
       'w-9 h-9 rounded-full bg-brand-surface border-2 border-gw-border-subtle text-gw-text-muted flex items-center justify-center font-bold text-sm transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
     const CAPTION_ACTIVE =
@@ -278,12 +307,18 @@ const slides = steps.map((step, index) => ({
       nodes.forEach((node, i) => {
         if (!(node instanceof HTMLButtonElement)) return;
         const active = i === current;
-        node.className = active ? NODE_ACTIVE : NODE_IDLE;
+        const completed = i < current;
+        node.className = active
+          ? NODE_ACTIVE
+          : completed
+            ? NODE_COMPLETED
+            : NODE_IDLE;
         if (active) node.setAttribute('aria-current', 'step');
         else node.removeAttribute('aria-current');
         const caption = captions[i];
         if (caption instanceof HTMLElement) {
-          caption.className = active ? CAPTION_ACTIVE : CAPTION_IDLE;
+          caption.className =
+            active || completed ? CAPTION_ACTIVE : CAPTION_IDLE;
         }
       });
 
