@@ -11,6 +11,7 @@ import SectionHeading from '../ui/SectionHeading.astro';
 import Breadcrumbs from '../ui/Breadcrumbs.astro';
 import Image from '../ui/Image.astro';
 import Button from '../ui/Button.astro';
+import ServiceApproach from './ServiceApproach.astro';
 import { getBreadcrumbHome } from '../../lib/routes';
 import { stripHtml } from '../../lib/wordpress/text';
 import type { WpService } from '../../lib/wordpress/types';
@@ -124,3 +125,10 @@ const title = stripHtml(service.title.rendered);
     </div>
   </Section>
 )}
+
+{/* RGW-EP09-06-04 — Nuestro Enfoque: acordeón dinámico. */}
+<ServiceApproach
+  title={acf.approach_title}
+  description={acf.approach_description}
+  items={acf.approach ?? []}
+/>
