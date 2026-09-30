@@ -46,7 +46,7 @@ import { wpFetch } from '../lib/wordpress/client';
 import { wpRoutes } from '../lib/wordpress/routes';
 import { getSocialMedia } from '../lib/wordpress/socialMedia';
 import { stripHtml } from '../lib/wordpress/text';
-import type { WpMedia } from '../lib/wordpress/types';
+import type { WpMedia, WpServiceSummary } from '../lib/wordpress/types';
 
 export const prerender = false;
 
@@ -77,8 +77,31 @@ const technology =
   page.acf && 'technology' in page.acf
     ? (page.acf.technology ?? null)
     : null;
-const services =
+const servicesAcf =
   page.acf && 'services' in page.acf ? (page.acf.services ?? null) : null;
+
+// RGW-EP09-04-03: ítems desde el CPT `service` (locale en curso);
+// respaldo a `services.items[]` de ACF si REST falla o está vacío.
+let serviceItems = servicesAcf?.items ?? [];
+
+if (hero && servicesAcf) {
+  try {
+    const list = await wpFetch<WpServiceSummary[]>(
+      wpRoutes.services(locale),
+    );
+
+    if (Array.isArray(list) && list.length > 0) {
+      serviceItems = list.map((item) => ({
+        title: stripHtml(item.title.rendered),
+        description: stripHtml(item.excerpt.rendered),
+      }));
+    }
+  } catch {
+    // Respaldo: ítems ACF.
+  }
+}
+
+const services = servicesAcf ? { ...servicesAcf, items: serviceItems } : null;
 const process =
   page.acf && 'process' in page.acf ? (page.acf.process ?? null) : null;
 const finalCta =

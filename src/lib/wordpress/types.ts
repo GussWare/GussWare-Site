@@ -385,6 +385,17 @@ export interface WpPostProtectedContent extends WpPostRendered {
 
 export interface WpPostGuid extends WpPostRendered {}
 
+/** Ítem mínimo del CPT `service` para listados (RGW-EP09-04-03). */
+export interface WpServiceSummary {
+  id: number;
+  slug: string;
+  status: string;
+  title: WpPostRendered;
+  excerpt: WpPostRendered;
+  lang: string;
+  translations: Record<string, number>;
+}
+
 export interface WpPostMeta {
   _acf_changed: boolean;
   inline_featured_image: boolean;
