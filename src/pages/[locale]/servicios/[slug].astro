@@ -1,0 +1,79 @@
+---
+/**
+ * RGW-EP09-06-01 — Detalle de servicio por locale (`/en/servicios/[slug]`).
+ *
+ * Ruta fina: resuelve el servicio (`getServiceBySlug`, con `lang`) y lo
+ * renderiza con `ServiceDetail` (compartido con `/servicios`, sin
+ * duplicar lógica). Sin servicio, redirige a `/404`.
+ */
+import Layout from '../../../layouts/Layout.astro';
+import ServiceDetail from '../../../components/services/ServiceDetail.astro';
+import {
+  getServiceBySlug,
+  getServiceImage,
+} from '../../../lib/wordpress/services';
+import { wpFetch } from '../../../lib/wordpress/client';
+import { wpRoutes } from '../../../lib/wordpress/routes';
+import {
+  routes,
+  servicesBaseUrl,
+  serviceDetailUrl,
+} from '../../../lib/routes';
+import { stripHtml } from '../../../lib/wordpress/text';
+import type { WpService } from '../../../lib/wordpress/types';
+
+export const prerender = false;
+
+const locale = Astro.params.locale ?? 'es';
+const { slug } = Astro.params;
+const service =
+  typeof slug === 'string'
+    ? await getServiceBySlug(slug, locale).catch(() => null)
+    : null;
+
+if (!service) {
+  return Astro.redirect(routes.notFound);
+}
+
+const image = await getServiceImage(service);
+
+const otherLocale = locale === 'es' ? 'en' : 'es';
+let otherSlug = service.slug;
+const otherId = service.translations?.[otherLocale];
+
+if (typeof otherId === 'number' && otherId !== service.id) {
+  const translated = await wpFetch<WpService>(
+    wpRoutes.service(otherId),
+  ).catch(() => null);
+
+  if (translated?.slug) {
+    otherSlug = translated.slug;
+  }
+}
+
+const localeUrls = {
+  es:
+    locale === 'es'
+      ? serviceDetailUrl('es', service.slug)
+      : serviceDetailUrl('es', otherSlug),
+  en:
+    locale === 'en'
+      ? serviceDetailUrl('en', service.slug)
+      : serviceDetailUrl('en', otherSlug),
+};
+---
+
+<Layout
+  title={`${stripHtml(service.title.rendered)} — GussWare`}
+  description={stripHtml(service.excerpt.rendered).slice(0, 160) || undefined}
+  localeUrls={localeUrls}
+  lang={service.lang}
+>
+  <ServiceDetail
+    service={service}
+    image={image}
+    locale={locale}
+    indexUrl={servicesBaseUrl(locale)}
+    indexLabel={locale === 'en' ? 'Services' : 'Servicios'}
+  />
+</Layout>

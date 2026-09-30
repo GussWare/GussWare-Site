@@ -57,6 +57,18 @@ export function blogPostUrl(locale: string, slug: string): string {
   return removeBlogTrailingSlash(getRelativeLocaleUrl(locale, `blog/${slug}`));
 }
 
+/** Base del índice de Servicios (`/servicios`, `/en/servicios`). */
+export function servicesBaseUrl(locale: string): string {
+  return removeBlogTrailingSlash(getRelativeLocaleUrl(locale, 'servicios'));
+}
+
+/** URL del detalle de un servicio (`/servicios/[slug]`, `/en/servicios/[slug]`). */
+export function serviceDetailUrl(locale: string, slug: string): string {
+  return removeBlogTrailingSlash(
+    getRelativeLocaleUrl(locale, `servicios/${slug}`),
+  );
+}
+
 function removeBlogTrailingSlash(url: string): string {
   return url.length > 1 && url.endsWith('/') ? url.slice(0, -1) : url;
 }

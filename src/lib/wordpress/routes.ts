@@ -70,6 +70,7 @@ export const wpRoutes = {
     `/wp/v2/services?per_page=100&lang=${encodeURIComponent(lang)}`,
   serviceBySlug: (slug: string, lang: string) =>
     `/wp/v2/services?slug=${encodeURIComponent(slug)}&lang=${encodeURIComponent(lang)}`,
+  service: (serviceId: number) => `/wp/v2/services/${serviceId}`,
   user: (userId: number) => `/wp/v2/users/${userId}`,
   tags: (lang?: string) =>
     `/wp/v2/tags?per_page=100${lang ? `&lang=${encodeURIComponent(lang)}` : ''}`,

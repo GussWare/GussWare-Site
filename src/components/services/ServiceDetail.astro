@@ -1,0 +1,46 @@
+---
+/**
+ * RGW-EP09-06 — Template único del detalle de servicios.
+ *
+ * Renderiza exclusivamente desde el CPT `service` (prop `service`);
+ * sin literales de contenido ni lógica por slug. Las secciones crecen
+ * por tarjeta (intro → desarrollo → soluciones → enfoque → tech/CTA).
+ */
+import Section from '../ui/Section.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Breadcrumbs from '../ui/Breadcrumbs.astro';
+import { getBreadcrumbHome } from '../../lib/routes';
+import { stripHtml } from '../../lib/wordpress/text';
+import type { WpService } from '../../lib/wordpress/types';
+
+interface Props {
+  service: WpService;
+  image: { src: string; alt: string } | null;
+  locale: string;
+  indexUrl: string;
+  indexLabel: string;
+}
+
+const { service, image, locale, indexUrl, indexLabel } = Astro.props;
+
+const home = getBreadcrumbHome(locale);
+const acf = service.acf;
+const title = stripHtml(service.title.rendered);
+---
+
+<Section>
+  <Breadcrumbs
+    items={[
+      { label: home.label, href: home.href },
+      { label: indexLabel, href: indexUrl },
+      { label: title },
+    ]}
+    class="mb-8"
+  />
+  <SectionHeading
+    eyebrow={acf.intro_eyebrow}
+    title={acf.intro_title}
+    level={1}
+    description={acf.intro_description}
+  />
+</Section>
