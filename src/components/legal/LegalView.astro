@@ -1,0 +1,1053 @@
+---
+/**
+ * RGW-268 — Vista de página legal (Política de Privacidad).
+ *
+ * Consume el contenido Gutenberg de la Page (`content.rendered`, fuente
+ * WordPress) y lo presenta con el diseño de Stitch `GussWare - Aviso de
+ * Privacidad (Rediseño Editorial)`. Sin lógica de obtención de datos
+ * (la resuelve `[...uri].astro` con `getPageBySlug` + Polylang) y sin
+ * tocar el contenido editorial: solo reordena envoltorios mediante
+ * ganchos `gw-*` ya presentes en el HTML y aplica presentación con
+ * tokens existentes (precedente: `BlogArticleView` + `.article-content`).
+ *
+ * Transformaciones (todas con respaldo: si un patrón no aparece, el
+ * contenido se renderiza sin ese envoltorio, nunca se rompe la página):
+ * - encabezado (eyebrow, fecha, lede) antes del H1 (título de la Page);
+ * - `gw-fact` ×5 de sec-01 envueltos en `.gw-facts-box`;
+ * - procedimiento de sec-06 envuelto en `.gw-procedure-box`;
+ * - bloque de sec-08 envuelto en `.gw-info-box`;
+ * - email suelto de sec-06 como chip `.gw-email-chip`;
+ * - enlaces del índice divididos en número + etiqueta.
+ *
+ * Iconos (calendar, mail, person, phone, verified_user, lock, shield,
+ * update) como presentación CSS (data-URI SVG estilo Lucide): el
+ * contenido WP no trae nodos de icono y `Icon.astro` no puede inyectarse
+ * dentro de `set:html`.
+ */
+import Container from '../ui/Container.astro';
+import Icon from '../ui/Icon.astro';
+
+interface Props {
+  /** Título de la Page (`page.title`, renderizado como H1). */
+  title: string;
+  /** HTML renderizado de la Page (`page.content.rendered`). */
+  content: string;
+}
+
+const { title, content } = Astro.props;
+
+/** Primer `<p class="...">` encontrado (o null si no existe). */
+function pickParagraph(html: string, cls: string): string | null {
+  const match = html.match(
+    new RegExp(`<p class="${cls}[^"]*">[\\s\\S]*?</p>`),
+  );
+  return match ? match[0] : null;
+}
+
+const eyebrowHtml = pickParagraph(content, 'gw-eyebrow');
+const metaHtml = pickParagraph(content, 'gw-update-meta');
+const ledeHtml = pickParagraph(content, 'gw-lede');
+
+let bodyHtml = content;
+
+// Retira el grupo de encabezado (solo contiene los 3 <p>, sin divs
+// anidados) para reordenarlo delante del H1.
+const headerGroup = bodyHtml.match(
+  /<div class="[^"]*gw-legal-header[^"]*">[\s\S]*?<\/div>/,
+);
+
+if (headerGroup && eyebrowHtml && metaHtml && ledeHtml) {
+  bodyHtml = bodyHtml.replace(headerGroup[0], '');
+}
+
+// Envuelve las 5 filas de sec-01 (grupos consecutivos de un solo <p>)
+// en la caja de datos. Sin envoltura si no hay exactamente 5 seguidas.
+const factsRun = bodyHtml.match(
+  /(<div class="[^"]*\bgw-fact\b[^"]*"><p>[\s\S]*?<\/p><\/div>(?:\s*<div class="[^"]*\bgw-fact\b[^"]*"><p>[\s\S]*?<\/p><\/div>){4})/,
+);
+
+if (factsRun) {
+  bodyHtml = bodyHtml.replace(
+    factsRun[0],
+    `<div class="gw-facts-box">${factsRun[1]}</div>`,
+  );
+}
+
+// Envuelve el procedimiento de sec-06 (del H3 posterior a los subbloques
+// hasta el cierre de la sección) en su panel. Sin subbloques anidados
+// con divs, el cierre perezoso es seguro.
+const procedureMatch = bodyHtml.match(
+  /(<div id="sec-06"[^>]*>[\s\S]*?<\/div>\s*)(<h3 class="wp-block-heading">[\s\S]*?)(<\/div>\s*<div id="sec-07")/,
+);
+
+if (procedureMatch && procedureMatch[2].includes('<ol')) {
+  bodyHtml = bodyHtml.replace(
+    procedureMatch[0],
+    `${procedureMatch[1]}<div class="gw-procedure-box">${procedureMatch[2]}</div>${procedureMatch[3]}`,
+  );
+}
+
+// Envuelve el bloque de sec-08 (su único H3 y el párrafo final) en panel.
+const infoMatch = bodyHtml.match(
+  /(<div id="sec-08"[^>]*>[\s\S]*?)(<h3 class="wp-block-heading">[\s\S]*?)(<\/div>\s*<div id="sec-09")/,
+);
+
+if (infoMatch) {
+  bodyHtml = bodyHtml.replace(
+    infoMatch[0],
+    `${infoMatch[1]}<div class="gw-info-box">${infoMatch[2]}</div>${infoMatch[3]}`,
+  );
+}
+
+// Email suelto de sec-06 como chip (cadena exacta, ambos idiomas).
+bodyHtml = bodyHtml.replace(
+  /<p[^>]*>privacidad@gussware\.com<\/p>/,
+  '<p class="gw-email-chip-row"><span class="gw-email-chip">privacidad@gussware.com</span></p>',
+);
+
+// Divide los 10 enlaces del índice en número + etiqueta.
+const indexLinks = bodyHtml.match(
+  /<li><a href="(#[^"]+)">(\d+)\.\s([^<]*)<\/a><\/li>/g,
+);
+
+if (indexLinks && indexLinks.length === 10) {
+  bodyHtml = bodyHtml.replace(
+    /<li><a href="(#[^"]+)">(\d+)\.\s([^<]*)<\/a><\/li>/g,
+    '<li><a href="$1"><span class="gw-index-num">$2.</span><span>$3</span></a></li>',
+  );
+}
+
+const hasHeader = Boolean(headerGroup && eyebrowHtml && metaHtml && ledeHtml);
+---
+
+<div class="legal-page bg-gw-surface-primary text-gw-text-primary">
+  {hasHeader ? (
+    <div class="legal-hero">
+      <div class="legal-hero-deco" aria-hidden="true" />
+      <Container>
+        <div class="legal-hero-inner">
+          <div class="legal-eyebrow-row">
+            <span class="legal-eyebrow-sq" aria-hidden="true" />
+            <div set:html={eyebrowHtml} />
+          </div>
+          <h1 class="legal-h1">{title}</h1>
+          <div class="legal-bars" aria-hidden="true">
+            <span class="legal-bars-primary" />
+            <span class="legal-bars-accent" />
+          </div>
+          <div class="legal-meta-row">
+            <Icon name="calendar" size={4} class="legal-meta-icon" />
+            <div set:html={metaHtml} />
+          </div>
+          <div class="legal-lede-box">
+            <div set:html={ledeHtml} />
+          </div>
+        </div>
+      </Container>
+    </div>
+    <Container>
+      <div class="legal-body-inner">
+        <div class="legal-content" set:html={bodyHtml} />
+      </div>
+    </Container>
+  ) : (
+    <Container>
+      <article class="mx-auto w-full max-w-[800px] pt-16 md:pt-24 pb-16 md:pb-24">
+        <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6">
+          {title}
+        </h1>
+        <div set:html={content} />
+      </article>
+    </Container>
+  )}
+</div>
+
+<script>
+  // RGW-268 — Scrollspy del índice lateral: resalta el enlace de la
+  // sección visible (`aria-current` + clase, solo presentación).
+  const indexLinks = Array.from(
+    document.querySelectorAll('.gw-index a[href^="#sec-"]'),
+  );
+  const sections = indexLinks
+    .map((link) => {
+      const id = link.getAttribute('href');
+      return id ? document.querySelector(id) : null;
+    })
+    .filter((el): el is Element => el !== null);
+
+  if (indexLinks.length > 0 && sections.length > 0 && 'IntersectionObserver' in window) {
+    const setActive = (id: string | null) => {
+      for (const link of indexLinks) {
+        const active = link.getAttribute('href') === id;
+        link.classList.toggle('is-active', active);
+
+        if (active) {
+          link.setAttribute('aria-current', 'true');
+        } else {
+          link.removeAttribute('aria-current');
+        }
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActive(`#${entry.target.id}`);
+          }
+        }
+      },
+      { rootMargin: '-30% 0px -60% 0px' },
+    );
+
+    for (const section of sections) {
+      observer.observe(section);
+    }
+  }
+</script>
+
+<style>
+  .legal-page {
+    background: var(--color-surface-primary);
+  }
+
+  /* ---------- Cabecera editorial ---------- */
+  .legal-hero {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-surface-auxiliary);
+    border-bottom: 1px solid #e2e2e2;
+  }
+
+  .legal-hero-deco {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 6rem;
+    height: 6rem;
+    margin: -2rem -2rem 0 0;
+    background: var(--color-surface-secondary);
+    pointer-events: none;
+  }
+
+  .legal-hero-inner {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .legal-eyebrow-row {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin-bottom: 1rem;
+  }
+
+  .legal-eyebrow-sq {
+    width: 0.625rem;
+    height: 0.625rem;
+    flex-shrink: 0;
+    background: var(--color-brand-primary);
+  }
+
+  .legal-eyebrow-row .gw-eyebrow {
+    margin: 0;
+    font-size: var(--font-size-label-bold);
+    font-weight: var(--font-weight-label);
+    letter-spacing: var(--letter-spacing-label-bold);
+    text-transform: uppercase;
+    color: var(--color-brand-primary);
+  }
+
+  .legal-h1 {
+    margin: 0 0 1rem;
+    font-size: var(--font-size-display-lg-mobile);
+    line-height: var(--line-height-display-lg-mobile);
+    font-weight: var(--font-weight-display-lg);
+    letter-spacing: -0.025em;
+    color: var(--color-text-secondary);
+  }
+
+  .legal-bars {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .legal-bars-primary {
+    width: 5rem;
+    height: 0.25rem;
+    background: var(--color-brand-primary);
+  }
+
+  .legal-bars-accent {
+    width: 2rem;
+    height: 0.25rem;
+    background: var(--color-brand-accent);
+  }
+
+  .legal-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #595c62;
+  }
+
+  .legal-meta-icon {
+    flex-shrink: 0;
+    color: var(--color-brand-primary);
+  }
+
+  .legal-meta-row .gw-update-meta {
+    margin: 0;
+  }
+
+  .legal-lede-box {
+    max-width: 56rem;
+    padding: 0.5rem 0 0.5rem 1.25rem;
+    background: var(--color-surface-primary);
+    border: 1px solid #e2e2e2;
+    border-left: 4px solid var(--color-brand-accent);
+  }
+
+  .legal-lede-box .gw-lede {
+    margin: 0;
+    font-size: var(--font-size-body-lg);
+    line-height: var(--line-height-body-lg);
+    color: var(--color-text-primary);
+  }
+
+  /* ---------- Cuerpo en dos columnas ---------- */
+  .legal-body-inner {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  .legal-content .gw-legal-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .legal-content .gw-sidebar {
+    display: contents;
+  }
+
+  .legal-content .gw-sidebar > .gw-eyebrow {
+    order: 1;
+    order: 1;
+    margin: 0;
+    padding: 1.5rem 1.5rem 0.875rem;
+    background: var(--color-surface-primary);
+    border: 1px solid #e2e2e2;
+    border-bottom: 0;
+    font-size: var(--font-size-label-bold);
+    font-weight: var(--font-weight-label);
+    letter-spacing: var(--letter-spacing-label-bold);
+    text-transform: uppercase;
+    color: var(--color-text-primary);
+  }
+
+  .legal-content .gw-index {
+    order: 2;
+    margin: 0 0 2rem;
+    padding: 1rem 1.5rem 1.5rem;
+    list-style: none;
+    background: var(--color-surface-primary);
+    border: 1px solid #e2e2e2;
+    border-top: 0;
+  }
+
+  .legal-content .gw-index li {
+    margin: 0;
+  }
+
+  .legal-content .gw-index a {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    padding: 0.5rem 0.625rem;
+    font-size: 0.875rem;
+    line-height: 1.375rem;
+    color: #595c62;
+    text-decoration: none;
+    transition:
+      color 0.2s,
+      background-color 0.2s;
+  }
+
+  .legal-content .gw-index a:hover {
+    color: var(--color-brand-primary);
+    background: var(--color-surface-secondary);
+  }
+
+  .legal-content .gw-index a.is-active {
+    color: var(--color-brand-primary);
+    background: var(--color-surface-secondary);
+    font-weight: 700;
+  }
+
+  .legal-content .gw-index-num {
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-brand-primary);
+  }
+
+  .legal-content .gw-main {
+    order: 3;
+    min-width: 0;
+  }
+
+  .legal-content .gw-card-channel {
+    order: 4;
+    margin: 0 0 2rem;
+    padding: 1rem;
+    background: var(--color-surface-auxiliary);
+    border: 1px solid #e2e2e2;
+  }
+
+  .legal-content .gw-card-channel .gw-label {
+    display: block;
+    margin: 0 0 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #595c62;
+  }
+
+  .legal-content .gw-card-channel p {
+    margin: 0 0 0.25rem;
+    font-size: 0.875rem;
+    color: var(--color-text-primary);
+  }
+
+  .legal-content .gw-card-channel a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-weight: 600;
+    color: var(--color-brand-secondary);
+    overflow-wrap: anywhere;
+  }
+
+  .legal-content .gw-card-channel a:hover {
+    color: var(--color-brand-primary);
+  }
+
+  .legal-content .gw-card-channel a::before {
+    content: '';
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    background: no-repeat center / contain
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232164a6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='20' height='16' x='2' y='4' rx='2'/%3E%3Cpath d='m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7'/%3E%3C/svg%3E");
+  }
+
+  .legal-content .gw-card-channel .gw-caption {
+    margin: 0.375rem 0 0;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+
+  /* ---------- Secciones ---------- */
+  .legal-content .gw-section {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 1rem;
+    margin: 0 0 3.5rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid #e2e2e2;
+    scroll-margin-top: 7rem;
+  }
+
+  .legal-content .gw-section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 1rem;
+    border-bottom: 0;
+  }
+
+  .legal-content .gw-section-number {
+    flex: 0 0 auto;
+    margin: 0 0 1rem;
+    padding: 0.125rem 0.5rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-brand-surface);
+    background: var(--color-brand-primary);
+  }
+
+  .legal-content .gw-section > h2 {
+    flex: 1 1 16rem;
+    margin: 0 0 1rem;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--color-text-primary);
+  }
+
+  .legal-content .gw-section > p,
+  .legal-content .gw-section > div,
+  .legal-content .gw-section > ul,
+  .legal-content .gw-section > ol {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .legal-content .gw-main p {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+    line-height: 1.625;
+    color: var(--color-text-primary);
+  }
+
+  .legal-content .gw-main p:last-child {
+    margin-bottom: 0;
+  }
+
+  .legal-content .gw-main a {
+    font-weight: 600;
+    color: var(--color-brand-secondary);
+  }
+
+  .legal-content .gw-main a:hover {
+    color: var(--color-brand-primary);
+    text-decoration: underline;
+  }
+
+  /* Subtítulos de tercer nivel: 16px en cards, etiqueta xs en bloques. */
+  .legal-content .gw-main h3 {
+    margin: 0 0 0.375rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+  }
+
+  .legal-content .gw-section > h3 {
+    margin-bottom: 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .legal-content .gw-subblock h3 {
+    color: var(--color-brand-primary);
+  }
+
+  /* ---------- Caja de datos sec-01 ---------- */
+  .legal-content .gw-facts-box {
+    margin-bottom: 1.5rem;
+    padding: 1.25rem 1.25rem 0.75rem;
+    background: var(--color-surface-auxiliary);
+    border: 1px solid #e2e2e2;
+    border-left: 4px solid var(--color-brand-primary);
+  }
+
+  .legal-content .gw-fact p {
+    display: grid;
+    gap: 0.5rem;
+    margin-bottom: 0;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e2e2e2;
+  }
+
+  .legal-content .gw-fact:last-child p {
+    border-bottom: 0;
+  }
+
+  .legal-content .gw-fact strong {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #595c62;
+  }
+
+  .legal-content .gw-fact a {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    overflow-wrap: anywhere;
+  }
+
+  /* ---------- Cards de datos sec-02 ---------- */
+  .legal-content .gw-card-data {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: var(--color-surface-primary);
+    border: 1px solid #e2e2e2;
+    border-top: 2px solid var(--color-brand-primary);
+  }
+
+  .legal-content .gw-card-data h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .legal-content .gw-card-data p {
+    margin: 0;
+    font-size: 0.75rem;
+    line-height: 1.35;
+    color: #595c62;
+  }
+
+  .legal-content .gw-icon-person h3::before,
+  .legal-content .gw-icon-mail h3::before,
+  .legal-content .gw-icon-phone h3::before {
+    content: '';
+    width: 1.125rem;
+    height: 1.125rem;
+    flex-shrink: 0;
+    background: no-repeat center / contain var(--gw-icon, none);
+  }
+
+  .legal-content .gw-icon-person {
+    --gw-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004a98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E");
+  }
+
+  .legal-content .gw-icon-mail {
+    --gw-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004a98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='20' height='16' x='2' y='4' rx='2'/%3E%3Cpath d='m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7'/%3E%3C/svg%3E");
+  }
+
+  .legal-content .gw-icon-phone {
+    --gw-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004a98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z'/%3E%3C/svg%3E");
+  }
+
+  .legal-content .gw-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: var(--color-surface-auxiliary);
+    border: 1px solid #e2e2e2;
+    border-left: 4px solid var(--color-brand-primary);
+  }
+
+  .legal-content .gw-note::before {
+    content: '';
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+    background: no-repeat center / contain
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004a98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E");
+  }
+
+  .legal-content .gw-note p {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.625;
+    color: #595c62;
+  }
+
+  /* ---------- Finalidades sec-03 ---------- */
+  .legal-content .gw-purposes {
+    margin: 0 0 1.5rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .legal-content .gw-purposes li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0 0.875rem;
+    margin: 0 0 0.75rem;
+    padding: 1rem;
+    background: var(--color-surface-primary);
+    border: 1px solid #e2e2e2;
+  }
+
+  .legal-content .gw-purposes li:last-child {
+    margin-bottom: 0;
+  }
+
+  .legal-content .gw-badge {
+    grid-row: span 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-brand-primary);
+    background: var(--color-surface-secondary);
+  }
+
+  .legal-content .gw-purposes h3 {
+    margin-bottom: 0.125rem;
+  }
+
+  .legal-content .gw-purposes p:not(.gw-badge) {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #595c62;
+  }
+
+  /* ---------- Medidas sec-04 ---------- */
+  .legal-content .gw-card-measure {
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    background: var(--color-surface-auxiliary);
+    border: 1px solid #e2e2e2;
+    border-top: 2px solid var(--color-brand-primary);
+  }
+
+  .legal-content .gw-card-measure:last-child {
+    border-top-color: var(--color-brand-secondary);
+  }
+
+  .legal-content .gw-card-measure h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .legal-content .gw-card-measure p {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.625;
+    color: #595c62;
+  }
+
+  .legal-content .gw-icon-lock h3::before,
+  .legal-content .gw-icon-shield h3::before {
+    content: '';
+    width: 1.125rem;
+    height: 1.125rem;
+    flex-shrink: 0;
+    background: no-repeat center / contain var(--gw-icon, none);
+  }
+
+  .legal-content .gw-icon-lock {
+    --gw-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004a98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='11' x='3' y='11' rx='2' ry='2'/%3E%3Cpath d='M7 11V7a5 5 0 0 1 10 0v4'/%3E%3C/svg%3E");
+  }
+
+  .legal-content .gw-icon-shield {
+    --gw-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232164a6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- ARCO sec-06 ---------- */
+  .legal-content .gw-subblock {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: var(--color-surface-primary);
+    border: 1px solid #e2e2e2;
+    border-left: 2px solid var(--color-brand-primary);
+  }
+
+  .legal-content .gw-subblock + .gw-subblock {
+    border-left-color: var(--color-brand-secondary);
+  }
+
+  .legal-content .gw-subblock + .gw-subblock h3 {
+    color: var(--color-brand-secondary);
+  }
+
+  .legal-content .gw-subblock p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #595c62;
+  }
+
+  .legal-content .gw-procedure-box {
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    background: var(--color-surface-auxiliary);
+    border: 1px solid #e2e2e2;
+  }
+
+  .legal-content .gw-procedure-box h3 {
+    margin-bottom: 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .legal-content .gw-procedure-box > p {
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+    color: #595c62;
+  }
+
+  .legal-content .gw-email-chip-row {
+    margin-bottom: 1rem;
+  }
+
+  .legal-content .gw-email-chip {
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-brand-primary);
+    background: var(--color-surface-primary);
+    border: 1px solid #e2e2e2;
+    overflow-wrap: anywhere;
+  }
+
+  .legal-content .gw-procedure-box > p:last-of-type {
+    margin-bottom: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-text-primary);
+  }
+
+  .legal-content .gw-procedure-box ol {
+    margin: 0;
+    padding-left: 1.25rem;
+    list-style: decimal;
+    font-size: 0.875rem;
+    line-height: 1.625;
+    color: #595c62;
+  }
+
+  .legal-content .gw-procedure-box ol li {
+    margin-bottom: 0.25rem;
+  }
+
+  .legal-content .gw-procedure-box ol li:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ---------- Cookies sec-08 ---------- */
+  .legal-content .gw-info-box {
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    background: var(--color-surface-auxiliary);
+    border: 1px solid #e2e2e2;
+  }
+
+  .legal-content .gw-info-box h3 {
+    margin-bottom: 0.375rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .legal-content .gw-info-box p {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.625;
+    color: #595c62;
+  }
+
+  /* ---------- Actualización sec-10 ---------- */
+  .legal-content .gw-card-doc {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    background: var(--color-surface-auxiliary);
+    border: 1px solid #e2e2e2;
+  }
+
+  .legal-content .gw-card-doc::before {
+    content: '';
+    width: 1.75rem;
+    height: 1.75rem;
+    flex-shrink: 0;
+    background: no-repeat center / contain
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004a98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8'/%3E%3Cpath d='M3 3v5h5'/%3E%3C/svg%3E");
+  }
+
+  .legal-content .gw-card-doc .gw-label {
+    display: block;
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #595c62;
+  }
+
+  .legal-content .gw-card-doc p:not(.gw-label) {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  .legal-content .gw-card-contact {
+    position: relative;
+    margin-bottom: 0;
+    padding: 1.5rem;
+    background: var(--color-surface-secondary);
+    border: 1px solid #e2e2e2;
+  }
+
+  .legal-content .gw-card-contact::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0.75rem;
+    height: 0.75rem;
+    background: var(--color-brand-accent);
+  }
+
+  .legal-content .gw-card-contact .gw-label {
+    display: block;
+    margin: 0 0 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-brand-primary);
+  }
+
+  .legal-content .gw-card-contact h3 {
+    margin-bottom: 0.75rem;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+
+  .legal-content .gw-card-contact > p {
+    margin-bottom: 1.5rem;
+    max-width: 42rem;
+    font-size: 1rem;
+    color: #595c62;
+  }
+
+  .legal-content .gw-card-contact > p:has(> a:only-child) {
+    margin-bottom: 0.75rem;
+  }
+
+  .legal-content .gw-card-contact a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.025em;
+    color: var(--color-brand-surface);
+    background: var(--color-brand-primary);
+    text-decoration: none;
+    transition: background-color 0.2s;
+  }
+
+  .legal-content .gw-card-contact a:hover {
+    color: var(--color-brand-surface);
+    background: var(--color-supporting-blue-dark);
+    text-decoration: none;
+  }
+
+  .legal-content .gw-card-contact a::before {
+    content: '';
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    background: no-repeat center / contain
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='20' height='16' x='2' y='4' rx='2'/%3E%3Cpath d='m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7'/%3E%3C/svg%3E");
+  }
+
+  .legal-content .gw-card-contact .gw-caption {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (min-width: 640px) {
+    .legal-content .gw-fact p {
+      grid-template-columns: 1fr 2fr;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .legal-content .gw-fact strong {
+      padding-top: 0.125rem;
+    }
+
+    .legal-content .gw-card-contact {
+      padding: 2rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .legal-hero-inner {
+      padding-top: 4.5rem;
+      padding-bottom: 4.5rem;
+    }
+
+    .legal-h1 {
+      font-size: var(--font-size-display-lg);
+      line-height: var(--line-height-display-lg);
+    }
+
+    .legal-content .gw-section > h2 {
+      font-size: 1.875rem;
+      line-height: 2.25rem;
+    }
+
+    .legal-content .gw-card-data,
+    .legal-content .gw-card-measure,
+    .legal-content .gw-subblock {
+      flex: 1 1 0;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .legal-body-inner {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+
+    .legal-content .gw-legal-layout {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .legal-content .gw-sidebar {
+      display: block;
+      grid-column: span 4 / span 4;
+      position: sticky;
+      top: 7rem;
+    }
+
+    .legal-content .gw-sidebar > .gw-eyebrow,
+    .legal-content .gw-index,
+    .legal-content .gw-card-channel,
+    .legal-content .gw-main {
+      order: initial;
+    }
+
+    .legal-content .gw-index {
+      margin-bottom: 0;
+    }
+
+    .legal-content .gw-card-channel {
+      margin-top: 1.5rem;
+      margin-bottom: 0;
+    }
+
+    .legal-content .gw-main {
+      grid-column: span 8 / span 8;
+    }
+  }
+</style>

@@ -32,6 +32,7 @@ import Services from '../components/home/Services.astro';
 import Process from '../components/home/Process.astro';
 import Faq from '../components/home/Faq.astro';
 import FinalCta from '../components/home/FinalCta.astro';
+import LegalView from '../components/legal/LegalView.astro';
 import Icon from '../components/ui/Icon.astro';
 import FormField from '../components/ui/FormField.astro';
 import Button from '../components/ui/Button.astro';
@@ -61,6 +62,11 @@ const [page, socialMedia, languages] = await Promise.all([
   getSocialMedia(),
   getLanguages().catch(() => null),
 ]);
+
+// RGW-268 — Página de políticas de privacidad.
+const isLegalPage =
+  (locale === 'es' && uri === 'politica-de-privacidad') ||
+  (locale === 'en' && uri === 'privacy-policy');
 
 if (!page) {
   Astro.response.status = 404;
@@ -204,7 +210,9 @@ if (translatedSlug) {
     languages: languages ?? undefined,
   }}
 >
-  {hero ? (
+  {isLegalPage ? (
+    <LegalView title={title} content={page.content.rendered} />
+  ) : hero ? (
     <>
       <Hero hero={hero} image={heroImage} />
       {expertise && <Expertise expertise={expertise} />}
