@@ -73,29 +73,30 @@ if (factsRun) {
   );
 }
 
-// Envuelve el procedimiento de sec-06 (del H3 posterior a los subbloques
-// hasta el cierre de la sección) en su panel. Sin subbloques anidados
-// con divs, el cierre perezoso es seguro.
+// Envuelve el procedimiento de sec-06 (h3 "Procedimiento de Solicitud ARCO"
+  // y sus elementos siguientes) en su panel. Busca el h3 específico
+  // que viene después de los subbloques ARCO.
 const procedureMatch = bodyHtml.match(
-  /(<div id="sec-06"[^>]*>[\s\S]*?<\/div>\s*)(<h3 class="wp-block-heading">[\s\S]*?)(<\/div>\s*<div id="sec-07")/,
+  /(<h3 class="wp-block-heading">Procedimiento de Solicitud ARCO<\/h3>[\\s\\S]*?)(?=<\\/div>)(?=<div id="sec-07|<h2 class="wp-block-heading">)/,
 );
 
-if (procedureMatch && procedureMatch[2].includes('<ol')) {
+if (procedureMatch && procedureMatch[1].includes('<ol')) {
   bodyHtml = bodyHtml.replace(
-    procedureMatch[0],
-    `${procedureMatch[1]}<div class="gw-procedure-box">${procedureMatch[2]}</div>${procedureMatch[3]}`,
+    procedureMatch[1],
+    `<div class="gw-procedure-box">${procedureMatch[1]}</div>`,
   );
 }
 
-// Envuelve el bloque de sec-08 (su único H3 y el párrafo final) en panel.
+// Envuelve el bloque de sec-08 en panel. La estructura WP tiene h2 directamente,
+  // no h3, y el contenido va hasta el cierre de sec-08.
 const infoMatch = bodyHtml.match(
-  /(<div id="sec-08"[^>]*>[\s\S]*?)(<h3 class="wp-block-heading">[\s\S]*?)(<\/div>\s*<div id="sec-09")/,
+  /(<div id="sec-08"[^>]*>[\s\S]*?<\/div>)(?=<div id="sec-09|<h2 class="wp-block-heading">)/,
 );
 
 if (infoMatch) {
   bodyHtml = bodyHtml.replace(
-    infoMatch[0],
-    `${infoMatch[1]}<div class="gw-info-box">${infoMatch[2]}</div>${infoMatch[3]}`,
+    infoMatch[1],
+    `<div class="gw-info-box">${infoMatch[1]}</div>`,
   );
 }
 
