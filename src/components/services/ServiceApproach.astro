@@ -1,10 +1,18 @@
 ---
 /**
- * RGW-EP09-06-04 — Acordeón "Nuestro Enfoque" del detalle de servicio.
+ * RGW-EP09-06-04 — Enfoque como timeline editorial sobre un eje
+ * vertical (Stitch `Servicio Detalle - Integración de APIs` S04),
+ * sin acordeón: la referencia no tiene interacción.
  *
- * Contenido 100% dinámico (`approach[]` de WordPress, numeración por
- * índice); comportamiento en Astro reutilizando el patrón de
- * `home/Faq.astro` (`aria-expanded`, `hidden`, `+/−`, sin dependencias).
+ * Columna izquierda fija (`lg:sticky`) con eyebrow, H2 y descripción;
+ * eje `border-l-2` con marcadores numerados sobre la línea (primera
+ * fase destacada, resto sobre superficie primaria con hover).
+ *
+ * Contenido 100% dinámico (`approach[]` de WordPress: solo
+ * `{title, description}`); numeración y contador derivados del índice.
+ * Sin fuente ACF para el kicker `// …` de la referencia ni para tags
+ * por fase: eyebrow genérico `FASE 0N` + contador `0N / 0M`.
+ * Etiquetas de UI por locale (`FASE`/`PHASE`, `METODOLOGÍA`).
  */
 import Section from '../ui/Section.astro';
 
@@ -14,103 +22,87 @@ interface ApproachItem {
 }
 
 interface Props {
+  id?: string;
   title: string;
   description: string;
   items: ApproachItem[];
+  locale: string;
 }
 
-const { title, description, items } = Astro.props;
+const { id = undefined, title, description, items, locale } = Astro.props;
 
 const pad = (n: number): string => String(n).padStart(2, '0');
+const phaseLabel = locale === 'en' ? 'PHASE' : 'FASE';
+const approachEyebrow = locale === 'en' ? 'METHODOLOGY' : 'METODOLOGÍA';
 ---
 
 {items.length > 0 && (
-  <Section>
-    <div data-approach class="grid grid-cols-1 items-start gap-12 md:grid-cols-12">
-      <div class="md:col-span-4">
-        {title && (
-          <h2 class="text-gw-text-primary text-headline-lg mb-6">{title}</h2>
-        )}
-        {description && (
-          <p class="text-gw-text-secondary text-body-lg">{description}</p>
-        )}
+  <Section id={id} class="border-b border-gw-border-subtle">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div class="lg:col-span-4">
+        <div class="lg:sticky lg:top-28">
+          <span class="inline-block text-xs font-bold tracking-[0.2em] uppercase text-brand-primary mb-3">
+            {approachEyebrow}
+          </span>
+          {title && (
+            <h2 class="text-gw-text-primary text-2xl sm:text-3xl font-bold tracking-tight uppercase mb-4">
+              {title}
+            </h2>
+          )}
+          {description && (
+            <p class="text-gw-text-secondary text-base leading-relaxed mb-6">
+              {description}
+            </p>
+          )}
+        </div>
       </div>
-      <div data-approach-list class="space-y-4 md:col-span-8">
-        {items.map((item, index) => (
-          <div
-            data-approach-item
-            class="border-gw-border-subtle border-b"
-          >
-            <button
-              type="button"
-              data-approach-button
-              id={`approach-button-${index}`}
-              aria-expanded="false"
-              aria-controls={`approach-panel-${index}`}
-              class="group flex w-full items-center justify-between py-6 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
-            >
-              <span class="flex items-center gap-6">
-                <span class="text-gw-text-muted text-headline-md opacity-50">
-                  {pad(index + 1)}
-                </span>
-                <span class="text-gw-text-primary text-headline-md transition-colors duration-200 group-hover:text-supporting-blue-dark">
-                  {item.title}
-                </span>
-              </span>
+      <div class="lg:col-span-8">
+        <div class="relative pl-8 md:pl-12 border-l-2 border-gw-border-subtle space-y-10">
+          {items.map((item, index) => (
+            <div data-approach-step class="relative">
               <span
-                data-approach-icon
                 aria-hidden="true"
-                class="text-supporting-blue-dark text-body-lg font-bold"
+                class={
+                  index === 0
+                    ? 'absolute -left-[41px] md:-left-[57px] top-1.5 flex w-6 h-6 items-center justify-center bg-brand-primary border-4 border-white text-white text-[10px] font-bold'
+                    : 'absolute -left-[39px] md:-left-[55px] top-1.5 flex w-5 h-5 items-center justify-center bg-gw-surface-primary border-2 border-brand-secondary text-brand-secondary text-[9px] font-bold'
+                }
               >
-                +
+                {index + 1}
               </span>
-            </button>
-            <div
-              data-approach-panel
-              id={`approach-panel-${index}`}
-              role="region"
-              aria-labelledby={`approach-button-${index}`}
-              hidden
-              class="hidden"
-            >
-              <div class="pr-4 pb-8 pl-16">
-                <p class="text-gw-text-secondary text-body-md">
+              <div
+                class={
+                  index === 0
+                    ? 'bg-gw-surface-auxiliary border border-gw-border-subtle border-l-4 border-l-brand-primary p-6 md:p-8'
+                    : 'bg-gw-surface-primary border border-gw-border-subtle p-6 md:p-8 transition-colors hover:border-brand-secondary'
+                }
+              >
+                <div class="flex items-baseline justify-between gap-4 mb-3">
+                  <span
+                    class:list={[
+                      'text-xs font-bold tracking-widest uppercase',
+                      index === 0
+                        ? 'text-brand-primary'
+                        : 'text-brand-secondary',
+                    ]}
+                  >
+                    {phaseLabel} {pad(index + 1)}
+                  </span>
+                  <span class="text-gw-text-muted text-xs font-mono whitespace-nowrap">
+                    {pad(index + 1)} / {pad(items.length)}
+                  </span>
+                </div>
+                <h3 class="text-gw-text-primary text-xl sm:text-2xl font-bold tracking-tight uppercase mb-3">
+                  {item.title}
+                </h3>
+                <p class="text-gw-text-secondary text-base leading-relaxed">
                   {item.description}
                 </p>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   </Section>
 )}
-
-<script>
-  const root = document.querySelector('[data-approach]');
-
-  if (root instanceof HTMLElement) {
-    root.querySelectorAll('[data-approach-button]').forEach((button) => {
-      if (!(button instanceof HTMLButtonElement)) return;
-
-      const panelId = button.getAttribute('aria-controls');
-      const panel = panelId ? root.querySelector(`#${panelId}`) : null;
-
-      button.addEventListener('click', () => {
-        const next =
-          button.getAttribute('aria-expanded') !== 'true';
-        button.setAttribute('aria-expanded', String(next));
-
-        if (panel instanceof HTMLElement) {
-          panel.hidden = !next;
-          panel.classList.toggle('hidden', !next);
-        }
-
-        const icon = button.querySelector('[data-approach-icon]');
-        if (icon instanceof HTMLElement) {
-          icon.textContent = next ? '−' : '+';
-        }
-      });
-    });
-  }
-</script>

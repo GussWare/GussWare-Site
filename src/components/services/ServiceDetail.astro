@@ -1,21 +1,18 @@
 ---
 /**
- * RGW-EP09-06 — Template único del detalle de servicios.
+ * RGW-EP09-06 (visual Variant B: Editorial Timeline) — Template único
+ * del detalle de servicios.
  *
  * Renderiza exclusivamente desde el CPT `service` (prop `service`);
- * sin literales de contenido ni lógica por slug. Las secciones crecen
- * por tarjeta (intro → desarrollo → soluciones → enfoque → tech/CTA).
+ * sin literales de contenido ni lógica por slug. Etiquetas de UI
+ * (`SOLUCIÓN`, `CAPACIDADES CLAVE`) por locale, como los breadcrumbs.
  */
 import Section from '../ui/Section.astro';
-import SectionHeading from '../ui/SectionHeading.astro';
-import Breadcrumbs from '../ui/Breadcrumbs.astro';
-import Image from '../ui/Image.astro';
-import Button from '../ui/Button.astro';
+import CTA from '../ui/CTA.astro';
+import Icon from '../ui/Icon.astro';
+import ServiceHeader from './ServiceHeader.astro';
 import ServiceApproach from './ServiceApproach.astro';
-import Faq from '../home/Faq.astro';
-import FinalCta from '../home/FinalCta.astro';
-import { getBreadcrumbHome } from '../../lib/routes';
-import { stripHtml } from '../../lib/wordpress/text';
+import ServiceFaq from './ServiceFaq.astro';
 import type { WpService } from '../../lib/wordpress/types';
 
 interface Props {
@@ -26,101 +23,158 @@ interface Props {
   indexLabel: string;
 }
 
-const { service, image, locale, indexUrl, indexLabel } = Astro.props;
+const { service, locale } = Astro.props;
 
-const home = getBreadcrumbHome(locale);
 const acf = service.acf;
-const title = stripHtml(service.title.rendered);
+const pad = (n: number): string => String(n).padStart(2, '0');
+
+const solutionLabel = locale === 'en' ? 'SOLUTION' : 'SOLUCIÓN';
+const capabilitiesLabel =
+  locale === 'en' ? 'KEY CAPABILITIES' : 'CAPACIDADES CLAVE';
+const techEyebrow =
+  locale === 'en' ? 'STACK & CAPABILITIES' : 'STACK & CAPACIDADES';
+
+// Párrafos editoriales desde el textarea (saltos de línea del contenido).
+const developmentParagraphs = (acf.development_content ?? '')
+  .split(/\r?\n\r?\n|\r\n|\n/)
+  .map((paragraph) => paragraph.trim())
+  .filter((paragraph) => paragraph.length > 0);
+
+const ctaActions =
+  acf.cta.button_text?.trim() !== ''
+    ? [
+        {
+          label: acf.cta.button_text,
+          href: acf.cta.button_url,
+          icon: 'arrow-right',
+          buttonClass: 'px-8 py-4 text-sm uppercase gap-3 shadow-md',
+        },
+      ]
+    : [];
 ---
 
-<Section>
-  <Breadcrumbs
-    items={[
-      { label: home.label, href: home.href },
-      { label: indexLabel, href: indexUrl },
-      { label: title },
-    ]}
-    class="mb-8"
-  />
-  <SectionHeading
-    eyebrow={acf.intro_eyebrow}
-    title={acf.intro_title}
-    level={1}
-    description={acf.intro_description}
-  />
-  {image && (
-    <div class="relative z-10 mt-8 overflow-hidden rounded-xl shadow-lg">
-      <Image
-        src={image.src}
-        alt={image.alt}
-        fit="contain"
-        loading="eager"
-        class="h-auto w-full"
-      />
-    </div>
-  )}
-</Section>
+{/* Header del detalle (componente específico, NO Hero). */}
+<ServiceHeader
+  eyebrow={acf.intro_eyebrow}
+  eyebrowSuffix={acf.intro_eyebrow_suffix ?? ''}
+  title={acf.intro_title}
+  description={acf.intro_description}
+  stats={acf.hero_stats ?? []}
+/>
 
-{/* RGW-EP09-06-02 — Desarrollo editorial desde WordPress. */}
+{/* Desarrollo editorial (S2: grilla 4/8, tags inferiores). */}
 {acf.development_title && (
-  <Section>
-    <div class="max-w-3xl">
-      <h2 class="text-gw-text-primary text-display-lg-mobile md:text-display-lg mb-6">
-        {acf.development_title}
-      </h2>
-      {acf.development_content && (
-        <p class="text-gw-text-secondary text-body-lg">
-          {acf.development_content}
-        </p>
-      )}
+  <section class="border-b border-gw-border-subtle bg-gw-surface-primary py-16 md:py-20">
+    <div class="mx-auto w-full max-w-[var(--container-max)] px-4 md:px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
+        <div class="lg:col-span-4 flex flex-col justify-between">
+          <div>
+            <h2 class="text-gw-text-primary text-2xl sm:text-3xl font-bold uppercase tracking-tight mb-3">
+              {acf.development_title}
+            </h2>
+            <span
+              aria-hidden="true"
+              class="block h-0.5 w-12 bg-brand-primary my-3"
+            ></span>
+          </div>
+          {(acf.development_tags ?? []).length > 0 && (
+            <p class="text-xs font-mono text-gw-text-muted tracking-wider uppercase mt-8">
+              {(acf.development_tags ?? []).map((item) => item.tag).join(' · ')}
+            </p>
+          )}
+        </div>
+        <div class="lg:col-span-8 space-y-6 text-gw-text-secondary text-base sm:text-lg leading-relaxed">
+          {developmentParagraphs.map((paragraph) => (
+            <p class="leading-relaxed">{paragraph}</p>
+          ))}
+        </div>
+      </div>
     </div>
-  </Section>
+  </section>
 )}
 
-{/* RGW-EP09-06-03 — Soluciones dinámicas (`solutions[]`, N elementos). */}
+{/* Soluciones: comparativa asimétrica bordeada (N elementos). */}
 {(acf.solutions ?? []).length > 0 && (
-  <Section>
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-6 mb-12 items-start">
-      <div class="md:col-span-5">
-        <h2 class="text-gw-text-primary text-display-lg-mobile md:text-display-lg">
+  <Section
+    id="soluciones"
+    class="bg-gw-surface-secondary border-b border-gw-border-subtle"
+  >
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 md:mb-16 gap-4">
+      <div>
+        {acf.solutions_eyebrow && (
+          <span class="inline-block text-xs font-bold tracking-[0.2em] uppercase text-brand-primary mb-2">
+            {acf.solutions_eyebrow}
+          </span>
+        )}
+        <h2 class="text-gw-text-primary text-2xl sm:text-3xl font-bold tracking-tight uppercase">
           {acf.solutions_title}
         </h2>
       </div>
-      <div class="md:col-span-6 md:col-start-7 pt-2 md:pt-4">
-        <p class="text-gw-text-secondary text-body-lg max-w-lg">
+      {acf.solutions_description && (
+        <p class="text-gw-text-secondary text-base max-w-xl">
           {acf.solutions_description}
         </p>
-      </div>
+      )}
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {(acf.solutions ?? []).map((solution) => (
-        <article class="bg-gw-surface-primary border-gw-border-subtle rounded-none border p-8 transition-colors duration-200 hover:bg-gw-surface-secondary md:p-10">
-          <h3 class="text-gw-text-primary text-headline-md mb-4">
-            {solution.title}
-          </h3>
-          <p class="text-gw-text-secondary text-body-md mb-6">
-            {solution.description}
-          </p>
-          {(solution.features ?? []).length > 0 && (
-            <ul class="mb-6 flex flex-col gap-2">
-              {(solution.features ?? []).map((feature) => (
-                <li class="text-gw-text-secondary text-body-md flex items-center gap-2">
-                  <span
-                    aria-hidden="true"
-                    class="bg-brand-accent inline-block h-1.5 w-1.5"
-                  ></span>
-                  {feature.feature}
-                </li>
-              ))}
-            </ul>
-          )}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 border border-gw-border-subtle bg-gw-surface-primary">
+      {(acf.solutions ?? []).map((solution, index) => (
+        <article
+          class:list={[
+            'p-8 sm:p-12 flex flex-col justify-between border-t-4 border-t-brand-primary transition-colors bg-gw-surface-primary hover:bg-gw-surface-auxiliary',
+            index > 0
+              ? ''
+              : 'border-b lg:border-b-0 lg:border-r border-gw-border-subtle',
+          ]}
+        >
+          <div>
+            <div class="flex justify-between items-start mb-6">
+              <span class="text-xs font-bold tracking-widest uppercase px-2.5 py-1 bg-gw-surface-secondary text-supporting-blue-dark">
+                {solutionLabel} {pad(index + 1)}
+              </span>
+              <span
+                aria-hidden="true"
+                class="w-2.5 h-2.5 inline-block flex-shrink-0 bg-brand-primary"
+              ></span>
+            </div>
+            <h3 class="text-gw-text-primary text-2xl sm:text-3xl font-bold tracking-tight uppercase mb-4">
+              {solution.title}
+            </h3>
+            <p class="text-gw-text-secondary text-base leading-relaxed mb-8">
+              {solution.description}
+            </p>
+            {(solution.features ?? []).length > 0 && (
+              <div class="pt-6 border-t border-gw-border-subtle mb-8">
+                <p class="text-xs font-bold uppercase tracking-wider text-gw-text-muted block mb-4">
+                  {capabilitiesLabel}
+                </p>
+                <ul class="space-y-3.5 text-base font-medium text-gw-text-primary">
+                  {(solution.features ?? []).map((feature) => (
+                    <li class="flex items-center gap-3">
+                      <span
+                        aria-hidden="true"
+                        class="w-2 h-2 inline-block flex-shrink-0 bg-brand-primary"
+                      ></span>
+                      <span>{feature.feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
           {solution.link?.text && (
-            <Button
-              variant="secondary"
-              href={solution.link.url || undefined}
-            >
-              {solution.link.text}
-            </Button>
+            <div class="pt-6 border-t border-gw-border-subtle">
+              <a
+                href={solution.link.url || undefined}
+                class="w-full inline-flex items-center justify-between font-bold text-xs tracking-wider uppercase px-6 py-3.5 transition-colors group bg-gw-surface-primary hover:bg-brand-primary text-brand-primary hover:text-white border border-brand-primary"
+              >
+                <span>{solution.link.text}</span>
+                <Icon
+                  name="arrow-right"
+                  size={4}
+                  class="transition-transform group-hover:translate-x-1"
+                />
+              </a>
+            </div>
           )}
         </article>
       ))}
@@ -128,63 +182,94 @@ const title = stripHtml(service.title.rendered);
   </Section>
 )}
 
-{/* RGW-EP09-06-04 — Nuestro Enfoque: acordeón dinámico. */}
+{/* Enfoque: timeline editorial (sin acordeón, como la referencia). */}
 <ServiceApproach
+  id="metodologia"
   title={acf.approach_title}
   description={acf.approach_description}
   items={acf.approach ?? []}
+  locale={locale}
 />
 
-{/* RGW-EP09-06-05 — Tecnologías dinámicas (sin hardcodear). */}
+{/* Tecnologías: grupos apilados con badges (S05 de la referencia). */}
 {(acf.tech_groups ?? []).length > 0 && (
-  <Section>
-    <div class="max-w-3xl mb-12">
-      <h2 class="text-gw-text-primary text-display-lg-mobile md:text-display-lg mb-6">
-        {acf.tech_title}
-      </h2>
-      {acf.tech_description && (
-        <p class="text-gw-text-secondary text-body-lg">
-          {acf.tech_description}
-        </p>
-      )}
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {(acf.tech_groups ?? []).map((group) => (
-        <div class="bg-gw-surface-secondary rounded-none p-8">
-          <h3 class="text-gw-text-primary text-headline-md mb-4">
-            {group.title}
-          </h3>
-          <ul class="flex flex-wrap gap-2">
-            {(group.items ?? []).map((tech) => (
-              <li class="bg-gw-surface-primary border-gw-border-subtle text-gw-text-secondary text-body-md rounded-none border px-3 py-1">
-                {tech.name}
-              </li>
-            ))}
-          </ul>
+  <Section
+    id="tecnologias"
+    class="bg-gw-surface-secondary border-b border-gw-border-subtle"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
+      <div class="lg:col-span-5 space-y-6">
+        <div>
+          <span class="inline-block text-xs font-bold tracking-[0.2em] uppercase text-brand-primary mb-3">
+            {techEyebrow}
+          </span>
+          <h2 class="text-gw-text-primary text-2xl sm:text-3xl font-bold tracking-tight uppercase mb-4">
+            {acf.tech_title}
+          </h2>
+          {acf.tech_description && (
+            <p class="text-gw-text-secondary text-base sm:text-lg leading-relaxed">
+              {acf.tech_description}
+            </p>
+          )}
         </div>
-      ))}
+      </div>
+      <div class="lg:col-span-7 space-y-5">
+        {(acf.tech_groups ?? []).map((group, groupIndex) => (
+          <div class="bg-gw-surface-primary border border-gw-border-subtle p-6">
+            <div class="flex items-center gap-2.5 mb-4 pb-3 border-b border-gw-border-subtle">
+              <span
+                aria-hidden="true"
+                class:list={[
+                  'w-2 h-2 inline-block flex-shrink-0',
+                  groupIndex % 2 === 1
+                    ? 'bg-brand-secondary'
+                    : 'bg-brand-primary',
+                ]}
+              ></span>
+              <h3 class="text-supporting-blue-dark text-xs font-bold tracking-wider uppercase">
+                {group.title}
+              </h3>
+            </div>
+            <ul class="flex flex-wrap gap-2">
+              {(group.items ?? []).map((tech) => (
+                <li class="bg-gw-surface-auxiliary border border-gw-border-subtle text-gw-text-primary text-sm font-semibold px-3 py-1.5">
+                  {tech.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
     </div>
   </Section>
 )}
 
-{/* RGW-EP09-06-05 — FAQ opcional reutilizando `Faq` del Home. */}
+{/* FAQ del servicio (patrón propio S06, contenido dinámico). */}
 {(acf.faq_items ?? []).length > 0 && (
-  <Faq
-    faq={{
-      eyebrow: '',
-      titulo: '',
-      descripcion: '',
-      preguntas: acf.faq_items,
-    }}
-  />
+  <ServiceFaq id="faq" items={acf.faq_items} locale={locale} />
 )}
 
-{/* RGW-EP09-06-05 — CTA reutilizando `FinalCta` del Home. */}
-<FinalCta
-  finalCta={{
-    title: acf.cta.title,
-    description: acf.cta.description,
-    button_text: acf.cta.button_text,
-    button_url: acf.cta.button_url,
-  }}
-/>
+{/* CTA sobre superficie oscura (S07: `#00346e`, acentos constructivistas). */}
+<section
+  id="contacto"
+  class="relative overflow-hidden bg-supporting-blue-dark py-20 md:py-28"
+>
+  <div
+    aria-hidden="true"
+    class="bg-brand-secondary/20 pointer-events-none absolute top-0 right-0 h-32 w-32"
+  ></div>
+  <div
+    aria-hidden="true"
+    class="border-white/10 pointer-events-none absolute bottom-0 left-10 h-24 w-24 border-t border-r"
+  ></div>
+  <div class="relative z-10 mx-auto w-full max-w-3xl px-4 md:px-6 text-center">
+    <CTA
+      tone="dark"
+      align="center"
+      title={acf.cta.title}
+      titleClass="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight uppercase"
+      description={acf.cta.description}
+      actions={ctaActions}
+    />
+  </div>
+</section>

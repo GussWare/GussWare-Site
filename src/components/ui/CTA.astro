@@ -13,12 +13,24 @@
  * (la rama `light` con `title` conserva su salida actual).
  */
 import Button from './Button.astro';
+import Icon from './Icon.astro';
 import SectionHeading from './SectionHeading.astro';
 
 interface CtaAction {
   label: string;
   href: string;
   variant?: 'primary' | 'secondary' | 'ghost';
+  /**
+   * Icono trailing del botón (nombre de `Icon.astro`, p. ej.
+   * `'arrow-right'` para CTAs estilo Stitch con flecha).
+   * Sin icono: salida idéntica a la anterior.
+   */
+  icon?: string;
+  /**
+   * Clases extra sobre el `Button` (calibrar padding/tracking/sombra
+   * sin tocar las variantes globales).
+   */
+  buttonClass?: string;
 }
 
 interface Props {
@@ -29,6 +41,11 @@ interface Props {
   tone?: 'light' | 'dark';
   actions?: CtaAction[];
   class?: string;
+  /**
+   * Clases del título (permite calibrar la escala sin tocar el resto).
+   * Por defecto la escala display del sistema (sin cambios visuales).
+   */
+  titleClass?: string;
 }
 
 const {
@@ -39,19 +56,22 @@ const {
   tone = 'light',
   actions = [],
   class: className = '',
+  titleClass = 'text-display-lg-mobile md:text-display-lg leading-display-lg-mobile md:leading-display-lg',
 } = Astro.props;
 ---
 
 <div class={className}>
   {tone === 'dark' ? (
-    <div class={`flex flex-col ${align === 'center' ? 'items-center text-center' : 'items-start text-left'}`}>
+    <div
+      class={`flex flex-col ${align === 'center' ? 'items-center text-center' : 'items-start text-left'}`}
+    >
       {eyebrow && (
-        <p class="text-label-bold text-brand-surface mb-4 uppercase">{eyebrow}</p>
+        <p class="text-label-bold text-brand-surface mb-4 uppercase">
+          {eyebrow}
+        </p>
       )}
       {title && (
-        <h2 class="text-brand-surface text-display-lg-mobile md:text-display-lg mb-6 leading-display-lg-mobile md:leading-display-lg">
-          {title}
-        </h2>
+        <h2 class={`text-brand-surface ${titleClass} mb-6`}>{title}</h2>
       )}
       {description && (
         <p class="text-brand-surface text-body-lg max-w-2xl opacity-90">
@@ -72,8 +92,13 @@ const {
       class={`mt-8 flex flex-wrap gap-4 ${align === 'center' ? 'justify-center' : 'justify-start'}`}
     >
       {actions.map((action) => (
-        <Button href={action.href} variant={action.variant ?? 'primary'}>
+        <Button
+          href={action.href}
+          variant={action.variant ?? 'primary'}
+          class={action.buttonClass ?? ''}
+        >
           {action.label}
+          {action.icon && <Icon name={action.icon} size={4} />}
         </Button>
       ))}
     </div>

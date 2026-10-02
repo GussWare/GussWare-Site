@@ -1,0 +1,94 @@
+---
+/**
+ * Header del Service Detail (Variant B: Editorial Timeline).
+ *
+ * Composición propia de la referencia —fila de contexto, H1 display
+ * bicolor y rail editorial con stats— que ningún componente existente
+ * reproduce (SectionHeading es 1 columna fija, Hero incluye visual y
+ * botones): NO es un Hero.
+ *
+ * Todo el contenido llega por props desde WordPress (eyebrow, sufijo,
+ * título, descripción, `hero_stats[]`). Regla de presentación genérica:
+ * títulos "A / B" pintan la segunda parte en `brand-secondary`.
+ * Nota tipográfica: la referencia usa peso 800, no cargado en el
+ * proyecto (400/600/700); se usa 700 y resto de propiedades exactas.
+ */
+import Section from '../ui/Section.astro';
+
+interface HeroStat {
+  label: string;
+  value: string;
+}
+
+interface Props {
+  eyebrow: string;
+  eyebrowSuffix: string;
+  title: string;
+  description: string;
+  stats: HeroStat[];
+}
+
+const { eyebrow, eyebrowSuffix, title, description, stats } = Astro.props;
+
+const titleParts = title.split(' / ');
+const hasTwoToneTitle = titleParts.length === 2;
+---
+
+<Section class="border-b border-gw-border-subtle">
+  <div class="flex items-center gap-3 mb-6">
+    <span
+      aria-hidden="true"
+      class="w-2.5 h-2.5 bg-brand-primary inline-block flex-shrink-0"
+    ></span>
+    {eyebrow && (
+      <span class="text-xs font-bold tracking-[0.2em] uppercase text-brand-primary">
+        {eyebrow}
+      </span>
+    )}
+    {eyebrowSuffix && (
+      <>
+        <span aria-hidden="true" class="text-xs text-gw-text-muted">
+          /
+        </span>
+        <span class="text-xs font-semibold tracking-wider uppercase text-gw-text-secondary">
+          {eyebrowSuffix}
+        </span>
+      </>
+    )}
+  </div>
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
+    <div class="lg:col-span-7">
+      <h1 class="text-gw-text-primary text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05]">
+        {hasTwoToneTitle ? (
+          <>
+            <span class="block">{titleParts[0]} /</span>
+            <span class="block text-brand-secondary">{titleParts[1]}</span>
+          </>
+        ) : (
+          title
+        )}
+      </h1>
+    </div>
+    <div class="lg:col-span-5 border-l-0 lg:border-l border-gw-border-subtle lg:pl-10 space-y-6">
+      {description && (
+        <p class="text-gw-text-secondary text-lg sm:text-xl leading-relaxed font-normal">
+          {description}
+        </p>
+      )}
+      {stats.length > 0 && (
+        <div class="grid grid-cols-2 gap-4 pt-6 border-t border-gw-border-subtle text-xs uppercase tracking-wider text-gw-text-secondary">
+          {stats.map((stat) => (
+            <div class="space-y-1 border border-gw-border-subtle bg-gw-surface-auxiliary p-3">
+              <span class="font-bold text-supporting-blue-dark block">
+                {stat.label}
+              </span>
+              <span class="text-gw-text-primary font-semibold normal-case text-sm block">
+                {stat.value}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</Section>

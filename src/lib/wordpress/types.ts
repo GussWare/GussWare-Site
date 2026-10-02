@@ -366,6 +366,12 @@ export interface WpHomePage extends Omit<WpPage, 'acf'> {
   acf: WpHomeAcf;
 }
 
+/** Stat del rail del Header (`hero_stats[]`). */
+export interface WpHeroStat {
+  label: string;
+  value: string;
+}
+
 /** Enlace opcional `{text, url}` (patrón `WpHomeButton`). */
 export interface WpServiceLink {
   text: string;
@@ -411,12 +417,16 @@ export interface WpServiceCta {
  */
 export interface WpServiceAcf {
   intro_eyebrow: string;
+  intro_eyebrow_suffix: string;
   intro_title: string;
   intro_description: string;
+  hero_stats: WpHeroStat[];
   development_title: string;
   development_content: string;
+  development_tags: { tag: string }[];
   solutions_title: string;
   solutions_description: string;
+  solutions_eyebrow: string;
   solutions: WpSolutionItem[];
   approach_title: string;
   approach_description: string;

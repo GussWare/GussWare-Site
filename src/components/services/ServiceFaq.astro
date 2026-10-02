@@ -1,0 +1,67 @@
+---
+/**
+ * FAQ del detalle de servicio (Stitch `Servicio Detalle` S06).
+ *
+ * Patrón propio de la pantalla —cabecera superior + lista de ancho
+ * completo con divisores—, distinto del `Faq` del Home (grid intro 4 +
+ * acordeón 8 con numeración): no se reutiliza para no forzar un
+ * componente que no representa este diseño.
+ *
+ * `<details>`/`<summary>` nativos (como la referencia; icono `+` que
+ * rota 45° al abrir vía `group-open`), sin JavaScript. Preguntas 100%
+ * dinámicas (`faq_items[]` de WordPress); eyebrow y título son
+ * etiquetas de UI por locale, como el resto del template.
+ */
+import Section from '../ui/Section.astro';
+
+interface FaqItem {
+  pregunta: string;
+  respuesta: string;
+}
+
+interface Props {
+  id?: string;
+  items: FaqItem[];
+  locale: string;
+}
+
+const { id = undefined, items, locale } = Astro.props;
+
+const faqEyebrow =
+  locale === 'en' ? 'WE ANSWER YOUR QUESTIONS' : 'RESOLVEMOS TUS DUDAS';
+const faqTitle =
+  locale === 'en' ? 'FREQUENTLY ASKED QUESTIONS' : 'PREGUNTAS FRECUENTES';
+---
+
+{items.length > 0 && (
+  <Section id={id} class="border-b border-gw-border-subtle">
+    <div class="mb-12">
+      <span class="inline-block text-xs font-bold tracking-[0.2em] uppercase text-brand-primary mb-2">
+        {faqEyebrow}
+      </span>
+      <h2 class="text-gw-text-primary text-2xl sm:text-3xl font-bold tracking-tight uppercase">
+        {faqTitle}
+      </h2>
+    </div>
+    <div class="border-t border-gw-border-subtle divide-y divide-gw-border-subtle">
+      {items.map((item) => (
+        <details class="group py-6">
+          <summary class="flex justify-between items-center cursor-pointer list-none select-none text-left [&::-webkit-details-marker]:hidden">
+            <span class="text-gw-text-primary text-lg md:text-xl font-bold group-hover:text-brand-primary transition-colors pr-6">
+              {item.pregunta}
+            </span>
+            <span
+              aria-hidden="true"
+              class="text-2xl font-light text-brand-primary transition-transform duration-200 group-open:rotate-45 flex-shrink-0"
+            >
+              +
+            </span>
+          </summary>
+          <div class="pt-4 text-gw-text-secondary text-base leading-relaxed max-w-4xl">
+            {item.respuesta}
+          </div>
+        </details>
+      ))}
+    </div>
+  </Section>
+)}

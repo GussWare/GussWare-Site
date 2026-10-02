@@ -4,7 +4,8 @@
  *
  * Ruta fina: resuelve el servicio (`getServiceBySlug`, `lang=es`) y lo
  * renderiza con `ServiceDetail` (compartido con `[locale]`, sin duplicar
- * lógica). Sin servicio, redirige a `/404`.
+ * lógica). Sin servicio, reescribe a `/404`
+ * (render nativo de la 404 con HTTP 404, sin redirect).
  */
 import Layout from '../../layouts/Layout.astro';
 import ServiceDetail from '../../components/services/ServiceDetail.astro';
@@ -14,11 +15,7 @@ import {
 } from '../../lib/wordpress/services';
 import { wpFetch } from '../../lib/wordpress/client';
 import { wpRoutes } from '../../lib/wordpress/routes';
-import {
-  routes,
-  servicesBaseUrl,
-  serviceDetailUrl,
-} from '../../lib/routes';
+import { routes, servicesBaseUrl, serviceDetailUrl } from '../../lib/routes';
 import { stripHtml } from '../../lib/wordpress/text';
 import type { WpService } from '../../lib/wordpress/types';
 
@@ -31,7 +28,8 @@ const service =
     : null;
 
 if (!service) {
-  return Astro.redirect(routes.notFound);
+  Astro.response.status = 404;
+  return Astro.rewrite(routes.notFound);
 }
 
 const image = await getServiceImage(service);

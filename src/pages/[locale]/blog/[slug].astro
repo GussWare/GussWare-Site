@@ -4,7 +4,8 @@
  *
  * Ruta fina: resuelve el artículo (`getBlogArticle`, con `lang`) y lo
  * renderiza con `BlogArticleView` (compartida con `/blog/[slug]`, sin
- * duplicar lógica). Sin artículo, redirige a `/404`.
+ * duplicar lógica). Sin artículo, reescribe a `/404`
+ * (render nativo de la 404 con HTTP 404, sin redirect).
  */
 import Layout from '../../../layouts/Layout.astro';
 import BlogArticleView from '../../../components/blog/BlogArticleView.astro';
@@ -21,7 +22,8 @@ const data =
     : null;
 
 if (!data) {
-  return Astro.redirect(routes.notFound);
+  Astro.response.status = 404;
+  return Astro.rewrite(routes.notFound);
 }
 ---
 

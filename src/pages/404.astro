@@ -1,0 +1,76 @@
+---
+/**
+ * 404 — Página no encontrada.
+ *
+ * Página especial de Astro (`src/pages/404.astro`): destino de
+ * `routes.notFound` (`/404`). Réplica 1:1 del diseño Stitch
+ * `GussWare - Error 404 (Página no encontrada)` reutilizando la
+ * arquitectura existente: `Layout` (Header + Footer globales),
+ * `Button` (CTA primario con override de padding como en
+ * `contact.astro`/`[...uri].astro`: `py-4`) y tokens existentes.
+ * Sin Header/Footer duplicados, sin CDN, sin tokens globales nuevos
+ * (único valor arbitrario: `lg:text-[14rem]` del `404`, sin
+ * equivalente en la escala del proyecto).
+ */
+
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/ui/Button.astro';
+import { routes } from '../lib/routes';
+
+// Server-rendered (no prerender): las rutas dinámicas (`prerender = false`)
+// solo pueden reescribir (`Astro.rewrite`) a destinos server-rendered;
+// prerenderizar esta página provocaría `ForbiddenRewrite` en esos casos.
+export const prerender = false;
+
+Astro.response.status = 404;
+---
+
+<Layout
+  title="404 — Página no encontrada | GussWare"
+  description="La página que buscas no existe o ya no está disponible."
+>
+  <div class="bg-gw-surface-primary flex w-full flex-col items-center justify-center px-6 py-16 sm:py-24 lg:py-32">
+    <div class="mx-auto flex w-full max-w-2xl flex-col items-center text-center">
+      {/* Detalle decorativo constructivista (Stitch: acento, línea, primario). */}
+      <div
+        aria-hidden="true"
+        class="mb-6 flex items-center justify-center gap-2"
+      >
+        <span class="bg-brand-accent inline-block h-3 w-3"></span>
+        <span class="bg-brand-primary inline-block h-1 w-12"></span>
+        <span class="bg-brand-primary inline-block h-3 w-3"></span>
+      </div>
+
+      <h1 class="text-brand-primary text-8xl leading-none font-black tracking-tighter select-none sm:text-9xl lg:text-[14rem]">
+        404
+      </h1>
+
+      <h2 class="text-gw-text-primary mt-4 text-2xl font-black tracking-tight sm:mt-6 sm:text-3xl lg:text-4xl">
+        Página no encontrada
+      </h2>
+
+      <div
+        aria-hidden="true"
+        class="bg-brand-accent my-5 h-1 w-16 sm:my-6"
+      ></div>
+
+      <p class="text-gw-text-secondary max-w-lg text-base leading-relaxed font-normal sm:text-lg lg:text-xl">
+        La página que buscas no existe o ya no está disponible.
+      </p>
+
+      <div class="mt-8 sm:mt-10">
+        <Button
+          href={routes.home}
+          variant="primary"
+          class="px-8 py-4 text-sm uppercase active:scale-95 sm:text-base"
+        >
+          Volver al inicio
+        </Button>
+      </div>
+
+      <p class="text-gw-text-muted mt-12 font-mono text-xs tracking-widest uppercase">
+        HTTP 404 // STATUS NOT FOUND
+      </p>
+    </div>
+  </div>
+</Layout>

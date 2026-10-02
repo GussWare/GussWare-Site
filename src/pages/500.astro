@@ -1,0 +1,152 @@
+---
+/**
+ * 500 — Error interno del servidor.
+ *
+ * Página especial de Astro (`src/pages/500.astro`): Astro la renderiza
+ * automáticamente ante un error no capturado en rutas server-rendered,
+ * con HTTP 500. Réplica 1:1 del diseño Stitch
+ * `GussWare - Error 500 (Error interno del servidor)` reutilizando la
+ * arquitectura existente: `Layout` (Header + Footer globales) y `Button`
+ * (primario + secundario, con overrides de padding según la convención
+ * ya usada en `404.astro`/`contact.astro`). Sin Header/Footer duplicados,
+ * sin CDN, sin tokens globales nuevos. Valores arbitrarios locales,
+ * estrictamente necesarios y documentados: monumental
+ * `text-[clamp(6.5rem,18vw,15rem)] leading-[0.85]`, H1
+ * `md:text-[44px] md:leading-[52px]`.
+ */
+
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/ui/Button.astro';
+import { routes } from '../lib/routes';
+
+// Server-rendered (no prerender): el mecanismo nativo de 500 de Astro solo
+// aplica a rutas bajo demanda.
+export const prerender = false;
+
+Astro.response.status = 500;
+---
+
+<Layout
+  title="500 — Internal Server Error | GussWare"
+  description="Ha ocurrido un problema inesperado. Intenta nuevamente más tarde."
+>
+  <div class="bg-gw-surface-primary w-full px-4 pt-16 pb-24 md:px-6 md:pt-24 md:pb-32">
+    <section
+      aria-labelledby="error-heading"
+      class="mx-auto grid w-full max-w-[var(--container-max)] grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-12"
+    >
+      {/* Columna visual: monumental 500 + glifos estructurales. */}
+      <div class="relative flex flex-col justify-center lg:col-span-7">
+        <div class="mb-6 flex items-center gap-3">
+          <span
+            aria-hidden="true"
+            class="bg-brand-accent inline-block h-3 w-3"
+          ></span>
+          <span
+            aria-hidden="true"
+            class="bg-brand-primary inline-block h-0.5 w-8"
+          ></span>
+          <p class="text-label-bold text-brand-primary uppercase">
+            System diagnostic // HTTP 500
+          </p>
+        </div>
+
+        <div class="relative">
+          <p
+            aria-hidden="true"
+            class="text-brand-primary text-[clamp(6.5rem,18vw,15rem)] leading-[0.85] font-black tracking-tighter select-none"
+          >
+            500
+          </p>
+          <div
+            aria-hidden="true"
+            class="bg-brand-accent absolute -bottom-3 left-0 h-2 w-24"
+          ></div>
+          <div
+            aria-hidden="true"
+            class="bg-brand-primary absolute -bottom-3 left-28 h-2 w-12"
+          ></div>
+          <div
+            aria-hidden="true"
+            class="bg-gw-surface-secondary absolute top-4 right-12 hidden h-16 w-2 sm:block"
+          ></div>
+        </div>
+
+        <div class="border-gw-border-subtle mt-8 flex max-w-md items-center justify-between border-t pt-4">
+          <span class="text-gw-text-secondary text-xs font-bold tracking-widest uppercase">
+            HTTP 500 // Internal Server Error
+          </span>
+          <span class="text-brand-primary flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase">
+            <span
+              aria-hidden="true"
+              class="bg-brand-accent inline-block h-2 w-2"
+            ></span>
+            Recovery Active
+          </span>
+        </div>
+      </div>
+
+      {/* Columna informativa y de acción. */}
+      <div class="border-gw-border-subtle flex flex-col justify-center lg:col-span-5 lg:border-l lg:pl-6">
+        <div class="bg-gw-surface-secondary mb-6 inline-flex w-fit items-center gap-2 px-3 py-1">
+          <span
+            aria-hidden="true"
+            class="bg-brand-accent inline-block h-1.5 w-1.5"
+          ></span>
+          <span class="text-gw-text-primary text-xs font-bold tracking-widest uppercase">
+            Excepción en proceso de servicio
+          </span>
+        </div>
+
+        <h1
+          id="error-heading"
+          class="text-gw-text-primary text-headline-lg mb-6 font-bold md:text-[44px] md:leading-[52px]"
+        >
+          Error interno del servidor
+        </h1>
+
+        <div aria-hidden="true" class="bg-brand-primary mb-6 h-1 w-16"></div>
+
+        <p class="text-gw-text-secondary text-body-lg mb-10 max-w-lg">
+          Ha ocurrido un problema inesperado. Intenta nuevamente más tarde.
+        </p>
+
+        <div class="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
+          <Button
+            href={routes.home}
+            variant="primary"
+            class="px-8 py-4 text-sm uppercase active:scale-95 sm:text-base"
+          >
+            Volver al inicio
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            class="px-6 py-3.5 uppercase"
+          >
+            <span id="retry-button-label">Reintentar acción</span>
+          </Button>
+        </div>
+
+        <div class="bg-gw-surface-secondary border-l-brand-primary mt-10 border-l-2 p-4">
+          <p class="text-gw-text-primary mb-1 text-xs font-bold tracking-wider uppercase">
+            Registro del Incidente
+          </p>
+          <p class="text-gw-text-secondary font-mono text-xs">
+            EVENT_REF: GW-ERR-500-SRV-CORE // DISPATCH_ID: 8849-B2
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<script>
+  const retry = document
+    .getElementById('retry-button-label')
+    ?.closest('button');
+
+  retry?.addEventListener('click', () => {
+    window.location.reload();
+  });
+</script>
