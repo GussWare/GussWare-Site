@@ -1,0 +1,124 @@
+---
+/**
+ * RGW-271 — Formulario de contacto Headless (solo GET + validación).
+ *
+ * Reutiliza la implementación visual existente sin rediseño: mismo
+ * `form` (`flex flex-col gap-8`, `novalidate`), mismos `FormField`
+ * (label + input underline de Stitch) y mismo `Button` submit
+ * (`w-full py-4`, "Start a Conversation").
+ *
+ * Los campos NO están hardcodeados: se generan desde la configuración
+ * obtenida vía `GET /pavelsilinskii-cf/v1/forms` (prop `fields`).
+ * La validación es genérica y se basa en las propiedades recibidas
+ * (`required`, `type`); sin POST hacia WordPress (otra tarea).
+ */
+import FormField from '../ui/FormField.astro';
+import Button from '../ui/Button.astro';
+import {
+  autocompleteForField,
+  mapFieldTypeToInputType,
+  type ContactFormField,
+} from '../../lib/contact/forms';
+
+interface Props {
+  fields: ContactFormField[];
+}
+
+const { fields } = Astro.props;
+---
+
+<form id="contact-form" novalidate class="flex flex-col gap-8">
+  {
+    fields.map((field) => (
+      <FormField
+        id={field.name}
+        label={field.label}
+        type={mapFieldTypeToInputType(field.type)}
+        placeholder={field.placeholder}
+        required={field.required}
+        autocomplete={autocompleteForField(field.name)}
+      />
+    ))
+  }
+
+  <div class="pt-6">
+    <Button type="submit" variant="primary" class="w-full py-4">
+      Start a Conversation
+    </Button>
+  </div>
+</form>
+
+<script>
+  // RGW-271: validación frontend genérica desde la configuración
+  // renderizada por la API (`required` + `type`, sin reglas
+  // hardcodeadas por campo). Sin POST: el envío se integra después.
+  const form = document.getElementById('contact-form');
+
+  const setError = (id, message) => {
+    const input = document.getElementById(id);
+    const error = document.getElementById(`${id}-error`);
+
+    if (
+      !(input instanceof HTMLInputElement) ||
+      !(error instanceof HTMLElement)
+    ) {
+      return;
+    }
+
+    if (message) {
+      error.textContent = message;
+      error.hidden = false;
+      input.setAttribute('aria-invalid', 'true');
+    } else {
+      error.textContent = '';
+      error.hidden = true;
+      input.removeAttribute('aria-invalid');
+    }
+  };
+
+  const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (form instanceof HTMLFormElement) {
+    form.addEventListener('submit', (event) => {
+      // RGW-271 (GET only): no hay envío hacia WordPress todavía.
+      event.preventDefault();
+
+      const inputs = Array.from(
+        form.querySelectorAll('input[name]'),
+      ).filter((node) => node instanceof HTMLInputElement);
+
+      let valid = true;
+
+      for (const input of inputs) {
+        const value = input.value.trim();
+        const label =
+          form
+            .querySelector(`label[for="${CSS.escape(input.id)}"]`)
+            ?.textContent?.trim() || input.name;
+
+        setError(input.id);
+
+        if (input.required && value === '') {
+          setError(input.id, `Por favor, ingresa tu ${label.toLowerCase()}.`);
+          valid = false;
+          continue;
+        }
+
+        if (
+          value !== '' &&
+          (input.type === 'email' || input.getAttribute('type') === 'email') &&
+          !EMAIL_PATTERN.test(value)
+        ) {
+          setError(input.id, 'Ingresa un email válido.');
+          valid = false;
+        }
+      }
+
+      if (!valid) {
+        return;
+      }
+
+      // Formulario válido. POST fuera de alcance en RGW-271.
+    });
+  }
+</script>

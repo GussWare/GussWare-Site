@@ -33,8 +33,7 @@ import Process from '../components/home/Process.astro';
 import Faq from '../components/home/Faq.astro';
 import FinalCta from '../components/home/FinalCta.astro';
 import Icon from '../components/ui/Icon.astro';
-import FormField from '../components/ui/FormField.astro';
-import Button from '../components/ui/Button.astro';
+import ContactForm from '../components/contact/ContactForm.astro';
 import { routes } from '../lib/routes';
 import { serviceDetailUrl } from '../lib/routes';
 import type { LocaleUrls } from '../lib/routes';
@@ -48,6 +47,8 @@ import { wpFetch } from '../lib/wordpress/client';
 import { wpRoutes } from '../lib/wordpress/routes';
 import { getSocialMedia } from '../lib/wordpress/socialMedia';
 import { stripHtml } from '../lib/wordpress/text';
+// RGW-271: configuración del formulario vía GET (Pavel Silinskii CF).
+import { getContactForm } from '../lib/contact/forms';
 import type { WpMedia, WpServiceSummary } from '../lib/wordpress/types';
 
 export const prerender = false;
@@ -108,6 +109,10 @@ const process =
 const finalCta =
   page.acf && 'final_cta' in page.acf ? (page.acf.final_cta ?? null) : null;
 const faq = page.acf && 'faq' in page.acf ? (page.acf.faq ?? null) : null;
+
+// RGW-271: campos del formulario vía GET (solo si la página usa la
+// sección de contacto; `getContactForm` no lanza ante fallos de API).
+const contactForm = sectionContent ? await getContactForm() : null;
 
 const heroImageId = hero?.image ?? null;
 let heroImage: { src: string; alt: string } | null = null;
@@ -261,38 +266,8 @@ if (translatedSlug) {
         </div>
 
         <div class="bg-gw-surface-primary rounded-sm p-8 shadow-sm md:p-12 lg:w-1/2">
-          <form id="contact-form" novalidate class="flex flex-col gap-8">
-            <FormField
-              id="name"
-              label="Name"
-              placeholder="Your full name"
-              required
-              autocomplete="name"
-            />
-
-            <FormField
-              id="email"
-              label="Email"
-              type="email"
-              placeholder="hello@company.com"
-              required
-              autocomplete="email"
-            />
-
-            <FormField
-              id="phone"
-              label="Phone Number"
-              type="tel"
-              placeholder="+1 (555) 000-0000"
-              autocomplete="tel"
-            />
-
-            <div class="pt-6">
-              <Button type="submit" variant="primary" class="w-full py-4">
-                Start a Conversation
-              </Button>
-            </div>
-          </form>
+          {/* RGW-271: campos dinámicos desde la API (mismo diseño). */}
+          {contactForm && <ContactForm fields={contactForm.fields} />}
         </div>
       </div>
     </Section>
@@ -307,59 +282,4 @@ if (translatedSlug) {
     </Container>
   )}
 </Layout>
-
-<script>
-  import { contactSchema } from '../lib/contact/schema';
-
-  const form = document.getElementById('contact-form');
-
-  const setError = (id, message) => {
-    const input = document.getElementById(id);
-    const error = document.getElementById(`${id}-error`);
-
-    if (
-      !(input instanceof HTMLInputElement) ||
-      !(error instanceof HTMLElement)
-    ) {
-      return;
-    }
-
-    if (message) {
-      error.textContent = message;
-      error.hidden = false;
-      input.setAttribute('aria-invalid', 'true');
-    } else {
-      error.textContent = '';
-      error.hidden = true;
-      input.removeAttribute('aria-invalid');
-    }
-  };
-
-  if (form instanceof HTMLFormElement) {
-    form.addEventListener('submit', (event) => {
-      const data = new FormData(form);
-
-      const result = contactSchema.safeParse({
-        name: data.get('name'),
-        email: data.get('email'),
-        phone: data.get('phone'),
-      });
-
-      setError('name');
-      setError('email');
-      setError('phone');
-
-      if (!result.success) {
-        event.preventDefault();
-
-        for (const issue of result.error.issues) {
-          const field = issue.path[0];
-
-          if (field === 'name' || field === 'email' || field === 'phone') {
-            setError(field, issue.message);
-          }
-        }
-      }
-    });
-  }
-</script>
+{/* RGW-271: la validación vive en `ContactForm` (sin POST todavía). */}

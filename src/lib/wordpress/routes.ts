@@ -7,6 +7,7 @@ export const wpRoutes = {
   socialMedia: '/gussware/v1/social-media',
   contact: (lang: string) =>
     `/gussware/v1/contact?lang=${encodeURIComponent(lang)}`,
+  contactForms: '/pavelsilinskii-cf/v1/forms',
   header: (lang: string) =>
     `/gussware/v1/header?lang=${encodeURIComponent(lang)}`,
   languages: '/pll/v1/languages',
