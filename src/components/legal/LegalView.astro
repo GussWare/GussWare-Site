@@ -87,17 +87,18 @@ if (procedureMatch && procedureMatch[1].includes('<ol')) {
   );
 }
 
-// Envuelve el bloque de sec-08 en panel. La estructura WP tiene h2 directamente,
-  // no h3, y el contenido va hasta el cierre de sec-08.
-const infoMatch = bodyHtml.match(
-  /(<div id="sec-08"[^>]*>[\s\S]*?<\/div>)(?=<div id="sec-09|<h2 class="wp-block-heading">)/,
-);
+// Envuelve el bloque final de sec-08 (h3 "Deshabilitación de Cookies" + su
+  // último párrafo) en panel. Se aísla primero la sección para no cruzar
+  // hacia otras secciones con un `[\s\S]*?` demasiado amplio.
+const sec08Match = bodyHtml.match(/<div id="sec-08"[\s\S]*?<\/div>/);
 
-if (infoMatch) {
-  bodyHtml = bodyHtml.replace(
-    infoMatch[1],
-    `<div class="gw-info-box">${infoMatch[1]}</div>`,
+if (sec08Match) {
+  const sec08 = sec08Match[0];
+  const sec08Inner = sec08.replace(
+    /(<h3 class="wp-block-heading">[\s\S]*?<\/h3>\s*<p class="wp-block-paragraph">[\s\S]*?<\/p>)(\s*<\/div>)$/,
+    '<div class="gw-info-box">$1</div>$2',
   );
+  bodyHtml = bodyHtml.replace(sec08, sec08Inner);
 }
 
 // Email suelto de sec-06 como chip (cadena exacta, ambos idiomas).
@@ -207,7 +208,9 @@ const hasHeader = Boolean(headerGroup && eyebrowHtml && metaHtml && ledeHtml);
   }
 </script>
 
-<style>
+<style is:global>
+  /* El cuerpo legal se inyecta con `set:html`, por lo que Astro no le añade
+     su atributo de scope. Estas reglas deben ser globales para aplicar. */
   .legal-page {
     background: var(--color-surface-primary);
   }
@@ -264,7 +267,7 @@ const hasHeader = Boolean(headerGroup && eyebrowHtml && metaHtml && ledeHtml);
     font-size: var(--font-size-display-lg-mobile);
     line-height: var(--line-height-display-lg-mobile);
     font-weight: var(--font-weight-display-lg);
-    letter-spacing: -0.025em;
+    letter-spacing: var(--letter-spacing-display-lg-mobile);
     color: var(--color-text-secondary);
   }
 
@@ -337,7 +340,10 @@ const hasHeader = Boolean(headerGroup && eyebrowHtml && metaHtml && ledeHtml);
 
   .legal-content .gw-sidebar > .gw-eyebrow {
     order: 1;
-    order: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
     margin: 0;
     padding: 1.5rem 1.5rem 0.875rem;
     background: var(--color-surface-primary);
@@ -348,6 +354,15 @@ const hasHeader = Boolean(headerGroup && eyebrowHtml && metaHtml && ledeHtml);
     letter-spacing: var(--letter-spacing-label-bold);
     text-transform: uppercase;
     color: var(--color-text-primary);
+  }
+
+  /* Marca geométrica del encabezado del índice (como en Stitch). */
+  .legal-content .gw-sidebar > .gw-eyebrow::after {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    flex-shrink: 0;
+    background: var(--color-brand-accent);
   }
 
   .legal-content .gw-index {
@@ -399,12 +414,12 @@ const hasHeader = Boolean(headerGroup && eyebrowHtml && metaHtml && ledeHtml);
   }
 
   .legal-content .gw-main {
-    order: 3;
+    order: 4;
     min-width: 0;
   }
 
   .legal-content .gw-card-channel {
-    order: 4;
+    order: 3;
     margin: 0 0 2rem;
     padding: 1rem;
     background: var(--color-surface-auxiliary);
@@ -473,7 +488,7 @@ const hasHeader = Boolean(headerGroup && eyebrowHtml && metaHtml && ledeHtml);
     border-bottom: 0;
   }
 
-  .legal-content .gw-section-number {
+  .legal-content .gw-main .gw-section-number {
     flex: 0 0 auto;
     margin: 0 0 1rem;
     padding: 0.125rem 0.5rem;
@@ -494,7 +509,7 @@ const hasHeader = Boolean(headerGroup && eyebrowHtml && metaHtml && ledeHtml);
     color: var(--color-text-primary);
   }
 
-  .legal-content .gw-section > p,
+  .legal-content .gw-section > p:not(.gw-section-number),
   .legal-content .gw-section > div,
   .legal-content .gw-section > ul,
   .legal-content .gw-section > ol {
@@ -997,6 +1012,7 @@ const hasHeader = Boolean(headerGroup && eyebrowHtml && metaHtml && ledeHtml);
     .legal-h1 {
       font-size: var(--font-size-display-lg);
       line-height: var(--line-height-display-lg);
+      letter-spacing: var(--letter-spacing-display-lg);
     }
 
     .legal-content .gw-section > h2 {
@@ -1004,10 +1020,11 @@ const hasHeader = Boolean(headerGroup && eyebrowHtml && metaHtml && ledeHtml);
       line-height: 2.25rem;
     }
 
-    .legal-content .gw-card-data,
-    .legal-content .gw-card-measure,
-    .legal-content .gw-subblock {
+    .legal-content .gw-section > .gw-card-data,
+    .legal-content .gw-section > .gw-card-measure,
+    .legal-content .gw-section > .gw-subblock {
       flex: 1 1 0;
+      min-width: 0;
     }
   }
 
