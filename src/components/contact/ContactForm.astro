@@ -55,7 +55,7 @@ const { fields, submitUrl } = Astro.props;
     id="contact-form-status"
     aria-live="polite"
     hidden
-    class="text-body-md text-gw-text-primary"
+    class="text-body-md rounded-sm border-l-4 border-l-brand-primary bg-supporting-blue-fixed text-supporting-blue-fixed-on px-4 py-3"
   ></p>
 
   <div class="pt-6">
@@ -109,8 +109,14 @@ const { fields, submitUrl } = Astro.props;
     if (message) {
       status.textContent = message;
       status.hidden = false;
-      status.classList.toggle('text-gw-state-error', isError);
-      status.classList.toggle('text-gw-text-primary', !isError);
+      // Solo presentación: paleta de éxito (azul de marca) o de error,
+      // con el patrón de aviso existente (contenedor + borde de acento).
+      status.classList.toggle('border-l-brand-primary', !isError);
+      status.classList.toggle('bg-supporting-blue-fixed', !isError);
+      status.classList.toggle('text-supporting-blue-fixed-on', !isError);
+      status.classList.toggle('border-l-gw-state-error', isError);
+      status.classList.toggle('bg-gw-state-error-container', isError);
+      status.classList.toggle('text-gw-state-error-on-container', isError);
     } else {
       status.textContent = '';
       status.hidden = true;
