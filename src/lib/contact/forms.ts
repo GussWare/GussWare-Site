@@ -1,16 +1,24 @@
 /**
  * RGW-271 — Formularios de contacto Headless (Pavel Silinskii Contact Forms).
  *
- * Fuente de verdad: `GET /pavelsilinskii-cf/v1/forms`. Astro obtiene la
- * configuración, renderiza los campos dinámicamente y valida en el
- * frontend con las propiedades recibidas (`required`, `type`, ...).
- * Sin hardcodear campos: la respuesta de la API manda.
+ * Fuente de verdad: WordPress. Astro obtiene la configuración vía GET,
+ * renderiza los campos dinámicamente, valida en el frontend con las
+ * propiedades recibidas (`required`, `type`, ...) y envía vía POST al
+ * endpoint `submit` del plugin. Sin hardcodear campos: la API manda.
  *
- * Alcance RGW-271: solo lectura (GET). Sin POST ni envíos (otra tarea).
+ * Contrato verificado en `RestApi::submitForm` del plugin:
+ * - `POST .../forms/{id}/submit` con JSON plano `{ [name]: value }`
+ *   (claves = `name` de cada campo definido en WP).
+ * - Éxito: `201 { success: true, message, submission_id }`.
+ * - Error de validación: `422 { code: 'validation_failed',
+ *   data: { errors: { [name]: message } } }`.
  */
 
 import { wpFetch } from '../wordpress/client';
 import { wpRoutes } from '../wordpress/routes';
+
+/** Id del formulario de contacto en WordPress. */
+export const CONTACT_FORM_ID = 1;
 
 /** Campo tal como lo define WordPress (`fields` del formulario). */
 export interface ContactFormField {
@@ -27,14 +35,25 @@ export interface ContactFormDefinition {
   id: string;
   name: string;
   fields: ContactFormField[];
+  /** Mensaje de éxito configurado en WordPress (`success_message`). */
+  successMessage: string;
 }
 
-/** Respuesta cruda del endpoint ( `fields` llega serializado como JSON ). */
+/** Respuesta del endpoint público de un formulario (`GET /forms/{id}`). */
+interface ContactFormSingleResponse {
+  id?: string | number;
+  name?: string;
+  fields?: string | ContactFormField[];
+  success_message?: string;
+}
+
+/** Respuesta cruda del listado ( `fields` llega serializado como JSON ). */
 interface ContactFormRaw {
   id?: string | number;
   name?: string;
   title?: string;
   fields?: string | ContactFormField[];
+  success_message?: string;
   is_active?: string | number | boolean;
 }
 
@@ -128,44 +147,101 @@ const FALLBACK_FIELDS: ContactFormField[] = [
 ];
 
 export function getFallbackContactForm(): ContactFormDefinition {
-  return { id: 'fallback', name: 'Contact Form', fields: FALLBACK_FIELDS };
+  return {
+    id: 'fallback',
+    name: 'Contact Form',
+    fields: FALLBACK_FIELDS,
+    successMessage: 'Thank you for your message!',
+  };
+}
+
+function toDefinition(
+  id: string | number | undefined,
+  name: string | undefined,
+  fields: ContactFormField[],
+  successMessage: string | undefined,
+): ContactFormDefinition | null {
+  if (fields.length === 0) {
+    return null;
+  }
+
+  return {
+    id: String(id ?? 'contact'),
+    name: name ?? 'Contact Form',
+    fields,
+    successMessage: successMessage || 'Thank you for your message!',
+  };
 }
 
 /**
- * Obtiene vía GET la configuración del formulario de contacto.
- * Nunca lanza: ante cualquier fallo devuelve el respaldo visual para
- * no romper el build ni la página (la API sigue siendo la fuente de
- * verdad cuando responde).
+ * Obtiene vía GET la configuración del formulario de contacto
+ * (`id: 1`). Usa el endpoint público del formulario y conserva el
+ * listado como respaldo. Nunca lanza: ante cualquier fallo devuelve
+ * el respaldo visual para no romper el build ni la página (la API
+ * sigue siendo la fuente de verdad cuando responde).
  */
-export async function getContactForm(): Promise<ContactFormDefinition> {
+export async function getContactForm(
+  formId: number = CONTACT_FORM_ID,
+): Promise<ContactFormDefinition> {
   try {
+    const single = await wpFetch<ContactFormSingleResponse>(
+      wpRoutes.contactForm(formId),
+    ).catch(() => null);
+
+    if (single) {
+      const definition = toDefinition(
+        single.id,
+        single.name,
+        parseContactFormFields(single.fields),
+        single.success_message,
+      );
+
+      if (definition) {
+        return definition;
+      }
+    }
+
     const forms = await wpFetch<ContactFormRaw[]>(wpRoutes.contactForms);
 
-    if (!Array.isArray(forms)) {
-      return getFallbackContactForm();
+    if (Array.isArray(forms)) {
+      const selected =
+        forms.find((form) => String(form.id ?? '') === String(formId)) ??
+        selectContactForm(forms);
+
+      if (selected) {
+        const definition = toDefinition(
+          selected.id,
+          selected.name ?? selected.title,
+          parseContactFormFields(selected.fields),
+          selected.success_message,
+        );
+
+        if (definition) {
+          return definition;
+        }
+      }
     }
-
-    const selected = selectContactForm(forms);
-
-    if (!selected) {
-      return getFallbackContactForm();
-    }
-
-    const fields = parseContactFormFields(selected.fields);
-
-    if (fields.length === 0) {
-      return getFallbackContactForm();
-    }
-
-    return {
-      id: String(selected.id ?? 'contact'),
-      name: String(selected.name ?? selected.title ?? 'Contact Form'),
-      fields,
-    };
   } catch (error) {
     console.error('Error fetching contact forms:', error);
-    return getFallbackContactForm();
   }
+
+  return getFallbackContactForm();
+}
+
+/**
+ * URL absoluta del endpoint `submit` (solo servidor: se renderiza como
+ * atributo `data-submit-url` para que el cliente no lea el entorno).
+ */
+export function getContactFormSubmitUrl(formId: number | string): string {
+  const baseUrl = (
+    import.meta.env.WP_API_URL as string | undefined
+  )?.replace(/\/+$/, '');
+
+  if (!baseUrl) {
+    throw new Error('Falta la variable de entorno WP_API_URL.');
+  }
+
+  return `${baseUrl}/wp-json${wpRoutes.contactFormSubmit(formId)}`;
 }
 
 /**

@@ -1,16 +1,19 @@
 ---
 /**
- * RGW-271 — Formulario de contacto Headless (solo GET + validación).
+ * RGW-271 — Formulario de contacto Headless (flujo completo).
  *
  * Reutiliza la implementación visual existente sin rediseño: mismo
  * `form` (`flex flex-col gap-8`, `novalidate`), mismos `FormField`
  * (label + input underline de Stitch) y mismo `Button` submit
- * (`w-full py-4`, "Start a Conversation").
+ * (`w-full py-4`, "Start a Conversation"). Los estados (envío, éxito,
+ * error) reutilizan la tipografía y el color de error ya existentes
+ * (`text-body-md`, `text-gw-state-error`) con `aria-live`.
  *
  * Los campos NO están hardcodeados: se generan desde la configuración
- * obtenida vía `GET /pavelsilinskii-cf/v1/forms` (prop `fields`).
- * La validación es genérica y se basa en las propiedades recibidas
- * (`required`, `type`); sin POST hacia WordPress (otra tarea).
+ * obtenida vía `GET /pavelsilinskii-cf/v1/forms` (prop `fields`). La
+ * validación es genérica y se basa en las propiedades recibidas
+ * (`required`, `type`). El envío usa `POST .../forms/{id}/submit` con
+ * JSON plano `{ [name]: value }` (contrato de `RestApi::submitForm`).
  */
 import FormField from '../ui/FormField.astro';
 import Button from '../ui/Button.astro';
@@ -22,12 +25,19 @@ import {
 
 interface Props {
   fields: ContactFormField[];
+  /** URL absoluta del endpoint `submit` (calculada en el servidor). */
+  submitUrl: string;
 }
 
-const { fields } = Astro.props;
+const { fields, submitUrl } = Astro.props;
 ---
 
-<form id="contact-form" novalidate class="flex flex-col gap-8">
+<form
+  id="contact-form"
+  novalidate
+  class="flex flex-col gap-8"
+  data-submit-url={submitUrl}
+>
   {
     fields.map((field) => (
       <FormField
@@ -41,17 +51,30 @@ const { fields } = Astro.props;
     ))
   }
 
+  <p
+    id="contact-form-status"
+    aria-live="polite"
+    hidden
+    class="text-body-md text-gw-text-primary"
+  ></p>
+
   <div class="pt-6">
-    <Button type="submit" variant="primary" class="w-full py-4">
+    <Button
+      type="submit"
+      variant="primary"
+      class="w-full py-4 disabled:opacity-70"
+    >
       Start a Conversation
     </Button>
   </div>
 </form>
 
 <script>
+  import { submitContactForm } from '../../lib/contact/submit';
+
   // RGW-271: validación frontend genérica desde la configuración
   // renderizada por la API (`required` + `type`, sin reglas
-  // hardcodeadas por campo). Sin POST: el envío se integra después.
+  // hardcodeadas por campo) y envío al endpoint `submit` del plugin.
   const form = document.getElementById('contact-form');
 
   const setError = (id, message) => {
@@ -76,49 +99,120 @@ const { fields } = Astro.props;
     }
   };
 
+  const setStatus = (message, isError) => {
+    const status = document.getElementById('contact-form-status');
+
+    if (!(status instanceof HTMLElement)) {
+      return;
+    }
+
+    if (message) {
+      status.textContent = message;
+      status.hidden = false;
+      status.classList.toggle('text-gw-state-error', isError);
+      status.classList.toggle('text-gw-text-primary', !isError);
+    } else {
+      status.textContent = '';
+      status.hidden = true;
+    }
+  };
+
   const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  if (form instanceof HTMLFormElement) {
-    form.addEventListener('submit', (event) => {
-      // RGW-271 (GET only): no hay envío hacia WordPress todavía.
-      event.preventDefault();
+  const collectInputs = (formElement) =>
+    Array.from(formElement.querySelectorAll('input[name]')).filter(
+      (node) => node instanceof HTMLInputElement,
+    );
 
-      const inputs = Array.from(
-        form.querySelectorAll('input[name]'),
-      ).filter((node) => node instanceof HTMLInputElement);
+  /** Valida con `required`/`type`; devuelve los valores o `null`. */
+  const validate = (inputs) => {
+    const data = {};
+    let valid = true;
 
-      let valid = true;
+    for (const input of inputs) {
+      const value = input.value.trim();
+      const label =
+        document
+          .querySelector(`label[for="${CSS.escape(input.id)}"]`)
+          ?.textContent?.trim() || input.name;
 
-      for (const input of inputs) {
-        const value = input.value.trim();
-        const label =
-          form
-            .querySelector(`label[for="${CSS.escape(input.id)}"]`)
-            ?.textContent?.trim() || input.name;
+      setError(input.id);
 
-        setError(input.id);
-
-        if (input.required && value === '') {
-          setError(input.id, `Por favor, ingresa tu ${label.toLowerCase()}.`);
-          valid = false;
-          continue;
-        }
-
-        if (
-          value !== '' &&
-          (input.type === 'email' || input.getAttribute('type') === 'email') &&
-          !EMAIL_PATTERN.test(value)
-        ) {
-          setError(input.id, 'Ingresa un email válido.');
-          valid = false;
-        }
+      if (input.required && value === '') {
+        setError(input.id, `Por favor, ingresa tu ${label.toLowerCase()}.`);
+        valid = false;
+        continue;
       }
 
-      if (!valid) {
+      if (
+        value !== '' &&
+        input.type === 'email' &&
+        !EMAIL_PATTERN.test(value)
+      ) {
+        setError(input.id, 'Ingresa un email válido.');
+        valid = false;
+        continue;
+      }
+
+      data[input.name] = input.value;
+    }
+
+    return valid ? data : null;
+  };
+
+  if (form instanceof HTMLFormElement) {
+    const submitUrl = form.dataset.submitUrl ?? '';
+    const submitButton = form.querySelector('button[type="submit"]');
+    const defaultLabel = submitButton?.textContent?.trim() || 'Send';
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const inputs = collectInputs(form);
+      const data = validate(inputs);
+
+      // Sin POST si la validación frontend falla.
+      if (!data) {
+        setStatus('');
         return;
       }
 
-      // Formulario válido. POST fuera de alcance en RGW-271.
+      setStatus('');
+
+      if (submitButton instanceof HTMLButtonElement) {
+        submitButton.disabled = true;
+        submitButton.textContent = 'Sending...';
+      }
+
+      const result = await submitContactForm(submitUrl, data);
+
+      if (submitButton instanceof HTMLButtonElement) {
+        submitButton.disabled = false;
+        submitButton.textContent = defaultLabel;
+      }
+
+      if (result.ok) {
+        for (const input of inputs) {
+          setError(input.id);
+        }
+
+        form.reset();
+        // Mensaje de éxito configurado en WordPress (`success_message`).
+        setStatus(result.message, false);
+        return;
+      }
+
+      for (const [name, message] of Object.entries(result.fieldErrors)) {
+        const input = inputs.find((candidate) => candidate.name === name);
+
+        if (input) {
+          setError(input.id, message);
+        }
+      }
+
+      if (Object.keys(result.fieldErrors).length === 0) {
+        setStatus(result.message, true);
+      }
     });
   }
 </script>

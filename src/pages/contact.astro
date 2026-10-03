@@ -17,13 +17,21 @@ import ContactForm from '../components/contact/ContactForm.astro';
 import { getSocialMedia } from '../lib/wordpress/socialMedia';
 import { getContact } from '../lib/wordpress/contact';
 // RGW-271: configuración del formulario vía GET (Pavel Silinskii CF).
-import { getContactForm } from '../lib/contact/forms';
+import {
+  CONTACT_FORM_ID,
+  getContactForm,
+  getContactFormSubmitUrl,
+} from '../lib/contact/forms';
 
 const [socialMedia, contact, contactForm] = await Promise.all([
   getSocialMedia(),
   getContact(Astro.currentLocale ?? undefined),
   getContactForm(),
 ]);
+
+const contactFormSubmitUrl = getContactFormSubmitUrl(
+  contactForm.id !== 'fallback' ? contactForm.id : CONTACT_FORM_ID,
+);
 ---
 
 <Layout
@@ -77,7 +85,10 @@ const [socialMedia, contact, contactForm] = await Promise.all([
 
       <div class="bg-gw-surface-primary rounded-sm p-8 shadow-sm md:p-12 lg:w-1/2">
         {/* RGW-271: campos dinámicos desde la API (mismo diseño). */}
-        <ContactForm fields={contactForm.fields} />
+        <ContactForm
+          fields={contactForm.fields}
+          submitUrl={contactFormSubmitUrl}
+        />
       </div>
     </div>
   </Section>

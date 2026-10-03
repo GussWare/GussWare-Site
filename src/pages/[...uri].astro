@@ -48,7 +48,11 @@ import { wpRoutes } from '../lib/wordpress/routes';
 import { getSocialMedia } from '../lib/wordpress/socialMedia';
 import { stripHtml } from '../lib/wordpress/text';
 // RGW-271: configuración del formulario vía GET (Pavel Silinskii CF).
-import { getContactForm } from '../lib/contact/forms';
+import {
+  CONTACT_FORM_ID,
+  getContactForm,
+  getContactFormSubmitUrl,
+} from '../lib/contact/forms';
 import type { WpMedia, WpServiceSummary } from '../lib/wordpress/types';
 
 export const prerender = false;
@@ -113,6 +117,11 @@ const faq = page.acf && 'faq' in page.acf ? (page.acf.faq ?? null) : null;
 // RGW-271: campos del formulario vía GET (solo si la página usa la
 // sección de contacto; `getContactForm` no lanza ante fallos de API).
 const contactForm = sectionContent ? await getContactForm() : null;
+const contactFormSubmitUrl = contactForm
+  ? getContactFormSubmitUrl(
+      contactForm.id !== 'fallback' ? contactForm.id : CONTACT_FORM_ID,
+    )
+  : null;
 
 const heroImageId = hero?.image ?? null;
 let heroImage: { src: string; alt: string } | null = null;
@@ -267,7 +276,12 @@ if (translatedSlug) {
 
         <div class="bg-gw-surface-primary rounded-sm p-8 shadow-sm md:p-12 lg:w-1/2">
           {/* RGW-271: campos dinámicos desde la API (mismo diseño). */}
-          {contactForm && <ContactForm fields={contactForm.fields} />}
+          {contactForm && contactFormSubmitUrl && (
+            <ContactForm
+              fields={contactForm.fields}
+              submitUrl={contactFormSubmitUrl}
+            />
+          )}
         </div>
       </div>
     </Section>
