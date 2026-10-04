@@ -9,6 +9,11 @@ export const wpRoutes = {
     `/gussware/v1/contact?lang=${encodeURIComponent(lang)}`,
   legalInformation: (lang: string) =>
     `/gussware/v1/legal_information?lang=${encodeURIComponent(lang)}`,
+  contactForms: '/pavelsilinskii-cf/v1/forms',
+  contactForm: (id: number | string) =>
+    `/pavelsilinskii-cf/v1/forms/${encodeURIComponent(String(id))}`,
+  contactFormSubmit: (id: number | string) =>
+    `/pavelsilinskii-cf/v1/forms/${encodeURIComponent(String(id))}/submit`,
   header: (lang: string) =>
     `/gussware/v1/header?lang=${encodeURIComponent(lang)}`,
   languages: '/pll/v1/languages',

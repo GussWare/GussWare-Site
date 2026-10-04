@@ -68,14 +68,16 @@ const ctaActions =
     <div class="mx-auto w-full max-w-[var(--container-max)] px-4 md:px-6">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
         <div class="lg:col-span-4 flex flex-col justify-between">
-          <div>
-            <h2 class="text-gw-text-primary text-2xl sm:text-3xl font-bold uppercase tracking-tight mb-3">
-              {acf.development_title}
-            </h2>
-            <span
-              aria-hidden="true"
-              class="block h-0.5 w-12 bg-brand-primary my-3"
-            ></span>
+          <div class="lg:sticky lg:top-28">
+            <div>
+              <h2 class="text-gw-text-primary text-2xl sm:text-3xl font-bold uppercase tracking-tight mb-3">
+                {acf.development_title}
+              </h2>
+              <span
+                aria-hidden="true"
+                class="block h-0.5 w-12 bg-brand-primary my-3"
+              ></span>
+            </div>
           </div>
           {(acf.development_tags ?? []).length > 0 && (
             <p class="text-xs font-mono text-gw-text-muted tracking-wider uppercase mt-8">
@@ -198,7 +200,7 @@ const ctaActions =
     class="bg-gw-surface-secondary border-b border-gw-border-subtle"
   >
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
-      <div class="lg:col-span-5 space-y-6">
+      <div class="lg:col-span-5 space-y-6 lg:sticky lg:top-28 lg:self-start">
         <div>
           <span class="inline-block text-xs font-bold tracking-[0.2em] uppercase text-brand-primary mb-3">
             {techEyebrow}

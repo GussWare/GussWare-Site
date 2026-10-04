@@ -5,8 +5,17 @@
  * sin acordeón: la referencia no tiene interacción.
  *
  * Columna izquierda fija (`lg:sticky`) con eyebrow, H2 y descripción;
- * eje `border-l-2` con marcadores numerados sobre la línea (primera
- * fase destacada, resto sobre superficie primaria con hover).
+ * eje `border-l-2` con marcadores numerados sobre la línea.
+ *
+ * Scroll-driven active state: los items se activan de arriba hacia
+ * abajo según su posición respecto al viewport (regla determinista:
+ * activo ⟺ `top < 65%` del viewport) y se revierten en orden inverso
+ * al subir. El estado vive en `data-active` del paso y los estilos
+ * reutilizan las clases existentes vía `group-data-[active=…]`
+ * (paleta y transiciones de la sección, sin CSS nuevo): la card activa
+ * es la que antes era estática (`index === 0`) y la inactiva la del
+ * resto. `IntersectionObserver` actúa solo como planificador (sin
+ * listener de `scroll`); el atributo solo se escribe si cambia.
  *
  * Contenido 100% dinámico (`approach[]` de WordPress: solo
  * `{title, description}`); numeración y contador derivados del índice.
@@ -57,35 +66,21 @@ const approachEyebrow = locale === 'en' ? 'METHODOLOGY' : 'METODOLOGÍA';
         </div>
       </div>
       <div class="lg:col-span-8">
-        <div class="relative pl-8 md:pl-12 border-l-2 border-gw-border-subtle space-y-10">
+        <div
+          data-approach-timeline
+          class="relative pl-8 md:pl-12 border-l-2 border-gw-border-subtle space-y-10"
+        >
           {items.map((item, index) => (
-            <div data-approach-step class="relative">
+            <div data-approach-step data-active="false" class="relative group">
               <span
                 aria-hidden="true"
-                class={
-                  index === 0
-                    ? 'absolute -left-[41px] md:-left-[57px] top-1.5 flex w-6 h-6 items-center justify-center bg-brand-primary border-4 border-white text-white text-[10px] font-bold'
-                    : 'absolute -left-[39px] md:-left-[55px] top-1.5 flex w-5 h-5 items-center justify-center bg-gw-surface-primary border-2 border-brand-secondary text-brand-secondary text-[9px] font-bold'
-                }
+                class="absolute top-1.5 flex items-center justify-center font-bold group-data-[active=false]:-left-[39px] group-data-[active=false]:md:-left-[55px] group-data-[active=false]:h-5 group-data-[active=false]:w-5 group-data-[active=false]:border-2 group-data-[active=false]:border-brand-secondary group-data-[active=false]:bg-gw-surface-primary group-data-[active=false]:text-[9px] group-data-[active=false]:text-brand-secondary group-data-[active=true]:-left-[41px] group-data-[active=true]:md:-left-[57px] group-data-[active=true]:h-6 group-data-[active=true]:w-6 group-data-[active=true]:border-4 group-data-[active=true]:border-white group-data-[active=true]:bg-brand-primary group-data-[active=true]:text-[10px] group-data-[active=true]:text-white"
               >
                 {index + 1}
               </span>
-              <div
-                class={
-                  index === 0
-                    ? 'bg-gw-surface-auxiliary border border-gw-border-subtle border-l-4 border-l-brand-primary p-6 md:p-8'
-                    : 'bg-gw-surface-primary border border-gw-border-subtle p-6 md:p-8 transition-colors hover:border-brand-secondary'
-                }
-              >
+              <div class="border border-gw-border-subtle p-6 md:p-8 transition-colors group-data-[active=false]:bg-gw-surface-primary group-data-[active=false]:hover:border-brand-secondary group-data-[active=true]:border-l-4 group-data-[active=true]:border-l-brand-primary group-data-[active=true]:bg-gw-surface-auxiliary">
                 <div class="flex items-baseline justify-between gap-4 mb-3">
-                  <span
-                    class:list={[
-                      'text-xs font-bold tracking-widest uppercase',
-                      index === 0
-                        ? 'text-brand-primary'
-                        : 'text-brand-secondary',
-                    ]}
-                  >
+                  <span class="text-xs font-bold tracking-widest uppercase group-data-[active=false]:text-brand-secondary group-data-[active=true]:text-brand-primary">
                     {phaseLabel} {pad(index + 1)}
                   </span>
                   <span class="text-gw-text-muted text-xs font-mono whitespace-nowrap">
@@ -106,3 +101,40 @@ const approachEyebrow = locale === 'en' ? 'METHODOLOGY' : 'METODOLOGÍA';
     </div>
   </Section>
 )}
+
+<script>
+  const timeline = document.querySelector('[data-approach-timeline]');
+
+  if (timeline instanceof HTMLElement) {
+    const steps = [...timeline.querySelectorAll('[data-approach-step]')];
+
+    if (steps.length > 0) {
+      // Línea de activación: 65% de la altura del viewport. Regla
+      // puramente geométrica (mismo scroll ⇒ mismo estado) evaluada
+      // solo cuando el observer detecta un cruce: sin listener de scroll.
+      const LINE_RATIO = 0.65;
+
+      const update = (): void => {
+        const lineY = window.innerHeight * LINE_RATIO;
+
+        steps.forEach((step) => {
+          if (!(step instanceof HTMLElement)) return;
+
+          const next = String(step.getBoundingClientRect().top < lineY);
+
+          if (step.dataset.active !== next) {
+            step.dataset.active = next;
+          }
+        });
+      };
+
+      const observer = new IntersectionObserver(update, {
+        rootMargin: '0px 0px -35% 0px',
+        threshold: [0],
+      });
+
+      steps.forEach((step) => observer.observe(step));
+      update();
+    }
+  }
+</script>
