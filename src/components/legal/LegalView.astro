@@ -23,18 +23,41 @@
  * update) como presentación CSS (data-URI SVG estilo Lucide): el
  * contenido WP no trae nodos de icono y `Icon.astro` no puede inyectarse
  * dentro de `set:html`.
+ *
+ * Fuentes de datos (RGW-268, sin mezclar):
+ * - etiquetas `{{TOKEN}}` generales → `legalInfo` (Configuración del
+ *   sitio → Información legal), resueltas antes de los transforms;
+ * - `{{PRIVACY_LAST_UPDATED}}` → `updatedLabel` (Custom Field `Fecha de
+ *   actualización` de la propia Page, ya formateado por la ruta).
+ * Las etiquetas sin valor en WordPress se dejan intactas (dato faltante,
+ * nunca inventado). Sin emails hardcodeados: el chip envuelve el párrafo
+ * de email suelto cualquiera que sea su dirección.
  */
 import Container from '../ui/Container.astro';
 import Icon from '../ui/Icon.astro';
+import {
+  resolveLegalTokens,
+  type LegalInfo,
+} from '../../lib/wordpress/legal';
 
 interface Props {
   /** Título de la Page (`page.title`, renderizado como H1). */
   title: string;
   /** HTML renderizado de la Page (`page.content.rendered`). */
   content: string;
+  /** Datos legales generales (`Información legal`) o `null` si WP no los expone. */
+  legalInfo?: LegalInfo | null;
+  /** Fecha del Custom Field de la página, formateada (o `null`). */
+  updatedLabel?: string | null;
 }
 
-const { title, content } = Astro.props;
+const { title, content, legalInfo = null, updatedLabel = null } = Astro.props;
+
+/** Contenido con etiquetas legales resueltas desde su fuente correcta. */
+const resolvedContent = resolveLegalTokens(content, {
+  legalInfo,
+  updatedLabel,
+});
 
 /** Primer `<p class="...">` encontrado (o null si no existe). */
 function pickParagraph(html: string, cls: string): string | null {
@@ -44,11 +67,11 @@ function pickParagraph(html: string, cls: string): string | null {
   return match ? match[0] : null;
 }
 
-const eyebrowHtml = pickParagraph(content, 'gw-eyebrow');
-const metaHtml = pickParagraph(content, 'gw-update-meta');
-const ledeHtml = pickParagraph(content, 'gw-lede');
+const eyebrowHtml = pickParagraph(resolvedContent, 'gw-eyebrow');
+const metaHtml = pickParagraph(resolvedContent, 'gw-update-meta');
+const ledeHtml = pickParagraph(resolvedContent, 'gw-lede');
 
-let bodyHtml = content;
+let bodyHtml = resolvedContent;
 
 // Retira el grupo de encabezado (solo contiene los 3 <p>, sin divs
 // anidados) para reordenarlo delante del H1.
@@ -101,10 +124,11 @@ if (sec08Match) {
   bodyHtml = bodyHtml.replace(sec08, sec08Inner);
 }
 
-// Email suelto de sec-06 como chip (cadena exacta, ambos idiomas).
+// Email suelto de sec-06 como chip (cualquier dirección, ambos idiomas;
+// la dirección proviene de `Información legal`, nunca hardcodeada aquí).
 bodyHtml = bodyHtml.replace(
-  /<p[^>]*>privacidad@gussware\.com<\/p>/,
-  '<p class="gw-email-chip-row"><span class="gw-email-chip">privacidad@gussware.com</span></p>',
+  /<p[^>]*>([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})<\/p>/,
+  '<p class="gw-email-chip-row"><span class="gw-email-chip">$1</span></p>',
 );
 
 // Divide los 10 enlaces del índice en número + etiqueta.

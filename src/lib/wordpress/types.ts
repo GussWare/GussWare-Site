@@ -140,6 +140,28 @@ export interface ContactResponse {
   contact_information: Contact | null;
 }
 
+/**
+ * RGW-268 — Estructura exacta de `/gussware/v1/legal_information`
+ * (Configuración del sitio → Información legal). No renombrar campos:
+ * deben coincidir con la API.
+ */
+export interface LegalInformationApi {
+  legal_entity_name: string | null;
+  legal_responsible_name: string | null;
+  legal_address: string | null;
+  privacy_email: string | null;
+  contact_phone: string | null;
+  site_name: string | null;
+  personal_data_name_label: string | null;
+  personal_data_email_label: string | null;
+  personal_data_phone_label: string | null;
+}
+
+/** Respuesta de `/gussware/v1/legal_information` (`null` si no hay configuración). */
+export interface LegalInformationResponse {
+  legal_information: LegalInformationApi | null;
+}
+
 export interface WpListPost {
   id: number;
   date: string;
@@ -229,6 +251,9 @@ export interface WpPage {
   excerpt: WpPostProtectedContent;
 
   acf: WpPageAcf;
+
+  /** RGW-268 — Meta con el Custom Field de la página (solo si WP lo expone). */
+  meta?: WpPageMeta;
 
   lang: string;
   translations: Record<string, number>;
@@ -488,6 +513,15 @@ export interface WpPostMeta {
   _acf_changed: boolean;
   inline_featured_image: boolean;
   footnotes: string;
+}
+
+/**
+ * RGW-268 — Meta de una Page con el Custom Field `Fecha de
+ * actualización` (`privacy_last_updated`, `YYYYMMDD`). Solo la página
+ * de Política de Privacidad lo utiliza; el resto de Pages no lo trae.
+ */
+export interface WpPageMeta extends WpPostMeta {
+  privacy_last_updated?: string | null;
 }
 
 export interface WpPostYoastRobots {
