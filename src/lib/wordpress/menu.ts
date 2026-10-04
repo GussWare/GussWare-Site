@@ -115,6 +115,72 @@ function menuName(baseName: string, englishName: string, locale: string) {
   return locale === 'en' ? englishName : baseName;
 }
 
+/**
+ * RGW-273 — Nodo del menú con jerarquía padre → hijos desde WordPress
+ * (`menu_item_parent`). Sin nombres ni relaciones hardcodeadas: la
+ * jerarquía proviene íntegramente de los datos.
+ */
+export interface MenuTreeItem extends HeaderMenuItem {
+  children: MenuTreeItem[];
+}
+
+/** Ítem con `href` ya resuelto (`resolveMenuHref`) y jerarquía. */
+export interface ResolvedMenuTreeItem extends MenuTreeItem {
+  href: string;
+  children: ResolvedMenuTreeItem[];
+}
+
+/**
+ * RGW-273 — Construye el árbol del menú desde la lista plana de
+ * WordPress. Ordena por `menu_order` en cada nivel. Un ítem cuyo padre
+ * no existe (huérfano) sube al nivel superior para no perder contenido.
+ */
+export function buildMenuTree(items: HeaderMenuItem[]): MenuTreeItem[] {
+  const byId = new Map<number, MenuTreeItem>();
+
+  for (const item of items) {
+    byId.set(item.id, { ...item, children: [] });
+  }
+
+  const roots: MenuTreeItem[] = [];
+
+  for (const node of byId.values()) {
+    const parent = byId.get(node.parent);
+
+    if (node.parent !== 0 && parent) {
+      parent.children.push(node);
+    } else {
+      roots.push(node);
+    }
+  }
+
+  const byOrder = (a: MenuTreeItem, b: MenuTreeItem): number =>
+    a.menu_order - b.menu_order;
+  roots.sort(byOrder);
+
+  for (const node of byId.values()) {
+    node.children.sort(byOrder);
+  }
+
+  return roots;
+}
+
+/**
+ * RGW-273 — Aplica `resolveMenuHref` a todo el árbol con el mismo
+ * contexto de página/idioma. Recursivo: cubre cualquier profundidad
+ * que WordPress configure.
+ */
+export function resolveMenuTreeHrefs(
+  nodes: MenuTreeItem[],
+  context: MenuHrefContext,
+): ResolvedMenuTreeItem[] {
+  return nodes.map((node) => ({
+    ...node,
+    href: resolveMenuHref(node.url, context),
+    children: resolveMenuTreeHrefs(node.children, context),
+  }));
+}
+
 /** Contexto de página para resolver el `href` de un ítem del menú. */
 export interface MenuHrefContext {
   /** Ruta actual (`Astro.url.pathname`), p. ej. `/blog`. */
