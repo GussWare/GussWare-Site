@@ -70,8 +70,10 @@ const footerColumns = footerMenuItems
                   <a
                     href={link.url}
                     target={link.target || undefined}
+                    title={link.attrTitle || undefined}
+                    rel={link.rel || undefined}
                     set:html={link.title}
-                    class="text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200"
+                    class={`text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200${link.classes.length > 0 ? ` ${link.classes.join(' ')}` : ''}`}
                   />
                 </li>
               ))}
@@ -93,8 +95,10 @@ const footerColumns = footerMenuItems
                   <a
                     href={link.url}
                     target={link.target || undefined}
+                    title={link.attrTitle || undefined}
+                    rel={link.rel || undefined}
                     set:html={link.title}
-                    class="text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200"
+                    class={`text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200${link.classes.length > 0 ? ` ${link.classes.join(' ')}` : ''}`}
                   />
                 </li>
               ))}
@@ -116,8 +120,10 @@ const footerColumns = footerMenuItems
           <a
             href={link.url}
             target={link.target || undefined}
+            title={link.attrTitle || undefined}
+            rel={link.rel || undefined}
             set:html={link.title}
-            class="text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200"
+            class={`text-gw-text-secondary text-body-md hover:text-supporting-blue-dark transition-colors duration-200${link.classes.length > 0 ? ` ${link.classes.join(' ')}` : ''}`}
           />
         ))}
       </div>

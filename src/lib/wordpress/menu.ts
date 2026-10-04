@@ -25,7 +25,12 @@ import {
 } from './constants';
 import type { HeaderMenuItem, WpCustomMenu, WpCustomMenuItem } from './types';
 
-function toHeaderMenuItem(item: WpCustomMenuItem): HeaderMenuItem | null {
+/**
+ * RGW-273 — Normaliza un ítem crudo de WordPress conservando todas sus
+ * propiedades configurables (`url`, `target`, `attr_title`, `classes`,
+ * `description`, `xfn`, tipo/objeto). Exportada para pruebas.
+ */
+export function toHeaderMenuItem(item: WpCustomMenuItem): HeaderMenuItem | null {
   const id = item.ID;
   const parent = Number(item.menu_item_parent);
 
@@ -42,6 +47,12 @@ function toHeaderMenuItem(item: WpCustomMenuItem): HeaderMenuItem | null {
     return null;
   }
 
+  const classes = Array.isArray(item.classes)
+    ? item.classes.filter(
+        (cls): cls is string => typeof cls === 'string' && cls.trim() !== '',
+      )
+    : [];
+
   return {
     id,
     title: item.title,
@@ -49,6 +60,14 @@ function toHeaderMenuItem(item: WpCustomMenuItem): HeaderMenuItem | null {
     parent,
     menu_order: item.menu_order,
     target: item.target,
+    attrTitle: typeof item.attr_title === 'string' ? item.attr_title : '',
+    classes,
+    description:
+      typeof item.description === 'string' ? item.description : '',
+    rel: typeof item.xfn === 'string' ? item.xfn : '',
+    type: typeof item.type === 'string' ? item.type : '',
+    object: typeof item.object === 'string' ? item.object : '',
+    objectId: typeof item.object_id === 'string' ? item.object_id : '',
   };
 }
 
@@ -137,6 +156,9 @@ function siteOrigins(currentOrigin?: string): string[] {
  * - Ancla (`#seccion`): comportamiento nativo si la página actual es la
  *   portada; desde otra página apunta a `portada + ancla` para que la
  *   sección siga siendo alcanzable. `#` solo se conserva tal cual.
+ * - Ruta con ancla (`/pagina#seccion`, como configura WordPress):
+ *   si es la página actual se reduce al ancla (scroll suave sin
+ *   recargar); si no, se conserva para navegar y posicionar.
  * - Ruta interna (`/contacto`): se conserva tal cual.
  * - URL completa: si es del propio sitio se reduce a ruta interna
  *   (`path + search + hash`); si es externa se conserva intacta.
@@ -166,13 +188,40 @@ export function resolveMenuHref(
       const parsed = new URL(rawUrl);
 
       if (siteOrigins(context.currentOrigin).includes(parsed.origin)) {
-        return `${parsed.pathname}${parsed.search}${parsed.hash}` || '/';
+        return resolveRelative(
+          `${parsed.pathname}${parsed.search}${parsed.hash}`,
+          context,
+        );
       }
     } catch {
       // URL no parseable: se conserva tal cual.
     }
 
     return rawUrl;
+  }
+
+  return resolveRelative(rawUrl, context);
+}
+
+/**
+ * RGW-273 — Resuelve una ruta relativa (`/pagina#seccion`, `/ruta`).
+ * Con ancla en la página actual se reduce al ancla; lo demás intacto.
+ */
+function resolveRelative(rawUrl: string, context: MenuHrefContext): string {
+  const hashIndex = rawUrl.indexOf('#');
+
+  if (hashIndex < 0) {
+    return rawUrl;
+  }
+
+  const path = rawUrl.slice(0, hashIndex);
+  const hash = rawUrl.slice(hashIndex);
+
+  if (
+    hash.length > 1 &&
+    (path === '' || normalizePath(path) === normalizePath(context.currentPath))
+  ) {
+    return hash;
   }
 
   return rawUrl;
