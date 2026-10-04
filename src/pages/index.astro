@@ -128,8 +128,10 @@ const stepImages = await Promise.all(
       <Hero hero={hero} image={heroImage} />
       {expertise && <Expertise expertise={expertise} />}
       {technology && <CommunityModel technology={technology} />}
-      {services && <Services services={services} />}
-      {process && <Process process={process} images={stepImages} />}
+      {services && <Services services={services} id="servicios" />}
+      {process && (
+        <Process process={process} images={stepImages} id="como-trabajamos" />
+      )}
       {faq && <Faq faq={faq} />}
       {finalCta && <FinalCta finalCta={finalCta} />}
     </>
