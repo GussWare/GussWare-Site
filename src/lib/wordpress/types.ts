@@ -510,6 +510,11 @@ export interface WpServiceSummary {
   excerpt: WpPostRendered;
   lang: string;
   translations: Record<string, number>;
+  /**
+   * RGW-272 — Descripción del servicio en el catálogo. El extracto del
+   * CPT puede venir nulo; la lista REST expone `acf` (`show_in_rest`).
+   */
+  acf?: { intro_description?: string | null } | null;
 }
 
 export interface WpPostMeta {
