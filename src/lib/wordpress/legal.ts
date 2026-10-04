@@ -9,7 +9,9 @@
  *   legales). Se leen con `getLegalInfo()`; si la sección no expone un
  *   valor, la etiqueta se deja intacta y se reporta como dato faltante.
  */
-import { getContact } from './contact';
+import { wpFetch } from './client';
+import { wpRoutes } from './routes';
+import type { LegalInformationResponse } from './types';
 
 /** Datos legales generales reutilizables (`Información legal`). */
 export interface LegalInfo {
@@ -48,40 +50,39 @@ export const PAGE_DATE_TOKEN = 'PRIVACY_LAST_UPDATED';
 export const PAGE_UPDATE_DATE_META_KEY = 'privacy_last_updated';
 
 /**
- * Lee la configuración reutilizable del sitio para datos legales.
- *
- * Reutiliza el contenedor de información de contacto del sitio
- * (`getContact`, mismo patrón que `contact.astro`): solo se mapean los
- * campos que existen con valores reales; el resto queda en `null` para
- * que la etiqueta correspondiente se reporte como dato faltante en
- * WordPress en lugar de inventarse.
+ * Lee la configuración reutilizable del sitio para datos legales
+ * (`{{baseUrl}}/gussware/v1/legal_information`, fuente de verdad de
+ * `Información legal`). Mapea exactamente la estructura de la API, campo
+ * por campo; los valores ausentes o vacíos quedan en `null` para que la
+ * etiqueta correspondiente conserve su comportamiento actual en lugar
+ * de inventarse.
  */
 export async function getLegalInfo(
   lang?: string,
 ): Promise<LegalInfo | null> {
-  const empty: LegalInfo = {
-    siteName: null,
-    legalEntityName: null,
-    legalResponsibleName: null,
-    legalAddress: null,
-    privacyEmail: null,
-    contactPhone: null,
-    personalDataNameLabel: null,
-    personalDataEmailLabel: null,
-    personalDataPhoneLabel: null,
-  };
+  const pick = (value: string | null | undefined): string | null =>
+    typeof value === 'string' && value.trim() !== '' ? value : null;
 
   try {
-    const contact = await getContact(lang);
+    const data = await wpFetch<LegalInformationResponse>(
+      wpRoutes.legalInformation(lang ?? 'es'),
+    );
+    const api = data.legal_information;
 
-    if (!contact) {
+    if (!api) {
       return null;
     }
 
     const info: LegalInfo = {
-      ...empty,
-      privacyEmail: contact.email?.trim() ? contact.email : null,
-      contactPhone: contact.phone?.trim() ? contact.phone : null,
+      siteName: pick(api.site_name),
+      legalEntityName: pick(api.legal_entity_name),
+      legalResponsibleName: pick(api.legal_responsible_name),
+      legalAddress: pick(api.legal_address),
+      privacyEmail: pick(api.privacy_email),
+      contactPhone: pick(api.contact_phone),
+      personalDataNameLabel: pick(api.personal_data_name_label),
+      personalDataEmailLabel: pick(api.personal_data_email_label),
+      personalDataPhoneLabel: pick(api.personal_data_phone_label),
     };
 
     return Object.values(info).some((value) => value !== null) ? info : null;

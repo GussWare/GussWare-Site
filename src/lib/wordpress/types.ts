@@ -140,6 +140,28 @@ export interface ContactResponse {
   contact_information: Contact | null;
 }
 
+/**
+ * RGW-268 — Estructura exacta de `/gussware/v1/legal_information`
+ * (Configuración del sitio → Información legal). No renombrar campos:
+ * deben coincidir con la API.
+ */
+export interface LegalInformationApi {
+  legal_entity_name: string | null;
+  legal_responsible_name: string | null;
+  legal_address: string | null;
+  privacy_email: string | null;
+  contact_phone: string | null;
+  site_name: string | null;
+  personal_data_name_label: string | null;
+  personal_data_email_label: string | null;
+  personal_data_phone_label: string | null;
+}
+
+/** Respuesta de `/gussware/v1/legal_information` (`null` si no hay configuración). */
+export interface LegalInformationResponse {
+  legal_information: LegalInformationApi | null;
+}
+
 export interface WpListPost {
   id: number;
   date: string;
