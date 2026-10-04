@@ -1,0 +1,41 @@
+---
+import DesktopMenuNodes from '../components/layout/DesktopMenuNodes.astro';
+import MobileMenuNodes from '../components/layout/MobileMenuNodes.astro';
+import { buildMenuTree, resolveMenuTreeHrefs } from '../lib/wordpress/menu';
+import Header from '../components/layout/Header.astro';
+import '../styles/global.css';
+
+export const prerender = false;
+
+const base = (o: any) => ({ id: 0, title: 'T', url: '/x', parent: 0, menu_order: 0, target: '', attrTitle: '', classes: [], description: '', rel: '', type: 'custom', object: 'custom', objectId: '0', ...o });
+const items = [
+  base({ id: 1, title: 'N1', url: '/n1', menu_order: 1 }),
+  base({ id: 2, title: 'N2', url: '/n2', parent: 1, menu_order: 1 }),
+  base({ id: 3, title: 'N3', url: '/n3', parent: 2, menu_order: 1 }),
+  base({ id: 4, title: 'N4', url: '/n4', parent: 3, menu_order: 1, target: '_blank', rel: 'nofollow' }),
+  base({ id: 5, title: 'Hoja', url: '/hoja', menu_order: 2 }),
+];
+const tree = resolveMenuTreeHrefs(buildMenuTree(items), { currentPath: '/', homePath: '/' });
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Fixture</title>
+  </head>
+  <body>
+    <main id="fixturenav">
+      <nav
+        aria-label="Main Navigation"
+        data-fixture="desktop"
+        class="hidden items-center gap-6 lg:mt-14 lg:flex lg:pl-[40vw] xl:gap-8"
+      >
+        <DesktopMenuNodes nodes={tree} />
+      </nav>
+    </main>
+    <Header />
+    <MobileMenuNodes nodes={tree} />
+  </body>
+</html>

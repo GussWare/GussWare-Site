@@ -131,6 +131,71 @@ const mobileLogo = header?.mobileLogo ?? desktopLogo;
   const toggle = document.getElementById('header-menu-toggle');
   const menu = document.getElementById('header-mobile-menu');
 
+  // RGW-273 — Dirección lateral de flyouts desktop (solo Main
+  // Navigation): cada panel anidado intenta abrir a la derecha de su
+  // fila padre exacta y cambia a la izquierda si no cabe en el
+  // viewport. Decisión por nivel e independiente de la profundidad
+  // (sin niveles fijos). El desplegable de nivel 0 no se toca.
+  const desktopNav = document.querySelector(
+    'nav[aria-label="Main Navigation"]',
+  );
+
+  if (desktopNav instanceof HTMLElement) {
+    const placeFlyout = (node) => {
+      if (
+        !(node instanceof HTMLElement) ||
+        node.dataset.depth === '0'
+      ) {
+        return;
+      }
+
+      const panel = node.querySelector(':scope > [data-desktop-panel]');
+
+      if (!(panel instanceof HTMLElement)) {
+        return;
+      }
+
+      const MARGIN = 8;
+      const nodeRect = node.getBoundingClientRect();
+      const panelWidth = panel.offsetWidth;
+      const spaceRight = window.innerWidth - nodeRect.right;
+      const spaceLeft = nodeRect.left;
+      const need = panelWidth + MARGIN;
+      const goLeft = spaceRight < need && spaceLeft >= spaceRight;
+      node.classList.toggle('flyout-left', goLeft);
+
+      // RGW-273 — Contención vertical: si el panel no cabe debajo del
+      // viewport, se ancla al borde inferior del nodo (abre hacia arriba)
+      // para mantenerlo visible. Decision por nivel e independiente de la
+      // profundidad (vale para cualquier depth ≥ 1). El nivel 0 retorna
+      // antes, por lo que no se ve afectado.
+      const panelHeight = panel.offsetHeight;
+      const spaceBelow = window.innerHeight - nodeRect.bottom;
+      const goUp = spaceBelow < panelHeight + MARGIN;
+      node.classList.toggle('flyout-up', goUp);
+    };
+
+    desktopNav
+      .querySelectorAll('[data-desktop-node]:not([data-depth="0"])')
+      .forEach((node) => {
+        node.addEventListener('mouseenter', () => placeFlyout(node));
+        node.addEventListener('focusin', () => placeFlyout(node));
+      });
+
+    window.addEventListener('resize', () => {
+      desktopNav
+        .querySelectorAll('[data-desktop-node]:not([data-depth="0"])')
+        .forEach((node) => {
+          if (
+            node.matches(':hover, :focus-within') &&
+            node.querySelector(':scope > [data-desktop-panel]')
+          ) {
+            placeFlyout(node);
+          }
+        });
+    });
+  }
+
   if (toggle instanceof HTMLButtonElement && menu instanceof HTMLElement) {
     const setOpen = (open) => {
       menu.classList.toggle('hidden', !open);
