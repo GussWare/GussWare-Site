@@ -8,17 +8,26 @@
  * Responsive solo visual (sin JS): nav completa en lg+, hamburger visual
  * en Tablet/Mobile, CTA visible desde sm.
  * El botón hamburguesa abre/cierra el panel móvil con los mismos ítems
- * de WordPress (único JS del componente, sin framework).
+ * de WordPress; dentro del panel, cada padre con hijos lleva su botón
+ * expansor (acordeón). JS vainilla del componente, sin framework.
  */
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import { getHeaderLogo } from '../../lib/wordpress/logo';
-import { getHeaderMenu } from '../../lib/wordpress/menu';
+import {
+  buildMenuTree,
+  getHeaderMenu,
+  resolveMenuTreeHrefs,
+} from '../../lib/wordpress/menu';
+import type { ResolvedMenuTreeItem } from '../../lib/wordpress/menu';
 import { getHeader } from '../../lib/wordpress/header';
 import { routes } from '../../lib/routes';
 import type { LocaleUrls } from '../../lib/routes';
 import Button from '../ui/Button.astro';
+import DesktopMenuNodes from './DesktopMenuNodes.astro';
 import LanguageSelector from '../ui/LanguageSelector.astro';
 import Logo from '../ui/Logo.astro';
 import MenuButton from '../ui/MenuButton.astro';
+import MobileMenuNodes from './MobileMenuNodes.astro';
 
 interface Props {
   localeUrls?: LocaleUrls;
@@ -31,7 +40,17 @@ const [logo, menuItems, header] = await Promise.all([
   getHeaderMenu(Astro.currentLocale ?? undefined),
   getHeader(Astro.currentLocale ?? undefined),
 ]);
-const topLevelItems = menuItems.filter((item) => item.parent === 0);
+const menuTree = buildMenuTree(menuItems);
+// RGW-273 — Resolución inteligente del `href` según el tipo de enlace
+// de WordPress (ancla, ruta interna o URL completa), por página e idioma,
+// en todo el árbol. Solo cambia el destino; estructura y estilos intactos.
+const locale = Astro.currentLocale ?? 'es';
+const homePath = locale === 'en' ? getRelativeLocaleUrl('en', '/') : routes.home;
+const navItems: ResolvedMenuTreeItem[] = resolveMenuTreeHrefs(menuTree, {
+  currentPath: Astro.url.pathname,
+  homePath,
+  currentOrigin: Astro.url.origin,
+});
 const desktopLogo = header?.logo ?? logo;
 const mobileLogo = header?.mobileLogo ?? desktopLogo;
 ---
@@ -51,19 +70,14 @@ const mobileLogo = header?.mobileLogo ?? desktopLogo;
     />
 
     <!-- Desktop Navigation (visible desde lg; en Tablet/Mobile la oculta el hamburger visual) -->
+    <!-- RGW-273 — Submenú recursivo (`DesktopMenuNodes`): N niveles sin
+      límite, desplegable CSS con hover + focus-within (teclado), sin JS.
+      El enlace padre conserva su URL de WordPress. -->
     <nav
       aria-label="Main Navigation"
       class="hidden items-center gap-6 lg:flex xl:gap-8"
     >
-      {topLevelItems.map((item) => (
-        <a
-          href={item.url}
-          target={item.target || undefined}
-          class="text-navigation text-gw-text-secondary transition-colors duration-200 hover:text-brand-secondary"
-        >
-          {item.title}
-        </a>
-      ))}
+      <DesktopMenuNodes nodes={navItems} />
     </nav>
 
     <!-- Desktop CTA & Mobile Toggle -->
@@ -98,15 +112,9 @@ const mobileLogo = header?.mobileLogo ?? desktopLogo;
       aria-label="Mobile Navigation"
       class="mx-auto flex w-full max-w-[var(--container-max)] flex-col px-4 py-2 md:px-6"
     >
-      {topLevelItems.map((item) => (
-        <a
-          href={item.url}
-          target={item.target || undefined}
-          class="text-navigation text-gw-text-secondary py-3 transition-colors duration-200 hover:text-brand-secondary"
-        >
-          {item.title}
-        </a>
-      ))}
+      {/* RGW-273 — Submenú móvil recursivo (`MobileMenuNodes`): N niveles
+        sin límite, acordeón por nivel con el JS del componente. */}
+      <MobileMenuNodes nodes={navItems} />
       <LanguageSelector variant="panel" localeUrls={localeUrls} />
       <Button
         href={routes.contact}
@@ -123,6 +131,71 @@ const mobileLogo = header?.mobileLogo ?? desktopLogo;
   const toggle = document.getElementById('header-menu-toggle');
   const menu = document.getElementById('header-mobile-menu');
 
+  // RGW-273 — Dirección lateral de flyouts desktop (solo Main
+  // Navigation): cada panel anidado intenta abrir a la derecha de su
+  // fila padre exacta y cambia a la izquierda si no cabe en el
+  // viewport. Decisión por nivel e independiente de la profundidad
+  // (sin niveles fijos). El desplegable de nivel 0 no se toca.
+  const desktopNav = document.querySelector(
+    'nav[aria-label="Main Navigation"]',
+  );
+
+  if (desktopNav instanceof HTMLElement) {
+    const placeFlyout = (node) => {
+      if (
+        !(node instanceof HTMLElement) ||
+        node.dataset.depth === '0'
+      ) {
+        return;
+      }
+
+      const panel = node.querySelector(':scope > [data-desktop-panel]');
+
+      if (!(panel instanceof HTMLElement)) {
+        return;
+      }
+
+      const MARGIN = 8;
+      const nodeRect = node.getBoundingClientRect();
+      const panelWidth = panel.offsetWidth;
+      const spaceRight = window.innerWidth - nodeRect.right;
+      const spaceLeft = nodeRect.left;
+      const need = panelWidth + MARGIN;
+      const goLeft = spaceRight < need && spaceLeft >= spaceRight;
+      node.classList.toggle('flyout-left', goLeft);
+
+      // RGW-273 — Contención vertical: si el panel no cabe debajo del
+      // viewport, se ancla al borde inferior del nodo (abre hacia arriba)
+      // para mantenerlo visible. Decision por nivel e independiente de la
+      // profundidad (vale para cualquier depth ≥ 1). El nivel 0 retorna
+      // antes, por lo que no se ve afectado.
+      const panelHeight = panel.offsetHeight;
+      const spaceBelow = window.innerHeight - nodeRect.bottom;
+      const goUp = spaceBelow < panelHeight + MARGIN;
+      node.classList.toggle('flyout-up', goUp);
+    };
+
+    desktopNav
+      .querySelectorAll('[data-desktop-node]:not([data-depth="0"])')
+      .forEach((node) => {
+        node.addEventListener('mouseenter', () => placeFlyout(node));
+        node.addEventListener('focusin', () => placeFlyout(node));
+      });
+
+    window.addEventListener('resize', () => {
+      desktopNav
+        .querySelectorAll('[data-desktop-node]:not([data-depth="0"])')
+        .forEach((node) => {
+          if (
+            node.matches(':hover, :focus-within') &&
+            node.querySelector(':scope > [data-desktop-panel]')
+          ) {
+            placeFlyout(node);
+          }
+        });
+    });
+  }
+
   if (toggle instanceof HTMLButtonElement && menu instanceof HTMLElement) {
     const setOpen = (open) => {
       menu.classList.toggle('hidden', !open);
@@ -135,6 +208,30 @@ const mobileLogo = header?.mobileLogo ?? desktopLogo;
 
     menu.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', () => setOpen(false));
+    });
+
+    // RGW-273 — Acordeón de submenús (solo < lg, sin hover): cada botón
+    // expande su propio panel sin interferir con el resto ni con los
+    // enlaces, que conservan su navegación.
+    menu.querySelectorAll('[data-submenu-toggle]').forEach((toggleBtn) => {
+      if (!(toggleBtn instanceof HTMLButtonElement)) return;
+
+      toggleBtn.addEventListener('click', () => {
+        const panel = toggleBtn.parentElement?.nextElementSibling;
+
+        if (!(panel instanceof HTMLElement)) return;
+
+        const willOpen = panel.classList.contains('hidden');
+        panel.classList.toggle('hidden', !willOpen);
+        panel.classList.toggle('flex', willOpen);
+        toggleBtn.setAttribute('aria-expanded', String(willOpen));
+
+        const chevron = toggleBtn.querySelector('svg');
+
+        if (chevron instanceof SVGElement) {
+          chevron.classList.toggle('rotate-[270deg]', willOpen);
+        }
+      });
     });
   }
 </script>

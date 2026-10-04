@@ -19,15 +19,21 @@ import type { WpServices, WpServiceItem } from '../../lib/wordpress/types';
 
 interface Props {
   services: WpServices;
+  /**
+   * RGW-273 — Identificador de ancla de la sección (p. ej. el hash que
+   * WordPress configura en el menú para este idioma). El nombre lo
+   * define WordPress; Astro solo lo expone. Sin `id` no hay ancla.
+   */
+  id?: string;
 }
 
-const { services } = Astro.props;
+const { services, id = undefined } = Astro.props;
 
 const items: WpServiceItem[] = services.items ?? [];
 const pad = (n: number): string => String(n).padStart(2, '0');
 ---
 
-<Section>
+<Section id={id} class={id ? 'scroll-mt-24' : ''}>
   <div data-services>
     <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-6 mb-24 items-start">
       {services.title && (

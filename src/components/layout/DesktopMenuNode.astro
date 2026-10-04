@@ -1,0 +1,97 @@
+---
+/**
+ * RGW-273 — Nodo de navegación desktop (recursivo con
+ * `DesktopMenuNodes`: N niveles sin límite impuesto por Astro).
+ *
+ * - El desplegable de nivel 0 abre debajo del menú principal.
+ * - Los paneles anidados (depth ≥ 1) abren lateralmente alineados con
+ *   la parte superior de su fila padre exacta (`top-0` relativo al
+ *   nodo), nunca con la parte superior del contenedor del submenú.
+ * - La dirección lateral (derecha/izquierda) la decide JS por nivel
+ *   según el espacio del viewport (`flyout-left`); ver script del
+ *   Header. Sin niveles fijos: vale para cualquier profundidad.
+ * - Apertura por padre directo (hover/focus con combinador hijo).
+ * - Todos los elementos con hijos muestran `→` apuntando a la derecha,
+ *   independientemente de la dirección del panel.
+ * El enlace padre conserva su URL de WordPress.
+ */
+import DesktopMenuNodes from './DesktopMenuNodes.astro';
+import Icon from '../ui/Icon.astro';
+import { menuItemClasses } from '../../lib/wordpress/menu';
+import type { ResolvedMenuTreeItem } from '../../lib/wordpress/menu';
+
+interface Props {
+  node: ResolvedMenuTreeItem;
+  depth?: number;
+}
+
+const { node: item, depth = 0 } = Astro.props;
+const hasChildren = item.children.length > 0;
+const isNestedFlyout = depth > 0;
+---
+
+<style>
+  /* RGW-273 — Apertura por padre directo: `:hover`/`:focus-within`
+     con combinador hijo para que los descendientes no se abran con el
+     ancestro (ver `DesktopMenuNodes`). Con ámbito del componente. */
+  [data-desktop-node]:hover > [data-desktop-panel],
+  [data-desktop-node]:focus-within > [data-desktop-panel] {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* RGW-273 — Flyout hacia la izquierda (lo activa JS por nivel cuando
+     el panel no cabe a la derecha del viewport). */
+  [data-desktop-node].flyout-left > [data-desktop-panel] {
+    left: auto;
+    right: 100%;
+    padding-left: 0;
+    padding-right: 0.5rem;
+  }
+
+  /* RGW-273 — Contención vertical: si al abrir lateralmente el panel no
+     cabe debajo del viewport, se ancla al borde inferior del nodo (abre
+     hacia arriba), manteniendo el anclaje al padre exacto. No afecta al
+     nivel 0 (depth=0 abre siempre debajo y el JS no toca ese nodo). */
+  [data-desktop-node].flyout-up > [data-desktop-panel] {
+    top: auto;
+    bottom: 0;
+  }
+</style>
+
+{!hasChildren ? (
+  <a
+    href={item.href}
+    target={item.target || undefined}
+    title={item.attrTitle || undefined}
+    rel={item.rel || undefined}
+    class={`text-navigation text-gw-text-secondary transition-colors duration-200 hover:text-brand-secondary${menuItemClasses(item)}`}
+  >
+    {item.title}
+  </a>
+) : (
+  <div class="relative" data-desktop-node data-depth={depth}>
+    <a
+      href={item.href}
+      target={item.target || undefined}
+      title={item.attrTitle || undefined}
+      rel={item.rel || undefined}
+      aria-haspopup="true"
+      class={`text-navigation text-gw-text-secondary flex items-center gap-1 transition-colors duration-200 hover:text-brand-secondary${menuItemClasses(item)}`}
+    >
+      {item.title}
+      {hasChildren && (
+        <Icon name="chevron-right" size={4} class="ml-auto" />
+      )}
+    </a>
+    <div
+      data-desktop-panel
+      class={`invisible absolute z-50 min-w-56${isNestedFlyout ? ' left-full top-0' : ' left-0 top-full translate-y-1'} pt-2 opacity-0 transition-[opacity,transform,visibility] duration-200 ease-out`}
+    >
+      <div class="bg-gw-surface-primary border-gw-border-subtle flex flex-col gap-1 border p-2 shadow-sm">
+        <DesktopMenuNodes nodes={item.children} depth={depth + 1} />
+      </div>
+    </div>
+  </div>
+)}

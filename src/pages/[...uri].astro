@@ -269,8 +269,27 @@ if (translatedSlug) {
       <Hero hero={hero} image={heroImage} />
       {expertise && <Expertise expertise={expertise} />}
       {technology && <CommunityModel technology={technology} />}
-      {services && <Services services={services} />}
-      {process && <Process process={process} images={stepImages} />}
+      {services && (
+        <Services
+          services={services}
+          id={
+            isHomePage ? (locale === 'en' ? 'services' : 'servicios') : undefined
+          }
+        />
+      )}
+      {process && (
+        <Process
+          process={process}
+          images={stepImages}
+          id={
+            isHomePage
+              ? locale === 'en'
+                ? 'how-we-work'
+                : 'como-trabajamos'
+              : undefined
+          }
+        />
+      )}
       {faq && <Faq faq={faq} />}
       {finalCta && <FinalCta finalCta={finalCta} />}
     </>

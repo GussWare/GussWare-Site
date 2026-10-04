@@ -39,7 +39,7 @@ export interface WpCustomMenu {
   items: WpCustomMenuItem[];
 }
 
-/** Ítem embebido de `/gussware/v1/menus`. */
+/** Ítem embebido de `/gussware/v1/menus` (estructura exacta del endpoint). */
 export interface WpCustomMenuItem {
   ID: number;
   /** ID del ítem padre como cadena (`"0"` = nivel superior). */
@@ -47,7 +47,19 @@ export interface WpCustomMenuItem {
   title: string;
   url: string;
   target: string;
+  /** Atributo HTML `title` configurado en WordPress. */
+  attr_title: string;
+  /** Clases CSS configuradas en WordPress. */
+  classes: string[];
+  /** Descripción del elemento configurada en WordPress. */
+  description: string;
+  /** Relación del enlace (`rel`) configurada en WordPress. */
+  xfn: string;
+  /** Tipo de objeto enlazado en WordPress (`custom`, `post_type`, ...). */
   type: string;
+  /** Objeto enlazado (`custom`, `page`, ...) e ID informativo. */
+  object: string;
+  object_id: string;
   menu_order: number;
   post_status: string;
 }
@@ -58,7 +70,7 @@ export interface HeaderLogo {
   alt: string;
 }
 
-/** Ítem del menú del Header listo para renderizar. */
+/** Ítem del menú del Header listo para renderizar (propiedades de WP conservadas). */
 export interface HeaderMenuItem {
   id: number;
   title: string;
@@ -66,6 +78,18 @@ export interface HeaderMenuItem {
   parent: number;
   menu_order: number;
   target: string;
+  /** Atributo HTML `title` (`attr_title` de WordPress, vacío si no hay). */
+  attrTitle: string;
+  /** Clases CSS de WordPress (sin vacíos); se suman a las del diseño. */
+  classes: string[];
+  /** Descripción de WordPress (sin slot en el diseño actual: se conserva, no se renderiza). */
+  description: string;
+  /** Relación del enlace (`xfn` de WordPress → `rel`, vacío si no hay). */
+  rel: string;
+  /** Tipo/objeto enlazado en WordPress (informativo, sin uso en render). */
+  type: string;
+  object: string;
+  objectId: string;
 }
 
 export interface Header {
