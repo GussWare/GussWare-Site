@@ -48,6 +48,11 @@ import { getLanguages } from '../lib/wordpress/languages';
 import { wpFetch } from '../lib/wordpress/client';
 import { wpRoutes } from '../lib/wordpress/routes';
 import { getSocialMedia } from '../lib/wordpress/socialMedia';
+import {
+  formatLegalDate,
+  getLegalInfo,
+  getPageUpdateDate,
+} from '../lib/wordpress/legal';
 import { stripHtml } from '../lib/wordpress/text';
 import type { WpMedia, WpServiceSummary } from '../lib/wordpress/types';
 
@@ -72,6 +77,14 @@ if (!page) {
   Astro.response.status = 404;
   return Astro.rewrite(routes.notFound);
 }
+
+// RGW-268 — Solo la página legal resuelve datos legales: generales desde
+// `Información legal` y fecha desde el Custom Field de la propia Page.
+// El resto de páginas no toca estas fuentes.
+const legalInfo = isLegalPage ? await getLegalInfo(locale) : null;
+const updatedLabel = isLegalPage
+  ? formatLegalDate(getPageUpdateDate(page), locale)
+  : null;
 
 const title = stripHtml(page.title.rendered);
 const description = stripHtml(page.excerpt.rendered).slice(0, 160);
@@ -211,7 +224,12 @@ if (translatedSlug) {
   }}
 >
   {isLegalPage ? (
-    <LegalView title={title} content={page.content.rendered} />
+    <LegalView
+      title={title}
+      content={page.content.rendered}
+      legalInfo={legalInfo}
+      updatedLabel={updatedLabel}
+    />
   ) : hero ? (
     <>
       <Hero hero={hero} image={heroImage} />

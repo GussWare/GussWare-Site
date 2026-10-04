@@ -230,6 +230,9 @@ export interface WpPage {
 
   acf: WpPageAcf;
 
+  /** RGW-268 — Meta con el Custom Field de la página (solo si WP lo expone). */
+  meta?: WpPageMeta;
+
   lang: string;
   translations: Record<string, number>;
 
@@ -488,6 +491,15 @@ export interface WpPostMeta {
   _acf_changed: boolean;
   inline_featured_image: boolean;
   footnotes: string;
+}
+
+/**
+ * RGW-268 — Meta de una Page con el Custom Field `Fecha de
+ * actualización` (`privacy_last_updated`, `YYYYMMDD`). Solo la página
+ * de Política de Privacidad lo utiliza; el resto de Pages no lo trae.
+ */
+export interface WpPageMeta extends WpPostMeta {
+  privacy_last_updated?: string | null;
 }
 
 export interface WpPostYoastRobots {
