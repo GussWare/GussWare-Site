@@ -63,7 +63,7 @@ const localeUrls = {
 
 <Layout
   title={`${stripHtml(service.title.rendered)} — GussWare`}
-  description={stripHtml(service.excerpt.rendered).slice(0, 160) || undefined}
+  description={stripHtml(service.excerpt?.rendered ?? '').slice(0, 160) || undefined}
   localeUrls={localeUrls}
   lang={service.lang}
 >

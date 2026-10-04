@@ -58,7 +58,9 @@ const localeUrls = {
         {services.map((service) => (
           <Card
             title={stripHtml(service.title.rendered)}
-            description={stripHtml(service.excerpt.rendered)}
+            description={stripHtml(
+              service.excerpt?.rendered || service.acf?.intro_description || '',
+            )}
             href={serviceDetailUrl('es', service.slug)}
           />
         ))}
