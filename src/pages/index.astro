@@ -22,7 +22,7 @@ import { getFrontPage } from '../lib/wordpress/pages';
 import { wpFetch } from '../lib/wordpress/client';
 import { wpRoutes } from '../lib/wordpress/routes';
 import { stripHtml } from '../lib/wordpress/text';
-import type { WpMedia, WpServiceSummary } from '../lib/wordpress/types';
+import type { WpMedia, WpServiceItem, WpServiceSummary } from '../lib/wordpress/types';
 
 export const prerender = false;
 
@@ -42,28 +42,37 @@ const expertise = page?.acf?.expertise ?? null;
 const technology = page?.acf?.technology ?? null;
 const servicesAcf = page?.acf?.services ?? null;
 
-// RGW-EP09-04-03: ítems desde el CPT `service` (locale `es`);
-// respaldo a `services.items[]` de ACF si REST falla o está vacío.
-let serviceItems = servicesAcf?.items ?? [];
+// RGW-272: ítems siempre desde el catálogo CPT `service` (locale `es`),
+// sin integración con `services.items[]` de ACF. El encabezado de la
+// sección sigue desde el ACF del Home cuando existe.
+let serviceItems: WpServiceItem[] = [];
 
-if (servicesAcf) {
-  try {
-    const list = await wpFetch<WpServiceSummary[]>(wpRoutes.services('es'));
+try {
+  const list = await wpFetch<WpServiceSummary[]>(wpRoutes.services('es'));
 
-    if (Array.isArray(list) && list.length > 0) {
-      serviceItems = list.map((item) => ({
-        title: stripHtml(item.title.rendered),
-        description: stripHtml(item.excerpt.rendered),
-        // RGW-EP09-07-03: cada fila enlaza a su detalle.
-        url: serviceDetailUrl('es', item.slug),
-      }));
-    }
-  } catch {
-    // Respaldo: ítems ACF.
+  if (Array.isArray(list)) {
+    serviceItems = list.map((item) => ({
+      title: stripHtml(item.title.rendered),
+      // RGW-272: el extracto del CPT puede venir nulo; se usa la
+      // descripción del propio servicio en el catálogo.
+      description: stripHtml(
+        item.excerpt?.rendered || item.acf?.intro_description || '',
+      ),
+      // RGW-EP09-07-03: cada fila enlaza a su detalle.
+      url: serviceDetailUrl('es', item.slug),
+    }));
   }
+} catch {
+  // Sin catálogo: la sección se renderiza sin ítems.
 }
 
-const services = servicesAcf ? { ...servicesAcf, items: serviceItems } : null;
+const services =
+  servicesAcf || serviceItems.length > 0
+    ? {
+        ...(servicesAcf ?? { eyebrow: '', title: '', description: '' }),
+        items: serviceItems,
+      }
+    : null;
 const process = page?.acf?.process ?? null;
 const finalCta = page?.acf?.final_cta ?? null;
 const faq = page?.acf?.faq ?? null;
