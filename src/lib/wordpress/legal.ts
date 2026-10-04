@@ -3,7 +3,8 @@
  *
  * Origen de cada dato (sin mezclar fuentes, sin hardcodear, sin inventar):
  * - `PRIVACY_LAST_UPDATED` → Custom Field `privacy_last_updated` de la
- *   propia Page (`page.meta`, formato `YYYYMMDD`). Exclusivo de la página.
+ *   propia Page, desde la misma respuesta REST que trae el contenido
+ *   (`page.acf`, formato `YYYYMMDD`). Exclusivo de la página.
  * - Resto de etiquetas `{{TOKEN}}` → Configuración del sitio
  *   → `Información legal` (datos generales reutilizables en otras páginas
  *   legales). Se leen con `getLegalInfo()`; si la sección no expone un
@@ -46,7 +47,7 @@ export const LEGAL_SITE_TOKENS: Record<string, keyof LegalInfo> = {
 /** Etiqueta que proviene del Custom Field de la página (nunca del sitio). */
 export const PAGE_DATE_TOKEN = 'PRIVACY_LAST_UPDATED';
 
-/** Custom Field `Fecha de actualización` de la Page (`page.meta`). */
+/** Custom Field `Fecha de actualización` de la Page (`page.acf`). */
 export const PAGE_UPDATE_DATE_META_KEY = 'privacy_last_updated';
 
 /**
@@ -93,13 +94,14 @@ export async function getLegalInfo(
 }
 
 /**
- * Extrae la fecha del Custom Field de la página (`YYYYMMDD`).
- * Retorna `null` si la página no trae el campo.
+ * Extrae la fecha del Custom Field de la página (`page.acf`, `YYYYMMDD`,
+ * misma respuesta REST que el contenido). Retorna `null` si la página
+ * no trae el campo. Ya no depende de `page.meta`.
  */
 export function getPageUpdateDate(page: {
-  meta?: Record<string, unknown> | null;
+  acf?: Record<string, unknown> | null;
 }): string | null {
-  const raw = page.meta?.[PAGE_UPDATE_DATE_META_KEY];
+  const raw = page.acf?.[PAGE_UPDATE_DATE_META_KEY];
 
   if (typeof raw !== 'string' || !/^\d{8}$/.test(raw)) {
     return null;

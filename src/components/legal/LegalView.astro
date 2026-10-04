@@ -35,6 +35,8 @@
  */
 import Container from '../ui/Container.astro';
 import Icon from '../ui/Icon.astro';
+import Breadcrumbs from '../ui/Breadcrumbs.astro';
+import { getBreadcrumbHome } from '../../lib/routes';
 import {
   resolveLegalTokens,
   type LegalInfo,
@@ -49,9 +51,17 @@ interface Props {
   legalInfo?: LegalInfo | null;
   /** Fecha del Custom Field de la página, formateada (o `null`). */
   updatedLabel?: string | null;
+  /** Locale en curso para la raíz de la migaja de pan (`Inicio`/`Home`). */
+  locale?: string;
 }
 
-const { title, content, legalInfo = null, updatedLabel = null } = Astro.props;
+const {
+  title,
+  content,
+  legalInfo = null,
+  updatedLabel = null,
+  locale = 'es',
+} = Astro.props;
 
 /** Contenido con etiquetas legales resueltas desde su fuente correcta. */
 const resolvedContent = resolveLegalTokens(content, {
@@ -144,6 +154,9 @@ if (indexLinks && indexLinks.length === 10) {
 }
 
 const hasHeader = Boolean(headerGroup && eyebrowHtml && metaHtml && ledeHtml);
+
+/** Migaja de pan homologada (mismo componente y raíz que el resto del sitio). */
+const crumbs = [getBreadcrumbHome(locale), { label: title }];
 ---
 
 <div class="legal-page bg-gw-surface-primary text-gw-text-primary">
@@ -152,6 +165,7 @@ const hasHeader = Boolean(headerGroup && eyebrowHtml && metaHtml && ledeHtml);
       <div class="legal-hero-deco" aria-hidden="true" />
       <Container>
         <div class="legal-hero-inner">
+          <Breadcrumbs items={crumbs} class="mb-8" />
           <div class="legal-eyebrow-row">
             <span class="legal-eyebrow-sq" aria-hidden="true" />
             <div set:html={eyebrowHtml} />
@@ -179,6 +193,7 @@ const hasHeader = Boolean(headerGroup && eyebrowHtml && metaHtml && ledeHtml);
   ) : (
     <Container>
       <article class="mx-auto w-full max-w-[800px] pt-16 md:pt-24 pb-16 md:pb-24">
+        <Breadcrumbs items={crumbs} class="mb-8" />
         <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6">
           {title}
         </h1>
