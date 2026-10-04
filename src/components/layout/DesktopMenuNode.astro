@@ -41,6 +41,10 @@ const isNestedFlyout = depth > 0;
     transform: translateY(0);
   }
 
+  [data-desktop-panel] {
+    min-width: 14rem;
+  }
+
   /* RGW-273 — Flyout hacia la izquierda (lo activa JS por nivel cuando
      el panel no cabe a la derecha del viewport). */
   [data-desktop-node].flyout-left > [data-desktop-panel] {
@@ -82,12 +86,12 @@ const isNestedFlyout = depth > 0;
     >
       {item.title}
       {hasChildren && (
-        <Icon name="chevron-right" size={4} class="ml-auto" />
+        <Icon name="chevron-right" size={4} class="ml-auto shrink-0" />
       )}
     </a>
     <div
       data-desktop-panel
-      class={`invisible absolute z-50 min-w-56${isNestedFlyout ? ' left-full top-0' : ' left-0 top-full translate-y-1'} pt-2 opacity-0 transition-[opacity,transform,visibility] duration-200 ease-out`}
+      class={`invisible absolute z-50${isNestedFlyout ? ' left-full top-0' : ' left-0 top-full translate-y-1'} pt-2 opacity-0 transition-[opacity,transform,visibility] duration-200 ease-out`}
     >
       <div class="bg-gw-surface-primary border-gw-border-subtle flex flex-col gap-1 border p-2 shadow-sm">
         <DesktopMenuNodes nodes={item.children} depth={depth + 1} />
