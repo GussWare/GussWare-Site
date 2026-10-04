@@ -1,0 +1,58 @@
+---
+/**
+ * RGW-273 — Nodo de navegación desktop (recursivo con
+ * `DesktopMenuNodes`: N niveles sin límite impuesto por Astro).
+ *
+ * Desplegable CSS con hover + focus-within (teclado), sin JS. El enlace
+ * padre conserva su URL de WordPress. Panel anidado (depth ≥ 1) en
+ * flyout lateral; mismos tokens en todos los niveles.
+ */
+import DesktopMenuNodes from './DesktopMenuNodes.astro';
+import Icon from '../ui/Icon.astro';
+import { menuItemClasses } from '../../lib/wordpress/menu';
+import type { ResolvedMenuTreeItem } from '../../lib/wordpress/menu';
+
+interface Props {
+  node: ResolvedMenuTreeItem;
+  depth?: number;
+}
+
+const { node: item, depth = 0 } = Astro.props;
+---
+
+{item.children.length === 0 ? (
+  <a
+    href={item.href}
+    target={item.target || undefined}
+    title={item.attrTitle || undefined}
+    rel={item.rel || undefined}
+    class={`text-navigation text-gw-text-secondary transition-colors duration-200 hover:text-brand-secondary${menuItemClasses(item)}`}
+  >
+    {item.title}
+  </a>
+) : (
+  <div class="group relative">
+    <a
+      href={item.href}
+      target={item.target || undefined}
+      title={item.attrTitle || undefined}
+      rel={item.rel || undefined}
+      aria-haspopup="true"
+      class={`text-navigation text-gw-text-secondary flex items-center gap-1 transition-colors duration-200 hover:text-brand-secondary${menuItemClasses(item)}`}
+    >
+      {item.title}
+      <Icon
+        name="chevron-right"
+        size={4}
+        class="rotate-90 transition-transform duration-200 group-hover:rotate-[270deg]"
+      />
+    </a>
+    <div
+      class={`invisible absolute top-full z-50 min-w-56 pt-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100${depth === 0 ? ' left-0' : ' left-full'}`}
+    >
+      <div class="bg-gw-surface-primary border-gw-border-subtle flex flex-col gap-1 border p-2 shadow-sm">
+        <DesktopMenuNodes nodes={item.children} depth={depth + 1} />
+      </div>
+    </div>
+  </div>
+)}

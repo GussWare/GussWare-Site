@@ -23,10 +23,11 @@ import { getHeader } from '../../lib/wordpress/header';
 import { routes } from '../../lib/routes';
 import type { LocaleUrls } from '../../lib/routes';
 import Button from '../ui/Button.astro';
-import Icon from '../ui/Icon.astro';
+import DesktopMenuNodes from './DesktopMenuNodes.astro';
 import LanguageSelector from '../ui/LanguageSelector.astro';
 import Logo from '../ui/Logo.astro';
 import MenuButton from '../ui/MenuButton.astro';
+import MobileMenuNodes from './MobileMenuNodes.astro';
 
 interface Props {
   localeUrls?: LocaleUrls;
@@ -39,21 +40,17 @@ const [logo, menuItems, header] = await Promise.all([
   getHeaderMenu(Astro.currentLocale ?? undefined),
   getHeader(Astro.currentLocale ?? undefined),
 ]);
-const topLevelItems = buildMenuTree(menuItems);
+const menuTree = buildMenuTree(menuItems);
 // RGW-273 — Resolución inteligente del `href` según el tipo de enlace
 // de WordPress (ancla, ruta interna o URL completa), por página e idioma,
 // en todo el árbol. Solo cambia el destino; estructura y estilos intactos.
 const locale = Astro.currentLocale ?? 'es';
 const homePath = locale === 'en' ? getRelativeLocaleUrl('en', '/') : routes.home;
-const navItems: ResolvedMenuTreeItem[] = resolveMenuTreeHrefs(topLevelItems, {
+const navItems: ResolvedMenuTreeItem[] = resolveMenuTreeHrefs(menuTree, {
   currentPath: Astro.url.pathname,
   homePath,
   currentOrigin: Astro.url.origin,
 });
-
-/** Clases WP del ítem sumadas a las del diseño (vacías si no hay). */
-const wpClasses = (item: ResolvedMenuTreeItem): string =>
-  item.classes.length > 0 ? ` ${item.classes.join(' ')}` : '';
 const desktopLogo = header?.logo ?? logo;
 const mobileLogo = header?.mobileLogo ?? desktopLogo;
 ---
@@ -73,60 +70,14 @@ const mobileLogo = header?.mobileLogo ?? desktopLogo;
     />
 
     <!-- Desktop Navigation (visible desde lg; en Tablet/Mobile la oculta el hamburger visual) -->
-    <!-- RGW-273 — Submenú: desplegable CSS con hover + focus-within
-      (teclado), sin JS. Dos niveles (padre → hijos, lo que WordPress
-      configura); la capa de datos ya soporta más profundidad. El enlace
-      padre conserva su URL de WordPress. -->
+    <!-- RGW-273 — Submenú recursivo (`DesktopMenuNodes`): N niveles sin
+      límite, desplegable CSS con hover + focus-within (teclado), sin JS.
+      El enlace padre conserva su URL de WordPress. -->
     <nav
       aria-label="Main Navigation"
       class="hidden items-center gap-6 lg:flex xl:gap-8"
     >
-      {navItems.map((item) =>
-        item.children.length === 0 ? (
-          <a
-            href={item.href}
-            target={item.target || undefined}
-            title={item.attrTitle || undefined}
-            rel={item.rel || undefined}
-            class={`text-navigation text-gw-text-secondary transition-colors duration-200 hover:text-brand-secondary${wpClasses(item)}`}
-          >
-            {item.title}
-          </a>
-        ) : (
-          <div class="group relative">
-            <a
-              href={item.href}
-              target={item.target || undefined}
-              title={item.attrTitle || undefined}
-              rel={item.rel || undefined}
-              aria-haspopup="true"
-              class={`text-navigation text-gw-text-secondary flex items-center gap-1 transition-colors duration-200 hover:text-brand-secondary${wpClasses(item)}`}
-            >
-              {item.title}
-              <Icon
-                name="chevron-right"
-                size={4}
-                class="rotate-90 transition-transform duration-200 group-hover:rotate-[270deg]"
-              />
-            </a>
-            <div class="invisible absolute left-0 top-full z-50 min-w-56 pt-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-              <div class="bg-gw-surface-primary border-gw-border-subtle flex flex-col gap-1 border p-2 shadow-sm">
-                {item.children.map((child) => (
-                  <a
-                    href={child.href}
-                    target={child.target || undefined}
-                    title={child.attrTitle || undefined}
-                    rel={child.rel || undefined}
-                    class={`text-navigation text-gw-text-secondary px-3 py-2 transition-colors duration-200 hover:text-brand-secondary${wpClasses(child)}`}
-                  >
-                    {child.title}
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-        ),
-      )}
+      <DesktopMenuNodes nodes={navItems} />
     </nav>
 
     <!-- Desktop CTA & Mobile Toggle -->
@@ -161,61 +112,9 @@ const mobileLogo = header?.mobileLogo ?? desktopLogo;
       aria-label="Mobile Navigation"
       class="mx-auto flex w-full max-w-[var(--container-max)] flex-col px-4 py-2 md:px-6"
     >
-      {/* RGW-273 — Submenú móvil (< lg, sin hover): botón expansor por
-        padre (acordeón); el enlace del padre conserva su URL. */}
-      {navItems.map((item) =>
-        item.children.length === 0 ? (
-          <a
-            href={item.href}
-            target={item.target || undefined}
-            title={item.attrTitle || undefined}
-            rel={item.rel || undefined}
-            class={`text-navigation text-gw-text-secondary py-3 transition-colors duration-200 hover:text-brand-secondary${wpClasses(item)}`}
-          >
-            {item.title}
-          </a>
-        ) : (
-          <div>
-            <div class="flex items-center justify-between">
-              <a
-                href={item.href}
-                target={item.target || undefined}
-                title={item.attrTitle || undefined}
-                rel={item.rel || undefined}
-                class={`text-navigation text-gw-text-secondary py-3 transition-colors duration-200 hover:text-brand-secondary${wpClasses(item)}`}
-              >
-                {item.title}
-              </a>
-              <button
-                type="button"
-                data-submenu-toggle
-                aria-expanded="false"
-                aria-label={item.title}
-                class="text-gw-text-secondary p-2"
-              >
-                <Icon
-                  name="chevron-right"
-                  size={4}
-                  class="rotate-90 transition-transform duration-200"
-                />
-              </button>
-            </div>
-            <div data-submenu-panel class="hidden flex-col">
-              {item.children.map((child) => (
-                <a
-                  href={child.href}
-                  target={child.target || undefined}
-                  title={child.attrTitle || undefined}
-                  rel={child.rel || undefined}
-                  class={`text-navigation text-gw-text-secondary py-3 pl-4 transition-colors duration-200 hover:text-brand-secondary${wpClasses(child)}`}
-                >
-                  {child.title}
-                </a>
-              ))}
-            </div>
-          </div>
-        ),
-      )}
+      {/* RGW-273 — Submenú móvil recursivo (`MobileMenuNodes`): N niveles
+        sin límite, acordeón por nivel con el JS del componente. */}
+      <MobileMenuNodes nodes={navItems} />
       <LanguageSelector variant="panel" localeUrls={localeUrls} />
       <Button
         href={routes.contact}

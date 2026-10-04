@@ -1,0 +1,65 @@
+---
+/**
+ * RGW-273 — Nodo del panel móvil (recursivo con `MobileMenuNodes`:
+ * N niveles sin límite impuesto por Astro).
+ *
+ * Sin hover (< lg): cada padre con hijos lleva botón expansor
+ * (acordeón, `data-submenu-toggle`/`data-submenu-panel`, ya operados
+ * por el JS vainilla del Header); el enlace del padre conserva su URL
+ * de WordPress. Hijos con sangría uniforme en cualquier profundidad.
+ */
+import MobileMenuNodes from './MobileMenuNodes.astro';
+import Icon from '../ui/Icon.astro';
+import { menuItemClasses } from '../../lib/wordpress/menu';
+import type { ResolvedMenuTreeItem } from '../../lib/wordpress/menu';
+
+interface Props {
+  node: ResolvedMenuTreeItem;
+  depth?: number;
+}
+
+const { node: item, depth = 0 } = Astro.props;
+const indented = depth > 0 ? ' pl-4' : '';
+---
+
+{item.children.length === 0 ? (
+  <a
+    href={item.href}
+    target={item.target || undefined}
+    title={item.attrTitle || undefined}
+    rel={item.rel || undefined}
+    class={`text-navigation text-gw-text-secondary py-3 transition-colors duration-200 hover:text-brand-secondary${indented}${menuItemClasses(item)}`}
+  >
+    {item.title}
+  </a>
+) : (
+  <div>
+    <div class="flex items-center justify-between">
+      <a
+        href={item.href}
+        target={item.target || undefined}
+        title={item.attrTitle || undefined}
+        rel={item.rel || undefined}
+        class={`text-navigation text-gw-text-secondary py-3 transition-colors duration-200 hover:text-brand-secondary${indented}${menuItemClasses(item)}`}
+      >
+        {item.title}
+      </a>
+      <button
+        type="button"
+        data-submenu-toggle
+        aria-expanded="false"
+        aria-label={item.title}
+        class="text-gw-text-secondary p-2"
+      >
+        <Icon
+          name="chevron-right"
+          size={4}
+          class="rotate-90 transition-transform duration-200"
+        />
+      </button>
+    </div>
+    <div data-submenu-panel class="hidden flex-col">
+      <MobileMenuNodes nodes={item.children} depth={depth + 1} />
+    </div>
+  </div>
+)}

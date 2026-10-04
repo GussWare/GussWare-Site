@@ -116,6 +116,14 @@ function menuName(baseName: string, englishName: string, locale: string) {
 }
 
 /**
+ * RGW-273 — Clases WP de un ítem sumadas a las del diseño
+ * (cadena vacía si no hay). Presentacional, sin JSX.
+ */
+export function menuItemClasses(item: { classes: string[] }): string {
+  return item.classes.length > 0 ? ` ${item.classes.join(' ')}` : '';
+}
+
+/**
  * RGW-273 — Nodo del menú con jerarquía padre → hijos desde WordPress
  * (`menu_item_parent`). Sin nombres ni relaciones hardcodeadas: la
  * jerarquía proviene íntegramente de los datos.
