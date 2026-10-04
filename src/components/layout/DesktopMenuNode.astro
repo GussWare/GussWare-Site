@@ -3,9 +3,15 @@
  * RGW-273 — Nodo de navegación desktop (recursivo con
  * `DesktopMenuNodes`: N niveles sin límite impuesto por Astro).
  *
- * Desplegable CSS con hover + focus-within (teclado), sin JS. El enlace
- * padre conserva su URL de WordPress. Panel anidado (depth ≥ 1) en
- * flyout lateral; mismos tokens en todos los niveles.
+ * Desplegable CSS sin JS. Cada panel abre SOLO con hover/focus de SU
+ * nodo padre directo (`:hover >` y `:focus-within >` por combinador
+ * hijo en el `<style>`): los descendientes nunca se abren con el
+ * ancestro (los `group-hover` genéricos sí filtraban hacia abajo).
+ * Teclado: el foco dentro mantiene abierta su rama. Apertura con
+ * transición sutil (opacidad + desplazamiento mínimo).
+ * El enlace padre conserva su URL de WordPress.
+ * Flecha solo en elementos de submenú (depth ≥ 1) con hijos, alineada
+ * al extremo derecho; el nivel principal no la muestra.
  */
 import DesktopMenuNodes from './DesktopMenuNodes.astro';
 import Icon from '../ui/Icon.astro';
@@ -18,9 +24,28 @@ interface Props {
 }
 
 const { node: item, depth = 0 } = Astro.props;
+const hasChildren = item.children.length > 0;
+const isSubmenuMember = depth > 0;
 ---
 
-{item.children.length === 0 ? (
+<style>
+  /* RGW-273 — Apertura por padre directo: `:hover`/`:focus-within`
+     con combinador hijo para que los descendientes no se abran con el
+     ancestro (ver `DesktopMenuNodes`). Con ámbito del componente. */
+  [data-desktop-node]:hover > [data-desktop-panel],
+  [data-desktop-node]:focus-within > [data-desktop-panel] {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  [data-desktop-node]:hover > a > svg[data-submenu-chevron],
+  [data-desktop-node]:focus-within > a > svg[data-submenu-chevron] {
+    transform: rotate(270deg);
+  }
+</style>
+
+{!hasChildren ? (
   <a
     href={item.href}
     target={item.target || undefined}
@@ -31,7 +56,7 @@ const { node: item, depth = 0 } = Astro.props;
     {item.title}
   </a>
 ) : (
-  <div class="group relative">
+  <div class="relative" data-desktop-node>
     <a
       href={item.href}
       target={item.target || undefined}
@@ -41,14 +66,18 @@ const { node: item, depth = 0 } = Astro.props;
       class={`text-navigation text-gw-text-secondary flex items-center gap-1 transition-colors duration-200 hover:text-brand-secondary${menuItemClasses(item)}`}
     >
       {item.title}
-      <Icon
-        name="chevron-right"
-        size={4}
-        class="rotate-90 transition-transform duration-200 group-hover:rotate-[270deg]"
-      />
+      {isSubmenuMember && (
+        <Icon
+          name="chevron-right"
+          size={4}
+          data-submenu-chevron
+          class="ml-auto rotate-90 transition-transform duration-200"
+        />
+      )}
     </a>
     <div
-      class={`invisible absolute top-full z-50 min-w-56 pt-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100${depth === 0 ? ' left-0' : ' left-full'}`}
+      data-desktop-panel
+      class={`invisible absolute top-full z-50 min-w-56 translate-y-1 pt-2 opacity-0 transition-[opacity,transform,visibility] duration-200 ease-out${depth === 0 ? ' left-0' : ' left-full'}`}
     >
       <div class="bg-gw-surface-primary border-gw-border-subtle flex flex-col gap-1 border p-2 shadow-sm">
         <DesktopMenuNodes nodes={item.children} depth={depth + 1} />
