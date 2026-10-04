@@ -1,165 +1,78 @@
 ---
 name: gussware-content-import
-description: Use when importing or creating GussWare services from an Obsidian Markdown content document into the WordPress service CPT, including Spanish/English content, ACF Service Detail fields, service categories, and Polylang translations.
-compatibility: opencode
-metadata:
-  project: gussware-site
-  content_type: services
-  wordpress_post_type: service
-  integration: wordpress-rest-api
-  languages:
-    - es
-    - en
+description: Imports the 6 GussWare services from an Obsidian Markdown document into the WordPress service CPT via REST API, with Service Detail ACF fields, service_category taxonomy, and Polylang es/en translations. Use when importing services, creating service translations, or syncing Markdown service content to WordPress.
 ---
 
 # GussWare Content Import
 
 ## Purpose
 
-Use this skill to import GussWare service content from an Obsidian-compatible Markdown source document into the existing WordPress installation.
+Import the 6 services defined in an Obsidian Markdown source document into the existing WordPress installation.
 
-The source document is the content source of truth for the services being imported.
+- Source of truth: Markdown document.
+- Destination: existing WordPress via REST API.
+- Scope: CPT `service` only, plus its ACF group and Polylang relations.
+- Idempotent: re-running must not create duplicates.
 
-The WordPress installation is the destination and must be modified through its existing REST APIs.
+Do not perform cleanup, refactors, config changes, or unrelated code changes.
 
-This skill is specifically for the `service` custom post type and its associated ACF and Polylang data.
+## Integration
 
----
+Use WordPress REST API as the primary mechanism:
 
-## Required Integration
+```text
+/wp-json/wp/v2/services
+/wp-json/wp/v2/service-categories
+/wp-json/pll/v1/languages
+```
 
-Use the **WordPress REST API** for this task.
+Use MCP only if a WordPress MCP is already configured and exposes the required operations. Do not assume an MCP exists. Do not create one.
 
-Do not assume or introduce a WordPress MCP integration.
+Before writes, inspect schema if needed:
 
-MCP may only be used if an existing configured MCP explicitly exposes the required WordPress operations. If no such MCP exists, use the WordPress REST API.
+```http
+OPTIONS /wp-json/wp/v2/services
+OPTIONS /wp-json/wp/v2/services/{id}
+```
 
-The expected API namespaces are:
+Use authenticated requests. Follow the installed schema; do not assume undocumented shapes.
 
-* WordPress REST API: `/wp-json/wp/v2/`
-* Services endpoint: `/wp-json/wp/v2/services`
-* Service categories: `/wp-json/wp/v2/service-categories`
-* Polylang languages: `/wp-json/pll/v1/languages`
-
-ACF data is exposed through the `acf` object of the service REST resource because the `Service Detail` field group has `show_in_rest` enabled.
-
----
-
-## WordPress Configuration
-
-The target CPT is:
+## WordPress Model
 
 ```text
 post_type: service
 rest_base: services
-```
+supports: title, editor, excerpt, thumbnail, revisions, custom-fields, author
 
-The target taxonomy is:
-
-```text
 taxonomy: service_category
 rest_base: service-categories
-```
 
-The ACF field group is:
-
-```text
-group_gw_service_detail
+ACF group: group_gw_service_detail
 title: Service Detail
+show_in_rest: true, exposed as `acf` object
 ```
 
-All fields in this group currently use:
+All fields in this group use `translations: ignore`. ES and EN must receive explicit independent payloads. Never rely on automatic sync.
 
-```text
-translations: ignore
-```
+## Languages
 
-Therefore:
+Support exactly `es` and `en`.
 
-**Do not rely on ACF/Polylang automatic field synchronization.**
+Source frontmatter uses `es-MX` + English. Map `es-MX → es`, `English → en` unless WordPress reports different codes.
 
-Spanish and English ACF content must be populated independently.
-
----
-
-# Supported Languages
-
-The import must support exactly these content languages:
-
-```text
-es
-en
-```
-
-The source document contains:
-
-```yaml
-language: es-MX
-translation_languages:
-  - es
-  - en
-```
-
-Treat:
-
-```text
-es-MX → es
-English → en
-```
-
-as the WordPress/Polylang language codes unless the existing WordPress configuration reports different codes.
-
-Before importing, query:
+Before import:
 
 ```http
 GET /wp-json/pll/v1/languages
 ```
 
-Verify that the expected Spanish and English languages exist.
+Verify `es` and `en` exist. Do not create or modify languages, ACF config, Polylang config, or CPT definition.
 
-Do not create or modify languages.
+## Source Structure
 
----
+Only `#` headings are services. All other headings are content hierarchy to map to WP/ACF fields.
 
-# Translation Rules
-
-Every service represents one logical service with two language versions:
-
-```text
-Service
-├── Spanish post
-└── English post
-```
-
-Spanish and English must be separate WordPress posts.
-
-The two posts must be linked through Polylang.
-
-Polylang exposes the language and translation relationship in REST responses and supports assigning the language and translation relationship through REST.
-
-After both posts exist, verify:
-
-```text
-Spanish post:
-lang = es
-translations.en = English post ID
-
-English post:
-lang = en
-translations.es = Spanish post ID
-```
-
-Never create a second translation when the existing translation relationship already represents the same service.
-
----
-
-# Import Source
-
-The input document is an Obsidian Markdown document.
-
-Its six services are the only top-level service entities.
-
-The six expected services are:
+Expected 6 logical services:
 
 1. Consultoría técnica
 2. Diseño de sitios web y tiendas en línea
@@ -168,659 +81,171 @@ The six expected services are:
 5. DevOps y Soporte Técnico
 6. Integración de APIs y Servicios Externos
 
-The Markdown hierarchy is semantic:
+Semantic hierarchy:
 
 ```text
 # Servicio
 ## Identificación
 ## 🇲🇽 Español
-### Información principal
-#### ...
-### Intro
-#### ...
-### Hero Stats
-#### ...
-### Development
-#### ...
-### Solutions
-#### ...
-### Approach
-#### ...
-### Technologies
-#### ...
-### FAQ
-#### ...
-### CTA
-## 🇺🇸 English
-### Main Information
-#### ...
-### Intro
-#### ...
-### Hero Stats
-#### ...
-### Development
-#### ...
-### Solutions
-#### ...
-### Approach
-#### ...
-### Technologies
-#### ...
-### FAQ
-#### ...
-### CTA
+### Información principal (Título de WordPress, Extracto, Contenido)
+### Intro (Eyebrow, Título, Descripción, Suffix)
+### Hero Stats (Stat XX: label, value)
+### Development (title, content, tags)
+### Solutions (eyebrow, title, description, solutions[])
+### Approach (title, description, items[])
+### Technologies (title, description, groups[])
+### FAQ (items[])
+### CTA (title, description, button_text, button_url)
+## 🇺🇸 English (same structure: Main Information, Intro, Hero Stats, ...)
 ## Import Notes
 ```
 
-Do not interpret every Markdown heading as a WordPress field.
+Do not treat every Markdown heading as a WP field. Map semantically per tables below.
 
-Map the semantic sections to the ACF field structure defined below.
+## Existing Detection
 
----
-
-# Existing Service Detection
-
-Before creating anything, retrieve the existing services.
-
-Query the service endpoint separately by language when possible:
+Before creating anything:
 
 ```http
 GET /wp-json/wp/v2/services?lang=es&per_page=100
 GET /wp-json/wp/v2/services?lang=en&per_page=100
 ```
 
-Inspect:
+Inspect `id, slug, title, lang, translations, service_category, acf`.
 
-* post ID
-* slug
-* title
-* language
-* translations
-* categories
-* ACF data
+Match in this order:
 
-The objective is to prevent duplicates.
+1. Existing Polylang `translations` relationship.
+2. Exact normalized WP `slug`.
+3. Exact normalized `title` within same `lang`.
 
-## Matching
+Normalization: trim, case-insensitive, collapse repeated whitespace. No fuzzy matching for auto-merge. If ambiguous, stop for that service and report `AMBIGUOUS`.
 
-Prefer this order when identifying an existing service:
+Also query categories first:
 
-1. Existing Polylang translation relationship.
-2. Exact normalized WordPress slug.
-3. Exact normalized title within the same language.
-
-Normalization for comparison may include:
-
-* trimming whitespace
-* case-insensitive comparison
-* normalizing repeated whitespace
-
-Do not use approximate/fuzzy matching to automatically merge two services.
-
-If the identity of an existing service is ambiguous, stop and report the ambiguity instead of creating a possible duplicate.
-
----
-
-# Creation Rules
-
-For each of the six logical services:
-
-1. Find the Spanish version.
-2. Find the English version.
-3. Determine whether either already exists.
-4. Create only missing posts.
-5. Populate the Spanish content independently.
-6. Populate the English content independently.
-7. Establish the Polylang translation relationship.
-8. Verify the final result.
-
-### Existing service
-
-If the service already exists:
-
-* Do not create another post.
-* Do not create another translation.
-* Preserve the existing WordPress post ID.
-* Use the existing post as the target for the imported language content.
-
-Do not delete existing services.
-
-Do not duplicate existing categories.
-
-Do not create alternative service slugs unnecessarily.
-
----
-
-# WordPress Post Mapping
-
-For each service language version:
-
-### WordPress title
-
-Map:
-
-```text
-Español → Información principal → Título de WordPress
-English → Main Information → WordPress Title
+```http
+GET /wp-json/wp/v2/service-categories?per_page=100
 ```
 
-to the WordPress post `title`.
-
-### Extract
-
-Map:
-
-```text
-Extracto
-```
-
-to the WordPress `excerpt`.
-
-### Content
-
-Map:
-
-```text
-Contenido
-```
-
-to the WordPress `content`.
-
-The Markdown source may contain formatting intended for editorial content.
-
-Preserve the actual content meaning and structure when converting it to WordPress content.
-
-Do not put ACF structural data into `post_content` when the source section clearly maps to an ACF field.
-
----
-
-# ACF Mapping
-
-Populate the `acf` object using the following exact field names.
-
-## Intro
-
-```text
-intro_eyebrow
-intro_title
-intro_description
-intro_eyebrow_suffix
-```
-
-Source:
-
-```text
-Intro
-├── Eyebrow
-├── Título / Title
-├── Descripción / Description
-└── Suffix
-```
-
----
-
-## Hero Stats
-
-Map:
-
-```text
-Hero Stats
-└── Stat XX
-    ├── label
-    └── value
-```
-
-to:
-
-```json
-{
-  "hero_stats": [
-    {
-      "label": "...",
-      "value": "..."
-    }
-  ]
-}
-```
-
-Preserve the source ordering.
-
----
-
-## Development
-
-Map:
-
-```text
-development_title
-development_content
-development_tags
-```
-
-`development_tags` must use:
-
-```json
-{
-  "development_tags": [
-    {
-      "tag": "..."
-    }
-  ]
-}
-```
-
-Preserve ordering.
-
----
-
-# Solutions
-
-Map:
-
-```text
-solutions_eyebrow
-solutions_title
-solutions_description
-solutions
-```
-
-Each solution must use:
-
-```json
-{
-  "title": "...",
-  "description": "...",
-  "features": [
-    {
-      "feature": "..."
-    }
-  ],
-  "link": {
-    "text": "...",
-    "url": "..."
-  }
-}
-```
-
-If the source does not contain a link, do not invent one.
-
-Preserve the source solution ordering.
-
-Do not invent features.
-
-Do not invent URLs.
-
----
-
-# Approach
-
-Map:
-
-```text
-approach_title
-approach_description
-approach
-```
-
-Each approach item:
-
-```json
-{
-  "title": "...",
-  "description": "..."
-}
-```
-
-Preserve ordering.
-
----
-
-# Technologies
-
-Map:
-
-```text
-tech_title
-tech_description
-tech_groups
-```
-
-Each technology group:
-
-```json
-{
-  "title": "...",
-  "items": [
-    {
-      "name": "..."
-    }
-  ]
-}
-```
-
-Preserve the order of groups and technology items.
-
-Do not invent technologies.
-
----
-
-# FAQ
-
-Map:
-
-```text
-faq_items
-```
-
-to:
-
-```json
-{
-  "faq_items": [
-    {
-      "pregunta": "...",
-      "respuesta": "..."
-    }
-  ]
-}
-```
-
-For English content, still use the exact ACF field names:
-
-```text
-pregunta
-respuesta
-```
-
-Do not rename the ACF keys to English.
-
----
-
-# CTA
-
-Map:
-
-```text
-cta
-```
-
-to:
-
-```json
-{
-  "cta": {
-    "title": "...",
-    "description": "...",
-    "button_text": "...",
-    "button_url": "..."
-  }
-}
-```
-
-Do not invent `button_url`.
-
-If the source does not provide a URL, preserve it as absent/empty according to the existing WordPress field behavior.
-
----
-
-# Service Categories
-
-The source may identify a service category.
-
-Before creating a category:
-
-1. Query existing `service_category` terms.
-2. Match by language and normalized name.
-3. Reuse an existing category when it already exists.
-4. Create only when the category is explicitly present in the source and does not exist.
-
-Do not invent categories.
-
-Do not create duplicate categories.
-
-If categories are translated, preserve their Polylang relationship in the same way as service posts.
-
----
-
-# REST Write Strategy
-
-Use authenticated WordPress REST requests.
-
-For a new service:
+## Create ES and EN
+
+For each logical service:
+
+1. Find ES post, find EN post per matching above.
+2. Create only missing side. Reuse existing post and ID.
+3. Never create a second translation if link already exists.
+4. Populate ES ACF independently to ES post.
+5. Populate EN ACF independently to EN post.
+6. Assign `lang` explicitly on create/update.
+7. Link translations via Polylang, then verify both directions.
+
+New post:
 
 ```http
 POST /wp-json/wp/v2/services
 ```
 
-Populate the appropriate language and basic WordPress fields.
-
-Then populate ACF data through the same service REST resource:
+Update ACF via same resource:
 
 ```http
 POST /wp-json/wp/v2/services/{id}
 ```
 
-or the appropriate supported update method exposed by the installed WordPress/ACF REST schema.
-
-ACF supports reading and updating custom fields through the WordPress REST API when the field group is exposed in REST.
-
-Before performing writes, inspect the REST schema if necessary:
-
-```http
-OPTIONS /wp-json/wp/v2/services
-OPTIONS /wp-json/wp/v2/services/{id}
-```
-
-Do not assume an undocumented request shape when the installed API exposes its schema.
-
----
-
-# Polylang Linking
-
-After both language posts exist, establish the translation relationship.
-
-Use the Polylang REST mechanism:
+Link translations (follow installed schema):
 
 ```text
-POST /wp-json/wp/v2/services/{id}?lang={language}&translations[{other_language}]={other_post_id}
+Spanish: lang=es + translations[en]=EN_ID
+English: lang=en + translations[es]=ES_ID
 ```
 
-The exact request must follow the installed REST schema and authentication behavior.
-
-Example concept:
+Verify afterwards:
 
 ```text
-Spanish:
-lang=es
-translations[en]=EN_POST_ID
-
-English:
-lang=en
-translations[es]=ES_POST_ID
+ES: lang=es, translations.en=EN_ID
+EN: lang=en, translations.es=ES_ID
 ```
 
-Do not assume that creating two posts automatically links them.
+## Post Field Mapping
 
-Verify the relationship afterward.
+| Source (per language) | WP field |
+|---|---|
+| Información principal → Título de WordPress / Main Information → WordPress Title | `title` |
+| Extracto | `excerpt` |
+| Contenido | `content` |
+| service_category from `## Identificación` if present | `service_category` term IDs |
 
----
+Preserve editorial meaning when converting Markdown to WP content. Do not put structural ACF data into `post_content`.
 
-# Important Language Safety Rule
+## ACF Mapping
 
-Because the ACF fields use:
+Use exact keys. For EN still use `pregunta`, `respuesta`. Never rename keys.
+
+| Section | ACF keys |
+|---|---|
+| Intro | `intro_eyebrow, intro_title, intro_description, intro_eyebrow_suffix` |
+| Hero Stats | `hero_stats[]: {label, value}` ordered |
+| Development | `development_title, development_content, development_tags[]: {tag}` |
+| Solutions | `solutions_eyebrow, solutions_title, solutions_description, solutions[]` |
+| Approach | `approach_title, approach_description, approach[]: {title, description}` |
+| Technologies | `tech_title, tech_description, tech_groups[]: {title, items[]: {name}}` |
+| FAQ | `faq_items[]: {pregunta, respuesta}` |
+| CTA | `cta: {title, description, button_text, button_url}` |
+
+Shapes:
+
+```json
+{"hero_stats": [{"label": "...", "value": "..."}]}
+{"development_tags": [{"tag": "..."}]}
+{"solutions": [{"title": "...", "description": "...", "features": [{"feature": "..."}], "link": {"text": "...", "url": "..."}}]}
+{"approach": [{"title": "...", "description": "..."}]}
+{"tech_groups": [{"title": "...", "items": [{"name": "..."}]}]}
+{"faq_items": [{"pregunta": "...", "respuesta": "..."}]}
+{"cta": {"title": "...", "description": "...", "button_text": "...", "button_url": "..."}}
+```
+
+Rules: preserve order; do not invent features, URLs, technologies, categories, translations. If source has no link/URL, leave absent/empty per existing field behavior.
+
+## Categories
+
+1. Match by normalized name within same language.
+2. Reuse existing term.
+3. Create only if explicitly in source and missing.
+4. Preserve Polylang relation for translated categories same as posts.
+
+Do not invent or duplicate categories.
+
+## Status Values
+
+Report per service:
 
 ```text
-translations: ignore
+CREATED: post(s) newly created
+EXISTING: detected, no change needed
+UPDATED: existing post content/ACF/link updated
+SKIPPED: intentionally not touched (reason required)
+AMBIGUOUS: identity unclear, stopped to avoid duplicate
+ERROR: operation failed, include detail
 ```
 
-never assume that updating the Spanish ACF data will populate English automatically.
+## Validation
 
-Explicitly send the Spanish ACF payload to the Spanish post.
+After all 6:
 
-Explicitly send the English ACF payload to the English post.
+- [ ] 6 logical services exist (ES + EN each, unless source has single language).
+- [ ] `ES lang=es`, `EN lang=en`.
+- [ ] `ES translations.en=EN_ID`, `EN translations.es=ES_ID`.
+- [ ] `acf` contains expected keys for both languages: `intro_eyebrow, intro_title, intro_description, development_title, development_content, solutions_title, solutions_description, solutions, approach_title, approach_description, approach, tech_title, tech_description, tech_groups, faq_items, cta` plus optional `intro_eyebrow_suffix, hero_stats, development_tags, solutions_eyebrow` when in source.
+- [ ] Same payloads retrievable via Astro-consumed REST: `title, excerpt, content, lang, translations, acf` independently per language.
 
-Never copy Spanish ACF content into English.
+## Failure Rules
 
-Never translate content automatically unless the source document already provides the English version.
+Stop instead of guessing when: auth fails; `services` endpoint missing; `acf` object unavailable; `es`/`en` not configured; ambiguous match; inconsistent translation relation; required ACF field unwritable; schema mismatch.
 
-The source document is expected to provide both languages.
+Never fix by: duplicating posts, deleting posts, changing Polylang/ACF/plugin/CPT config, inventing content.
 
----
+Report exact problem + affected service.
 
-# Idempotency
-
-Running the same import twice must not create duplicate services.
-
-Example:
-
-```text
-First execution:
-ES service → created
-EN service → created
-translation → linked
-
-Second execution:
-ES service → detected
-EN service → detected
-translation → detected
-no duplicate posts created
-```
-
-The agent must report whether each service was:
-
-```text
-CREATED
-EXISTING
-UPDATED
-SKIPPED
-AMBIGUOUS
-ERROR
-```
-
-Do not silently create duplicates.
-
----
-
-# Validation
-
-After importing all six services, verify:
-
-## Services
-
-Exactly the expected six logical services exist.
-
-For each service:
-
-```text
-ES post exists
-EN post exists
-```
-
-unless the source explicitly contains only one language.
-
-## Languages
-
-Verify:
-
-```text
-ES post → lang = es
-EN post → lang = en
-```
-
-## Translation relationship
-
-Verify:
-
-```text
-ES translations.en = EN ID
-EN translations.es = ES ID
-```
-
-## ACF
-
-Verify the returned `acf` object contains the expected data for both languages.
-
-At minimum verify:
-
-```text
-intro_eyebrow
-intro_title
-intro_description
-development_title
-development_content
-solutions_title
-solutions_description
-solutions
-approach_title
-approach_description
-approach
-tech_title
-tech_description
-tech_groups
-faq_items
-cta
-```
-
-Also verify optional fields when present in the source:
-
-```text
-intro_eyebrow_suffix
-hero_stats
-development_tags
-solutions_eyebrow
-solution links
-```
-
-## REST Consumption
-
-Finally query the services through the same API consumed by Astro.
-
-Verify that the resulting REST responses contain:
-
-```text
-title
-excerpt
-content
-lang
-translations
-acf
-```
-
-and that both language versions can be retrieved independently.
-
----
-
-# Failure Rules
-
-Stop instead of guessing when:
-
-* WordPress authentication fails.
-* The `service` endpoint does not exist.
-* The ACF `acf` object is unavailable.
-* Spanish or English is not configured in Polylang.
-* An existing service cannot be matched unambiguously.
-* Two existing posts appear to represent the same logical service but their translation relationship is inconsistent.
-* A required ACF field cannot be written.
-* A REST response differs materially from the expected schema.
-
-Never solve these situations by:
-
-* creating duplicate posts
-* deleting existing posts
-* modifying Polylang configuration
-* modifying ACF field configuration
-* modifying WordPress plugins
-* changing the CPT definition
-* changing the ACF field group
-* inventing missing content
-
-Report the exact problem and affected service.
-
----
-
-# Final Report
-
-At the end report:
+## Final Report Template
 
 ```text
 Services processed: 6
@@ -837,6 +262,9 @@ Updated:
 Skipped:
 - ...
 
+Ambiguous:
+- ...
+
 Errors:
 - ...
 
@@ -848,14 +276,9 @@ YES/NO
 
 REST API consumption verified:
 YES/NO
-```
 
-Also report the final WordPress IDs:
-
-```text
+IDs:
 Service
 ├── ES: ID
 └── EN: ID
 ```
-
-Do not perform unrelated cleanup, refactoring, configuration changes, or code changes outside the content import.

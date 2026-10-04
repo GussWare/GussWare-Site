@@ -2,7 +2,7 @@
 
 name: gussware-git-workflow
 description: Gestiona el flujo Git y Git Worktree de GussWare para ramas de tarea, worktrees, upstreams, fetch, pull, commits, push y Pull Requests. Usar cuando una tarea implique operaciones Git, branches, worktrees o Pull Requests.
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---
 
 # GussWare Git Workflow
 
