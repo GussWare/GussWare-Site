@@ -10,8 +10,9 @@
  * El botón hamburguesa abre/cierra el panel móvil con los mismos ítems
  * de WordPress (único JS del componente, sin framework).
  */
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import { getHeaderLogo } from '../../lib/wordpress/logo';
-import { getHeaderMenu } from '../../lib/wordpress/menu';
+import { getHeaderMenu, resolveMenuHref } from '../../lib/wordpress/menu';
 import { getHeader } from '../../lib/wordpress/header';
 import { routes } from '../../lib/routes';
 import type { LocaleUrls } from '../../lib/routes';
@@ -32,6 +33,19 @@ const [logo, menuItems, header] = await Promise.all([
   getHeader(Astro.currentLocale ?? undefined),
 ]);
 const topLevelItems = menuItems.filter((item) => item.parent === 0);
+// RGW-273 — Resolución inteligente del `href` según el tipo de enlace
+// de WordPress (ancla, ruta interna o URL completa), por página e idioma.
+// Solo cambia el destino; estructura y estilos intactos.
+const locale = Astro.currentLocale ?? 'es';
+const homePath = locale === 'en' ? getRelativeLocaleUrl('en', '/') : routes.home;
+const navItems = topLevelItems.map((item) => ({
+  ...item,
+  href: resolveMenuHref(item.url, {
+    currentPath: Astro.url.pathname,
+    homePath,
+    currentOrigin: Astro.url.origin,
+  }),
+}));
 const desktopLogo = header?.logo ?? logo;
 const mobileLogo = header?.mobileLogo ?? desktopLogo;
 ---
@@ -55,9 +69,9 @@ const mobileLogo = header?.mobileLogo ?? desktopLogo;
       aria-label="Main Navigation"
       class="hidden items-center gap-6 lg:flex xl:gap-8"
     >
-      {topLevelItems.map((item) => (
+      {navItems.map((item) => (
         <a
-          href={item.url}
+          href={item.href}
           target={item.target || undefined}
           class="text-navigation text-gw-text-secondary transition-colors duration-200 hover:text-brand-secondary"
         >
@@ -98,9 +112,9 @@ const mobileLogo = header?.mobileLogo ?? desktopLogo;
       aria-label="Mobile Navigation"
       class="mx-auto flex w-full max-w-[var(--container-max)] flex-col px-4 py-2 md:px-6"
     >
-      {topLevelItems.map((item) => (
+      {navItems.map((item) => (
         <a
-          href={item.url}
+          href={item.href}
           target={item.target || undefined}
           class="text-navigation text-gw-text-secondary py-3 transition-colors duration-200 hover:text-brand-secondary"
         >

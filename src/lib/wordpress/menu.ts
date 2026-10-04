@@ -96,6 +96,88 @@ function menuName(baseName: string, englishName: string, locale: string) {
   return locale === 'en' ? englishName : baseName;
 }
 
+/** Contexto de página para resolver el `href` de un ítem del menú. */
+export interface MenuHrefContext {
+  /** Ruta actual (`Astro.url.pathname`), p. ej. `/blog`. */
+  currentPath: string;
+  /** Ruta de la portada del locale (`/` / `/en/`). */
+  homePath: string;
+  /** Origen actual (`Astro.url.origin`), para detectar URLs propias. */
+  currentOrigin?: string;
+}
+
+function normalizePath(path: string): string {
+  return path.length > 1 ? path.replace(/\/+$/, '') : path;
+}
+
+function siteOrigins(currentOrigin?: string): string[] {
+  const origins: string[] = [];
+  const wpApi = import.meta.env?.WP_API_URL as string | undefined;
+
+  if (wpApi) {
+    try {
+      origins.push(new URL(wpApi.replace(/\/+$/, '')).origin);
+    } catch {
+      // URL base inválida: se ignora sin romper la resolución.
+    }
+  }
+
+  if (currentOrigin) {
+    origins.push(currentOrigin);
+  }
+
+  return origins;
+}
+
+/**
+ * RGW-273 — Resuelve el `href` de un ítem del menú de WordPress según
+ * su tipo, sin hardcodear destinos y sin cambiar el comportamiento
+ * visual. Fuente de verdad: la URL configurada en WordPress.
+ *
+ * - Ancla (`#seccion`): comportamiento nativo si la página actual es la
+ *   portada; desde otra página apunta a `portada + ancla` para que la
+ *   sección siga siendo alcanzable. `#` solo se conserva tal cual.
+ * - Ruta interna (`/contacto`): se conserva tal cual.
+ * - URL completa: si es del propio sitio se reduce a ruta interna
+ *   (`path + search + hash`); si es externa se conserva intacta.
+ * - Cualquier otro valor (`mailto:`, `tel:`, relativos): intacto.
+ */
+export function resolveMenuHref(
+  rawUrl: string,
+  context: MenuHrefContext,
+): string {
+  if (!rawUrl || rawUrl === '#') {
+    return rawUrl;
+  }
+
+  if (rawUrl.startsWith('#')) {
+    if (normalizePath(context.currentPath) === normalizePath(context.homePath)) {
+      return rawUrl;
+    }
+
+    const base = context.homePath.endsWith('/')
+      ? context.homePath
+      : `${context.homePath}/`;
+    return `${base}#${rawUrl.slice(1)}`;
+  }
+
+  if (/^https?:\/\//i.test(rawUrl)) {
+    try {
+      const parsed = new URL(rawUrl);
+
+      if (siteOrigins(context.currentOrigin).includes(parsed.origin)) {
+        return `${parsed.pathname}${parsed.search}${parsed.hash}` || '/';
+      }
+    } catch {
+      // URL no parseable: se conserva tal cual.
+    }
+
+    return rawUrl;
+  }
+
+  return rawUrl;
+}
+
 export async function getHeaderMenu(lang?: string): Promise<HeaderMenuItem[]> {
   try {
     const locale = lang ?? (await getDefaultLocale());
