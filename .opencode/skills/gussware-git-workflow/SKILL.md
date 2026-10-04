@@ -1,7 +1,7 @@
 ---
 
 name: gussware-git-workflow
-description: Gestiona el flujo Git y Git Worktree de GussWare para ramas de tarea, worktrees, upstreams, fetch, pull, commits, push y Pull Requests. Usar cuando una tarea implique operaciones Git, branches, worktrees o Pull Requests.
+description: Gestiona el flujo Git y Git Worktree de GussWare para ramas de tarea, worktrees, upstreams, fetch, pull, commits, push y Pull Requests, incluyendo contexto y cierre de tarjetas Jira. Usar cuando una tarea implique operaciones Git, branches, worktrees o Pull Requests, o cuando la solicitud incluya un ID Jira (p. ej. RGW-272).
 ---
 
 # GussWare Git Workflow
@@ -21,8 +21,27 @@ Este Skill controla únicamente operaciones relacionadas con:
 * Commits
 * Push
 * Pull Requests
+* Contexto y cierre de tarjetas Jira vinculadas a la tarea (§0, §17)
 
 Las reglas generales de desarrollo del proyecto permanecen en `AGENTS.md`.
+
+---
+
+## 0. Contexto Jira (antes de ramas y worktrees)
+
+Si la solicitud incluye explícitamente un ID Jira (p. ej. `RGW-272`):
+
+1. Consultar la tarjeta vía MCP de Atlassian antes de crear o
+   seleccionar branch/worktree (el Summary y el alcance alimentan §3).
+   Detalle operativo en [reference.md](reference.md).
+2. Obtener como mínimo: Summary, Description, Status y Acceptance
+   Criteria (si existe). El Sprint no es obligatorio.
+3. No inferir una tarjeta desde el nombre de branch/worktree.
+4. Si el MCP no está disponible, no hay acceso, la tarjeta no existe
+   o el alcance está vacío/ambiguo: detenerse y preguntar. No inventar
+   requisitos ni alcance por inferencia.
+
+Sin ID Jira explícito en la solicitud, continuar con §1.
 
 ---
 
@@ -37,11 +56,6 @@ git branch --show-current
 git branch -vv
 git worktree list
 git remote -v
-```
-
-Para verificar el upstream actual:
-
-```bash
 git rev-parse --abbrev-ref --symbolic-full-name '@{upstream}'
 ```
 
@@ -239,16 +253,8 @@ Si una rama de tarea muestra:
 ...origin/develop
 ```
 
-como upstream, verificar:
-
-```bash
-git branch -vv
-git rev-parse --abbrev-ref --symbolic-full-name '@{upstream}'
-git remote -v
-git worktree list
-```
-
-Comprobar si existe el branch remoto correcto:
+como upstream, verificar el estado (§1) y comprobar si existe el
+branch remoto correcto:
 
 ```bash
 git ls-remote --heads origin <branch-name>
@@ -271,6 +277,8 @@ Nunca sobrescribir el remoto para solucionar un upstream incorrecto.
 El flujo estándar es:
 
 ```text
+Solicitud con Jira → consultar Jira (§0)
+      ↓ (sin tarjeta Jira, el flujo inicia aquí)
 origin/develop
       ↓
 git fetch
@@ -288,6 +296,8 @@ revisar diff
 commit
       ↓
 push
+      ↓
+transicionar Jira a Listo para pruebas (si aplica, §17)
       ↓
 Pull Request
       ↓
@@ -438,6 +448,12 @@ Si no puede determinarse con seguridad, detenerse y solicitar instrucciones.
 
 ## 17. Completion Checklist
 
+Si el flujo incluyó tarjeta Jira, solo después de que todas las
+validaciones pasaron: transicionarla a `Listo para pruebas` usando la
+transición real disponible (ver [reference.md](reference.md)). Si esa
+transición no existe para la tarjeta, no inventar otra ni cambiar a
+otro estado: informarlo en el reporte.
+
 Antes de finalizar:
 
 * [ ] Existe un worktree propio para la tarea.
@@ -451,6 +467,8 @@ Antes de finalizar:
 * [ ] El commit fue enviado a `origin`.
 * [ ] El branch remoto está actualizado.
 * [ ] El Pull Request apunta a `develop`.
+* [ ] La tarjeta Jira quedó en Listo para pruebas (o su ausencia de
+  transición quedó reportada; N/A sin tarjeta Jira).
 * [ ] No se modificaron otros branches o worktrees.
 
 ---
@@ -467,6 +485,7 @@ Remote:
 Upstream:
 Pull Request:
 Validation:
+Jira:
 Status:
 ```
 
