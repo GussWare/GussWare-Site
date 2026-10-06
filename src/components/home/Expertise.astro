@@ -30,9 +30,10 @@
  * genérico `arrow-right`. Sin lógica posicional ni valores
  * hardcodeados.
  *
- * RGW-291: la fuente de datos sigue siendo el ACF `expertise` (el
- * cambio al CPT Servicios corresponde a RGW-292) y el tratamiento
- * visual de cards no cambia (corresponde a RGW-293).
+ * RGW-292: los ítems provienen del CPT Servicios (fuente de verdad;
+ * prop `items`); el ACF `expertise` solo aporta encabezado, fiability
+ * y fallback de ítems. El tratamiento visual de cards no cambia
+ * (corresponde a RGW-293).
  */
 import Section from '../ui/Section.astro';
 import Icon from '../ui/Icon.astro';
@@ -40,6 +41,7 @@ import type {
   WpExpertise,
   WpExpertiseItem,
   WpFiabilityItem,
+  WpServiceItem,
 } from '../../lib/wordpress/types';
 
 interface Props {
@@ -50,9 +52,16 @@ interface Props {
    * define WordPress; Astro solo lo expone. Sin `id` no hay ancla.
    */
   id?: string;
+  /**
+   * RGW-292 — Ítems desde el CPT Servicios (fuente de verdad:
+   * nombre, descripción y enlace al detalle). Tienen prioridad sobre
+   * los ítems ACF; cuando está vacío o ausente (locale sin catálogo
+   * o fallo de API) se usan los ítems ACF existentes.
+   */
+  items?: WpServiceItem[];
 }
 
-const { expertise, id = undefined } = Astro.props;
+const { expertise, id = undefined, items: serviceItems = undefined } = Astro.props;
 
 /** Glifos disponibles en `Icon.astro` (claves de `paths`). */
 const KNOWN_ICONS = new Set([
@@ -86,8 +95,29 @@ const resolveIcon = (name: string): string =>
 
 // `WpExpertise` expone los ítems como `expertice_items`; se acepta
 // también `expertise_items` por compatibilidad con la fuente de datos.
-const items: WpExpertiseItem[] =
+// RGW-292: el CPT Servicios (sin icono propio) tiene prioridad; el ACF
+// es el fallback (p. ej. locale sin catálogo).
+type CardItem = {
+  icon?: string;
+  title: string;
+  description: string;
+  url?: string;
+};
+
+const acfItems: WpExpertiseItem[] =
   expertise.expertise_items ?? expertise.expertice_items ?? [];
+const items: CardItem[] =
+  serviceItems && serviceItems.length > 0
+    ? serviceItems.map((item) => ({
+        title: item.title,
+        description: item.description,
+        url: item.url,
+      }))
+    : acfItems.map((item) => ({
+        icon: item.icon,
+        title: item.title,
+        description: item.description,
+      }));
 const fiabilityItems: WpFiabilityItem[] =
   expertise.fiability?.fiability_items ?? [];
 ---
@@ -124,26 +154,33 @@ const fiabilityItems: WpFiabilityItem[] =
         data-expertise-grid
         class="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3"
       >
-        {items.map((item) => (
-          <article
+        {items.map((item) => {
+          // RGW-EP09-07-03: card navegable cuando hay URL de detalle (CPT).
+          const Tag = item.url ? 'a' : 'article';
+          return (
+          <Tag
             data-expertise-card
+            href={item.url}
             class="bg-gw-surface-primary border-gw-border-subtle group relative overflow-hidden rounded-none border p-8 transition-colors duration-200 hover:bg-gw-surface-secondary md:p-10"
           >
             <div
               aria-hidden="true"
               class="bg-gw-surface-secondary absolute top-0 right-0 -z-10 h-24 w-24 rounded-bl-full opacity-0 transition-opacity group-hover:opacity-100"
             ></div>
-            <div class="text-brand-primary mb-6">
-              <Icon name={resolveIcon(item.icon)} size={8} />
-            </div>
+            {item.icon && (
+              <div class="text-brand-primary mb-6">
+                <Icon name={resolveIcon(item.icon)} size={8} />
+              </div>
+            )}
             <h3 class="text-gw-text-primary text-headline-md mb-4">
               {item.title}
             </h3>
             <p class="text-gw-text-secondary text-body-md">
               {item.description}
             </p>
-          </article>
-        ))}
+          </Tag>
+          );
+        })}
       </div>
     )}
     {expertise.fiability && (

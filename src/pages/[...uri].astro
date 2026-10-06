@@ -154,6 +154,34 @@ const services =
         items: serviceItems,
       }
     : null;
+
+// RGW-292: ítems de la sección Servicios de la portada desde el
+// catálogo CPT `service` (fuente de verdad, locale en curso). Solo
+// portada; las páginas no portada usan ítems ACF. Sin catálogo (p. ej.
+// EN, aún sin servicios traducidos) la sección usa los ítems ACF
+// (fallback en el componente, con i18n existente).
+let homeServiceItems: WpServiceItem[] = [];
+
+if (isHomePage && hero && expertise) {
+  try {
+    const list = await wpFetch<WpServiceSummary[]>(wpRoutes.services(locale));
+
+    if (Array.isArray(list)) {
+      homeServiceItems = list.map((item) => ({
+        title: stripHtml(item.title.rendered),
+        // RGW-272: el extracto del CPT puede venir nulo; se usa la
+        // descripción del propio servicio en el catálogo.
+        description: stripHtml(
+          item.excerpt?.rendered || item.acf?.intro_description || '',
+        ),
+        // RGW-EP09-07-03: cada card enlaza a su detalle.
+        url: serviceDetailUrl(locale, item.slug),
+      }));
+    }
+  } catch {
+    // Sin catálogo: la sección se renderiza con ítems ACF.
+  }
+}
 const process =
   page.acf && 'process' in page.acf ? (page.acf.process ?? null) : null;
 const finalCta =
@@ -280,6 +308,7 @@ if (translatedSlug) {
       {expertise && (
         <Expertise
           expertise={expertise}
+          items={homeServiceItems}
           id={
             isHomePage ? (locale === 'en' ? 'services' : 'servicios') : undefined
           }
