@@ -12,7 +12,7 @@
  */
 import { wpFetch } from './client';
 import { wpRoutes } from './routes';
-import type { LegalInformationResponse } from './types';
+import type { LegalInformationResponse, WpSettings } from './types';
 
 /** Datos legales generales reutilizables (`Información legal`). */
 export interface LegalInfo {
@@ -93,6 +93,18 @@ export async function getLegalInfo(
   }
 }
 
+/** URL pública configurada en WordPress, para los tokens legales del sitio. */
+export async function getLegalSiteUrl(): Promise<string | null> {
+  try {
+    const settings = await wpFetch<Pick<WpSettings, 'url'>>(wpRoutes.settings);
+    const url = settings.url?.trim();
+    return url ? url.replace(/\/+$/, '') : null;
+  } catch (error) {
+    console.error('Error fetching legal site URL:', error);
+    return null;
+  }
+}
+
 /**
  * Extrae la fecha del Custom Field de la página (`page.acf`, `YYYYMMDD`,
  * misma respuesta REST que el contenido). Retorna `null` si la página
@@ -147,6 +159,8 @@ export interface LegalTokenValues {
   legalInfo: LegalInfo | null;
   /** Fecha ya formateada desde el Custom Field de la página (o `null`). */
   updatedLabel: string | null;
+  /** URL de sitio configurada en WordPress (o `null`). */
+  siteUrl?: string | null;
 }
 
 /**
@@ -165,6 +179,10 @@ export function resolveLegalTokens(
       `{{${PAGE_DATE_TOKEN}}}`,
       values.updatedLabel,
     );
+  }
+
+  if (values.siteUrl) {
+    result = result.replaceAll('{{SITE_URL}}', values.siteUrl);
   }
 
   if (values.legalInfo) {

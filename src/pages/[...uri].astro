@@ -50,6 +50,7 @@ import { getSocialMedia } from '../lib/wordpress/socialMedia';
 import {
   formatLegalDate,
   getLegalInfo,
+  getLegalSiteUrl,
   getPageUpdateDate,
 } from '../lib/wordpress/legal';
 import { stripHtml } from '../lib/wordpress/text';
@@ -77,10 +78,15 @@ const [page, socialMedia, languages] = await Promise.all([
   getLanguages().catch(() => null),
 ]);
 
-// RGW-268 — Página de políticas de privacidad.
-const isLegalPage =
+// RGW-269 — Las dos páginas legales comparten la vista; cada una conserva
+// su slug y el mismo origen WordPress/Polylang.
+const isPrivacyPage =
   (locale === 'es' && uri === 'politica-de-privacidad') ||
   (locale === 'en' && uri === 'privacy-policy');
+const isTermsPage =
+  (locale === 'es' && uri === 'terminos-y-condiciones') ||
+  (locale === 'en' && uri === 'terms-and-conditions');
+const isLegalPage = isPrivacyPage || isTermsPage;
 
 if (!page) {
   Astro.response.status = 404;
@@ -91,6 +97,7 @@ if (!page) {
 // `Información legal` y fecha desde el Custom Field de la propia Page.
 // El resto de páginas no toca estas fuentes.
 const legalInfo = isLegalPage ? await getLegalInfo(locale) : null;
+const legalSiteUrl = isTermsPage ? await getLegalSiteUrl() : null;
 const updatedLabel = isLegalPage
   ? formatLegalDate(getPageUpdateDate(page), locale)
   : null;
@@ -262,7 +269,9 @@ if (translatedSlug) {
       content={page.content.rendered}
       legalInfo={legalInfo}
       updatedLabel={updatedLabel}
+      siteUrl={legalSiteUrl}
       locale={locale}
+      variant={isTermsPage ? 'terms' : 'privacy'}
     />
   ) : hero ? (
     <>

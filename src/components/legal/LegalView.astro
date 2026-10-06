@@ -51,8 +51,12 @@ interface Props {
   legalInfo?: LegalInfo | null;
   /** Fecha del Custom Field de la página, formateada (o `null`). */
   updatedLabel?: string | null;
+  /** URL del sitio desde la configuración de WordPress (o `null`). */
+  siteUrl?: string | null;
   /** Locale en curso para la raíz de la migaja de pan (`Inicio`/`Home`). */
   locale?: string;
+  /** Variante editorial de la página legal. */
+  variant?: 'privacy' | 'terms';
 }
 
 const {
@@ -60,13 +64,16 @@ const {
   content,
   legalInfo = null,
   updatedLabel = null,
+  siteUrl = null,
   locale = 'es',
+  variant = 'privacy',
 } = Astro.props;
 
 /** Contenido con etiquetas legales resueltas desde su fuente correcta. */
 const resolvedContent = resolveLegalTokens(content, {
   legalInfo,
   updatedLabel,
+  siteUrl,
 });
 
 /** Primer `<p class="...">` encontrado (o null si no existe). */
@@ -146,7 +153,7 @@ const indexLinks = bodyHtml.match(
   /<li><a href="(#[^"]+)">(\d+)\.\s([^<]*)<\/a><\/li>/g,
 );
 
-if (indexLinks && indexLinks.length === 10) {
+if (indexLinks && indexLinks.length > 0) {
   bodyHtml = bodyHtml.replace(
     /<li><a href="(#[^"]+)">(\d+)\.\s([^<]*)<\/a><\/li>/g,
     '<li><a href="$1"><span class="gw-index-num">$2.</span><span>$3</span></a></li>',
@@ -159,7 +166,12 @@ const hasHeader = Boolean(headerGroup && eyebrowHtml && metaHtml && ledeHtml);
 const crumbs = [getBreadcrumbHome(locale), { label: title }];
 ---
 
-<div class="legal-page bg-gw-surface-primary text-gw-text-primary">
+<div
+  class:list={[
+    'legal-page bg-gw-surface-primary text-gw-text-primary',
+    variant === 'terms' && 'legal-page--terms',
+  ]}
+>
   {hasHeader ? (
     <div class="legal-hero">
       <div class="legal-hero-deco" aria-hidden="true" />
@@ -404,6 +416,9 @@ const crumbs = [getBreadcrumbHome(locale), { label: title }];
     background: var(--color-brand-accent);
   }
 
+  /* Índice compartido: el mismo patrón en ambas páginas (con 19
+     enlaces, Términos usa el desplazamiento; con 10, Privacidad no
+     desborda y se ve igual). */
   .legal-content .gw-index {
     order: 2;
     margin: 0 0 2rem;
@@ -412,6 +427,8 @@ const crumbs = [getBreadcrumbHome(locale), { label: title }];
     background: var(--color-surface-primary);
     border: 1px solid #e2e2e2;
     border-top: 0;
+    max-height: 36.25rem;
+    overflow-y: auto;
   }
 
   .legal-content .gw-index li {
@@ -465,8 +482,12 @@ const crumbs = [getBreadcrumbHome(locale), { label: title }];
     border: 1px solid #e2e2e2;
   }
 
+  /* Etiqueta del canal: la misma definición en ambas páginas (en
+     Términos aloja el icono de escudo; sin icono se ve igual). */
   .legal-content .gw-card-channel .gw-label {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
     margin: 0 0 0.25rem;
     font-size: 0.75rem;
     font-weight: 700;
@@ -567,6 +588,28 @@ const crumbs = [getBreadcrumbHome(locale), { label: title }];
     margin-bottom: 0;
   }
 
+  /* Listas sin patrón propio: la misma voz tipográfica del cuerpo en
+     ambas páginas. Las listas con patrón (`gw-purposes`,
+     `gw-procedure-box`, `gw-index`) conservan sus reglas específicas. */
+  .gw-main ul,
+  .gw-main ol {
+    margin: 0 0 1rem;
+    padding-left: 1.25rem;
+    font-size: 1rem;
+    line-height: 1.625;
+    color: var(--color-text-primary);
+  }
+
+  .gw-main ul li,
+  .gw-main ol li {
+    margin-bottom: 0.25rem;
+  }
+
+  .gw-main ul li:last-child,
+  .gw-main ol li:last-child {
+    margin-bottom: 0;
+  }
+
   .legal-content .gw-main a {
     font-weight: 600;
     color: var(--color-brand-secondary);
@@ -634,7 +677,10 @@ const crumbs = [getBreadcrumbHome(locale), { label: title }];
   }
 
   /* ---------- Cards de datos sec-02 ---------- */
-  .legal-content .gw-card-data {
+  /* Card de datos: definición única reutilizada por `gw-card-data`
+     (Privacidad) y `gw-terms-card` (Términos). */
+  .legal-content .gw-card-data,
+  .legal-page--terms .gw-terms-card {
     margin-bottom: 1.5rem;
     padding: 1rem;
     background: var(--color-surface-primary);
@@ -642,14 +688,16 @@ const crumbs = [getBreadcrumbHome(locale), { label: title }];
     border-top: 2px solid var(--color-brand-primary);
   }
 
-  .legal-content .gw-card-data h3 {
+  .legal-content .gw-card-data h3,
+  .legal-page--terms .gw-terms-card h3 {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     margin-bottom: 0.25rem;
   }
 
-  .legal-content .gw-card-data p {
+  .legal-content .gw-card-data p,
+  .legal-page--terms .gw-terms-card p {
     margin: 0;
     font-size: 0.75rem;
     line-height: 1.35;
@@ -678,7 +726,11 @@ const crumbs = [getBreadcrumbHome(locale), { label: title }];
     --gw-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004a98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z'/%3E%3C/svg%3E");
   }
 
-  .legal-content .gw-note {
+  /* Bloque destacado con icono: definición única reutilizada por
+     `gw-note` (Privacidad) y `gw-terms-highlight` (Términos). El icono
+     lo aporta cada marcado (`::before` o icono hijo). */
+  .legal-content .gw-note,
+  .legal-page--terms .gw-terms-highlight {
     display: flex;
     align-items: flex-start;
     gap: 0.75rem;
@@ -699,7 +751,8 @@ const crumbs = [getBreadcrumbHome(locale), { label: title }];
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004a98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E");
   }
 
-  .legal-content .gw-note p {
+  .legal-content .gw-note p,
+  .legal-page--terms .gw-terms-highlight p {
     margin: 0;
     font-size: 0.875rem;
     line-height: 1.625;
@@ -762,7 +815,8 @@ const crumbs = [getBreadcrumbHome(locale), { label: title }];
     border-top: 2px solid var(--color-brand-primary);
   }
 
-  .legal-content .gw-card-measure:last-child {
+  .legal-content .gw-card-measure:last-child,
+  .legal-page--terms #sec-11 .gw-terms-card {
     border-top-color: var(--color-brand-secondary);
   }
 
@@ -961,7 +1015,10 @@ const crumbs = [getBreadcrumbHome(locale), { label: title }];
     background: var(--color-brand-accent);
   }
 
-  .legal-content .gw-card-contact .gw-label {
+  /* Etiqueta de tarjeta/bloque: definición única reutilizada por el
+     canal de contacto (Privacidad) y la ficha de plataforma (Términos). */
+  .legal-content .gw-card-contact .gw-label,
+  .legal-page--terms .gw-platform-info > .gw-label {
     display: block;
     margin: 0 0 0.5rem;
     font-size: 0.75rem;
@@ -990,7 +1047,12 @@ const crumbs = [getBreadcrumbHome(locale), { label: title }];
     margin-bottom: 0.75rem;
   }
 
-  .legal-content .gw-card-contact a {
+  /* Botón-enlace de tarjeta: definición única reutilizada por el
+     enlace del canal de contacto (Privacidad) y el enlace del bloque
+     informativo final (Términos). El icono de correo sigue siendo
+     exclusivo del canal de contacto. */
+  .legal-content .gw-card-contact a,
+  .legal-page--terms #sec-14 .gw-info-box > a {
     display: inline-flex;
     align-items: center;
     gap: 0.625rem;
@@ -1004,7 +1066,8 @@ const crumbs = [getBreadcrumbHome(locale), { label: title }];
     transition: background-color 0.2s;
   }
 
-  .legal-content .gw-card-contact a:hover {
+  .legal-content .gw-card-contact a:hover,
+  .legal-page--terms #sec-14 .gw-info-box > a:hover {
     color: var(--color-brand-surface);
     background: var(--color-supporting-blue-dark);
     text-decoration: none;
@@ -1113,6 +1176,109 @@ const crumbs = [getBreadcrumbHome(locale), { label: title }];
 
     .legal-content .gw-main {
       grid-column: span 8 / span 8;
+    }
+  }
+
+  /* ---------- Términos y Condiciones (RGW-269, homologación) ----------
+     Esta variante NO define un lenguaje propio: consume las
+     definiciones únicas de arriba (cabecera, índice, canal, columnas,
+     secciones, ficha de datos, cards, bloque destacado y botón).
+     Solo quedan aquí los ganchos del marcado de Términos sin
+     contraparte en Privacidad, con los mismos tokens del sistema. */
+  .legal-page--terms .gw-terms-version {
+    white-space: nowrap;
+  }
+
+  .legal-page--terms .gw-terms-version::before,
+  .legal-page--terms .gw-terms-shield {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.25rem;
+    background: no-repeat center / contain
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004a98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E");
+    content: '';
+    vertical-align: -0.125rem;
+  }
+
+  /* Ficha de información legal: envoltorio neutro; la ficha visible la
+     aportan `.gw-facts-box` / `.gw-fact` (la misma definición única
+     que en Privacidad). La etiqueta usa el patrón de etiqueta de
+     tarjeta y el párrafo introductorio hereda `.gw-main p`. */
+  .legal-page--terms .gw-platform-info {
+    margin: 0 0 1.5rem;
+  }
+
+  /* El enlace del canal conserva su glifo de flecha (lleva a una página,
+     no a un correo) dentro del mismo sistema de iconos de presentación
+     (trazo estilo Lucide 2px, color de marca secundaria). */
+  .legal-page--terms .gw-card-channel a::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232164a6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3Cpath d='m12 5 7 7-7 7'/%3E%3C/svg%3E");
+  }
+
+  /* Icono del bloque destacado: mismo tamaño que el icono de
+     `gw-note` (1.25rem) y color de marca primaria del sistema. */
+  .legal-page--terms .gw-terms-community-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: 0 0 1.25rem;
+    background: no-repeat center / contain
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004a98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='9' cy='7' r='4'/%3E%3Cpath d='M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75'/%3E%3C/svg%3E");
+  }
+
+  /* Parrilla de cards: una columna en móvil y varias columnas desde
+     768px, el mismo lenguaje responsive que las cards en fila de
+     Privacidad (mismo gap de 1rem). */
+  .legal-page--terms .gw-terms-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+
+  /* Icono de card: mismo tamaño que los iconos de card del sistema
+     (1.125rem); el glifo usa el color de acento de marca existente. */
+  .legal-page--terms .gw-terms-offense-icon {
+    display: block;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-bottom: 0.375rem;
+    background: no-repeat center / contain;
+  }
+
+  .legal-page--terms .gw-icon-mark_email_unread {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='14' rx='1'/%3E%3Cpath d='m3 7 9 6 9-6'/%3E%3Ccircle cx='18' cy='5' r='3' fill='%23f9f9f9'/%3E%3C/svg%3E");
+  }
+
+  .legal-page--terms .gw-icon-bug_report {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 8h8v9a4 4 0 0 1-8 0zM9 4l3 4 3-4M4 10h4m8 0h4M4 15h4m8 0h4'/%3E%3C/svg%3E");
+  }
+
+  .legal-page--terms .gw-icon-copyright {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M15 9a4 4 0 1 0 0 6'/%3E%3C/svg%3E");
+  }
+
+  .legal-page--terms .gw-icon-person_cancel {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='10' cy='8' r='4'/%3E%3Cpath d='M3 21a7 7 0 0 1 14 0m1-9 5 5m0-5-5 5'/%3E%3C/svg%3E");
+  }
+
+  .legal-page--terms .gw-icon-fingerprint {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 11a2 2 0 0 0-2 2c0 3-.5 5-1.5 7M14 13c0 4-.5 6-1.5 8M6 13a6 6 0 0 1 12 0c0 4-.6 7-1.5 9M4 13a8 8 0 0 1 16 0'/%3E%3C/svg%3E");
+  }
+
+  .legal-page--terms .gw-icon-device_reset {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 12a9 9 0 1 0 2.6-6.4L3 8'/%3E%3Cpath d='M3 3v5h5m4-1v5l3 2'/%3E%3C/svg%3E");
+  }
+
+  /* Parrilla de cards en escritorio: varias columnas desde 768px,
+     igual que las cards en fila de Privacidad (mismo breakpoint). */
+  @media (min-width: 768px) {
+    .legal-page--terms #sec-08 .gw-terms-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .legal-page--terms #sec-11 .gw-terms-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 </style>
