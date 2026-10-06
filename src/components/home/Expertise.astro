@@ -32,8 +32,11 @@
  *
  * RGW-292: los ítems provienen del CPT Servicios (fuente de verdad;
  * prop `items`); el ACF `expertise` solo aporta encabezado, fiability
- * y fallback de ítems. El tratamiento visual de cards no cambia
- * (corresponde a RGW-293).
+ * y fallback de ítems.
+ * RGW-293: las cards alternan fondos suaves con tokens existentes
+ * (`bg-supporting-tertiary-fixed` naranja en pares,
+ * `bg-supporting-blue-fixed` azul en impares); el resto del
+ * tratamiento visual no cambia.
  */
 import Section from '../ui/Section.astro';
 import Icon from '../ui/Icon.astro';
@@ -154,14 +157,21 @@ const fiabilityItems: WpFiabilityItem[] =
         data-expertise-grid
         class="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3"
       >
-        {items.map((item) => {
+        {items.map((item, index) => {
           // RGW-EP09-07-03: card navegable cuando hay URL de detalle (CPT).
           const Tag = item.url ? 'a' : 'article';
+          // RGW-293: fondos suaves alternados con tokens existentes:
+          // naranja (`supporting-tertiary-fixed` #ffdbd0) en pares,
+          // azul (`supporting-blue-fixed` #d3e4ff) en impares.
+          const softBg =
+            index % 2 === 0
+              ? 'bg-supporting-tertiary-fixed'
+              : 'bg-supporting-blue-fixed';
           return (
           <Tag
             data-expertise-card
             href={item.url}
-            class="bg-gw-surface-primary border-gw-border-subtle group relative overflow-hidden rounded-none border p-8 transition-colors duration-200 hover:bg-gw-surface-secondary md:p-10"
+            class={`border-gw-border-subtle group relative overflow-hidden rounded-none border p-8 transition-colors duration-200 hover:bg-gw-surface-secondary md:p-10 ${softBg}`}
           >
             <div
               aria-hidden="true"
