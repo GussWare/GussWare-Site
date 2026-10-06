@@ -35,11 +35,10 @@
  * y fallback de ítems.
  * Observaciones RGW-289/RGW-293: cards con fondo blanco
  * (`bg-gw-surface-primary`), iconos conservados (el CPT no expone
- * icono: se empareja por palabra clave del título), borde superior
- * azul principal en cada card (`border-t-brand-primary`, 1 px) y hover
- * con color (`hover:bg-gw-highlight`, patrón de `CommunityModel`).
- * Ciclo 2: la sección no lleva línea superior; el borde azul vive en
- * cada card, no en el contenedor.
+ * icono: se empareja por palabra clave del título) y hover con color
+ * (`hover:bg-gw-highlight`, patrón de `CommunityModel`).
+ * Ciclo 3: items sin línea superior (tratamiento original de Stitch
+ * de CAPACIDADES) y FAQ sin línea superior.
  */
 import Section from '../ui/Section.astro';
 import Icon from '../ui/Icon.astro';
@@ -193,14 +192,11 @@ const fiabilityItems: WpFiabilityItem[] =
         {items.map((item) => {
           // RGW-EP09-07-03: card navegable cuando hay URL de detalle (CPT).
           const Tag = item.url ? 'a' : 'article';
-          // Ciclo 2: el borde superior azul vive en cada card
-          // (`border-t-brand-primary`, 1 px sobre el `border` existente),
-          // no en la sección.
           return (
           <Tag
             data-expertise-card
             href={item.url}
-            class="bg-gw-surface-primary border-gw-border-subtle border-t-brand-primary group relative overflow-hidden rounded-none border p-8 transition-colors duration-200 hover:bg-gw-highlight md:p-10"
+            class="bg-gw-surface-primary border-gw-border-subtle group relative overflow-hidden rounded-none border p-8 transition-colors duration-200 hover:bg-gw-highlight md:p-10"
           >
             <div
               aria-hidden="true"
