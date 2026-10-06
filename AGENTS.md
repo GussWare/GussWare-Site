@@ -27,6 +27,24 @@ Prefer the smallest change that completely satisfies the requested requirement.
 
 ---
 
+## Skills
+
+Project-specific skills are located at:
+
+`.opencode/skills/`
+
+When a task requires a project skill, inspect this directory and load the relevant skill before proceeding.
+
+The Git workflow skill is:
+
+`.opencode/skills/gussware-git-workflow/`
+
+Before performing Git operations involving worktrees, branches, commits, push, pull, or Pull Requests, load and follow:
+
+`.opencode/skills/gussware-git-workflow/`
+
+---
+
 ## Git and Worktrees
 
 Git and worktree operations must follow the project skill:
@@ -160,7 +178,9 @@ Manage the background server with:
 
 ```bash
 astro dev stop
+
 astro dev status
+
 astro dev logs
 ```
 
