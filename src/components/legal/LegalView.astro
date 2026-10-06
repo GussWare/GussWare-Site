@@ -51,8 +51,12 @@ interface Props {
   legalInfo?: LegalInfo | null;
   /** Fecha del Custom Field de la página, formateada (o `null`). */
   updatedLabel?: string | null;
+  /** URL del sitio desde la configuración de WordPress (o `null`). */
+  siteUrl?: string | null;
   /** Locale en curso para la raíz de la migaja de pan (`Inicio`/`Home`). */
   locale?: string;
+  /** Variante editorial de la página legal. */
+  variant?: 'privacy' | 'terms';
 }
 
 const {
@@ -60,13 +64,16 @@ const {
   content,
   legalInfo = null,
   updatedLabel = null,
+  siteUrl = null,
   locale = 'es',
+  variant = 'privacy',
 } = Astro.props;
 
 /** Contenido con etiquetas legales resueltas desde su fuente correcta. */
 const resolvedContent = resolveLegalTokens(content, {
   legalInfo,
   updatedLabel,
+  siteUrl,
 });
 
 /** Primer `<p class="...">` encontrado (o null si no existe). */
@@ -146,7 +153,7 @@ const indexLinks = bodyHtml.match(
   /<li><a href="(#[^"]+)">(\d+)\.\s([^<]*)<\/a><\/li>/g,
 );
 
-if (indexLinks && indexLinks.length === 10) {
+if (indexLinks && indexLinks.length > 0) {
   bodyHtml = bodyHtml.replace(
     /<li><a href="(#[^"]+)">(\d+)\.\s([^<]*)<\/a><\/li>/g,
     '<li><a href="$1"><span class="gw-index-num">$2.</span><span>$3</span></a></li>',
@@ -159,7 +166,12 @@ const hasHeader = Boolean(headerGroup && eyebrowHtml && metaHtml && ledeHtml);
 const crumbs = [getBreadcrumbHome(locale), { label: title }];
 ---
 
-<div class="legal-page bg-gw-surface-primary text-gw-text-primary">
+<div
+  class:list={[
+    'legal-page bg-gw-surface-primary text-gw-text-primary',
+    variant === 'terms' && 'legal-page--terms',
+  ]}
+>
   {hasHeader ? (
     <div class="legal-hero">
       <div class="legal-hero-deco" aria-hidden="true" />
@@ -1113,6 +1125,254 @@ const crumbs = [getBreadcrumbHome(locale), { label: title }];
 
     .legal-content .gw-main {
       grid-column: span 8 / span 8;
+    }
+  }
+
+  /* ---------- Términos y Condiciones (RGW-269) ---------- */
+  .legal-page--terms .gw-terms-version {
+    white-space: nowrap;
+  }
+
+  .legal-page--terms .gw-terms-version::before,
+  .legal-page--terms .gw-terms-shield {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.25rem;
+    background: no-repeat center / contain
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004a98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E");
+    content: '';
+    vertical-align: -0.125rem;
+  }
+
+  .legal-page--terms .gw-platform-info {
+    position: relative;
+    margin-bottom: 3rem;
+    padding: 1.5rem;
+    background: var(--color-surface-primary);
+    border: 1px solid #dadada;
+  }
+
+  .legal-page--terms .gw-platform-info > .gw-label {
+    display: inline-block;
+    margin: 0 0 1rem;
+    padding: 0.25rem 0.75rem;
+    background: var(--color-surface-auxiliary);
+    border-left: 2px solid var(--color-brand-primary);
+    color: var(--color-brand-primary);
+    font-size: var(--font-size-label-bold);
+    font-weight: var(--font-weight-label);
+    letter-spacing: var(--letter-spacing-label-bold);
+    text-transform: uppercase;
+  }
+
+  .legal-page--terms .gw-platform-info > p:not(.gw-label) {
+    margin-bottom: 1.5rem;
+    color: var(--color-text-secondary);
+  }
+
+  .legal-page--terms .gw-platform-info .gw-facts-box {
+    margin-bottom: 0;
+    padding: 0;
+    border-left-width: 1px;
+  }
+
+  .legal-page--terms .gw-platform-info .gw-fact p {
+    grid-template-columns: minmax(9rem, 1fr) 2fr;
+    gap: 0.5rem 1rem;
+    padding: 0.875rem;
+    background: var(--color-surface-auxiliary);
+  }
+
+  .legal-page--terms .gw-platform-info .gw-fact:nth-child(even) p {
+    background: var(--color-surface-primary);
+  }
+
+  .legal-page--terms .gw-platform-info .gw-fact strong {
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .legal-page--terms .gw-platform-info .gw-fact span {
+    color: var(--color-text-primary);
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  .legal-page--terms .gw-index {
+    max-height: 36.25rem;
+    overflow-y: auto;
+  }
+
+  .legal-page--terms .gw-card-channel .gw-label {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .legal-page--terms .gw-terms-shield {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004a98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E");
+  }
+
+  .legal-page--terms .gw-card-channel a::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232164a6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3Cpath d='m12 5 7 7-7 7'/%3E%3C/svg%3E");
+  }
+
+  .legal-page--terms .gw-section > h2 {
+    color: var(--color-brand-primary);
+  }
+
+  .legal-page--terms .gw-terms-highlight {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background: var(--color-surface-primary);
+    border: 1px solid #dadada;
+    border-left: 4px solid var(--color-brand-secondary);
+  }
+
+  .legal-page--terms .gw-terms-highlight h3 {
+    color: var(--color-brand-primary);
+  }
+
+  .legal-page--terms .gw-terms-community-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex: 0 0 1.5rem;
+    background: no-repeat center / contain
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231b60a2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='9' cy='7' r='4'/%3E%3Cpath d='M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75'/%3E%3C/svg%3E");
+  }
+
+  .legal-page--terms .gw-terms-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+
+  .legal-page--terms .gw-terms-card {
+    min-width: 0;
+    padding: 1rem;
+    background: var(--color-surface-primary);
+    border: 1px solid #dadada;
+  }
+
+  .legal-page--terms #sec-08 .gw-terms-card h3 {
+    margin-bottom: 0.25rem;
+    color: var(--color-brand-primary);
+    font-size: 0.875rem;
+  }
+
+  .legal-page--terms #sec-08 .gw-terms-card p,
+  .legal-page--terms #sec-11 .gw-terms-card p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .legal-page--terms #sec-11 .gw-terms-card {
+    border-top: 2px solid var(--color-brand-accent);
+  }
+
+  .legal-page--terms #sec-11 .gw-terms-card h3 {
+    margin-bottom: 0.25rem;
+    font-size: 0.875rem;
+  }
+
+  .legal-page--terms .gw-terms-offense-icon {
+    display: block;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-bottom: 0.375rem;
+    background: no-repeat center / contain;
+  }
+
+  .legal-page--terms .gw-icon-mark_email_unread {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='14' rx='1'/%3E%3Cpath d='m3 7 9 6 9-6'/%3E%3Ccircle cx='18' cy='5' r='3' fill='%23f9f9f9'/%3E%3C/svg%3E");
+  }
+
+  .legal-page--terms .gw-icon-bug_report {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 8h8v9a4 4 0 0 1-8 0zM9 4l3 4 3-4M4 10h4m8 0h4M4 15h4m8 0h4'/%3E%3C/svg%3E");
+  }
+
+  .legal-page--terms .gw-icon-copyright {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M15 9a4 4 0 1 0 0 6'/%3E%3C/svg%3E");
+  }
+
+  .legal-page--terms .gw-icon-person_cancel {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='10' cy='8' r='4'/%3E%3Cpath d='M3 21a7 7 0 0 1 14 0m1-9 5 5m0-5-5 5'/%3E%3C/svg%3E");
+  }
+
+  .legal-page--terms .gw-icon-fingerprint {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 11a2 2 0 0 0-2 2c0 3-.5 5-1.5 7M14 13c0 4-.5 6-1.5 8M6 13a6 6 0 0 1 12 0c0 4-.6 7-1.5 9M4 13a8 8 0 0 1 16 0'/%3E%3C/svg%3E");
+  }
+
+  .legal-page--terms .gw-icon-device_reset {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 12a9 9 0 1 0 2.6-6.4L3 8'/%3E%3Cpath d='M3 3v5h5m4-1v5l3 2'/%3E%3C/svg%3E");
+  }
+
+  .legal-page--terms #sec-14 .gw-info-box {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: var(--color-surface-primary);
+    border: 1px solid #dadada;
+    border-left: 4px solid var(--color-brand-primary);
+  }
+
+  .legal-page--terms #sec-14 .gw-info-box > div > p {
+    margin-bottom: 0.25rem;
+  }
+
+  .legal-page--terms #sec-14 .gw-info-box > a {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: var(--color-brand-primary);
+    color: var(--color-brand-surface);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  @media (min-width: 640px) {
+    .legal-page--terms .gw-platform-info {
+      padding: 2rem;
+    }
+
+    .legal-page--terms #sec-08 .gw-terms-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .legal-page--terms #sec-14 .gw-info-box {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .legal-page--terms #sec-11 .gw-terms-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .legal-page--terms .gw-sidebar {
+      grid-column: span 3 / span 3;
+    }
+
+    .legal-page--terms .gw-main {
+      grid-column: span 9 / span 9;
     }
   }
 </style>
