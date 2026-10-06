@@ -1,7 +1,9 @@
 ---
 /**
- * Expertise / Capacidades del Home según Stitch `GussWare Home-V0.1.0`
- * (`GussWare Home - Complete Final Flow`).
+ * Servicios del Home (RGW-291): la sección antes identificada como
+ * Expertise / Capacidades según Stitch `GussWare Home-V0.1.0`
+ * (`GussWare Home - Complete Final Flow`) ahora representa la oferta
+ * de Servicios, reutilizando la estructura existente.
  *
  * Intro en split layout (título `display` + descripción `body-lg` con
  * borde lateral), grid 3×2 de `expertice_items` (glifo `brand-primary` +
@@ -27,6 +29,10 @@
  * conocido usa su glifo; un nombre desconocido usa el fallback
  * genérico `arrow-right`. Sin lógica posicional ni valores
  * hardcodeados.
+ *
+ * RGW-291: la fuente de datos sigue siendo el ACF `expertise` (el
+ * cambio al CPT Servicios corresponde a RGW-292) y el tratamiento
+ * visual de cards no cambia (corresponde a RGW-293).
  */
 import Section from '../ui/Section.astro';
 import Icon from '../ui/Icon.astro';
@@ -38,9 +44,15 @@ import type {
 
 interface Props {
   expertise: WpExpertise & { expertise_items?: WpExpertiseItem[] };
+  /**
+   * RGW-273 — Identificador de ancla de la sección (p. ej. el hash que
+   * WordPress configura en el menú para este idioma). El nombre lo
+   * define WordPress; Astro solo lo expone. Sin `id` no hay ancla.
+   */
+  id?: string;
 }
 
-const { expertise } = Astro.props;
+const { expertise, id = undefined } = Astro.props;
 
 /** Glifos disponibles en `Icon.astro` (claves de `paths`). */
 const KNOWN_ICONS = new Set([
@@ -80,8 +92,8 @@ const fiabilityItems: WpFiabilityItem[] =
   expertise.fiability?.fiability_items ?? [];
 ---
 
-<Section>
-  <div data-expertise>
+<Section id={id} class={id ? 'scroll-mt-24' : ''}>
+  <div data-services>
     <div
       class="mb-16 flex flex-col items-start justify-between gap-8 md:flex-row md:items-end"
     >

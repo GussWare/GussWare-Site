@@ -277,7 +277,14 @@ if (translatedSlug) {
   ) : hero ? (
     <>
       <Hero hero={hero} image={heroImage} />
-      {expertise && <Expertise expertise={expertise} />}
+      {expertise && (
+        <Expertise
+          expertise={expertise}
+          id={
+            isHomePage ? (locale === 'en' ? 'services' : 'servicios') : undefined
+          }
+        />
+      )}
       {technology && <CommunityModel technology={technology} />}
       {services && (
         <Services

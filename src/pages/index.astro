@@ -92,7 +92,7 @@ const stepImages = await Promise.all(
   {page && hero ? (
     <>
       <Hero hero={hero} image={heroImage} />
-      {expertise && <Expertise expertise={expertise} />}
+      {expertise && <Expertise expertise={expertise} id="servicios" />}
       {technology && <CommunityModel technology={technology} />}
       {process && (
         <Process process={process} images={stepImages} id="como-trabajamos" />
