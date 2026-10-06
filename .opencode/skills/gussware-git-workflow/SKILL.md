@@ -297,7 +297,7 @@ commit
       ↓
 push
       ↓
-transicionar Jira a Listo para pruebas (si aplica, §17)
+transicionar Jira al estado correspondiente (si aplica, §17)
       ↓
 Pull Request
       ↓
@@ -449,10 +449,29 @@ Si no puede determinarse con seguridad, detenerse y solicitar instrucciones.
 ## 17. Completion Checklist
 
 Si el flujo incluyó tarjeta Jira, solo después de que todas las
-validaciones pasaron: transicionarla a `Listo para pruebas` usando la
-transición real disponible (ver [reference.md](reference.md)). Si esa
+validaciones pasaron: transicionarla al estado correspondiente según
+el tipo de tarjeta (ver [reference.md](reference.md)). Si esa
 transición no existe para la tarjeta, no inventar otra ni cambiar a
 otro estado: informarlo en el reporte.
+
+Reglas de estado:
+
+* Subtarea completamente terminada y validada → `Listo`. Nunca
+  `Listo para pruebas`. Terminar una subtarea no cambia el estado de
+  su tarea principal.
+* Tarea principal completamente terminada y validada → `Listo para
+  pruebas` (queda esperando validación/prueba manual). No mover la
+  tarea principal a `Listo para pruebas` solamente porque terminó una
+  subtarea; solo cuando el trabajo completo de la tarea principal esté
+  terminado y, cuando aplique, sus subtareas necesarias también estén
+  terminadas.
+* Observaciones del usuario sobre una tarea principal en `Listo para
+  pruebas`: al retomar el trabajo, devolver esa tarjeta a `En curso`.
+  Tras corregir las observaciones y pasar nuevamente todas las
+  validaciones, la tarea principal vuelve a `Listo para pruebas`.
+* Observaciones sobre una subtarea: al retomar el trabajo, devolverla
+  a `En curso`. Cuando vuelva a terminarse y validarse, regresa a
+  `Listo`.
 
 Antes de finalizar:
 
@@ -467,8 +486,9 @@ Antes de finalizar:
 * [ ] El commit fue enviado a `origin`.
 * [ ] El branch remoto está actualizado.
 * [ ] El Pull Request apunta a `develop`.
-* [ ] La tarjeta Jira quedó en Listo para pruebas (o su ausencia de
-  transición quedó reportada; N/A sin tarjeta Jira).
+* [ ] La tarjeta Jira quedó en el estado correspondiente (§17:
+  subtarea → Listo; tarea principal → Listo para pruebas; o su
+  ausencia de transición quedó reportada; N/A sin tarjeta Jira).
 * [ ] No se modificaron otros branches o worktrees.
 
 ---
