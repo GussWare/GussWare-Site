@@ -89,6 +89,11 @@ Cada tarea independiente debe tener:
 * su propio worktree;
 * su propio upstream remoto.
 
+Una tarjeta principal con subtareas es una sola unidad de trabajo Git:
+se utiliza el mismo worktree y la misma rama de la tarjeta principal
+para trabajar todas sus subtareas. No crear un worktree ni una rama
+independiente por cada subtarea.
+
 ### Feature
 
 ```text
@@ -306,6 +311,11 @@ origin/develop
 
 No comenzar una tarea independiente nueva hasta completar el commit de la tarea actual.
 
+Dentro de una tarjeta principal con subtareas: cada subtarea es una
+unidad independiente de trabajo dentro de la tarjeta principal y debe
+quedar en un commit independiente. Trabajar una subtarea a la vez y no
+comenzar la siguiente hasta terminar y hacer commit de la actual.
+
 ---
 
 ## 11. Before Commit
@@ -346,6 +356,9 @@ style(RGW-302): ajustar espaciado del hero
 ```
 
 Los commits deben representar unidades lógicas de trabajo.
+
+Cada subtarea terminada debe quedar en su propio commit independiente;
+no agrupar varias subtareas en un mismo commit.
 
 No utilizar:
 
@@ -458,20 +471,38 @@ Reglas de estado:
 
 * Subtarea completamente terminada y validada → `Listo`. Nunca
   `Listo para pruebas`. Terminar una subtarea no cambia el estado de
-  su tarea principal.
+  su tarea principal. Antes de cambiar el estado debe existir el
+  commit correspondiente a esa subtarea.
 * Tarea principal completamente terminada y validada → `Listo para
   pruebas` (queda esperando validación/prueba manual). No mover la
   tarea principal a `Listo para pruebas` solamente porque terminó una
   subtarea; solo cuando el trabajo completo de la tarea principal esté
   terminado y, cuando aplique, sus subtareas necesarias también estén
-  terminadas.
+  terminadas. Mientras existan subtareas pendientes, la tarjeta
+  principal continúa en su estado correspondiente. A partir de `Listo
+  para pruebas` continúa el flujo normal ya definido (§13–§14, §18).
 * Observaciones del usuario sobre una tarea principal en `Listo para
   pruebas`: al retomar el trabajo, devolver esa tarjeta a `En curso`.
   Tras corregir las observaciones y pasar nuevamente todas las
   validaciones, la tarea principal vuelve a `Listo para pruebas`.
 * Observaciones sobre una subtarea: al retomar el trabajo, devolverla
-  a `En curso`. Cuando vuelva a terminarse y validarse, regresa a
+  a `En curso`. Corregir únicamente las observaciones correspondientes
+  a esa subtarea. Cuando vuelva a terminarse y validarse, regresa a
   `Listo`.
+
+Comentario obligatorio en Jira (ver operación en
+[reference.md](reference.md)):
+
+* Cada vez que una subtarea quede terminada y validada, agregar un
+  comentario resumido en esa subtarea.
+* Cuando la tarea principal quede terminada, agregar también un
+  comentario resumido en ella.
+* Tras corregir observaciones (de subtarea o principal) y validar de
+  nuevo, agregar/actualizar el comentario con el resumen de la
+  corrección y validación.
+* El comentario debe indicar de forma breve: qué se realizó;
+  resultado; validaciones ejecutadas; commit relacionado, cuando
+  corresponda.
 
 Antes de finalizar:
 
@@ -489,6 +520,8 @@ Antes de finalizar:
 * [ ] La tarjeta Jira quedó en el estado correspondiente (§17:
   subtarea → Listo; tarea principal → Listo para pruebas; o su
   ausencia de transición quedó reportada; N/A sin tarjeta Jira).
+* [ ] El comentario obligatorio en Jira fue agregado/actualizado (§17;
+  N/A sin tarjeta Jira).
 * [ ] No se modificaron otros branches o worktrees.
 
 ---

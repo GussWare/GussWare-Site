@@ -13,7 +13,8 @@ aquí solo el cómo con el MCP de Atlassian.
 
 ## Transicionar al estado correspondiente (§17)
 
-1. Solo después de que todas las validaciones de la tarea pasaron.
+1. Solo después de que todas las validaciones de la tarea pasaron y
+   existe el commit correspondiente a esa subtarea/tarea.
 2. Determinar el destino según el tipo de tarjeta (tipo de issue /
    padre obtenido con `getJiraIssue`): subtarea → `Listo`; tarea
    principal → `Listo para pruebas`.
@@ -34,3 +35,14 @@ aquí solo el cómo con el MCP de Atlassian.
    inventado).
 7. Si no existe para esa tarjeta: no usar otra transición ni cambiar
    a otro estado; informarlo en el campo `Jira:` del reporte (§18).
+
+## Comentario obligatorio en Jira (§17)
+
+1. Con `addOrEditJiraIssueComment` (`issueIdOrKey: <ID>`) agregar el
+   comentario resumido en la subtarea o tarea principal terminada
+   (o tras corregir observaciones, agregar/actualizarlo).
+2. Contenido breve: qué se realizó; resultado; validaciones
+   ejecutadas; commit relacionado, cuando corresponda.
+3. No inventar estados, nombres de transiciones ni IDs; las
+   transiciones usadas son únicamente las reales listadas en el punto
+   5 anterior.
