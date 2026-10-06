@@ -120,12 +120,13 @@ const servicesAcf =
 // page; `/` lo sirve `index.astro`, `/en/` llega aquí).
 const isHomePage = uri === '';
 
-// RGW-272: ítems siempre desde el catálogo CPT `service` (locale en
-// curso), sin integración con `services.items[]` de ACF. El encabezado
-// de la sección sigue desde el ACF del Home cuando existe.
+// RGW-290: la sección "Cómo te ayudamos" (`Services`) se eliminó del
+// Home; en portada no se obtienen ítems del catálogo CPT ni se
+// renderiza la sección. Las páginas no portada conservan su
+// comportamiento existente.
 let serviceItems: WpServiceItem[] = [];
 
-if (hero && (servicesAcf || isHomePage)) {
+if (!isHomePage && hero && servicesAcf) {
   try {
     const list = await wpFetch<WpServiceSummary[]>(wpRoutes.services(locale));
 
@@ -147,7 +148,7 @@ if (hero && (servicesAcf || isHomePage)) {
 }
 
 const services =
-  servicesAcf || serviceItems.length > 0
+  !isHomePage && (servicesAcf || serviceItems.length > 0)
     ? {
         ...(servicesAcf ?? { eyebrow: '', title: '', description: '' }),
         items: serviceItems,
