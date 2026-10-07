@@ -1,14 +1,14 @@
 ---
 
-name: gussware-git-workflow
-description: Gestiona el flujo Git y Git Worktree de GussWare para ramas de tarea, worktrees, upstreams, fetch, pull, commits, push y Pull Requests, incluyendo contexto y cierre de tarjetas Jira. Usar cuando una tarea implique operaciones Git, branches, worktrees o Pull Requests, o cuando la solicitud incluya un ID Jira (p. ej. RGW-272).
+name: gussware-workflow
+description: Gestiona el flujo Git, Git Worktree y Jira de GussWare para ramas de tarea, worktrees, upstreams, fetch, pull, commits, push y Pull Requests, incluyendo contexto y cierre de tarjetas Jira. Usar cuando una tarea implique operaciones Git, branches, worktrees o Pull Requests, o cuando la solicitud incluya un ID Jira (p. ej. RGW-272).
 ---
 
-# GussWare Git Workflow
+# GussWare Workflow
 
 ## Purpose
 
-Aplicar el flujo Git estándar del proyecto GussWare Site.
+Aplicar el flujo Git y Jira estándar del proyecto GussWare Site.
 
 Este Skill controla únicamente operaciones relacionadas con:
 
@@ -93,6 +93,27 @@ Una tarjeta principal con subtareas es una sola unidad de trabajo Git:
 se utiliza el mismo worktree y la misma rama de la tarjeta principal
 para trabajar todas sus subtareas. No crear un worktree ni una rama
 independiente por cada subtarea.
+
+### Observaciones y ciclos sobre una tarea existente
+
+Una observación, corrección, ciclo de pruebas o comentario sobre una
+tarea existente NO es una nueva tarea Git.
+
+Cuando la tarea ya tenga rama y worktree asignados:
+
+* continuar trabajando en la misma rama y el mismo worktree;
+* no crear otra rama;
+* no crear otro worktree;
+* no crear una rama por cada ciclo u observación;
+* los commits de los ciclos/observaciones deben quedar en la rama
+  original de la tarea;
+* conservar el mismo upstream de esa rama;
+* únicamente crear una nueva rama/worktree cuando Jira represente
+  realmente una nueva tarea independiente.
+
+Antes de realizar cualquier operación Git derivada de una observación
+o ciclo, verificar cuál es la rama y worktree existentes de la tarea
+(§1, §5, §6) y continuar sobre ellos.
 
 ### Feature
 
@@ -503,6 +524,30 @@ Comentario obligatorio en Jira (ver operación en
 * El comentario debe indicar de forma breve: qué se realizó;
   resultado; validaciones ejecutadas; commit relacionado, cuando
   corresponda.
+
+### Cierre de tareas con subtareas
+
+Cuando una tarea de Jira tenga subtareas:
+
+* cada subtarea debe mantener su propio reporte y comentario de
+  cierre;
+* cuando todas las subtareas necesarias hayan terminado y la tarea
+  padre esté completamente validada, agregar un comentario de resumen
+  en la tarjeta padre;
+* ese comentario debe consolidar el resultado global de las subtareas
+  y de la tarea padre, incluyendo como mínimo:
+
+  * subtareas completadas;
+  * resultado general;
+  * validaciones;
+  * commits relevantes;
+  * PR cuando corresponda;
+  * observaciones o pendientes, si existen.
+* no limitarse a copiar los comentarios individuales;
+* después del comentario consolidado, continuar con el flujo de
+  transición de Jira definido por el skill;
+* si alguna subtarea necesaria sigue pendiente, la tarea padre no
+  debe considerarse completamente terminada.
 
 Antes de finalizar:
 

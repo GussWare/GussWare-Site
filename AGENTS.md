@@ -35,13 +35,13 @@ Project-specific skills are located at:
 
 When a task requires a project skill, inspect this directory and load the relevant skill before proceeding.
 
-The Git workflow skill is:
+The GussWare workflow (Git + Jira) skill is:
 
-`.opencode/skills/gussware-git-workflow/`
+`.opencode/skills/gussware-workflow/`
 
 Before performing Git operations involving worktrees, branches, commits, push, pull, or Pull Requests, load and follow:
 
-`.opencode/skills/gussware-git-workflow/`
+`.opencode/skills/gussware-workflow/`
 
 ---
 
@@ -49,7 +49,7 @@ Before performing Git operations involving worktrees, branches, commits, push, p
 
 Git and worktree operations must follow the project skill:
 
-`gussware-git-workflow`
+`gussware-workflow`
 
 Before performing Git operations involving worktrees, branches, commits, push, pull, or Pull Requests, load and follow that skill.
 
