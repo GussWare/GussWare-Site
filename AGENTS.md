@@ -43,6 +43,14 @@ Before performing Git operations involving worktrees, branches, commits, push, p
 
 `.opencode/skills/gussware-workflow/`
 
+The layout and visual standardization skill is:
+
+`.opencode/skills/gussware-layout/`
+
+Before laying out sections or pages, or creating or modifying visual components, load and follow:
+
+`.opencode/skills/gussware-layout/`
+
 ---
 
 ## Git and Worktrees

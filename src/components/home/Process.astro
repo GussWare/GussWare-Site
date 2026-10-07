@@ -137,7 +137,7 @@ const slides = steps.map((step, index) => ({
           class="relative overflow-hidden bg-gw-surface-secondary rounded-none p-8 lg:p-16 min-h-[500px] flex flex-col justify-center"
         >
           <div class="relative z-10">
-            <div class="flex flex-col lg:flex-row items-center gap-12">
+                 <div class="flex flex-col lg:flex-row items-center gap-12 transition-all duration-500" data-process-content>
               <div class="w-full lg:w-1/2">
                 <span
                   data-process-badge
@@ -158,37 +158,37 @@ const slides = steps.map((step, index) => ({
                   {steps[0].description}
                 </p>
               </div>
-              <div class="w-full lg:w-1/2">
-                <div
-                  class="aspect-video bg-brand-surface rounded-none border border-gw-border-subtle overflow-hidden"
-                >
-                  {firstImage ? (
-                    <img
-                      data-process-image
-                      src={firstImage.src}
-                      alt={firstImage.alt}
-                      loading="lazy"
-                      class="w-full h-full object-cover"
-                    />
-                    <div
-                      data-process-image-empty
-                      hidden
-                      class="hidden w-full h-full bg-gw-surface-secondary"
-                    ></div>
-                  ) : (
-                    <img
-                      data-process-image
-                      hidden
-                      class="hidden w-full h-full object-cover"
-                      alt=""
-                    />
-                    <div
-                      data-process-image-empty
-                      class="w-full h-full bg-gw-surface-secondary"
-                    ></div>
-                  )}
-                </div>
-              </div>
+               <div class="w-full lg:w-1/2">
+                 <div
+                   class="aspect-video bg-brand-surface rounded-xl shadow-lg border border-gw-border-subtle overflow-hidden relative"
+                 >
+                   {firstImage ? (
+                     <img
+                       data-process-image
+                       src={firstImage.src}
+                       alt={firstImage.alt}
+                       loading="lazy"
+                       class="w-full h-full object-cover transition-opacity duration-500"
+                     />
+                     <div
+                       data-process-image-empty
+                       hidden
+                       class="hidden w-full h-full bg-gw-surface-secondary"
+                     ></div>
+                   ) : (
+                     <img
+                       data-process-image
+                       hidden
+                       class="hidden w-full h-full object-cover transition-opacity duration-500"
+                       alt=""
+                     />
+                     <div
+                       data-process-image-empty
+                       class="w-full h-full bg-gw-surface-secondary"
+                     ></div>
+                   )}
+                 </div>
+               </div>
             </div>
           </div>
           <div class="flex items-center gap-4 mt-12 lg:mt-16 relative z-20">
@@ -312,6 +312,15 @@ const slides = steps.map((step, index) => ({
       const linePct = total > 1 ? (current / (total - 1)) * 100 : 100;
       const barPct = Math.round(((current + 1) / total) * 100);
 
+      const content = root.querySelector('[data-process-content]');
+      if (content instanceof HTMLElement) {
+        content.classList.add('opacity-0', 'translate-x-4');
+        setTimeout(() => {
+          content.classList.remove('opacity-0', 'translate-x-4');
+          content.classList.add('opacity-100', 'translate-x-0');
+        }, 50);
+      }
+
       nodes.forEach((node, i) => {
         if (!(node instanceof HTMLButtonElement)) return;
         const active = i === current;
@@ -339,10 +348,13 @@ const slides = steps.map((step, index) => ({
 
       if (image instanceof HTMLImageElement) {
         if (slide.image) {
-          image.src = slide.image.src;
-          image.alt = slide.image.alt;
-          image.hidden = false;
-          image.classList.remove('hidden');
+          image.classList.add('opacity-0');
+          setTimeout(() => {
+            image.src = slide.image.src;
+            image.alt = slide.image.alt;
+            image.hidden = false;
+            image.classList.remove('hidden', 'opacity-0');
+          }, 50);
         } else {
           image.removeAttribute('src');
           image.hidden = true;
