@@ -24,8 +24,8 @@
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import Layout from '../layouts/Layout.astro';
 import Container from '../components/ui/Container.astro';
+import ContactSection from '../components/contact/ContactSection.astro';
 import EditorialWrapper from '../components/ui/EditorialWrapper.astro';
-import Section from '../components/ui/Section.astro';
 import Hero from '../components/home/Hero.astro';
 import Expertise from '../components/home/Expertise.astro';
 import CommunityModel from '../components/home/CommunityModel.astro';
@@ -34,7 +34,6 @@ import Process from '../components/home/Process.astro';
 import Faq from '../components/home/Faq.astro';
 import FinalCta from '../components/home/FinalCta.astro';
 import LegalView from '../components/legal/LegalView.astro';
-import Icon from '../components/ui/Icon.astro';
 import ContactForm from '../components/contact/ContactForm.astro';
 import { routes } from '../lib/routes';
 import { serviceDetailUrl } from '../lib/routes';
@@ -341,62 +340,25 @@ if (translatedSlug) {
       {finalCta && <FinalCta finalCta={finalCta} />}
     </>
   ) : sectionContent ? (
-    <Section id="contact" class="bg-gw-surface-auxiliary">
-      <div class="flex flex-col gap-16 lg:flex-row lg:gap-24">
-        <div class="flex flex-col justify-center lg:w-1/2">
-          {sectionContent.eyebrow && (
-            <p class="text-label-bold text-brand-secondary mb-4 uppercase">
-              {sectionContent.eyebrow}
-            </p>
-          )}
-
-          {sectionContent.title && (
-            <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6 leading-display-lg-mobile md:leading-display-lg">
-              {sectionContent.title}
-            </h1>
-          )}
-
-          {sectionContent.description && (
-            <p class="text-body-lg text-gw-text-secondary">
-              {sectionContent.description}
-            </p>
-          )}
-
-          <div class="border-gw-border-subtle mt-8 border-t pt-8">
-            {sectionContent.social_media_text && (
-              <p class="text-body-md text-gw-text-secondary mb-6">
-                {sectionContent.social_media_text}
-              </p>
-            )}
-
-            {socialMedia && (
-              <div class="flex gap-4">
-                {socialMedia.map((social) => (
-                  <a
-                    aria-label={social.name}
-                    href={social.url}
-                    target="_blank"
-                    class="bg-brand-primary text-brand-surface flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 hover:bg-supporting-blue-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
-                  >
-                    <Icon name={social.icon} size={4} />
-                  </a>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div class="bg-gw-surface-primary rounded-none p-8 md:p-12 lg:w-1/2">
-          {/* RGW-271: campos dinámicos desde la API (mismo diseño). */}
-          {contactForm && contactFormSubmitUrl && (
-            <ContactForm
-              fields={contactForm.fields}
-              submitUrl={contactFormSubmitUrl}
-            />
-          )}
-        </div>
-      </div>
-    </Section>
+    <ContactSection
+      eyebrow={sectionContent.eyebrow ?? undefined}
+      title={sectionContent.title ?? undefined}
+      description={sectionContent.description ?? undefined}
+      socialText={sectionContent.social_media_text ?? undefined}
+      socialMedia={(socialMedia ?? []).map((social) => ({
+        name: social.name,
+        url: social.url,
+        icon: social.icon,
+      }))}
+    >
+      {/* RGW-271: campos dinámicos desde la API (mismo diseño). */}
+      {contactForm && contactFormSubmitUrl && (
+        <ContactForm
+          fields={contactForm.fields}
+          submitUrl={contactFormSubmitUrl}
+        />
+      )}
+    </ContactSection>
   ) : (
     <Container>
       <EditorialWrapper>

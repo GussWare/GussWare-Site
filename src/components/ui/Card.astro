@@ -24,6 +24,12 @@
  *   en lugar de la proporción `4/3` por defecto;
  * - con `href`, el cuerpo llena la tarjeta (`flex-grow`, como en Stitch)
  *   y el título crece para alinear los enlaces abajo.
+ *
+ * RGW-303 — Modo `skeleton` para estados de carga (hallazgo #20 del
+ * tree RGW-288: el skeleton del blog replicaba la geometría de Card a
+ * mano): con `skeleton`, se renderiza la misma carcasa (`article`,
+ * bloque de imagen y cuerpo `p-6`) con barras `animate-pulse`
+ * `aria-hidden`, sin contenido. `title` es opcional para este modo.
  */
 import Badge from './Badge.astro';
 import Icon from './Icon.astro';
@@ -33,12 +39,14 @@ interface Props {
   image?: { src: string; alt: string };
   imageHeight?: string;
   badge?: string;
-  title: string;
+  title?: string;
   description?: string;
   date?: string;
   readingTime?: string;
   href?: string;
   linkLabel?: string;
+  /** Estado de carga: carcasa con barras `animate-pulse`, sin contenido. */
+  skeleton?: boolean;
   class?: string;
 }
 
@@ -46,16 +54,31 @@ const {
   image = undefined,
   imageHeight = undefined,
   badge = undefined,
-  title,
+  title = '',
   description = undefined,
   date = undefined,
   readingTime = undefined,
   href = undefined,
   linkLabel = 'Read more',
+  skeleton = false,
   class: className = '',
 } = Astro.props;
 ---
 
+{skeleton ? (
+  <article
+    aria-hidden="true"
+    class={`bg-gw-surface-primary border-gw-border-subtle flex h-full flex-col overflow-hidden rounded-none border ${className}`}
+  >
+    <div class={`bg-gw-surface-secondary motion-safe:animate-pulse w-full overflow-hidden rounded-none ${imageHeight ?? 'aspect-[4/3]'}`} />
+    <div class="flex flex-grow flex-col p-6">
+      <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-3 h-6 w-24 rounded-none" />
+      <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-4 h-8 w-full rounded-none" />
+      <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-4 h-8 w-3/4 rounded-none" />
+      <div class="bg-gw-surface-secondary motion-safe:animate-pulse mt-4 h-5 w-28 rounded-none" />
+    </div>
+  </article>
+) : (
 <article
   class={`bg-gw-surface-primary border-gw-border-subtle group flex h-full flex-col overflow-hidden rounded-none border ${className}`}
 >
@@ -116,3 +139,4 @@ const {
     )}
   </div>
 </article>
+)}
