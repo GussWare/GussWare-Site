@@ -1,0 +1,215 @@
+---
+/**
+ * RGW-308 — Espécimen experimental (rama independiente, no integrar).
+ *
+ * Compara la escala tipográfica del sistema actual (variante A, clases
+ * con tokens) frente a la escala cruda de LegalView (variante B,
+ * valores exactos extraídos de `LegalView.astro`: display 30px/36px,
+ * h2 24px/32px/700, secundaria 14px/600, cuerpo 16px/1.625, meta
+ * 12px/700). Página standalone sin `Layout` para no requerir WordPress.
+ * El contenido es texto neutro de laboratorio, no contenido del sitio.
+ */
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Card from '../components/ui/Card.astro';
+import Button from '../components/ui/Button.astro';
+import '../styles/global.css';
+
+const demoTitle = 'Soluciones tecnológicas para tu negocio';
+const demoDesc =
+  'Diseñamos, desarrollamos y escalamos productos digitales con un equipo verificado y procesos probados.';
+const demoBody =
+  'Cada proyecto combina descubrimiento, diseño y desarrollo en ciclos cortos con entregas verificables. El contenido editorial fluye en párrafos de cuerpo con ritmo de lectura continua y jerarquía clara entre títulos.';
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>RGW-308 — Experimento tipográfico (no integrar)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <main class="mx-auto w-full max-w-[var(--container-max)] px-4 md:px-6 py-12">
+      <p class="text-label-bold text-brand-accent mb-2 uppercase">
+        RGW-308 · Espécimen experimental — no integrar
+      </p>
+      <h1
+        class="text-gw-text-primary text-headline-lg mb-12"
+      >
+        Sistema actual (A) vs escala LegalView (B)
+      </h1>
+
+      {/* Módulo 1 — Título display (Home hero) */}
+      <section data-module="display" class="mb-16">
+        <h2 class="text-label-bold text-gw-text-muted mb-6 uppercase">
+          Módulo 1 — Título display
+        </h2>
+        <div class="mb-8">
+          <p class="text-label-bold text-brand-secondary mb-2 uppercase">A · Sistema actual</p>
+          <p class="text-display-lg-mobile md:text-display-lg text-gw-text-primary">
+            {demoTitle}
+          </p>
+        </div>
+        <div>
+          <p class="text-label-bold text-brand-secondary mb-2 uppercase">B · Escala LegalView</p>
+          <p class="lv-display text-gw-text-primary">{demoTitle}</p>
+        </div>
+      </section>
+
+      {/* Módulo 2 — Encabezado de sección (Servicios) */}
+      <section data-module="heading" class="mb-16">
+        <h2 class="text-label-bold text-gw-text-muted mb-6 uppercase">
+          Módulo 2 — Encabezado de sección
+        </h2>
+        <div class="mb-8">
+          <p class="text-label-bold text-brand-secondary mb-2 uppercase">A · Sistema actual</p>
+          <SectionHeading
+            eyebrow="Servicios"
+            title="Cómo te ayudamos"
+            description={demoDesc}
+          />
+        </div>
+        <div>
+          <p class="text-label-bold text-brand-secondary mb-2 uppercase">B · Escala LegalView</p>
+          <p class="lv-eyebrow text-brand-secondary mb-4 uppercase">Servicios</p>
+          <h2 class="lv-h2 text-gw-text-primary mb-6">Cómo te ayudamos</h2>
+          <p class="lv-lede text-gw-text-secondary">{demoDesc}</p>
+        </div>
+      </section>
+
+      {/* Módulo 3 — Cuerpo + meta (Blog/Legal) */}
+      <section data-module="body" class="mb-16">
+        <h2 class="text-label-bold text-gw-text-muted mb-6 uppercase">
+          Módulo 3 — Cuerpo y meta
+        </h2>
+        <div class="mb-8">
+          <p class="text-label-bold text-brand-secondary mb-2 uppercase">A · Sistema actual</p>
+          <p class="text-body-md text-gw-text-secondary mb-4">{demoBody}</p>
+          <p class="text-label-bold text-gw-text-muted uppercase">
+            12 de octubre de 2026 · 5 min de lectura
+          </p>
+        </div>
+        <div>
+          <p class="text-label-bold text-brand-secondary mb-2 uppercase">B · Escala LegalView</p>
+          <p class="lv-body text-gw-text-secondary mb-4">{demoBody}</p>
+          <p class="lv-meta text-gw-text-muted uppercase">
+            12 de octubre de 2026 · 5 min de lectura
+          </p>
+        </div>
+      </section>
+
+      {/* Módulo 4 — Tarjeta (Servicios/Blog) */}
+      <section data-module="card" class="mb-16">
+        <h2 class="text-label-bold text-gw-text-muted mb-6 uppercase">
+          Módulo 4 — Tarjeta
+        </h2>
+        <div class="mb-8 max-w-xl">
+          <p class="text-label-bold text-brand-secondary mb-2 uppercase">A · Sistema actual</p>
+          <Card
+            badge="Desarrollo"
+            title="Desarrollo web a medida"
+            description={demoDesc}
+            date="12 de octubre de 2026"
+            readingTime="5 min"
+          />
+        </div>
+        <div class="max-w-xl">
+          <p class="text-label-bold text-brand-secondary mb-2 uppercase">B · Escala LegalView</p>
+          <article
+            class="bg-gw-surface-primary border-gw-border-subtle flex h-full flex-col overflow-hidden rounded-none border"
+          >
+            <div
+              aria-hidden="true"
+              class="bg-gw-surface-secondary aspect-[4/3] w-full overflow-hidden rounded-none"
+            />
+            <div class="flex flex-grow flex-col p-6">
+              <div class="mb-3">
+                <span
+                  class="bg-gw-surface-secondary text-gw-text-primary lv-badge inline-block rounded-none px-3 py-1 uppercase"
+                  >Desarrollo</span
+                >
+              </div>
+              <h3 class="lv-card-title text-gw-text-primary mb-4">
+                Desarrollo web a medida
+              </h3>
+              <p class="lv-body text-gw-text-secondary mb-6">{demoDesc}</p>
+              <p class="lv-meta text-gw-text-muted mt-auto flex justify-between gap-4">
+                <span>12 de octubre de 2026</span>
+                <span>5 min</span>
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      {/* Módulo 5 — Acciones (invariante: sin escala propia en LegalView) */}
+      <section data-module="actions" class="mb-4">
+        <h2 class="text-label-bold text-gw-text-muted mb-6 uppercase">
+          Módulo 5 — Acciones (igual en ambas: LegalView no define escala)
+        </h2>
+        <div class="flex flex-wrap gap-4">
+          <Button variant="primary" href="#">Iniciar conversación</Button>
+          <Button variant="secondary" href="#">Ver servicios</Button>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
+
+<style>
+  /* Variante B — valores exactos de LegalView.astro (rama del experimento). */
+  .lv-display {
+    font-size: var(--font-size-display-lg-mobile);
+    line-height: var(--line-height-display-lg-mobile);
+    font-weight: var(--font-weight-display-lg);
+  }
+  @media (min-width: 768px) {
+    .lv-display {
+      font-size: 1.875rem;
+      line-height: 2.25rem;
+    }
+  }
+  .lv-eyebrow {
+    font-size: var(--font-size-label-bold);
+    font-weight: var(--font-weight-label);
+    letter-spacing: var(--letter-spacing-label-bold);
+  }
+  .lv-h2 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+  .lv-lede {
+    font-size: 0.875rem;
+    line-height: 1.625;
+    font-weight: 600;
+  }
+  .lv-body {
+    font-size: 1rem;
+    line-height: 1.625;
+  }
+  .lv-meta {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .lv-badge {
+    font-size: var(--font-size-label-bold);
+    font-weight: var(--font-weight-label);
+    letter-spacing: var(--letter-spacing-label-bold);
+  }
+  .lv-card-title {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+</style>
