@@ -1,4 +1,4 @@
-# Referencia operativa Jira (gussware-git-workflow)
+# Referencia operativa Jira (gussware-workflow)
 
 Detalle operativo para §0 y §17. Las reglas viven en `SKILL.md`;
 aquí solo el cómo con el MCP de Atlassian.
@@ -43,6 +43,16 @@ aquí solo el cómo con el MCP de Atlassian.
    (o tras corregir observaciones, agregar/actualizarlo).
 2. Contenido breve: qué se realizó; resultado; validaciones
    ejecutadas; commit relacionado, cuando corresponda.
-3. No inventar estados, nombres de transiciones ni IDs; las
+3. Comentario de resumen en la tarjeta padre (cierre de tareas con
+   subtareas): con `addOrEditJiraIssueComment`
+   (`issueIdOrKey: <ID-padre>`) agregar el comentario consolidado
+   solo cuando todas las subtareas necesarias hayan terminado y la
+   tarea padre esté completamente validada. Contenido mínimo:
+   subtareas completadas; resultado general; validaciones; commits
+   relevantes; PR cuando corresponda; observaciones o pendientes, si
+   existen. No copiar los comentarios individuales: redactar una
+   consolidación. Después del comentario, continuar con la
+   transición (§17, sección anterior).
+4. No inventar estados, nombres de transiciones ni IDs; las
    transiciones usadas son únicamente las reales listadas en el punto
    5 anterior.
