@@ -701,6 +701,13 @@ const crumbs = [getBreadcrumbHome(locale), { label: title }];
     color: var(--color-text-muted);
   }
 
+  /* RGW-304 — Mecanismo de iconos para contenido WP: el cuerpo legal
+     se inyecta con `set:html`, fuera del alcance de `Icon.astro` (uso
+     obligatorio en el marcado del proyecto). Aquí los iconos son
+     data-URIs SVG con colores equivalentes a tokens
+     (`#004a98` brand-primary, `#2164a6` brand-secondary,
+     `#ff5000` brand-accent, `#ffffff` brand-surface); no introducir
+     otros colores ni otro mecanismo en este bloque. */
   .legal-content .gw-icon-person h3::before,
   .legal-content .gw-icon-mail h3::before,
   .legal-content .gw-icon-phone h3::before {
