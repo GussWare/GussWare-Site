@@ -17,6 +17,9 @@
  * Lista vacía: solo intro, sin errores (script con guards).
  * Interacción encapsulada en el `script` del componente:
  * `aria-expanded`, `hidden`, icono y control asociados por id.
+ * RGW-296: apertura/cierre con transición de altura suave
+ * (`grid-template-rows` 0fr → 1fr), sin cambios de contenido ni de
+ * diseño; `prefers-reduced-motion` desactiva la transición.
  */
 import Section from '../ui/Section.astro';
 import type { WpFaq } from '../../lib/wordpress/types';
@@ -88,10 +91,10 @@ const pad = (n: number): string => String(n).padStart(2, '0');
                 role="region"
                 aria-labelledby={`faq-button-${index}`}
                 hidden
-                class="hidden"
+                class="faq-panel"
               >
-                <div class="pr-4 pb-8 pl-16">
-                  <p class="text-gw-text-secondary text-body-md">
+                <div class="faq-content pr-4 pl-16">
+                  <p class="text-gw-text-secondary text-body-md pb-8">
                     {item.respuesta}
                   </p>
                 </div>
@@ -103,6 +106,40 @@ const pad = (n: number): string => String(n).padStart(2, '0');
     </div>
   </div>
 </Section>
+
+<style>
+  /*
+   * RGW-296 — Animación del acordeón: transición de altura vía
+   * grid-template-rows (0fr → 1fr); duración y easing alineados con la
+   * receta de transición del sistema (200ms). El atributo `hidden` sigue
+   * mandando (`display: none`) para conservar el estado inicial y el
+   * comportamiento sin JavaScript.
+   */
+  .faq-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 200ms ease-in-out;
+  }
+
+  .faq-panel[hidden] {
+    display: none;
+  }
+
+  .faq-panel.is-open {
+    grid-template-rows: 1fr;
+  }
+
+  .faq-content {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq-panel {
+      transition: none;
+    }
+  }
+</style>
 
 <script>
   const root = document.querySelector('[data-faq]');
@@ -120,8 +157,29 @@ const pad = (n: number): string => String(n).padStart(2, '0');
         button.setAttribute('aria-expanded', String(next));
 
         if (panel instanceof HTMLElement) {
-          panel.hidden = !next;
-          panel.classList.toggle('hidden', !next);
+          if (next) {
+            panel.hidden = false;
+            // Reflow forzado: el navegador registra el estado colapsado
+            // (0fr) antes de abrir; si no, la transición de altura no corre
+            // desde `display: none`.
+            void panel.offsetHeight;
+            panel.classList.add('is-open');
+          } else {
+            panel.classList.remove('is-open');
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+              panel.hidden = true;
+            } else {
+              panel.addEventListener(
+                'transitionend',
+                () => {
+                  if (!panel.classList.contains('is-open')) {
+                    panel.hidden = true;
+                  }
+                },
+                { once: true },
+              );
+            }
+          }
         }
 
         const icon = button.querySelector('[data-faq-icon]');
