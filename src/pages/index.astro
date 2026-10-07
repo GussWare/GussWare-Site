@@ -12,7 +12,6 @@ import Container from '../components/ui/Container.astro';
 import Hero from '../components/home/Hero.astro';
 import Expertise from '../components/home/Expertise.astro';
 import CommunityModel from '../components/home/CommunityModel.astro';
-import Services from '../components/home/Services.astro';
 import Process from '../components/home/Process.astro';
 import Faq from '../components/home/Faq.astro';
 import FinalCta from '../components/home/FinalCta.astro';
@@ -22,7 +21,11 @@ import { getFrontPage } from '../lib/wordpress/pages';
 import { wpFetch } from '../lib/wordpress/client';
 import { wpRoutes } from '../lib/wordpress/routes';
 import { stripHtml } from '../lib/wordpress/text';
-import type { WpMedia, WpServiceItem, WpServiceSummary } from '../lib/wordpress/types';
+import type {
+  WpMedia,
+  WpServiceItem,
+  WpServiceSummary,
+} from '../lib/wordpress/types';
 
 export const prerender = false;
 
@@ -40,11 +43,10 @@ const description = page
 const hero = page?.acf?.hero ?? null;
 const expertise = page?.acf?.expertise ?? null;
 const technology = page?.acf?.technology ?? null;
-const servicesAcf = page?.acf?.services ?? null;
 
-// RGW-272: ítems siempre desde el catálogo CPT `service` (locale `es`),
-// sin integración con `services.items[]` de ACF. El encabezado de la
-// sección sigue desde el ACF del Home cuando existe.
+// RGW-292: ítems de la sección Servicios desde el catálogo CPT
+// `service` (fuente de verdad, locale `es`); sin catálogo, la sección
+// usa los ítems ACF (fallback en el componente).
 let serviceItems: WpServiceItem[] = [];
 
 try {
@@ -58,21 +60,14 @@ try {
       description: stripHtml(
         item.excerpt?.rendered || item.acf?.intro_description || '',
       ),
-      // RGW-EP09-07-03: cada fila enlaza a su detalle.
+      // RGW-EP09-07-03: cada card enlaza a su detalle.
       url: serviceDetailUrl('es', item.slug),
     }));
   }
 } catch {
-  // Sin catálogo: la sección se renderiza sin ítems.
+  // Sin catálogo: la sección se renderiza con ítems ACF.
 }
 
-const services =
-  servicesAcf || serviceItems.length > 0
-    ? {
-        ...(servicesAcf ?? { eyebrow: '', title: '', description: '' }),
-        items: serviceItems,
-      }
-    : null;
 const process = page?.acf?.process ?? null;
 const finalCta = page?.acf?.final_cta ?? null;
 const faq = page?.acf?.faq ?? null;
@@ -126,9 +121,14 @@ const stepImages = await Promise.all(
   {page && hero ? (
     <>
       <Hero hero={hero} image={heroImage} />
-      {expertise && <Expertise expertise={expertise} />}
+      {expertise && (
+        <Expertise
+          expertise={expertise}
+          items={serviceItems}
+          id="servicios"
+        />
+      )}
       {technology && <CommunityModel technology={technology} />}
-      {services && <Services services={services} id="servicios" />}
       {process && (
         <Process process={process} images={stepImages} id="como-trabajamos" />
       )}

@@ -1,11 +1,13 @@
 ---
 /**
- * Expertise / Capacidades del Home según Stitch `GussWare Home-V0.1.0`
- * (`GussWare Home - Complete Final Flow`).
+ * Servicios del Home (RGW-291): la sección antes identificada como
+ * Expertise / Capacidades según Stitch `GussWare Home-V0.1.0`
+ * (`GussWare Home - Complete Final Flow`) ahora representa la oferta
+ * de Servicios, reutilizando la estructura existente.
  *
  * Intro en split layout (título `display` + descripción `body-lg` con
  * borde lateral), grid 3×2 de `expertice_items` (glifo `brand-primary` +
- * título + descripción, hover a `surface-secondary` con esquina
+ * título + descripción, hover con color `gw-highlight` y esquina
  * decorativa) y bloque Trust/Fiability (`fiability.title`,
  * `fiability.description`, 2×2 de `fiability_items` como mini-cards
  * `surface-secondary`). Solo visualización: sin navegación ni lógica más
@@ -16,8 +18,8 @@
  *   `rounded-none` (patrón de `Card.astro`);
  * - icono `text-brand-primary` sin círculo (Stitch muestra el glifo
  *   directo en `primary-container` = `brand-primary`);
- * - hover `hover:bg-gw-surface-secondary` + esquina decorativa
- *   `bg-gw-surface-secondary` (Stitch, sin sombras como en `Card.astro`);
+ * - hover `hover:bg-gw-highlight` + esquina decorativa
+ *   `bg-gw-surface-secondary` (sin sombras como en `Card.astro`);
  * - banda Trust con `border-t border-gw-border-subtle` y mini-cards
  *   `bg-gw-surface-secondary` sin borde (Stitch).
  *
@@ -27,6 +29,16 @@
  * conocido usa su glifo; un nombre desconocido usa el fallback
  * genérico `arrow-right`. Sin lógica posicional ni valores
  * hardcodeados.
+ *
+ * RGW-292: los ítems provienen del CPT Servicios (fuente de verdad;
+ * prop `items`); el ACF `expertise` solo aporta encabezado, fiability
+ * y fallback de ítems.
+ * Observaciones RGW-289/RGW-293: cards con fondo blanco
+ * (`bg-gw-surface-primary`), iconos conservados (el CPT no expone
+ * icono: se empareja por palabra clave del título) y hover con color
+ * (`hover:bg-gw-highlight`, patrón de `CommunityModel`).
+ * Ciclo 3: items sin línea superior (tratamiento original de Stitch
+ * de CAPACIDADES) y FAQ sin línea superior.
  */
 import Section from '../ui/Section.astro';
 import Icon from '../ui/Icon.astro';
@@ -34,13 +46,27 @@ import type {
   WpExpertise,
   WpExpertiseItem,
   WpFiabilityItem,
+  WpServiceItem,
 } from '../../lib/wordpress/types';
 
 interface Props {
   expertise: WpExpertise & { expertise_items?: WpExpertiseItem[] };
+  /**
+   * RGW-273 — Identificador de ancla de la sección (p. ej. el hash que
+   * WordPress configura en el menú para este idioma). El nombre lo
+   * define WordPress; Astro solo lo expone. Sin `id` no hay ancla.
+   */
+  id?: string;
+  /**
+   * RGW-292 — Ítems desde el CPT Servicios (fuente de verdad:
+   * nombre, descripción y enlace al detalle). Tienen prioridad sobre
+   * los ítems ACF; cuando está vacío o ausente (locale sin catálogo
+   * o fallo de API) se usan los ítems ACF existentes.
+   */
+  items?: WpServiceItem[];
 }
 
-const { expertise } = Astro.props;
+const { expertise, id = undefined, items: serviceItems = undefined } = Astro.props;
 
 /** Glifos disponibles en `Icon.astro` (claves de `paths`). */
 const KNOWN_ICONS = new Set([
@@ -72,16 +98,67 @@ const FALLBACK_ICON = 'arrow-right';
 const resolveIcon = (name: string): string =>
   KNOWN_ICONS.has(name) ? name : FALLBACK_ICON;
 
+// RGW-293-OBS1: el CPT Servicios no expone icono; para conservar el
+// glifo en las cards se empareja el título del servicio con el
+// catálogo local de `Icon.astro` por palabra clave del propio título
+// (sin valores inventados). Sin coincidencia: fallback genérico.
+const ICON_BY_TITLE_KEYWORD: Array<readonly [string, string]> = [
+  ['sitios web', 'web-development'],
+  ['moviles', 'mobile-development'],
+  ['a medida', 'custom-software'],
+  ['apis', 'api-integration'],
+  ['devops', 'devops-infrastructure'],
+  ['consultoria', 'consulting'],
+];
+
+const normalizeTitle = (value: string): string =>
+  value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+
+const iconForServiceTitle = (title: string): string => {
+  const normalized = normalizeTitle(title);
+  return (
+    ICON_BY_TITLE_KEYWORD.find(([keyword]) =>
+      normalized.includes(keyword),
+    )?.[1] ?? FALLBACK_ICON
+  );
+};
+
 // `WpExpertise` expone los ítems como `expertice_items`; se acepta
 // también `expertise_items` por compatibilidad con la fuente de datos.
-const items: WpExpertiseItem[] =
+// RGW-292: el CPT Servicios tiene prioridad; el ACF es el fallback
+// (p. ej. locale sin catálogo). El icono del CPT se empareja por
+// palabra clave (ver `ICON_BY_TITLE_KEYWORD`).
+type CardItem = {
+  icon?: string;
+  title: string;
+  description: string;
+  url?: string;
+};
+
+const acfItems: WpExpertiseItem[] =
   expertise.expertise_items ?? expertise.expertice_items ?? [];
+const items: CardItem[] =
+  serviceItems && serviceItems.length > 0
+    ? serviceItems.map((item) => ({
+        icon: iconForServiceTitle(item.title),
+        title: item.title,
+        description: item.description,
+        url: item.url,
+      }))
+    : acfItems.map((item) => ({
+        icon: item.icon,
+        title: item.title,
+        description: item.description,
+      }));
 const fiabilityItems: WpFiabilityItem[] =
   expertise.fiability?.fiability_items ?? [];
 ---
 
-<Section>
-  <div data-expertise>
+<Section id={id} class={id ? 'scroll-mt-24' : ''}>
+  <div data-services>
     <div
       class="mb-16 flex flex-col items-start justify-between gap-8 md:flex-row md:items-end"
     >
@@ -112,26 +189,33 @@ const fiabilityItems: WpFiabilityItem[] =
         data-expertise-grid
         class="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3"
       >
-        {items.map((item) => (
-          <article
+        {items.map((item) => {
+          // RGW-EP09-07-03: card navegable cuando hay URL de detalle (CPT).
+          const Tag = item.url ? 'a' : 'article';
+          return (
+          <Tag
             data-expertise-card
-            class="bg-gw-surface-primary border-gw-border-subtle group relative overflow-hidden rounded-none border p-8 transition-colors duration-200 hover:bg-gw-surface-secondary md:p-10"
+            href={item.url}
+            class="bg-gw-surface-primary border-gw-border-subtle group relative overflow-hidden rounded-none border p-8 transition-colors duration-200 hover:bg-gw-highlight md:p-10"
           >
             <div
               aria-hidden="true"
               class="bg-gw-surface-secondary absolute top-0 right-0 -z-10 h-24 w-24 rounded-bl-full opacity-0 transition-opacity group-hover:opacity-100"
             ></div>
-            <div class="text-brand-primary mb-6">
-              <Icon name={resolveIcon(item.icon)} size={8} />
-            </div>
+            {item.icon && (
+              <div class="text-brand-primary mb-6">
+                <Icon name={resolveIcon(item.icon)} size={8} />
+              </div>
+            )}
             <h3 class="text-gw-text-primary text-headline-md mb-4">
               {item.title}
             </h3>
             <p class="text-gw-text-secondary text-body-md">
               {item.description}
             </p>
-          </article>
-        ))}
+          </Tag>
+          );
+        })}
       </div>
     )}
     {expertise.fiability && (
