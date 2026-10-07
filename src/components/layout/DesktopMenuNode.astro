@@ -3,6 +3,15 @@
  * RGW-273 — Nodo de navegación desktop (recursivo con
  * `DesktopMenuNodes`: N niveles sin límite impuesto por Astro).
  *
+ * RGW-295 — Paridad visual desktop con Stitch (GussWare Home-V0.2.0):
+ * tipografía `text-navigation` (15/600/20, token Stitch), color de
+ * hover `brand-secondary` y elevación por capas tonales sin sombras
+ * (el sistema Stitch evita sombras tradicionales). Las filas del
+ * submenu son bloques de ancho completo con padding y fondo tonal en
+ * hover/focus; el foco de teclado usa el anillo del proyecto
+ * (`focus-visible:ring-supporting-blue-dark`, patrón de Button/Link).
+ * Solo desktop: este componente no se renderiza en Tablet/Mobile.
+ *
  * - El desplegable de nivel 0 abre debajo del menú principal.
  * - Los paneles anidados (depth ≥ 1) abren lateralmente alineados con
  *   la parte superior de su fila padre exacta (`top-0` relativo al
@@ -70,7 +79,7 @@ const isNestedFlyout = depth > 0;
     target={item.target || undefined}
     title={item.attrTitle || undefined}
     rel={item.rel || undefined}
-    class={`text-navigation text-gw-text-secondary transition-colors duration-200 hover:text-brand-secondary${menuItemClasses(item)}`}
+    class={`text-navigation text-gw-text-secondary transition-colors duration-200 hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark${isNestedFlyout ? ' block w-full px-3 py-2 hover:bg-gw-surface-secondary' : ' py-2'}${menuItemClasses(item)}`}
   >
     {item.title}
   </a>
@@ -82,7 +91,7 @@ const isNestedFlyout = depth > 0;
       title={item.attrTitle || undefined}
       rel={item.rel || undefined}
       aria-haspopup="true"
-      class={`text-navigation text-gw-text-secondary flex items-center gap-1 transition-colors duration-200 hover:text-brand-secondary${menuItemClasses(item)}`}
+      class={`text-navigation text-gw-text-secondary flex items-center gap-1 transition-colors duration-200 hover:text-brand-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark${isNestedFlyout ? ' w-full px-3 py-2 hover:bg-gw-surface-secondary' : ' py-2'}${menuItemClasses(item)}`}
     >
       {item.title}
       {hasChildren && (
@@ -93,7 +102,10 @@ const isNestedFlyout = depth > 0;
       data-desktop-panel
       class={`invisible absolute z-50${isNestedFlyout ? ' left-full top-0' : ' left-0 top-full translate-y-1'} pt-2 opacity-0 transition-[opacity,transform,visibility] duration-200 ease-out`}
     >
-      <div class="bg-gw-surface-primary border-gw-border-subtle flex flex-col gap-1 border p-2 shadow-sm">
+      {/* RGW-295 — Sin sombra: el sistema Stitch comunica elevación
+        con capas tonales y borde 1px, no con sombras (ver `Card.astro`,
+        `Expertise.astro`). */}
+      <div class="bg-gw-surface-primary border-gw-border-subtle flex flex-col gap-1 border p-2">
         <DesktopMenuNodes nodes={item.children} depth={depth + 1} />
       </div>
     </div>
