@@ -20,8 +20,8 @@
  *   según el espacio del viewport (`flyout-left`); ver script del
  *   Header. Sin niveles fijos: vale para cualquier profundidad.
  * - Apertura por padre directo (hover/focus con combinador hijo).
- * - Todos los elementos con hijos muestran `→` apuntando a la derecha,
- *   independientemente de la dirección del panel.
+ * - RGW-295 (Ciclo 1) — Indicador por nivel: depth 0 apunta hacia
+ *   abajo; depth ≥ 1 apunta hacia la derecha. Estático en hover.
  * El enlace padre conserva su URL de WordPress.
  */
 import DesktopMenuNodes from './DesktopMenuNodes.astro';
@@ -95,7 +95,16 @@ const isNestedFlyout = depth > 0;
     >
       {item.title}
       {hasChildren && (
-        <Icon name="chevron-right" size={4} class="ml-auto shrink-0" />
+        /* RGW-295 (Ciclo 1, obs 1-3) — Indicador data-driven según nivel:
+           nivel 0 apunta hacia abajo (`rotate-90` estático sobre el
+           `chevron-right` existente, sin crear iconos); niveles
+           anidados apuntan hacia la derecha. Sin animaciones ni cambios
+           de dirección en hover: sin clases de transición/transform. */
+        <Icon
+          name="chevron-right"
+          size={4}
+          class={`ml-auto shrink-0${isNestedFlyout ? '' : ' rotate-90'}`}
+        />
       )}
     </a>
     <div
@@ -104,8 +113,11 @@ const isNestedFlyout = depth > 0;
     >
       {/* RGW-295 — Sin sombra: el sistema Stitch comunica elevación
         con capas tonales y borde 1px, no con sombras (ver `Card.astro`,
-        `Expertise.astro`). */}
-      <div class="bg-gw-surface-primary border-gw-border-subtle flex flex-col gap-1 border p-2">
+        `Expertise.astro`).
+        Ciclo 1, obs 4 — Sin padding horizontal en el contenedor para que
+        el fondo de hover de cada fila ocupe todo el ancho del submenu;
+        las filas conservan su propio `px-3` para el inset del texto. */}
+      <div class="bg-gw-surface-primary border-gw-border-subtle flex flex-col gap-1 border px-0 py-2">
         <DesktopMenuNodes nodes={item.children} depth={depth + 1} />
       </div>
     </div>
