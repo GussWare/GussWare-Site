@@ -1,7 +1,7 @@
 ---
 
 name: gussware-workflow
-description: Gestiona el flujo Git, Git Worktree y Jira de GussWare para ramas de tarea, worktrees, upstreams, fetch, pull, commits, push y Pull Requests, incluyendo contexto y cierre de tarjetas Jira. Usar cuando una tarea implique operaciones Git, branches, worktrees o Pull Requests, o cuando la solicitud incluya un ID Jira (p. ej. RGW-272).
+description: Gestiona el flujo Git, Git Worktree y Jira de GussWare para ramas de tarea, worktrees, upstreams, fetch, pull, commits, push y Pull Requests, incluyendo contexto, estados y cierre de tarjetas Jira. Usar cuando una tarea implique operaciones Git, branches, worktrees o Pull Requests, o cuando la solicitud incluya un ID Jira (p. ej. RGW-272).
 ---
 
 # GussWare Workflow
@@ -21,7 +21,7 @@ Este Skill controla únicamente operaciones relacionadas con:
 * Commits
 * Push
 * Pull Requests
-* Contexto y cierre de tarjetas Jira vinculadas a la tarea (§0, §17)
+* Contexto, estados y cierre de tarjetas Jira vinculadas a la tarea (§0, §17)
 
 Las reglas generales de desarrollo del proyecto permanecen en `AGENTS.md`.
 
@@ -336,6 +336,8 @@ Dentro de una tarjeta principal con subtareas: cada subtarea es una
 unidad independiente de trabajo dentro de la tarjeta principal y debe
 quedar en un commit independiente. Trabajar una subtarea a la vez y no
 comenzar la siguiente hasta terminar y hacer commit de la actual.
+Antes de comenzar una subtarea, verificar que su tarea principal esté
+en `En curso` (§17).
 
 ---
 
@@ -494,14 +496,21 @@ Reglas de estado:
   `Listo para pruebas`. Terminar una subtarea no cambia el estado de
   su tarea principal. Antes de cambiar el estado debe existir el
   commit correspondiente a esa subtarea.
+* Antes de comenzar a trabajar una subtarea, verificar que su tarea
+  principal esté en `En curso`; si no lo está, transicionarla a `En
+  curso` antes de iniciar la subtarea. Mientras una subtarea esté
+  siendo trabajada, la tarea principal debe permanecer en `En curso`,
+  aunque la implementación se realice específicamente sobre la
+  subtarea. Una tarea principal nunca permanece en `Por hacer`
+  mientras sus subtareas ya están siendo ejecutadas.
 * Tarea principal completamente terminada y validada → `Listo para
   pruebas` (queda esperando validación/prueba manual). No mover la
   tarea principal a `Listo para pruebas` solamente porque terminó una
   subtarea; solo cuando el trabajo completo de la tarea principal esté
   terminado y, cuando aplique, sus subtareas necesarias también estén
-  terminadas. Mientras existan subtareas pendientes, la tarjeta
-  principal continúa en su estado correspondiente. A partir de `Listo
-  para pruebas` continúa el flujo normal ya definido (§13–§14, §18).
+  terminadas. Si queda otra subtarea por trabajar, la tarea principal
+  continúa en `En curso`. A partir de `Listo para pruebas` continúa el
+  flujo normal ya definido (§13–§14, §18).
 * Observaciones del usuario sobre una tarea principal en `Listo para
   pruebas`: al retomar el trabajo, devolver esa tarjeta a `En curso`.
   Tras corregir las observaciones y pasar nuevamente todas las
