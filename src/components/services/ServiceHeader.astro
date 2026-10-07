@@ -50,7 +50,7 @@ const hasTwoToneTitle = titleParts.length === 2;
         <span aria-hidden="true" class="text-xs text-gw-text-muted">
           /
         </span>
-        <span class="text-xs font-semibold tracking-wider uppercase text-gw-text-secondary">
+        <span class="text-label-bold uppercase text-gw-text-secondary">
           {eyebrowSuffix}
         </span>
       </>
@@ -58,7 +58,7 @@ const hasTwoToneTitle = titleParts.length === 2;
   </div>
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
     <div class="lg:col-span-7">
-      <h1 class="text-gw-text-primary text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05]">
+      <h1 class="text-gw-text-primary text-headline-md sm:text-6xl lg:text-7xl tracking-tight leading-[1.05]">
         {hasTwoToneTitle ? (
           <>
             <span class="block">{titleParts[0]} /</span>
@@ -76,13 +76,13 @@ const hasTwoToneTitle = titleParts.length === 2;
         </p>
       )}
       {stats.length > 0 && (
-        <div class="grid grid-cols-2 gap-4 pt-6 border-t border-gw-border-subtle text-xs uppercase tracking-wider text-gw-text-secondary">
+        <div class="grid grid-cols-2 gap-4 pt-6 border-t border-gw-border-subtle text-label-bold uppercase text-gw-text-secondary">
           {stats.map((stat) => (
             <div class="space-y-1 border border-gw-border-subtle bg-gw-surface-auxiliary p-3">
               <span class="font-bold text-supporting-blue-dark block">
                 {stat.label}
               </span>
-              <span class="text-gw-text-primary font-semibold normal-case text-sm block">
+              <span class="text-gw-text-primary normal-case text-body-md block">
                 {stat.value}
               </span>
             </div>

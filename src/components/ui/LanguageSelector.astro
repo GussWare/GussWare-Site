@@ -48,7 +48,7 @@ const languages = [
 ] as const;
 
 const linkBase =
-  'inline-flex items-center justify-center text-xs font-bold uppercase tracking-wider focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
+  'inline-flex items-center justify-center text-label-bold uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
 const linkActive = 'bg-supporting-blue-dark text-brand-surface';
 const desktopInactive =
   'bg-transparent text-gw-text-primary hover:bg-gw-surface-secondary hover:text-supporting-blue-dark hover:underline';
@@ -74,7 +74,7 @@ const panelInactive =
   </div>
 ) : (
   <div class={`border-t border-gw-border-subtle/40 pt-4 ${className}`}>
-    <span class="text-gw-text-primary/70 mb-2 block text-xs font-bold uppercase tracking-wider">
+    <span class="text-gw-text-primary/70 mb-2 block text-label-bold uppercase">
       IDIOMA / LANGUAGE
     </span>
     <div

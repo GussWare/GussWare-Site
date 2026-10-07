@@ -1,6 +1,7 @@
 :root {
   /* Font Family */
   --font-family-base: 'Source Sans 3', sans-serif;
+  --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /* Font Size */
   --font-size-display-lg: 64px;
