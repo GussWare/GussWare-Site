@@ -1,6 +1,6 @@
 # Referencia operativa Jira (gussware-workflow)
 
-Detalle operativo para §0 y §17. Las reglas viven en `SKILL.md`;
+Detalle operativo para §0, §10 y §17. Las reglas viven en `SKILL.md`;
 aquí solo el cómo con el MCP de Atlassian.
 
 ## Consultar la tarjeta (§0)
@@ -10,6 +10,18 @@ aquí solo el cómo con el MCP de Atlassian.
 2. Leer con `getJiraIssue` (`issueIdOrKey: <ID>`, `view: evidence`):
    Summary, Description, Status y Acceptance Criteria (si existe).
 3. Sin MCP, sin acceso o tarjeta inexistente: detenerse y avisar (§0.4).
+
+## Tarea principal en curso durante subtareas (§17)
+
+1. Antes de comenzar a trabajar una subtarea, identificar su tarea
+   principal (`fields.parent` de la subtarea con `getJiraIssue`) y
+   verificar su estado (`fields.status`).
+2. Si la tarea principal no está en `En curso`, listar sus transiciones
+   reales con `listJiraIssueTransitions` y aplicar la transición a
+   `En curso` con `transitionJiraIssue` (por `transitionId`, nunca por
+   nombre inventado).
+3. Si esa transición no existe: no usar otra transición ni cambiar a
+   otro estado; informarlo en el campo `Jira:` del reporte (§18).
 
 ## Transicionar al estado correspondiente (§17)
 
