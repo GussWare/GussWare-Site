@@ -67,10 +67,6 @@
    * The gw- prefix prevents namespace collisions inside @theme.
    */
 
-  --color-gw-brand-primary: var(--color-brand-primary);
-  --color-gw-brand-secondary: var(--color-brand-secondary);
-  --color-gw-brand-accent: var(--color-brand-accent);
-
   --color-gw-surface-primary: var(--color-surface-primary);
   --color-gw-surface-secondary: var(--color-surface-secondary);
   --color-gw-surface-auxiliary: var(--color-surface-auxiliary);
@@ -119,6 +115,7 @@
      ============================================================ */
 
   --font-base: var(--font-family-base);
+  --font-mono: var(--font-family-mono);
 
   /* ============================================================
      Typography — Font Size
@@ -193,16 +190,4 @@
   --tracking-display-lg-mobile: var(--letter-spacing-display-lg-mobile);
   --tracking-headline-lg: var(--letter-spacing-headline-lg);
   --tracking-label-bold: var(--letter-spacing-label-bold);
-
-  /* ============================================================
-     Shape
-     ============================================================ */
-
-  --radius-gw-none: var(--radius-none);
-
-  /* ============================================================
-     Layout
-     ============================================================ */
-
-  --container-gw: var(--container-max);
 }

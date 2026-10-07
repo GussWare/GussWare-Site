@@ -47,11 +47,11 @@ const pad = (n: number): string => String(n).padStart(2, '0');
 const footnote = process.footnote ?? '';
 
 const NODE_ACTIVE =
-  'w-14 h-14 rounded-full bg-brand-accent text-brand-surface flex items-center justify-center font-bold text-xl shadow-lg transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
+  'w-14 h-14 rounded-full bg-brand-accent text-brand-surface flex items-center justify-center font-bold text-xl transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
 const NODE_COMPLETED =
-  'w-9 h-9 rounded-full bg-brand-surface border-2 border-brand-accent text-brand-accent flex items-center justify-center font-bold text-sm transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
+  'w-9 h-9 rounded-full bg-brand-surface border-2 border-brand-accent text-brand-accent flex items-center justify-center text-label-bold transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
 const NODE_IDLE =
-  'w-9 h-9 rounded-full bg-brand-surface border-2 border-gw-border-subtle text-gw-text-muted flex items-center justify-center font-bold text-sm transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
+  'w-9 h-9 rounded-full bg-brand-surface border-2 border-gw-border-subtle text-gw-text-muted flex items-center justify-center text-label-bold transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
 const CAPTION_ACTIVE =
   'text-label-bold text-supporting-blue-dark absolute -bottom-12 whitespace-nowrap';
 const CAPTION_IDLE =
@@ -134,14 +134,14 @@ const slides = steps.map((step, index) => ({
           </div>
         </div>
         <div
-          class="relative overflow-hidden bg-gw-surface-secondary rounded-xl p-8 lg:p-16 min-h-[500px] flex flex-col justify-center"
+          class="relative overflow-hidden bg-gw-surface-secondary rounded-none p-8 lg:p-16 min-h-[500px] flex flex-col justify-center"
         >
           <div class="relative z-10">
                  <div class="flex flex-col lg:flex-row items-center gap-12 transition-all duration-500" data-process-content>
               <div class="w-full lg:w-1/2">
                 <span
                   data-process-badge
-                  class="inline-block px-3 py-1 bg-supporting-blue-dark text-brand-surface text-label-bold rounded mb-6 uppercase"
+                  class="inline-block px-3 py-1 bg-supporting-blue-dark text-brand-surface text-label-bold rounded-none mb-6 uppercase"
                 >
                   {steps[0].label}
                 </span>
@@ -205,7 +205,7 @@ const slides = steps.map((step, index) => ({
               type="button"
               data-process-next
               disabled={steps.length < 2}
-              class="flex items-center justify-center gap-3 px-8 py-3.5 rounded-none bg-brand-primary text-brand-surface text-label-bold transition-all duration-200 hover:opacity-90 shadow-lg disabled:opacity-30 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+              class="flex items-center justify-center gap-3 px-8 py-3.5 rounded-none bg-gw-action-primary text-brand-surface text-label-bold transition-all duration-200 hover:opacity-90 disabled:opacity-30 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
             >
               <span>Next Step</span>
               <Icon name="arrow-right" size={4} />
@@ -292,11 +292,11 @@ const slides = steps.map((step, index) => ({
     const progressText = root.querySelector('[data-process-text]');
 
     const NODE_ACTIVE =
-      'w-14 h-14 rounded-full bg-brand-accent text-brand-surface flex items-center justify-center font-bold text-xl shadow-lg transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
+      'w-14 h-14 rounded-full bg-brand-accent text-brand-surface flex items-center justify-center font-bold text-xl transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
     const NODE_COMPLETED =
-      'w-9 h-9 rounded-full bg-brand-surface border-2 border-brand-accent text-brand-accent flex items-center justify-center font-bold text-sm transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
+      'w-9 h-9 rounded-full bg-brand-surface border-2 border-brand-accent text-brand-accent flex items-center justify-center text-label-bold transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
     const NODE_IDLE =
-      'w-9 h-9 rounded-full bg-brand-surface border-2 border-gw-border-subtle text-gw-text-muted flex items-center justify-center font-bold text-sm transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
+      'w-9 h-9 rounded-full bg-brand-surface border-2 border-gw-border-subtle text-gw-text-muted flex items-center justify-center text-label-bold transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
     const CAPTION_ACTIVE =
       'text-label-bold text-supporting-blue-dark absolute -bottom-12 whitespace-nowrap';
     const CAPTION_IDLE =

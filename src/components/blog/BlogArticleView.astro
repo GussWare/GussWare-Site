@@ -8,6 +8,7 @@
  * respetan el locale.
  */
 import Container from '../ui/Container.astro';
+import EditorialWrapper from '../ui/EditorialWrapper.astro';
 import Breadcrumbs from '../ui/Breadcrumbs.astro';
 import Badge from '../ui/Badge.astro';
 import Icon from '../ui/Icon.astro';
@@ -68,7 +69,7 @@ const formatDate = (iso: string): string => {
 ---
 
 <Container>
-  <article class="mx-auto w-full max-w-[800px] pt-16 md:pt-24 pb-16 md:pb-24">
+  <EditorialWrapper>
     <Breadcrumbs
       items={[
         homeCrumb,
@@ -134,7 +135,7 @@ const formatDate = (iso: string): string => {
         ))}
       </div>
     )}
-  </article>
+  </EditorialWrapper>
   <RelatedArticles
     currentId={post.id}
     categories={post.categories ?? []}
@@ -203,7 +204,7 @@ const formatDate = (iso: string): string => {
     font-size: var(--font-size-body-md);
   }
   .article-content code {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-family: var(--font-family-mono);
   }
   .article-content img {
     width: 100%;

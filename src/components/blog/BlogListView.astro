@@ -52,7 +52,7 @@ const {
 const homeCrumb = getBreadcrumbHome(locale);
 ---
 
-<header class="bg-gw-surface-secondary mb-12 py-16 md:py-24">
+<header class="bg-gw-surface-secondary mb-12 py-[var(--section-padding-mobile)] md:py-[var(--section-padding-desktop)]">
   <Container>
     <Breadcrumbs items={[homeCrumb, { label: 'Blog' }]} class="mb-4" />
     <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary">
@@ -113,7 +113,7 @@ const homeCrumb = getBreadcrumbHome(locale);
           placeholder="Search articles..."
           aria-label="Search articles"
           value={currentSearch}
-          class="text-body-md text-gw-text-secondary border-gw-border-subtle bg-gw-surface-primary w-full rounded-lg border py-2 pr-4 pl-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+          class="text-body-md text-gw-text-secondary border-gw-border-subtle bg-gw-surface-primary w-full rounded-none border py-2 pr-4 pl-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
         />
       </form>
     </div>
@@ -189,18 +189,7 @@ const homeCrumb = getBreadcrumbHome(locale);
           />
         ))}
         {Array.from({ length: WP_BLOG_POSTS_PER_PAGE }).map(() => (
-          <div
-            aria-hidden="true"
-            class="skeleton-card bg-gw-surface-primary border-gw-border-subtle hidden overflow-hidden rounded-none border"
-          >
-            <div class="bg-gw-surface-secondary motion-safe:animate-pulse h-48 w-full"></div>
-            <div class="flex flex-col p-6">
-              <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-3 h-6 w-24 rounded-none"></div>
-              <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-4 h-8 w-full rounded-none"></div>
-              <div class="bg-gw-surface-secondary motion-safe:animate-pulse mb-4 h-8 w-3/4 rounded-none"></div>
-              <div class="bg-gw-surface-secondary motion-safe:animate-pulse mt-4 h-5 w-28 rounded-none"></div>
-            </div>
-          </div>
+          <Card skeleton imageHeight="h-48" class="skeleton-card hidden" />
         ))}
       </div>
     )}

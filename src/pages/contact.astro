@@ -2,8 +2,8 @@
 /**
  * RGW-031 — Página de Contacto (estructura base).
  *
- * Utiliza `Layout` (Header + Footer existentes) y `Section` (spacing
- * vertical y `Container` con tokens). El split reproduce el layout de
+ * Utiliza `Layout` (Header + Footer existentes) y `ContactSection`
+ * (sección de contacto compartida es/en sobre `Section`). El split reproduce el layout de
  * Stitch `GussWare Contact-V0.1.0`: apilado en mobile, dos columnas en
  * desktop (`lg:flex-row`, `gap-16`/`lg:gap-24`, mitades `lg:w-1/2`).
  * El contenido específico (info RGW-032, formulario RGW-033) se incorpora
@@ -11,8 +11,7 @@
  */
 
 import Layout from '../layouts/Layout.astro';
-import Section from '../components/ui/Section.astro';
-import Icon from '../components/ui/Icon.astro';
+import ContactSection from '../components/contact/ContactSection.astro';
 import ContactForm from '../components/contact/ContactForm.astro';
 import { getSocialMedia } from '../lib/wordpress/socialMedia';
 import { getContact } from '../lib/wordpress/contact';
@@ -38,59 +37,22 @@ const contactFormSubmitUrl = getContactFormSubmitUrl(
   title="Contact — GussWare"
   description="Contact GussWare — Start a conversation about your project."
 >
-  <Section id="contact" class="bg-gw-surface-auxiliary">
-    <div class="flex flex-col gap-16 lg:flex-row lg:gap-24">
-      <div class="flex flex-col justify-center lg:w-1/2">
-        {contact?.contenido_de_la_seccion?.eyebrow && (
-          <p class="text-label-bold text-brand-secondary mb-4 uppercase">
-            {contact.contenido_de_la_seccion.eyebrow}
-          </p>
-        )}
-
-        {contact?.contenido_de_la_seccion?.titulo && (
-          <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6 leading-display-lg-mobile md:leading-display-lg">
-            {contact.contenido_de_la_seccion.titulo}
-          </h1>
-        )}
-
-        {contact?.contenido_de_la_seccion?.descripcion && (
-          <p class="text-body-lg text-gw-text-secondary">
-            {contact.contenido_de_la_seccion.descripcion}
-          </p>
-        )}
-
-        <div class="border-gw-border-subtle mt-8 border-t pt-8">
-          {contact?.contenido_de_la_seccion?.texto_de_redes_sociales && (
-            <p class="text-body-md text-gw-text-secondary mb-6">
-              {contact.contenido_de_la_seccion.texto_de_redes_sociales}
-            </p>
-          )}
-
-          {socialMedia && (
-            <div class="flex gap-4">
-              {socialMedia.map((social) => (
-                <a
-                  aria-label={social.nombre}
-                  href={social.url}
-                  target="_blank"
-                  class="bg-brand-primary text-brand-surface flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 hover:bg-supporting-blue-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
-                >
-                  <Icon name={social.icono} size={4} />
-                </a>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div class="bg-gw-surface-primary rounded-sm p-8 shadow-sm md:p-12 lg:w-1/2">
-        {/* RGW-271: campos dinámicos desde la API (mismo diseño). */}
-        <ContactForm
-          fields={contactForm.fields}
-          submitUrl={contactFormSubmitUrl}
-        />
-      </div>
-    </div>
-  </Section>
+  <ContactSection
+    eyebrow={contact?.contenido_de_la_seccion?.eyebrow ?? undefined}
+    title={contact?.contenido_de_la_seccion?.titulo ?? undefined}
+    description={contact?.contenido_de_la_seccion?.descripcion ?? undefined}
+    socialText={contact?.contenido_de_la_seccion?.texto_de_redes_sociales ?? undefined}
+    socialMedia={(socialMedia ?? []).map((social) => ({
+      name: social.nombre,
+      url: social.url,
+      icon: social.icono,
+    }))}
+  >
+    {/* RGW-271: campos dinámicos desde la API (mismo diseño). */}
+    <ContactForm
+      fields={contactForm.fields}
+      submitUrl={contactFormSubmitUrl}
+    />
+  </ContactSection>
 </Layout>
 {/* RGW-271: la validación vive en `ContactForm` (sin POST todavía). */}

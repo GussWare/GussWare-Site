@@ -50,11 +50,11 @@ const approachEyebrow = locale === 'en' ? 'METHODOLOGY' : 'METODOLOGÍA';
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
       <div class="lg:col-span-4">
         <div class="lg:sticky lg:top-28">
-          <span class="inline-block text-xs font-bold tracking-[0.2em] uppercase text-brand-primary mb-3">
+          <span class="inline-block text-label-bold uppercase text-brand-primary mb-3">
             {approachEyebrow}
           </span>
           {title && (
-            <h2 class="text-gw-text-primary text-2xl sm:text-3xl font-bold tracking-tight uppercase mb-4">
+            <h2 class="text-gw-text-primary text-headline-md tracking-tight uppercase mb-4">
               {title}
             </h2>
           )}
@@ -74,20 +74,20 @@ const approachEyebrow = locale === 'en' ? 'METHODOLOGY' : 'METODOLOGÍA';
             <div data-approach-step data-active="false" class="relative group">
               <span
                 aria-hidden="true"
-                class="absolute top-1.5 flex items-center justify-center font-bold group-data-[active=false]:-left-[39px] group-data-[active=false]:md:-left-[55px] group-data-[active=false]:h-5 group-data-[active=false]:w-5 group-data-[active=false]:border-2 group-data-[active=false]:border-brand-secondary group-data-[active=false]:bg-gw-surface-primary group-data-[active=false]:text-[9px] group-data-[active=false]:text-brand-secondary group-data-[active=true]:-left-[41px] group-data-[active=true]:md:-left-[57px] group-data-[active=true]:h-6 group-data-[active=true]:w-6 group-data-[active=true]:border-4 group-data-[active=true]:border-white group-data-[active=true]:bg-brand-primary group-data-[active=true]:text-[10px] group-data-[active=true]:text-white"
+                class="absolute top-1.5 flex items-center justify-center font-bold group-data-[active=false]:-left-[39px] group-data-[active=false]:md:-left-[55px] group-data-[active=false]:h-5 group-data-[active=false]:w-5 group-data-[active=false]:border-2 group-data-[active=false]:border-brand-secondary group-data-[active=false]:bg-gw-surface-primary group-data-[active=false]:text-[9px] group-data-[active=false]:text-brand-secondary group-data-[active=true]:-left-[41px] group-data-[active=true]:md:-left-[57px] group-data-[active=true]:h-6 group-data-[active=true]:w-6 group-data-[active=true]:border-4 group-data-[active=true]:border-brand-surface group-data-[active=true]:bg-brand-primary group-data-[active=true]:text-[10px] group-data-[active=true]:text-brand-surface"
               >
                 {index + 1}
               </span>
               <div class="border border-gw-border-subtle p-6 md:p-8 transition-colors group-data-[active=false]:bg-gw-surface-primary group-data-[active=false]:hover:border-brand-secondary group-data-[active=true]:border-l-4 group-data-[active=true]:border-l-brand-primary group-data-[active=true]:bg-gw-surface-auxiliary">
                 <div class="flex items-baseline justify-between gap-4 mb-3">
-                  <span class="text-xs font-bold tracking-widest uppercase group-data-[active=false]:text-brand-secondary group-data-[active=true]:text-brand-primary">
+                  <span class="text-label-bold uppercase group-data-[active=false]:text-brand-secondary group-data-[active=true]:text-brand-primary">
                     {phaseLabel} {pad(index + 1)}
                   </span>
-                  <span class="text-gw-text-muted text-xs font-mono whitespace-nowrap">
+                  <span class="text-gw-text-muted text-label-bold font-mono whitespace-nowrap">
                     {pad(index + 1)} / {pad(items.length)}
                   </span>
                 </div>
-                <h3 class="text-gw-text-primary text-xl sm:text-2xl font-bold tracking-tight uppercase mb-3">
+                <h3 class="text-gw-text-primary text-headline-md tracking-tight uppercase mb-3">
                   {item.title}
                 </h3>
                 <p class="text-gw-text-secondary text-base leading-relaxed">

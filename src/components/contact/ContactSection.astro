@@ -1,0 +1,88 @@
+---
+/**
+ * RGW-303 — Sección de contacto compartida es/en (hallazgo #19 del
+ * tree RGW-288: el bloque de ~55 líneas estaba duplicado en
+ * `pages/contact.astro` y `pages/[...uri].astro`).
+ *
+ * Compone `Section` + eyebrow/título/descripción canónicos + bloque
+ * social + tarjeta de formulario. El formulario llega por `slot`
+ * porque cada página lo condiciona distinto; los items sociales llegan
+ * normalizados (`{ name, url, icon }`) y cada página mapea sus nombres
+ * de campo. Solo presentación con tokens existentes.
+ */
+import Section from '../ui/Section.astro';
+import Icon from '../ui/Icon.astro';
+
+interface ContactSocial {
+  name: string;
+  url: string;
+  icon: string;
+}
+
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  socialText?: string;
+  socialMedia?: ContactSocial[] | null;
+}
+
+const {
+  eyebrow = undefined,
+  title = undefined,
+  description = undefined,
+  socialText = undefined,
+  socialMedia = undefined,
+} = Astro.props;
+---
+
+<Section id="contact" class="bg-gw-surface-auxiliary">
+  <div class="flex flex-col gap-16 lg:flex-row lg:gap-24">
+    <div class="flex flex-col justify-center lg:w-1/2">
+      {eyebrow && (
+        <p class="text-label-bold text-brand-secondary mb-4 uppercase">
+          {eyebrow}
+        </p>
+      )}
+
+      {title && (
+        <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6">
+          {title}
+        </h1>
+      )}
+
+      {description && (
+        <p class="text-body-lg text-gw-text-secondary">
+          {description}
+        </p>
+      )}
+
+      <div class="border-gw-border-subtle mt-8 border-t pt-8">
+        {socialText && (
+          <p class="text-body-md text-gw-text-secondary mb-6">
+            {socialText}
+          </p>
+        )}
+
+        {socialMedia && (
+          <div class="flex gap-4">
+            {socialMedia.map((social) => (
+              <a
+                aria-label={social.name}
+                href={social.url}
+                target="_blank"
+                class="bg-brand-primary text-brand-surface flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 hover:bg-supporting-blue-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+              >
+                <Icon name={social.icon} size={4} />
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+
+    <div class="bg-gw-surface-primary rounded-none p-8 md:p-12 lg:w-1/2">
+      <slot />
+    </div>
+  </div>
+</Section>

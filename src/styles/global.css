@@ -18,7 +18,6 @@
 :root {
   font-family: var(--font-family-base);
   color: var(--color-text-primary);
-  background-color: var(--color-surface-primary);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }

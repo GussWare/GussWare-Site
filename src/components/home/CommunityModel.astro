@@ -80,10 +80,10 @@ const resolveIcon = (name: string): string =>
     <div data-cm-diagram class="w-full mb-32 hidden md:block">
       <div class="grid grid-cols-5 gap-8 items-stretch min-h-[400px]">
         <div
-          class="bg-gw-surface-secondary rounded-xl flex items-center justify-center relative p-8"
+          class="bg-gw-surface-secondary rounded-none flex items-center justify-center relative p-8"
         >
           <div
-            class="bg-brand-surface border-gw-border-subtle p-6 w-32 h-32 flex flex-col items-center justify-center shadow-sm"
+            class="bg-brand-surface border-gw-border-subtle p-6 w-32 h-32 flex flex-col items-center justify-center"
           >
             <span class="text-supporting-blue-dark mb-2">
               <Icon name="building" size={8} />
@@ -100,14 +100,14 @@ const resolveIcon = (name: string): string =>
           ></div>
         </div>
         <div
-          class="bg-gw-surface-secondary rounded-xl flex items-center justify-center relative p-8"
+          class="bg-gw-surface-secondary rounded-none flex items-center justify-center relative p-8"
         >
           <div
             aria-hidden="true"
             class="bg-supporting-neutral absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-px"
           ></div>
           <div
-            class="bg-brand-primary p-8 w-40 h-40 flex flex-col items-center justify-center rounded shadow-lg -translate-y-2 border-2 border-supporting-blue-fixed"
+            class="bg-brand-primary p-8 w-40 h-40 flex flex-col items-center justify-center rounded-none -translate-y-2 border-2 border-supporting-blue-fixed"
           >
             <span class="text-brand-surface mb-2">
               <Icon name="network" size={10} />
@@ -124,7 +124,7 @@ const resolveIcon = (name: string): string =>
           ></div>
         </div>
         <div
-          class="bg-gw-surface-secondary rounded-xl flex flex-col items-center justify-between py-12 relative"
+          class="bg-gw-surface-secondary rounded-none flex flex-col items-center justify-between py-12 relative"
         >
           <div
             aria-hidden="true"
@@ -143,7 +143,7 @@ const resolveIcon = (name: string): string =>
             class="bg-supporting-neutral absolute left-[-16px] top-[80%] w-8 h-px"
           ></div>
           <div
-            class="bg-brand-surface border-gw-border-subtle border p-4 w-32 flex flex-col items-center justify-center z-20 shadow-sm relative"
+            class="bg-brand-surface border-gw-border-subtle border p-4 w-32 flex flex-col items-center justify-center z-20 relative"
           >
             <div
               aria-hidden="true"
@@ -153,13 +153,13 @@ const resolveIcon = (name: string): string =>
               <Icon name="code" size={6} />
             </span>
             <span
-              class="text-label-bold text-[12px] text-gw-text-primary uppercase text-center"
+              class="text-label-bold text-gw-text-primary uppercase text-center"
             >
               Developer
             </span>
           </div>
           <div
-            class="bg-brand-surface border-gw-border-subtle border p-4 w-32 flex flex-col items-center justify-center z-20 shadow-sm relative"
+            class="bg-brand-surface border-gw-border-subtle border p-4 w-32 flex flex-col items-center justify-center z-20 relative"
           >
             <div
               aria-hidden="true"
@@ -173,13 +173,13 @@ const resolveIcon = (name: string): string =>
               <Icon name="pen-tool" size={6} />
             </span>
             <span
-              class="text-label-bold text-[12px] text-gw-text-primary uppercase text-center"
+              class="text-label-bold text-gw-text-primary uppercase text-center"
             >
               Designer
             </span>
           </div>
           <div
-            class="bg-brand-surface border-gw-border-subtle border p-4 w-32 flex flex-col items-center justify-center z-20 shadow-sm relative"
+            class="bg-brand-surface border-gw-border-subtle border p-4 w-32 flex flex-col items-center justify-center z-20 relative"
           >
             <div
               aria-hidden="true"
@@ -189,7 +189,7 @@ const resolveIcon = (name: string): string =>
               <Icon name="database" size={6} />
             </span>
             <span
-              class="text-label-bold text-[12px] text-gw-text-primary uppercase text-center"
+              class="text-label-bold text-gw-text-primary uppercase text-center"
             >
               Backend
             </span>
@@ -200,17 +200,17 @@ const resolveIcon = (name: string): string =>
           ></div>
         </div>
         <div
-          class="bg-gw-surface-secondary rounded-xl flex items-center justify-center relative p-8"
+          class="bg-gw-surface-secondary rounded-none flex items-center justify-center relative p-8"
         >
           <div
             aria-hidden="true"
             class="bg-supporting-neutral absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-px"
           ></div>
           <div
-            class="bg-brand-surface border-l-4 border-l-brand-primary p-6 w-full flex flex-col items-start justify-center shadow-sm"
+            class="bg-brand-surface border-l-4 border-l-brand-primary p-6 w-full flex flex-col items-start justify-center"
           >
             <span
-              class="text-label-bold text-[12px] text-gw-text-muted uppercase tracking-wider mb-2"
+              class="text-label-bold text-gw-text-muted uppercase mb-2"
             >
               Project Team
             </span>
@@ -224,14 +224,14 @@ const resolveIcon = (name: string): string =>
           ></div>
         </div>
         <div
-          class="bg-gw-surface-secondary rounded-xl flex items-center justify-center relative p-8"
+          class="bg-gw-surface-secondary rounded-none flex items-center justify-center relative p-8"
         >
           <div
             aria-hidden="true"
             class="bg-supporting-neutral absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-px"
           ></div>
           <div
-            class="bg-gw-text-primary p-6 w-32 h-32 flex flex-col items-center justify-center rounded shadow-md"
+            class="bg-gw-text-primary p-6 w-32 h-32 flex flex-col items-center justify-center rounded-none"
           >
             <span class="text-brand-surface mb-2">
               <Icon name="rocket" size={8} />
@@ -247,10 +247,10 @@ const resolveIcon = (name: string): string =>
     </div>
     <div
       data-cm-fallback
-      class="bg-gw-surface-secondary flex flex-col gap-8 mb-20 md:hidden p-8 rounded-xl"
+      class="bg-gw-surface-secondary flex flex-col gap-8 mb-20 md:hidden p-8 rounded-none"
     >
       <div
-        class="bg-brand-surface border-gw-border-subtle border p-6 text-center shadow-sm"
+        class="bg-brand-surface border-gw-border-subtle border p-6 text-center"
       >
         <span class="text-supporting-blue-dark mb-2 block">
           <Icon name="building" size={6} class="mx-auto" />
@@ -264,7 +264,7 @@ const resolveIcon = (name: string): string =>
           <Icon name="arrow-down" size={6} />
         </span>
       </div>
-      <div class="bg-brand-primary p-8 text-center rounded shadow-lg border-2 border-supporting-blue-fixed">
+      <div class="bg-brand-primary p-8 text-center rounded-none border-2 border-supporting-blue-fixed">
         <span class="text-brand-surface mb-2 block">
           <Icon name="network" size={8} class="mx-auto" />
         </span>
@@ -278,14 +278,14 @@ const resolveIcon = (name: string): string =>
         </span>
       </div>
       <div
-        class="bg-brand-surface border-gw-border-subtle border p-4 text-center shadow-sm"
+        class="bg-brand-surface border-gw-border-subtle border p-4 text-center"
       >
         <span
-          class="text-label-bold text-[12px] text-gw-text-primary uppercase block"
+          class="text-label-bold text-gw-text-primary uppercase block"
         >
           Specialist Community
         </span>
-        <p class="text-gw-text-secondary text-sm mt-2">
+        <p class="text-gw-text-secondary text-body-md mt-2">
           Dev, Design, DevOps, QA...
         </p>
       </div>
@@ -294,7 +294,7 @@ const resolveIcon = (name: string): string =>
           <Icon name="arrow-down" size={6} />
         </span>
       </div>
-      <div class="bg-gw-text-primary p-6 text-center rounded shadow-md">
+      <div class="bg-gw-text-primary p-6 text-center rounded-none">
         <span class="text-brand-surface mb-2 block">
           <Icon name="rocket" size={6} class="mx-auto" />
         </span>
@@ -322,7 +322,7 @@ const resolveIcon = (name: string): string =>
               class:list={[
                 'w-12 h-12 rounded-full flex items-center justify-center mb-16',
                 index % 2 === 0
-                  ? 'bg-gw-surface-primary shadow-sm'
+                  ? 'bg-gw-surface-primary'
                   : 'bg-gw-surface-secondary',
               ]}
             >

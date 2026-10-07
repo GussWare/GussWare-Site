@@ -17,6 +17,7 @@
  * Desktop lg+ intacto.
  */
 import { getHeaderLogo } from '../../lib/wordpress/logo';
+import Container from '../ui/Container.astro';
 import Logo from '../ui/Logo.astro';
 import { getFooterMenu, getLegalMenu } from '../../lib/wordpress/menu';
 import { getFooterDescription } from '../../lib/wordpress/footer';
@@ -38,7 +39,7 @@ const footerColumns = footerMenuItems
 ---
 
 <footer class="border-gw-border-subtle bg-gw-surface-secondary text-gw-text-primary border-t pt-8 pb-8 md:pt-10 md:pb-10 lg:pt-20 lg:pb-10">
-  <div class="mx-auto w-full max-w-[var(--container-max)] px-4 md:px-6">
+  <Container>
     <div class="mb-16 grid grid-cols-1 gap-6 md:gap-12 lg:grid-cols-6">
       <div class="col-span-full flex flex-col items-center text-center lg:col-span-2 lg:items-start lg:pr-8 lg:text-left">
         <Logo src={logo?.src} alt={logo?.alt} class="mb-6" />
@@ -128,5 +129,5 @@ const footerColumns = footerMenuItems
         ))}
       </div>
     </div>
-  </div>
+  </Container>
 </footer>

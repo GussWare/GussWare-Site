@@ -8,6 +8,7 @@
  * (`SOLUCIÓN`, `CAPACIDADES CLAVE`) por locale, como los breadcrumbs.
  */
 import Section from '../ui/Section.astro';
+import Container from '../ui/Container.astro';
 import CTA from '../ui/CTA.astro';
 import Icon from '../ui/Icon.astro';
 import ServiceHeader from './ServiceHeader.astro';
@@ -47,7 +48,7 @@ const ctaActions =
           label: acf.cta.button_text,
           href: acf.cta.button_url,
           icon: 'arrow-right',
-          buttonClass: 'px-8 py-4 text-sm uppercase gap-3 shadow-md',
+          buttonClass: 'px-8 py-4 text-label-bold uppercase gap-3',
         },
       ]
     : [];
@@ -65,12 +66,12 @@ const ctaActions =
 {/* Desarrollo editorial (S2: grilla 4/8, tags inferiores). */}
 {acf.development_title && (
   <section class="border-b border-gw-border-subtle bg-gw-surface-primary py-16 md:py-20">
-    <div class="mx-auto w-full max-w-[var(--container-max)] px-4 md:px-6">
+    <Container>
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
         <div class="lg:col-span-4 flex flex-col justify-between">
           <div class="lg:sticky lg:top-28">
             <div>
-              <h2 class="text-gw-text-primary text-2xl sm:text-3xl font-bold uppercase tracking-tight mb-3">
+              <h2 class="text-gw-text-primary text-headline-md uppercase tracking-tight mb-3">
                 {acf.development_title}
               </h2>
               <span
@@ -80,7 +81,7 @@ const ctaActions =
             </div>
           </div>
           {(acf.development_tags ?? []).length > 0 && (
-            <p class="text-xs font-mono text-gw-text-muted tracking-wider uppercase mt-8">
+            <p class="text-label-bold font-mono text-gw-text-muted uppercase mt-8">
               {(acf.development_tags ?? []).map((item) => item.tag).join(' · ')}
             </p>
           )}
@@ -91,7 +92,7 @@ const ctaActions =
           ))}
         </div>
       </div>
-    </div>
+    </Container>
   </section>
 )}
 
@@ -104,11 +105,11 @@ const ctaActions =
     <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 md:mb-16 gap-4">
       <div>
         {acf.solutions_eyebrow && (
-          <span class="inline-block text-xs font-bold tracking-[0.2em] uppercase text-brand-primary mb-2">
+          <span class="inline-block text-label-bold uppercase text-brand-primary mb-2">
             {acf.solutions_eyebrow}
           </span>
         )}
-        <h2 class="text-gw-text-primary text-2xl sm:text-3xl font-bold tracking-tight uppercase">
+        <h2 class="text-gw-text-primary text-headline-md tracking-tight uppercase">
           {acf.solutions_title}
         </h2>
       </div>
@@ -130,7 +131,7 @@ const ctaActions =
         >
           <div>
             <div class="flex justify-between items-start mb-6">
-              <span class="text-xs font-bold tracking-widest uppercase px-2.5 py-1 bg-gw-surface-secondary text-supporting-blue-dark">
+              <span class="text-label-bold uppercase px-2.5 py-1 bg-gw-surface-secondary text-supporting-blue-dark">
                 {solutionLabel} {pad(index + 1)}
               </span>
               <span
@@ -138,7 +139,7 @@ const ctaActions =
                 class="w-2.5 h-2.5 inline-block flex-shrink-0 bg-brand-primary"
               ></span>
             </div>
-            <h3 class="text-gw-text-primary text-2xl sm:text-3xl font-bold tracking-tight uppercase mb-4">
+            <h3 class="text-gw-text-primary text-headline-md tracking-tight uppercase mb-4">
               {solution.title}
             </h3>
             <p class="text-gw-text-secondary text-base leading-relaxed mb-8">
@@ -146,7 +147,7 @@ const ctaActions =
             </p>
             {(solution.features ?? []).length > 0 && (
               <div class="pt-6 border-t border-gw-border-subtle mb-8">
-                <p class="text-xs font-bold uppercase tracking-wider text-gw-text-muted block mb-4">
+                <p class="text-label-bold uppercase text-gw-text-muted block mb-4">
                   {capabilitiesLabel}
                 </p>
                 <ul class="space-y-3.5 text-base font-medium text-gw-text-primary">
@@ -167,7 +168,7 @@ const ctaActions =
             <div class="pt-6 border-t border-gw-border-subtle">
               <a
                 href={solution.link.url || undefined}
-                class="w-full inline-flex items-center justify-between font-bold text-xs tracking-wider uppercase px-6 py-3.5 transition-colors group bg-gw-surface-primary hover:bg-brand-primary text-brand-primary hover:text-white border border-brand-primary"
+                class="w-full inline-flex items-center justify-between text-label-bold uppercase px-6 py-3.5 transition-colors group bg-gw-surface-primary hover:bg-brand-primary text-brand-primary hover:text-brand-surface border border-brand-primary"
               >
                 <span>{solution.link.text}</span>
                 <Icon
@@ -202,10 +203,10 @@ const ctaActions =
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
       <div class="lg:col-span-5 space-y-6 lg:sticky lg:top-28 lg:self-start">
         <div>
-          <span class="inline-block text-xs font-bold tracking-[0.2em] uppercase text-brand-primary mb-3">
+          <span class="inline-block text-label-bold uppercase text-brand-primary mb-3">
             {techEyebrow}
           </span>
-          <h2 class="text-gw-text-primary text-2xl sm:text-3xl font-bold tracking-tight uppercase mb-4">
+          <h2 class="text-gw-text-primary text-headline-md tracking-tight uppercase mb-4">
             {acf.tech_title}
           </h2>
           {acf.tech_description && (
@@ -228,13 +229,13 @@ const ctaActions =
                     : 'bg-brand-primary',
                 ]}
               ></span>
-              <h3 class="text-supporting-blue-dark text-xs font-bold tracking-wider uppercase">
+              <h3 class="text-supporting-blue-dark text-label-bold uppercase">
                 {group.title}
               </h3>
             </div>
             <ul class="flex flex-wrap gap-2">
               {(group.items ?? []).map((tech) => (
-                <li class="bg-gw-surface-auxiliary border border-gw-border-subtle text-gw-text-primary text-sm font-semibold px-3 py-1.5">
+                <li class="bg-gw-surface-auxiliary border border-gw-border-subtle text-gw-text-primary text-label-bold px-3 py-1.5">
                   {tech.name}
                 </li>
               ))}
@@ -262,14 +263,14 @@ const ctaActions =
   ></div>
   <div
     aria-hidden="true"
-    class="border-white/10 pointer-events-none absolute bottom-0 left-10 h-24 w-24 border-t border-r"
+    class="border-brand-surface/10 pointer-events-none absolute bottom-0 left-10 h-24 w-24 border-t border-r"
   ></div>
   <div class="relative z-10 mx-auto w-full max-w-3xl px-4 md:px-6 text-center">
     <CTA
       tone="dark"
       align="center"
       title={acf.cta.title}
-      titleClass="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight uppercase"
+      titleClass="text-headline-md lg:text-headline-lg tracking-tight uppercase"
       description={acf.cta.description}
       actions={ctaActions}
     />

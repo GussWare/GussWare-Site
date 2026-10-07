@@ -29,7 +29,7 @@ Astro.response.status = 404;
   title="404 — Página no encontrada | GussWare"
   description="La página que buscas no existe o ya no está disponible."
 >
-  <div class="bg-gw-surface-primary flex w-full flex-col items-center justify-center px-6 py-16 sm:py-24 lg:py-32">
+  <div class="bg-gw-surface-primary flex w-full flex-col items-center justify-center px-4 md:px-6 py-[var(--section-padding-mobile)] md:py-[var(--section-padding-desktop)]">
     <div class="mx-auto flex w-full max-w-2xl flex-col items-center text-center">
       {/* Detalle decorativo constructivista (Stitch: acento, línea, primario). */}
       <div
@@ -45,7 +45,7 @@ Astro.response.status = 404;
         404
       </h1>
 
-      <h2 class="text-gw-text-primary mt-4 text-2xl font-black tracking-tight sm:mt-6 sm:text-3xl lg:text-4xl">
+      <h2 class="text-gw-text-primary mt-4 text-headline-md font-black tracking-tight sm:mt-6">
         Página no encontrada
       </h2>
 
@@ -62,13 +62,13 @@ Astro.response.status = 404;
         <Button
           href={routes.home}
           variant="primary"
-          class="px-8 py-4 text-sm uppercase active:scale-95 sm:text-base"
+          class="px-8 py-4 text-label-bold uppercase active:scale-95 sm:text-base"
         >
           Volver al inicio
         </Button>
       </div>
 
-      <p class="text-gw-text-muted mt-12 font-mono text-xs tracking-widest uppercase">
+      <p class="text-gw-text-muted mt-12 font-mono text-label-bold uppercase">
         HTTP 404 // STATUS NOT FOUND
       </p>
     </div>

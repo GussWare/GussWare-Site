@@ -57,6 +57,11 @@
  * Tamaños del sistema (`size-3/4/5/6/8/10`, clases literales para que
  * Tailwind las genere) y pesos (`standard` 1.5px, `emphasis` 2px).
  * El color se hereda del texto (`currentColor`, como en Stitch).
+ *
+ * RGW-304 — Este es el único mecanismo de iconos para el marcado del
+ * proyecto. Excepciones documentadas: `MenuButton.astro` (hamburguesa,
+ * fuera de catálogo) y los data-URIs del CSS global de `LegalView`
+ * (contenido WP inyectado con `set:html`, fuera del alcance de Astro).
  */
 interface Props {
   name: string;
