@@ -137,8 +137,11 @@ const slides = steps.map((step, index) => ({
           class="relative overflow-hidden bg-gw-surface-secondary rounded-xl p-8 lg:p-16 min-h-[500px] flex flex-col justify-center"
         >
           <div class="relative z-10">
-                 <div class="flex flex-col lg:flex-row items-center gap-12 transition-all duration-500" data-process-content>
-              <div class="w-full lg:w-1/2">
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+              <div
+                class="w-full lg:w-1/2 transition-all duration-300 opacity-100 translate-x-0 motion-reduce:transition-none"
+                data-process-body
+              >
                 <span
                   data-process-badge
                   class="inline-block px-3 py-1 bg-supporting-blue-dark text-brand-surface text-label-bold rounded mb-6 uppercase"
@@ -158,37 +161,37 @@ const slides = steps.map((step, index) => ({
                   {steps[0].description}
                 </p>
               </div>
-               <div class="w-full lg:w-1/2">
-                 <div
-                   class="aspect-video bg-brand-surface rounded-xl shadow-lg border border-gw-border-subtle overflow-hidden relative"
-                 >
-                   {firstImage ? (
-                     <img
-                       data-process-image
-                       src={firstImage.src}
-                       alt={firstImage.alt}
-                       loading="lazy"
-                       class="w-full h-full object-cover transition-opacity duration-500"
-                     />
-                     <div
-                       data-process-image-empty
-                       hidden
-                       class="hidden w-full h-full bg-gw-surface-secondary"
-                     ></div>
-                   ) : (
-                     <img
-                       data-process-image
-                       hidden
-                       class="hidden w-full h-full object-cover transition-opacity duration-500"
-                       alt=""
-                     />
-                     <div
-                       data-process-image-empty
-                       class="w-full h-full bg-gw-surface-secondary"
-                     ></div>
-                   )}
-                 </div>
-               </div>
+              <div class="w-full lg:w-1/2">
+                <div
+                  class="aspect-video bg-brand-surface rounded-xl shadow-lg border border-gw-border-subtle overflow-hidden"
+                >
+                  {firstImage ? (
+                    <img
+                      data-process-image
+                      src={firstImage.src}
+                      alt={firstImage.alt}
+                      loading="lazy"
+                      class="w-full h-full object-cover transition-opacity duration-300 opacity-100 motion-reduce:transition-none"
+                    />
+                    <div
+                      data-process-image-empty
+                      hidden
+                      class="hidden w-full h-full bg-gw-surface-secondary"
+                    ></div>
+                  ) : (
+                    <img
+                      data-process-image
+                      hidden
+                      class="hidden w-full h-full object-cover transition-opacity duration-300 motion-reduce:transition-none"
+                      alt=""
+                    />
+                    <div
+                      data-process-image-empty
+                      class="w-full h-full bg-gw-surface-secondary"
+                    ></div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
           <div class="flex items-center gap-4 mt-12 lg:mt-16 relative z-20">
@@ -304,6 +307,67 @@ const slides = steps.map((step, index) => ({
 
     const currentIndex = () => Number(root.dataset.processIndex ?? '0');
 
+    const textBlock = root.querySelector('[data-process-body]');
+    const reduceMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
+    let swapTimer = null;
+
+    /**
+     * Actualiza texto e imagen del paso activo. Sin animación por sí misma;
+     * los nodos/indicadores superiores se manejan aparte, con su
+     * comportamiento original intacto.
+     */
+    const updateStepContent = (slide) => {
+      if (badge instanceof HTMLElement) badge.textContent = slide.label;
+      if (title instanceof HTMLElement) title.textContent = slide.title;
+      if (desc instanceof HTMLElement) desc.textContent = slide.description;
+
+      if (image instanceof HTMLImageElement) {
+        if (slide.image) {
+          image.src = slide.image.src;
+          image.alt = slide.image.alt;
+          image.hidden = false;
+          image.classList.remove('hidden');
+        } else {
+          image.removeAttribute('src');
+          image.hidden = true;
+          image.classList.add('hidden');
+        }
+      }
+      if (imageEmpty instanceof HTMLElement) {
+        const empty = !slide.image;
+        imageEmpty.hidden = !empty;
+        imageEmpty.classList.toggle('hidden', !empty);
+      }
+    };
+
+    /**
+     * Transición suave exclusiva de la imagen y el bloque de texto
+     * (fade-out → cambio de contenido → fade-in). Se respeta
+     * prefers-reduced-motion.
+     */
+    const animateStepContent = (slide) => {
+      if (reduceMotion) {
+        updateStepContent(slide);
+        return;
+      }
+      if (swapTimer !== null) clearTimeout(swapTimer);
+      const targets = [textBlock, image].filter(
+        (el) => el instanceof HTMLElement,
+      );
+      targets.forEach((el) => {
+        el.classList.add('opacity-0', 'translate-x-2');
+      });
+      swapTimer = setTimeout(() => {
+        updateStepContent(slide);
+        targets.forEach((el) => {
+          el.classList.remove('opacity-0', 'translate-x-2');
+        });
+        swapTimer = null;
+      }, 280);
+    };
+
     const render = (index) => {
       const total = slides.length;
       if (total === 0) return;
@@ -312,15 +376,7 @@ const slides = steps.map((step, index) => ({
       const linePct = total > 1 ? (current / (total - 1)) * 100 : 100;
       const barPct = Math.round(((current + 1) / total) * 100);
 
-      const content = root.querySelector('[data-process-content]');
-      if (content instanceof HTMLElement) {
-        content.classList.add('opacity-0', 'translate-x-4');
-        setTimeout(() => {
-          content.classList.remove('opacity-0', 'translate-x-4');
-          content.classList.add('opacity-100', 'translate-x-0');
-        }, 50);
-      }
-
+      // Indicadores de paso superiores: comportamiento original, sin animación nueva.
       nodes.forEach((node, i) => {
         if (!(node instanceof HTMLButtonElement)) return;
         const active = i === current;
@@ -342,30 +398,8 @@ const slides = steps.map((step, index) => ({
       if (line instanceof HTMLElement) {
         line.style.width = `${linePct}%`;
       }
-      if (badge instanceof HTMLElement) badge.textContent = slide.label;
-      if (title instanceof HTMLElement) title.textContent = slide.title;
-      if (desc instanceof HTMLElement) desc.textContent = slide.description;
 
-      if (image instanceof HTMLImageElement) {
-        if (slide.image) {
-          image.classList.add('opacity-0');
-          setTimeout(() => {
-            image.src = slide.image.src;
-            image.alt = slide.image.alt;
-            image.hidden = false;
-            image.classList.remove('hidden', 'opacity-0');
-          }, 50);
-        } else {
-          image.removeAttribute('src');
-          image.hidden = true;
-          image.classList.add('hidden');
-        }
-      }
-      if (imageEmpty instanceof HTMLElement) {
-        const empty = !slide.image;
-        imageEmpty.hidden = !empty;
-        imageEmpty.classList.toggle('hidden', !empty);
-      }
+      animateStepContent(slide);
 
       if (prev instanceof HTMLButtonElement) prev.disabled = current === 0;
       if (next instanceof HTMLButtonElement) {
