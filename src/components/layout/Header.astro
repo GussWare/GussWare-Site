@@ -23,6 +23,7 @@ import { getHeader } from '../../lib/wordpress/header';
 import { routes } from '../../lib/routes';
 import type { LocaleUrls } from '../../lib/routes';
 import Button from '../ui/Button.astro';
+import Container from '../ui/Container.astro';
 import DesktopMenuNodes from './DesktopMenuNodes.astro';
 import LanguageSelector from '../ui/LanguageSelector.astro';
 import Logo from '../ui/Logo.astro';
@@ -56,7 +57,7 @@ const mobileLogo = header?.mobileLogo ?? desktopLogo;
 ---
 
 <header class="bg-gw-surface-primary sticky top-0 z-50 w-full border-b border-gw-border-subtle">
-  <div class="mx-auto flex h-16 w-full max-w-[var(--container-max)] items-center justify-between px-4 md:px-6">
+  <Container class="flex h-16 items-center justify-between">
     <!-- Logo: logo_section.logo en >=425px (fluido, sin overflow), logo_section.mobile_logo solo en <425px -->
     <Logo
       src={desktopLogo?.src}
@@ -101,17 +102,15 @@ const mobileLogo = header?.mobileLogo ?? desktopLogo;
         class="text-gw-text-secondary p-2 lg:hidden"
       />
     </div>
-  </div>
+  </Container>
 
   <!-- Mobile Navigation (Tablet/Mobile; la abre el botón hamburguesa) -->
   <div
     id="header-mobile-menu"
     class="border-gw-border-subtle bg-gw-surface-primary hidden border-t lg:hidden"
   >
-    <nav
-      aria-label="Mobile Navigation"
-      class="mx-auto flex w-full max-w-[var(--container-max)] flex-col px-4 py-2 md:px-6"
-    >
+    <nav aria-label="Mobile Navigation">
+      <Container class="flex flex-col py-2">
       {/* RGW-273 — Submenú móvil recursivo (`MobileMenuNodes`): N niveles
         sin límite, acordeón por nivel con el JS del componente. */}
       <MobileMenuNodes nodes={navItems} />
@@ -123,6 +122,7 @@ const mobileLogo = header?.mobileLogo ?? desktopLogo;
       >
         Start a Conversation
       </Button>
+      </Container>
     </nav>
   </div>
 </header>

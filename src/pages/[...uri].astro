@@ -24,6 +24,7 @@
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import Layout from '../layouts/Layout.astro';
 import Container from '../components/ui/Container.astro';
+import EditorialWrapper from '../components/ui/EditorialWrapper.astro';
 import Section from '../components/ui/Section.astro';
 import Hero from '../components/home/Hero.astro';
 import Expertise from '../components/home/Expertise.astro';
@@ -398,12 +399,12 @@ if (translatedSlug) {
     </Section>
   ) : (
     <Container>
-      <article class="mx-auto w-full max-w-[800px] pt-16 md:pt-24 pb-16 md:pb-24">
+      <EditorialWrapper>
         <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6">
           {title}
         </h1>
         <div set:html={page.content.rendered} />
-      </article>
+      </EditorialWrapper>
     </Container>
   )}
 </Layout>

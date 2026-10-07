@@ -52,7 +52,7 @@ const {
 const homeCrumb = getBreadcrumbHome(locale);
 ---
 
-<header class="bg-gw-surface-secondary mb-12 py-16 md:py-24">
+<header class="bg-gw-surface-secondary mb-12 py-[var(--section-padding-mobile)] md:py-[var(--section-padding-desktop)]">
   <Container>
     <Breadcrumbs items={[homeCrumb, { label: 'Blog' }]} class="mb-4" />
     <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary">

@@ -34,6 +34,7 @@
  * de email suelto cualquiera que sea su dirección.
  */
 import Container from '../ui/Container.astro';
+import EditorialWrapper from '../ui/EditorialWrapper.astro';
 import Icon from '../ui/Icon.astro';
 import Breadcrumbs from '../ui/Breadcrumbs.astro';
 import { getBreadcrumbHome } from '../../lib/routes';
@@ -200,13 +201,13 @@ const crumbs = [getBreadcrumbHome(locale), { label: title }];
     </Container>
   ) : (
     <Container>
-      <article class="mx-auto w-full max-w-[800px] pt-16 md:pt-24 pb-16 md:pb-24">
+      <EditorialWrapper>
         <Breadcrumbs items={crumbs} class="mb-8" />
         <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6">
           {title}
         </h1>
         <div set:html={content} />
-      </article>
+      </EditorialWrapper>
     </Container>
   )}
 </div>

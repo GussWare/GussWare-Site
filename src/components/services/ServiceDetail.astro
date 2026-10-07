@@ -8,6 +8,7 @@
  * (`SOLUCIÓN`, `CAPACIDADES CLAVE`) por locale, como los breadcrumbs.
  */
 import Section from '../ui/Section.astro';
+import Container from '../ui/Container.astro';
 import CTA from '../ui/CTA.astro';
 import Icon from '../ui/Icon.astro';
 import ServiceHeader from './ServiceHeader.astro';
@@ -65,7 +66,7 @@ const ctaActions =
 {/* Desarrollo editorial (S2: grilla 4/8, tags inferiores). */}
 {acf.development_title && (
   <section class="border-b border-gw-border-subtle bg-gw-surface-primary py-16 md:py-20">
-    <div class="mx-auto w-full max-w-[var(--container-max)] px-4 md:px-6">
+    <Container>
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
         <div class="lg:col-span-4 flex flex-col justify-between">
           <div class="lg:sticky lg:top-28">
@@ -91,7 +92,7 @@ const ctaActions =
           ))}
         </div>
       </div>
-    </div>
+    </Container>
   </section>
 )}
 
