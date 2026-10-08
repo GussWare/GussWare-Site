@@ -31,6 +31,7 @@ import Expertise from '../components/home/Expertise.astro';
 import CommunityModel from '../components/home/CommunityModel.astro';
 import Services from '../components/home/Services.astro';
 import Process from '../components/home/Process.astro';
+import Projects from '../components/home/Projects.astro';
 import Faq from '../components/home/Faq.astro';
 import FinalCta from '../components/home/FinalCta.astro';
 import LegalView from '../components/legal/LegalView.astro';
@@ -336,6 +337,10 @@ if (translatedSlug) {
           }
         />
       )}
+      {/* RGW-311: sección Home de Proyectos (maquetación Stitch,
+          contenido estático pendiente del CPT; sin integración WP).
+          Solo portada: las páginas no portada conservan su flujo. */}
+      {isHomePage && <Projects />}
       {faq && <Faq faq={faq} />}
       {finalCta && <FinalCta finalCta={finalCta} />}
     </>
