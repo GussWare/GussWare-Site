@@ -1,0 +1,184 @@
+---
+/**
+ * Vista del listado de Proyectos (RGW-312, compartida por `/proyectos`
+ * y `/en/proyectos`).
+ *
+ * Referencia visual: pantalla Stitch `Proyectos - Listado`
+ * (`GussWare - Nuestros Proyectos (Portafolio Oficial)`); `gussware-layout`
+ * define cómo implementarla dentro del sistema existente.
+ *
+ * Composición solo con componentes existentes (§1, §2): `Layout` en la
+ * página fina, `Section` por bloque (§3), `Breadcrumbs` como hermano
+ * sobre el encabezado, `SectionHeading` (`level={1}`: único `h1` de la
+ * página, §6), `Card` para cada proyecto y `CTA` (`tone="dark"`) para el
+ * cierre. Sin componentes nuevos (§7). Spacing con tokens y patrones
+ * del sistema (§4: `mb-8` tras breadcrumbs como en Servicios,
+ * `mt-12` + `gap-6` + `md:grid-cols-2 lg:grid-cols-3` del índice de
+ * Servicios); mobile-first con breakpoint `md` estándar (§5).
+ *
+ * Contenido estático verbatim de Stitch (ES) como referencia visual,
+ * pendiente del CPT Proyectos del épico RGW-325: la prop `projects`
+ * deja la vista preparada para recibir datos de WordPress/i18n sin
+ * cambiar la estructura. Sin `image` la `Card` renderiza su bloque
+ * neutro de maquetación (sin assets ni URLs inventadas). Los `href`
+ * usan `projectDetailUrl` (ruta del épico RGW-325).
+ *
+ * Diferencias documentadas frente a Stitch (sin token equivalente o
+ * fuera del alcance de maquetación):
+ * - bloque métrico del encabezado (`+18 Entregas con éxito`): afirmación
+ *   cuantitativa sin fuente CMS; se omite hasta la integración.
+ * - barra de filtros (búsqueda, selects, pills) y paginación numerada:
+ *   requieren taxonomías y datos de WordPress (lógica de consulta,
+ *   excluida por la SPEC); se agregarán con la integración.
+ * - CTA de cierre con una sola acción primaria (`/contact` existe);
+ *   el secundario de Stitch (`/how-we-work`) no tiene ruta en el
+ *   proyecto y se omite en lugar de enlazar a un 404.
+ * - geometría decorativa del CTA oscuro: `Section` + `CTA dark`
+ *   (patrón de `FinalCta.astro`), sin bloques flotantes adicionales.
+ */
+import Section from '../ui/Section.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Breadcrumbs from '../ui/Breadcrumbs.astro';
+import Card from '../ui/Card.astro';
+import CTA from '../ui/CTA.astro';
+import { projectDetailUrl, getBreadcrumbHome } from '../../lib/routes';
+
+/** Ítem del listado (futura: resuelto desde el CPT Proyectos). */
+interface ProjectListItem {
+  slug: string;
+  title: string;
+  description: string;
+  category: string;
+}
+
+interface Props {
+  locale: string;
+  projects?: ProjectListItem[];
+}
+
+/**
+ * Contenido de referencia verbatim de Stitch (`Proyectos - Listado`,
+ * 6 tarjetas). Provisional hasta el CPT Proyectos (RGW-325); los
+ * `slug` son los de Stitch sobre la base `/proyectos` del épico.
+ */
+const DEFAULT_PROJECTS: ProjectListItem[] = [
+  {
+    slug: 'sistema-nominas',
+    title: 'Sistema de Nóminas Tradicionales y Estrategia en la Nube',
+    description:
+      'Plataforma integral para gestión de nóminas gravadas al 100% y con estrategia para empresas de outsourcing con 7 módulos clave y reportes consolidados.',
+    category: 'Sistemas Empresariales',
+  },
+  {
+    slug: 'fintech-connect',
+    title: 'FinTech Connect — App Móvil de Pagos Transfronterizos',
+    description:
+      'Aplicación móvil multiplataforma de alta seguridad con autenticación biométrica, procesamiento de remesas instantáneas y conexión con redes bancarias.',
+    category: 'Aplicaciones Móviles',
+  },
+  {
+    slug: 'apex-commerce',
+    title: 'Apex Commerce — Portal Headless y Catálogo B2B',
+    description:
+      'Arquitectura de comercio digital de alto rendimiento con renderizado estático, sincronización de inventarios multitienda y checkout optimizado.',
+    category: 'Desarrollo Web',
+  },
+  {
+    slug: 'gateway-fiscal',
+    title: 'Gateway Unificado de Facturación y Servicios Fiscales',
+    description:
+      'Infraestructura de microservicios para timbrado masivo, conciliación tributaria y orquestación con proveedores de certificación autorizados.',
+    category: 'APIs & Backend',
+  },
+  {
+    slug: 'cloud-infra',
+    title: 'Infraestructura Automatizada Multi-Región y CI/CD',
+    description:
+      'Migración a contenedores orquestados con despliegue automatizado, tolerancia a fallos y reducción del 40% en costos de operación en la nube.',
+    category: 'DevOps & Cloud',
+  },
+  {
+    slug: 'nexus-talent',
+    title: 'Nexus Talent — Red Colaborativa para Especialistas Tech',
+    description:
+      'Plataforma de emparejamiento inteligente entre proyectos tecnológicos de alto impacto y consultores independientes verificados.',
+    category: 'Desarrollo Web',
+  },
+];
+
+const { locale, projects = DEFAULT_PROJECTS } = Astro.props;
+const isEnglish = locale === 'en';
+const home = getBreadcrumbHome(locale);
+
+const header = isEnglish
+  ? {
+      eyebrow: 'Portfolio & Case Studies',
+      title: 'Our projects',
+      description:
+        'Explore the technology solutions, enterprise platforms, and digital products our community of freelance specialists has designed and built for clients across industries.',
+      indexLabel: 'Projects',
+      linkLabel: 'View project',
+      ctaTitle: 'Have a project in mind?',
+      ctaDescription:
+        'We connect your idea with qualified specialists who design and build tailored solutions. Robust architecture, scalable code, and verified periodic deliveries.',
+      ctaAction: 'Start a conversation',
+    }
+  : {
+      eyebrow: 'Portafolio & Casos de estudio',
+      title: 'Nuestros proyectos',
+      description:
+        'Explora las soluciones tecnológicas, plataformas empresariales y productos digitales que nuestra comunidad de especialistas freelance ha diseñado y desarrollado para clientes en diversos sectores.',
+      indexLabel: 'Proyectos',
+      linkLabel: 'Ver proyecto',
+      ctaTitle: '¿Tienes un proyecto en mente?',
+      ctaDescription:
+        'Conectamos tu idea con especialistas calificados que diseñan y construyen soluciones a tu medida. Arquitectura robusta, código escalable y entregas periódicas verificadas.',
+      ctaAction: 'Iniciar una conversación',
+    };
+---
+
+<Section>
+  <Breadcrumbs
+    items={[
+      { label: home.label, href: home.href },
+      { label: header.indexLabel },
+    ]}
+    class="mb-8"
+  />
+  <SectionHeading
+    level={1}
+    eyebrow={header.eyebrow}
+    title={header.title}
+    description={header.description}
+  />
+  {projects.length > 0 ? (
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 mt-12">
+      {projects.map((project) => (
+        <Card
+          badge={project.category}
+          title={project.title}
+          description={project.description}
+          href={projectDetailUrl(locale, project.slug)}
+          linkLabel={header.linkLabel}
+        />
+      ))}
+    </div>
+  ) : (
+    <div class="mt-12">
+      <SectionHeading title="No se encontraron proyectos" align="center" />
+    </div>
+  )}
+</Section>
+
+<Section class="bg-brand-primary text-brand-surface relative overflow-hidden">
+  <CTA
+    tone="dark"
+    align="left"
+    eyebrow={header.eyebrow}
+    title={header.ctaTitle}
+    description={header.ctaDescription}
+    actions={[
+      { label: header.ctaAction, href: '/contact', variant: 'primary' },
+    ]}
+  />
+</Section>

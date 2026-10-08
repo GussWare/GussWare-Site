@@ -1,0 +1,34 @@
+---
+/**
+ * RGW-312 — Índice de proyectos por locale (`/en/proyectos`).
+ *
+ * Réplica de `proyectos/index.astro` con el locale de la URL;
+ * renderiza `ProjectListView` (compartida, sin duplicar lógica).
+ * Sin integración WordPress (SPEC).
+ */
+import Layout from '../../../layouts/Layout.astro';
+import ProjectListView from '../../../components/projects/ProjectListView.astro';
+import { proyectosBaseUrl } from '../../../lib/routes';
+
+export const prerender = false;
+
+const locale = Astro.params.locale ?? 'es';
+
+const localeUrls = {
+  es: proyectosBaseUrl('es'),
+  en: proyectosBaseUrl('en'),
+};
+---
+
+<Layout
+  title={locale === 'en' ? 'Projects — GussWare' : 'Proyectos — GussWare'}
+  description={
+    locale === 'en'
+      ? 'Explore the technology solutions, enterprise platforms, and digital products our community of freelance specialists has designed and built for clients across industries.'
+      : 'Explora las soluciones tecnológicas, plataformas empresariales y productos digitales que nuestra comunidad de especialistas freelance ha diseñado y desarrollado para clientes en diversos sectores.'
+  }
+  localeUrls={localeUrls}
+  lang={locale}
+>
+  <ProjectListView locale={locale} />
+</Layout>

@@ -1,0 +1,29 @@
+---
+/**
+ * RGW-312 — Índice de proyectos ES (`/proyectos`).
+ *
+ * Ruta fina de maquetación: renderiza `ProjectListView` (compartida
+ * con `[locale]`, sin duplicar lógica) con el contenido estático de
+ * referencia Stitch. Sin integración WordPress (SPEC). La integración
+ * con el CPT Proyectos llegará con el épico RGW-325.
+ */
+import Layout from '../../layouts/Layout.astro';
+import ProjectListView from '../../components/projects/ProjectListView.astro';
+import { proyectosBaseUrl } from '../../lib/routes';
+
+export const prerender = false;
+
+const localeUrls = {
+  es: proyectosBaseUrl('es'),
+  en: proyectosBaseUrl('en'),
+};
+---
+
+<Layout
+  title="Proyectos — GussWare"
+  description="Explora las soluciones tecnológicas, plataformas empresariales y productos digitales que nuestra comunidad de especialistas freelance ha diseñado y desarrollado para clientes en diversos sectores."
+  localeUrls={localeUrls}
+  lang="es"
+>
+  <ProjectListView locale="es" />
+</Layout>
