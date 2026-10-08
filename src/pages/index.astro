@@ -129,10 +129,10 @@ const stepImages = await Promise.all(
           id="servicios"
         />
       )}
-      {technology && <CommunityModel technology={technology} />}
       {process && (
         <Process process={process} images={stepImages} id="como-trabajamos" />
       )}
+      {technology && <CommunityModel technology={technology} />}
       {faq && <Faq faq={faq} />}
       {finalCta && <FinalCta finalCta={finalCta} />}
     </>
