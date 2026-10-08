@@ -138,10 +138,7 @@ const slides = steps.map((step, index) => ({
         >
           <div class="relative z-10">
             <div class="flex flex-col lg:flex-row items-center gap-12">
-              <div
-                class="w-full lg:w-1/2 transition-all duration-300 opacity-100 translate-x-0 motion-reduce:transition-none"
-                data-process-body
-              >
+              <div class="w-full lg:w-1/2">
                 <span
                   data-process-badge
                   class="inline-block px-3 py-1 bg-supporting-blue-dark text-brand-surface text-label-bold rounded-none mb-6 uppercase"
@@ -171,7 +168,7 @@ const slides = steps.map((step, index) => ({
                       src={firstImage.src}
                       alt={firstImage.alt}
                       loading="lazy"
-                      class="w-full h-full object-cover transition-opacity duration-300 opacity-100 motion-reduce:transition-none"
+                      class="w-full h-full object-cover"
                     />
                     <div
                       data-process-image-empty
@@ -182,7 +179,7 @@ const slides = steps.map((step, index) => ({
                     <img
                       data-process-image
                       hidden
-                      class="hidden w-full h-full object-cover transition-opacity duration-300 motion-reduce:transition-none"
+                      class="hidden w-full h-full object-cover"
                       alt=""
                     />
                     <div
@@ -307,67 +304,6 @@ const slides = steps.map((step, index) => ({
 
     const currentIndex = () => Number(root.dataset.processIndex ?? '0');
 
-    const textBlock = root.querySelector('[data-process-body]');
-    const reduceMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)',
-    ).matches;
-    let swapTimer = null;
-
-    /**
-     * Actualiza texto e imagen del paso activo. Sin animación por sí misma;
-     * los nodos/indicadores superiores se manejan aparte, con su
-     * comportamiento original intacto.
-     */
-    const updateStepContent = (slide) => {
-      if (badge instanceof HTMLElement) badge.textContent = slide.label;
-      if (title instanceof HTMLElement) title.textContent = slide.title;
-      if (desc instanceof HTMLElement) desc.textContent = slide.description;
-
-      if (image instanceof HTMLImageElement) {
-        if (slide.image) {
-          image.src = slide.image.src;
-          image.alt = slide.image.alt;
-          image.hidden = false;
-          image.classList.remove('hidden');
-        } else {
-          image.removeAttribute('src');
-          image.hidden = true;
-          image.classList.add('hidden');
-        }
-      }
-      if (imageEmpty instanceof HTMLElement) {
-        const empty = !slide.image;
-        imageEmpty.hidden = !empty;
-        imageEmpty.classList.toggle('hidden', !empty);
-      }
-    };
-
-    /**
-     * Transición suave exclusiva de la imagen y el bloque de texto
-     * (fade-out → cambio de contenido → fade-in). Se respeta
-     * prefers-reduced-motion.
-     */
-    const animateStepContent = (slide) => {
-      if (reduceMotion) {
-        updateStepContent(slide);
-        return;
-      }
-      if (swapTimer !== null) clearTimeout(swapTimer);
-      const targets = [textBlock, image].filter(
-        (el) => el instanceof HTMLElement,
-      );
-      targets.forEach((el) => {
-        el.classList.add('opacity-0', 'translate-x-2');
-      });
-      swapTimer = setTimeout(() => {
-        updateStepContent(slide);
-        targets.forEach((el) => {
-          el.classList.remove('opacity-0', 'translate-x-2');
-        });
-        swapTimer = null;
-      }, 280);
-    };
-
     const render = (index) => {
       const total = slides.length;
       if (total === 0) return;
@@ -376,7 +312,6 @@ const slides = steps.map((step, index) => ({
       const linePct = total > 1 ? (current / (total - 1)) * 100 : 100;
       const barPct = Math.round(((current + 1) / total) * 100);
 
-      // Indicadores de paso superiores: comportamiento original, sin animación nueva.
       nodes.forEach((node, i) => {
         if (!(node instanceof HTMLButtonElement)) return;
         const active = i === current;
@@ -398,8 +333,27 @@ const slides = steps.map((step, index) => ({
       if (line instanceof HTMLElement) {
         line.style.width = `${linePct}%`;
       }
+      if (badge instanceof HTMLElement) badge.textContent = slide.label;
+      if (title instanceof HTMLElement) title.textContent = slide.title;
+      if (desc instanceof HTMLElement) desc.textContent = slide.description;
 
-      animateStepContent(slide);
+      if (image instanceof HTMLImageElement) {
+        if (slide.image) {
+          image.src = slide.image.src;
+          image.alt = slide.image.alt;
+          image.hidden = false;
+          image.classList.remove('hidden');
+        } else {
+          image.removeAttribute('src');
+          image.hidden = true;
+          image.classList.add('hidden');
+        }
+      }
+      if (imageEmpty instanceof HTMLElement) {
+        const empty = !slide.image;
+        imageEmpty.hidden = !empty;
+        imageEmpty.classList.toggle('hidden', !empty);
+      }
 
       if (prev instanceof HTMLButtonElement) prev.disabled = current === 0;
       if (next instanceof HTMLButtonElement) {
