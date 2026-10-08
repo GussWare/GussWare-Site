@@ -69,6 +69,18 @@ export function serviceDetailUrl(locale: string, slug: string): string {
   );
 }
 
+/** Base del índice de Proyectos (`/proyectos`, `/en/proyectos`). */
+export function proyectosBaseUrl(locale: string): string {
+  return removeBlogTrailingSlash(getRelativeLocaleUrl(locale, 'proyectos'));
+}
+
+/** URL del detalle de un proyecto (`/proyectos/[slug]`, `/en/proyectos/[slug]`). */
+export function projectDetailUrl(locale: string, slug: string): string {
+  return removeBlogTrailingSlash(
+    getRelativeLocaleUrl(locale, `proyectos/${slug}`),
+  );
+}
+
 function removeBlogTrailingSlash(url: string): string {
   return url.length > 1 && url.endsWith('/') ? url.slice(0, -1) : url;
 }

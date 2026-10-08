@@ -1,0 +1,40 @@
+---
+/**
+ * RGW-313 — Detalle de proyecto ES (`/proyectos/[slug]`).
+ *
+ * Ruta fina de maquetación: resuelve el proyecto desde el mock Stitch
+ * (`getProjectMock`) y lo renderiza con `ProjectDetail` (compartido con
+ * `[locale]`, sin duplicar lógica). Sin proyecto, reescribe a `/404`
+ * (render nativo de la 404 con HTTP 404, sin redirect).
+ * RGW-323 sustituirá el mock por el CPT Proyectos de WordPress.
+ */
+import Layout from '../../layouts/Layout.astro';
+import ProjectDetail from '../../components/projects/ProjectDetail.astro';
+import { getProjectMock } from '../../lib/projects/mock';
+import { routes, projectDetailUrl } from '../../lib/routes';
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+const project =
+  typeof slug === 'string' ? getProjectMock(slug) : null;
+
+if (!project) {
+  Astro.response.status = 404;
+  return Astro.rewrite(routes.notFound);
+}
+
+const localeUrls = {
+  es: projectDetailUrl('es', project.slug),
+  en: projectDetailUrl('en', project.slug),
+};
+---
+
+<Layout
+  title={`${project.title} — GussWare`}
+  description={project.detailDescription.slice(0, 160) || undefined}
+  localeUrls={localeUrls}
+  lang="es"
+>
+  <ProjectDetail project={project} locale="es" indexLabel="Proyectos" />
+</Layout>

@@ -1,0 +1,372 @@
+---
+/**
+ * RGW-313 — Template único del detalle de Proyecto (maquetación).
+ *
+ * Patrón reutilizable que cubre los dos ejemplos Stitch de la tarea
+ * (`Sistema de Nóminas y Outsorcing` y `Multiples proyectos`): ambos
+ * comparten la misma composición en 6 bloques (identidad, descripción,
+ * alcance, detalle, herramientas y cierre); solo varía el contenido que
+ * llega por `project`. RGW-323 alimentará esta misma prop desde el CPT
+ * Proyectos de WordPress sin cambiar la estructura.
+ *
+ * Solo presentación: compone `Section`, `Breadcrumbs` y `Badge`
+ * existentes; sin consultas de datos ni lógica de contenido dinámico.
+ *
+ * Mapeo Stitch → sistema existente (sin valores nuevos):
+ * - Diagrama de alcance piramidal de Stitch (tiers 3/1/2/1 solo en el
+ *   ejemplo de Nóminas) → nodo central + grid uniforme
+ *   (`grid-cols-1 md:grid-cols-3`), único patrón válido para 7 módulos
+ *   y para 3 proyectos; conectores con `bg-brand-primary/30` existente.
+ * - Chips de conteo y capacidades con `Badge` (variante única; Stitch
+ *   usa 12px y el token más cercano es `label-bold`, como documenta
+ *   `Badge.astro`).
+ * - Cierre sobrio sobre `bg-supporting-blue-dark` (patrón del cierre de
+ *   `ServiceDetail.astro`), sin CTAs comerciales como en Stitch.
+ */
+import Section from '../ui/Section.astro';
+import Breadcrumbs from '../ui/Breadcrumbs.astro';
+import Badge from '../ui/Badge.astro';
+import { getBreadcrumbHome, proyectosBaseUrl } from '../../lib/routes';
+import type { ProjectDetailData } from '../../lib/projects/mock';
+
+interface Props {
+  /** Contenido del proyecto (hoy mock Stitch, luego CPT en RGW-323). */
+  project: ProjectDetailData;
+  /** Locale actual (breadcrumbs y raíz localizada). */
+  locale: string;
+  /** Etiqueta del índice en breadcrumbs (Stitch: "Proyectos"). */
+  indexLabel?: string;
+}
+
+const { project, locale, indexLabel = 'Proyectos' } = Astro.props;
+
+const homeCrumb = getBreadcrumbHome(locale);
+const singleBlock =
+  project.descriptionBlocks.length === 1 &&
+  !project.descriptionBlocks[0].title;
+---
+
+{/* 01 · Identidad del proyecto (Breadcrumbs hermanos sobre el h1). */}
+<Section class="border-gw-border-subtle border-b">
+  <Breadcrumbs
+    items={[
+      homeCrumb,
+      { label: indexLabel, href: proyectosBaseUrl(locale) },
+      { label: project.title },
+    ]}
+    class="mb-8"
+  />
+  <div class="mb-6 flex items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <span
+        aria-hidden="true"
+        class="bg-brand-primary inline-block h-2 w-2 flex-shrink-0"
+      ></span>
+      <span class="text-label-bold text-brand-primary uppercase">
+        Project / 01
+      </span>
+    </div>
+    <span class="text-label-bold text-gw-text-muted font-mono uppercase">
+      Exp // Case study
+    </span>
+  </div>
+  <h1
+    class="text-gw-text-primary text-display-lg-mobile md:text-display-lg mb-10 max-w-5xl"
+  >
+    {project.title}
+  </h1>
+  <div
+    aria-hidden="true"
+    class="bg-gw-border-subtle relative mb-8 h-px w-full"
+  >
+    <div class="bg-brand-accent absolute top-0 left-0 h-0.5 w-24"></div>
+  </div>
+  <dl class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+    <div class="border-gw-border-subtle border-l-2 pl-4">
+      <dt
+        class="text-label-bold text-gw-text-muted mb-1 block uppercase"
+      >
+        Empleador
+      </dt>
+      <dd class="text-gw-text-primary text-xl font-bold tracking-tight">
+        {project.employer}
+      </dd>
+    </div>
+    <div class="border-gw-border-subtle border-l-2 pl-4">
+      <dt
+        class="text-label-bold text-gw-text-muted mb-1 block uppercase"
+      >
+        Asignado a
+      </dt>
+      <dd class="text-gw-text-primary text-xl font-bold tracking-tight">
+        {project.assignee}
+      </dd>
+    </div>
+    <div class="border-brand-accent border-l-2 pl-4">
+      <dt
+        class="text-label-bold text-gw-text-muted mb-1 block uppercase"
+      >
+        Rol
+      </dt>
+      <dd
+        class="text-brand-primary text-xl font-bold tracking-tight uppercase"
+      >
+        {project.role}
+      </dd>
+    </div>
+  </dl>
+</Section>
+
+{/* 02 · Breve descripción de actividades. */}
+<Section class="bg-gw-surface-secondary border-gw-border-subtle border-b">
+  <div class="mb-6 flex items-center gap-2">
+    <span
+      aria-hidden="true"
+      class="bg-brand-accent inline-block h-1 w-3 flex-shrink-0"
+    ></span>
+    <h2 class="text-label-bold text-brand-primary uppercase">
+      Breve descripción de actividades
+    </h2>
+  </div>
+  {singleBlock ? (
+    <div class="max-w-3xl space-y-4">
+      {project.descriptionBlocks[0].paragraphs.map((paragraph, index) =>
+        index === 0 ? (
+          <p class="text-gw-text-secondary text-body-lg">{paragraph}</p>
+        ) : (
+          <p class="border-brand-primary/40 text-gw-text-primary bg-gw-surface-primary border-l-2 py-1 pl-4 font-medium">
+            {paragraph}
+          </p>
+        ),
+      )}
+    </div>
+  ) : (
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+      {project.descriptionBlocks.map((block) => (
+        <div class="border-brand-primary bg-gw-surface-primary border-l-2 p-6">
+          {block.title && (
+            <h3
+              class="text-label-bold text-brand-primary uppercase mb-4 border-b border-gw-border-subtle pb-2"
+            >
+              {block.title}
+            </h3>
+          )}
+          {block.paragraphs.map((paragraph) => (
+            <p class="text-gw-text-secondary text-body-md mb-4">{paragraph}</p>
+          ))}
+          {block.items && (
+            <ul class="text-gw-text-primary space-y-2.5 text-sm leading-relaxed">
+              {block.items.map((item) => (
+                <li class="flex items-start gap-2">
+                  <span
+                    aria-hidden="true"
+                    class="bg-brand-primary mt-1.5 h-1.5 w-1.5 flex-shrink-0"
+                  ></span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ))}
+    </div>
+  )}
+</Section>
+
+{/* 03 · Alcance funcional (elemento principal: nodo central + grid). */}
+<Section class="border-gw-border-subtle border-b">
+  <div class="mx-auto mb-12 max-w-2xl text-center">
+    <span
+      class="text-label-bold text-brand-primary mb-2 inline-block uppercase"
+    >
+      {project.scopeEyebrow}
+    </span>
+    <h2
+      class="text-gw-text-primary text-headline-md tracking-tight uppercase"
+    >
+      Alcance funcional
+    </h2>
+    <div class="mt-3">
+      <Badge>{project.scopeCount}</Badge>
+    </div>
+  </div>
+  <div class="mx-auto max-w-5xl">
+    <div class="flex flex-col items-center">
+      <span
+        class="bg-brand-primary text-label-bold px-5 py-2 text-white uppercase"
+      >
+        {project.scopeCentralNode}
+      </span>
+      <span
+        aria-hidden="true"
+        class="bg-brand-primary block h-8 w-0.5"
+      ></span>
+    </div>
+    <div
+      aria-hidden="true"
+      class="bg-brand-primary/30 mx-auto hidden h-px w-3/4 md:block"
+    ></div>
+    <div class="grid grid-cols-1 gap-6 pt-6 md:grid-cols-3 md:pt-4">
+      {project.scopeNodes.map((node) => (
+        <div class="flex flex-col items-center">
+          <span
+            aria-hidden="true"
+            class="bg-brand-primary/30 hidden h-6 w-px md:block"
+          ></span>
+          <div
+            class="bg-gw-surface-primary border-gw-border-subtle w-full border p-5 text-left"
+          >
+            <div class="mb-2 flex items-center justify-between">
+              <span class="text-label-bold text-brand-primary font-mono">
+                {node.index}
+              </span>
+              <Badge>{node.count}</Badge>
+            </div>
+            <h3
+              class="text-gw-text-primary text-lg font-bold tracking-tight uppercase"
+            >
+              {node.title}
+            </h3>
+            {node.description && (
+              <p class="text-gw-text-muted mt-1 text-xs">{node.description}</p>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</Section>
+
+{/* 04 · Detalle de funcionalidades (inventario completo visible). */}
+<Section class="bg-gw-surface-secondary border-gw-border-subtle border-b">
+  <div class="mb-12">
+    <span
+      class="text-label-bold text-brand-primary mb-2 inline-block uppercase"
+    >
+      {project.detailEyebrow}
+    </span>
+    <h2
+      class="text-gw-text-primary text-headline-md tracking-tight uppercase"
+    >
+      {project.detailTitle}
+    </h2>
+    <p class="text-gw-text-secondary mt-1 text-sm">
+      {project.detailDescription}
+    </p>
+  </div>
+  <div class="space-y-8">
+    {project.groups.map((group) => (
+      <article
+        class="bg-gw-surface-primary border-gw-border-subtle border p-6 md:p-8"
+      >
+        <div
+          class="mb-6 flex flex-col gap-2 border-b border-gw-border-subtle pb-4 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div class="flex items-center gap-3">
+            <span
+              class="text-label-bold bg-gw-surface-secondary text-brand-primary px-2.5 py-1 font-mono"
+            >
+              {group.index}
+            </span>
+            <h3
+              class="text-gw-text-primary text-base font-bold tracking-tight uppercase"
+            >
+              {group.title}
+            </h3>
+          </div>
+          <span class="text-label-bold text-gw-text-muted uppercase">
+            {group.count}
+          </span>
+        </div>
+        {group.description && (
+          <p
+            class="text-gw-text-secondary mb-6 max-w-3xl border-b border-gw-border-subtle/50 pb-4 text-sm leading-relaxed"
+          >
+            {group.description}
+          </p>
+        )}
+        <ul
+          class="grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          {group.items.map((item) => (
+            <li
+              class="text-gw-text-secondary flex items-center gap-2 border-b border-gw-border-subtle/50 py-1 text-sm"
+            >
+              <span
+                aria-hidden="true"
+                class="bg-brand-primary h-1.5 w-1.5 flex-shrink-0"
+              ></span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </article>
+    ))}
+  </div>
+</Section>
+
+{/* 05 · Herramientas utilizadas. */}
+<Section class="border-gw-border-subtle border-b">
+  <div class="mb-10 max-w-2xl">
+    <span
+      class="text-label-bold text-brand-primary mb-2 inline-block uppercase"
+    >
+      Stack & entorno
+    </span>
+    <h2
+      class="text-gw-text-primary text-headline-md tracking-tight uppercase"
+    >
+      Herramientas utilizadas
+    </h2>
+  </div>
+  <div class="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+    {project.tools.map((tool) => (
+      <div class="bg-gw-surface-secondary border-gw-border-subtle border p-4">
+        <p
+          class="text-label-bold text-gw-text-muted mb-1 font-mono uppercase"
+        >
+          {tool.category}
+        </p>
+        <p class="text-gw-text-primary text-sm font-bold">{tool.value}</p>
+      </div>
+    ))}
+  </div>
+  {project.toolNotes.length > 0 && (
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+      {project.toolNotes.map((note) => (
+        <div
+          class="border-brand-primary bg-gw-surface-secondary/60 border-l-2 p-5"
+        >
+          <p class="text-gw-text-primary text-sm font-bold">{note.title}</p>
+          <p class="text-gw-text-muted mt-0.5 text-xs">{note.description}</p>
+        </div>
+      ))}
+    </div>
+  )}
+</Section>
+
+{/* 06 · Cierre del proyecto (ficha técnica sobria, sin CTAs). */}
+<Section class="bg-supporting-blue-dark">
+  <div class="mx-auto max-w-4xl text-center">
+    <div
+      aria-hidden="true"
+      class="bg-brand-accent mx-auto mb-6 h-1 w-8"
+    ></div>
+    <h2
+      class="mx-auto mb-4 max-w-2xl text-xl font-extrabold tracking-tight text-white uppercase sm:text-2xl"
+    >
+      {project.closingTitle}
+    </h2>
+    <p class="text-sm font-medium tracking-wide text-white/80">
+      {project.employer}
+      <span aria-hidden="true" class="mx-2">
+        ·
+      </span>
+      {project.assignee}
+      <span aria-hidden="true" class="mx-2">
+        ·
+      </span>
+      <span class="font-bold text-white">{project.role}</span>
+    </p>
+  </div>
+</Section>
