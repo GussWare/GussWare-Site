@@ -11,7 +11,7 @@ Catálogo verificado del sistema visual existente. Las reglas viven en
 | `Section`         | `id?`, `class?`                                                                   | `py` 64px mobile / 120px desktop; integra `Container` |
 | `SectionHeading`  | `eyebrow?`, `title`, `level?` (1\|2\|3, defecto 2), `description?`, `align?` (left\|center) | eyebrow `label-bold` uppercase; título `headline-md` |
 | `Card`            | `image?` {src, alt}, `imageHeight?`, `badge?`, `title`, `description?`, `date?`, `readingTime?`, `href?`, `linkLabel?` (=`Read more`), `class?` | `article`; imagen `4/3` o altura fija; sin sombras |
-| `Button`          | `variant?` (primary\|secondary\|ghost), `href?`, `type?`, `class?`                 | `href` → `<a>`; si no → `<button>`; `px-6 py-3`, `rounded-none` |
+| `Button`          | `variant?` (primary\|secondary\|ghost\|outline-light), `href?`, `type?`, `class?` | `href` → `<a>`; si no → `<button>`; `px-6 py-3`, `rounded-none`; `outline-light` = outline claro para fondos oscuros (RGW-312) |
 | `Badge`           | `class?` (slot)                                                                   | Variante única; `px-3 py-1`, `label-bold` uppercase |
 | `Breadcrumbs`     | `items` [{label, href?}], `class?`                                                | Último ítem sin `href` = página actual (`aria-current`) |
 | `CTA`             | `eyebrow?`, `title?`, `description?`, `align?`, `tone?` (light\|dark), `actions?` [{label, href, variant?, icon?, buttonClass?}], `class?`, `titleClass?` | Compone `SectionHeading` + `Button`; fila `mt-8 flex flex-wrap gap-4` |
@@ -26,6 +26,7 @@ Componentes de layout existentes: `Header`, `Footer`, `DesktopMenu*`,
 (`src/layouts/`: `title`, `description?`, `localeUrls?`, `lang?`,
 `seo?`). Componentes de dominio (no genéricos, no reutilizar fuera
 de su contexto): `blog/*`, `contact/*`, `home/*`, `legal/*`,
+`projects/*` (`ProjectListView`, `ProjectCard` del listado RGW-312),
 `services/*`; utilidades puntuales: `Logo`, `LanguageSelector`,
 `MenuButton`.
 

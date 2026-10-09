@@ -19,7 +19,8 @@ import SectionHeading from './SectionHeading.astro';
 interface CtaAction {
   label: string;
   href: string;
-  variant?: 'primary' | 'secondary' | 'ghost';
+  /** Variante de `Button.astro` (incluye `outline-light` para fondos oscuros). */
+  variant?: 'primary' | 'secondary' | 'ghost' | 'outline-light';
   /**
    * Icono trailing del botón (nombre de `Icon.astro`, p. ej.
    * `'arrow-right'` para CTAs estilo Stitch con flecha).

@@ -8,6 +8,11 @@
  * - secondary → borde 2px `border-gw-text-primary`, hover con fondo ink y
  *   texto `text-brand-surface`;
  * - ghost → texto `text-brand-secondary` con subrayado en hover.
+ * - outline-light (RGW-312) → acción secundaria sobre fondos oscuros:
+ *   borde 2px `border-brand-surface` + `text-brand-surface`, hover con
+ *   fondo superficie y texto `text-brand-primary` (el sistema no tenía
+ *   secundaria legible sobre `brand-primary`; p. ej. CTA oscuro del
+ *   listado de Proyectos, Stitch `Proyectos - Listado`).
  * Tipografía `text-label-bold`, `rounded-none`, spacing `px-6 py-3`.
  * Focus visible con anillo `supporting-blue-dark` (estado de Stitch).
  *
@@ -23,7 +28,7 @@
  * interno dejaría sin efecto un `hidden` externo responsive.
  */
 interface Props {
-  variant?: 'primary' | 'secondary' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'outline-light';
   href?: string;
   type?: 'button' | 'submit' | 'reset';
   class?: string;
@@ -52,6 +57,8 @@ const variants: Record<NonNullable<Props['variant']>, string> = {
     'text-label-bold border-gw-text-primary text-gw-text-primary px-6 py-3 border-2 transition-colors duration-200 hover:bg-gw-text-primary hover:text-brand-surface',
   ghost:
     'text-navigation text-brand-secondary transition-colors duration-200 hover:underline',
+  'outline-light':
+    'text-label-bold border-brand-surface text-brand-surface hover:bg-brand-surface hover:text-brand-primary px-6 py-3 border-2 transition-colors duration-200',
 };
 
 const classes = `${base} ${variants[variant]} ${className}`;
