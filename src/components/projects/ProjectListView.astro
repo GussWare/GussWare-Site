@@ -10,17 +10,20 @@
  * Composición solo con componentes existentes (§1, §2): `Layout` en la
  * página fina, `Section` por bloque (§3), `Container` en la banda de
  * filtros, `Breadcrumbs` como hermano sobre el encabezado, `Badge`
- * (calibrado con `class` aditiva) para distintivo y métrica, `Card`
- * para cada proyecto, `CTA` (`tone="dark"`) para el cierre e `Icon`
- * (`search`, catálogo cerrado) en el buscador. Sin componentes nuevos
- * (§7). Spacing con tokens y patrones del sistema (§4); mobile-first
- * con breakpoint `md` estándar, `flex-wrap` anti-overflow (§5);
+ * (calibrado con `class` aditiva) para distintivo y métrica,
+ * `ProjectCard` (dominio, compone `Badge` + `Image` + `Icon`) para cada
+ * proyecto, `CTA` (`tone="dark"`, acción secundaria `outline-light`)
+ * para el cierre e `Icon` (`search`, catálogo cerrado) en el buscador.
+ * `ProjectCard` es componente de dominio (§7, catalogado en
+ * `reference.md`): la `Card` global no cubre esa anatomía. Spacing con
+ * tokens y patrones del sistema (§4); mobile-first con breakpoint `md`
+ * estándar, `flex-wrap` anti-overflow (§5);
  * `display`/`headline-md`/`body-lg`/`label-bold` y un solo `h1` (§6).
  *
  * Contenido estático verbatim de Stitch (ES) como referencia visual,
  * pendiente del CPT Proyectos del épico RGW-325: la prop `projects`
  * deja la vista preparada para recibir datos de WordPress/i18n sin
- * cambiar la estructura. Sin `image` la `Card` renderiza su bloque
+ * cambiar la estructura. Sin `image` la tarjeta renderiza su bloque
  * neutro de maquetación (sin assets ni URLs inventadas). Los `href`
  * usan `projectDetailUrl` (ruta del épico RGW-325).
  *
@@ -31,27 +34,22 @@
  * ambos locales hasta que WordPress los localice; el resto del chrome
  * sí se traduce.
  *
- * Diferencias documentadas frente a Stitch (requieren tocar la `Card`
- * global o no tienen equivalente en el sistema; no se modifican
- * componentes UI globales por regla de la SPEC):
- * - tarjetas sin imagen (bloque neutro `4/3` de `Card`, Stitch `16/10`
- *   con foto); `Badge` en flujo en lugar de etiqueta superpuesta;
- *   sin fila de tags técnicos ni código `#...` al pie (la `Card` no
- *   expone slots); título `headline-md` del sistema (Stitch ~20-24px).
- * - CTA secundario de Stitch (`/how-we-work`, outline claro): el
- *   sistema no tiene variante de `Button` outline-clara para fondos
- *   oscuros (`secondary` es borde ink, ilegible sobre `brand-primary`;
- *   la calibración por `buttonClass` no puede imponerse porque las
- *   utilidades base y aditiva comparten propiedad y gana la base en
- *   cascada) y esa ruta aún no existe en el proyecto; se mantiene la
- *   acción primaria y se documenta la discrepancia.
+ * Diferencias documentadas frente a Stitch (sin equivalente en el
+ * sistema):
+ * - tarjetas sin foto (bloque neutro `4/3` del sistema; Stitch `16/10`
+ *   con foto mock externa; SPEC: no inventar assets) y título
+ *   `headline-md` del sistema (jerarquía de tarjetas; Stitch ~20-24px
+ *   sin token equivalente).
+ * - CTA secundario (`/how-we-work`, verbatim Stitch) con la nueva
+ *   variante `outline-light` de `Button`; esa ruta aún no existe en el
+ *   proyecto (precedente RGW-311: `linkHref='/projects'`).
  */
 import Section from '../ui/Section.astro';
 import Container from '../ui/Container.astro';
 import SectionHeading from '../ui/SectionHeading.astro';
 import Breadcrumbs from '../ui/Breadcrumbs.astro';
 import Badge from '../ui/Badge.astro';
-import Card from '../ui/Card.astro';
+import ProjectCard from './ProjectCard.astro';
 import CTA from '../ui/CTA.astro';
 import Icon from '../ui/Icon.astro';
 import { projectDetailUrl, getBreadcrumbHome } from '../../lib/routes';
@@ -62,6 +60,8 @@ interface ProjectListItem {
   title: string;
   description: string;
   category: string;
+  tags: string[];
+  code: string;
 }
 
 interface Props {
@@ -81,6 +81,8 @@ const DEFAULT_PROJECTS: ProjectListItem[] = [
     description:
       'Plataforma integral para gestión de nóminas gravadas al 100% y con estrategia para empresas de outsourcing con 7 módulos clave y reportes consolidados.',
     category: 'Sistemas Empresariales',
+    tags: ['PHP', 'CodeIgniter', 'MySQL', 'Apache', 'JS'],
+    code: '#ERP-2024',
   },
   {
     slug: 'fintech-connect',
@@ -88,6 +90,8 @@ const DEFAULT_PROJECTS: ProjectListItem[] = [
     description:
       'Aplicación móvil multiplataforma de alta seguridad con autenticación biométrica, procesamiento de remesas instantáneas y conexión con redes bancarias.',
     category: 'Aplicaciones Móviles',
+    tags: ['Flutter', 'Dart', 'Node.js', 'AWS', 'PostgreSQL'],
+    code: '#MOB-781',
   },
   {
     slug: 'apex-commerce',
@@ -95,6 +99,8 @@ const DEFAULT_PROJECTS: ProjectListItem[] = [
     description:
       'Arquitectura de comercio digital de alto rendimiento con renderizado estático, sincronización de inventarios multitienda y checkout optimizado.',
     category: 'Desarrollo Web',
+    tags: ['Next.js', 'TypeScript', 'GraphQL', 'Stripe'],
+    code: '#WEB-302',
   },
   {
     slug: 'gateway-fiscal',
@@ -102,6 +108,8 @@ const DEFAULT_PROJECTS: ProjectListItem[] = [
     description:
       'Infraestructura de microservicios para timbrado masivo, conciliación tributaria y orquestación con proveedores de certificación autorizados.',
     category: 'APIs & Backend',
+    tags: ['Python', 'FastAPI', 'Docker', 'Redis', 'RabbitMQ'],
+    code: '#API-909',
   },
   {
     slug: 'cloud-infra',
@@ -109,6 +117,8 @@ const DEFAULT_PROJECTS: ProjectListItem[] = [
     description:
       'Migración a contenedores orquestados con despliegue automatizado, tolerancia a fallos y reducción del 40% en costos de operación en la nube.',
     category: 'DevOps & Cloud',
+    tags: ['Terraform', 'Kubernetes', 'AWS ECS', 'GitHub Actions'],
+    code: '#OPS-411',
   },
   {
     slug: 'nexus-talent',
@@ -116,6 +126,8 @@ const DEFAULT_PROJECTS: ProjectListItem[] = [
     description:
       'Plataforma de emparejamiento inteligente entre proyectos tecnológicos de alto impacto y consultores independientes verificados.',
     category: 'Desarrollo Web',
+    tags: ['React', 'Node.js', 'MongoDB', 'WebSockets'],
+    code: '#COMM-104',
   },
 ];
 
@@ -172,6 +184,7 @@ const copy = isEnglish
       ctaDescription:
         'We connect your idea with qualified specialists who design and build tailored solutions. Robust architecture, scalable code, and verified periodic deliveries.',
       ctaPrimary: 'Start a conversation',
+      ctaSecondary: 'Our process',
     }
   : {
       eyebrow: 'Portafolio & Casos de estudio',
@@ -200,6 +213,7 @@ const copy = isEnglish
       ctaDescription:
         'Conectamos tu idea con especialistas calificados que diseñan y construyen soluciones a tu medida. Arquitectura robusta, código escalable y entregas periódicas verificadas.',
       ctaPrimary: 'Iniciar una conversación',
+      ctaSecondary: 'Conocer nuestro proceso',
     };
 
 const pillActive =
@@ -324,10 +338,12 @@ const pageButton =
   {projects.length > 0 ? (
     <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       {projects.map((project) => (
-        <Card
+        <ProjectCard
           badge={project.category}
           title={project.title}
           description={project.description}
+          tags={project.tags}
+          code={project.code}
           href={projectDetailUrl(locale, project.slug)}
           linkLabel={copy.linkLabel}
         />
@@ -387,6 +403,11 @@ const pageButton =
       description={copy.ctaDescription}
       actions={[
         { label: copy.ctaPrimary, href: '/contact', variant: 'primary' },
+        {
+          label: copy.ctaSecondary,
+          href: '/how-we-work',
+          variant: 'outline-light',
+        },
       ]}
     />
   </div>
