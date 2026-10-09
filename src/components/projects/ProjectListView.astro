@@ -3,18 +3,19 @@
  * Vista del listado de Proyectos (RGW-312, compartida por `/proyectos`
  * y `/en/proyectos`).
  *
- * Referencia visual: pantalla Stitch `Proyectos - Listado`
+ * Referencia visual 1:1: pantalla Stitch `Proyectos - Listado`
  * (`GussWare - Nuestros Proyectos (Portafolio Oficial)`); `gussware-layout`
  * define cómo implementarla dentro del sistema existente.
  *
  * Composición solo con componentes existentes (§1, §2): `Layout` en la
- * página fina, `Section` por bloque (§3), `Breadcrumbs` como hermano
- * sobre el encabezado, `SectionHeading` (`level={1}`: único `h1` de la
- * página, §6), `Card` para cada proyecto y `CTA` (`tone="dark"`) para el
- * cierre. Sin componentes nuevos (§7). Spacing con tokens y patrones
- * del sistema (§4: `mb-8` tras breadcrumbs como en Servicios,
- * `mt-12` + `gap-6` + `md:grid-cols-2 lg:grid-cols-3` del índice de
- * Servicios); mobile-first con breakpoint `md` estándar (§5).
+ * página fina, `Section` por bloque (§3), `Container` en la banda de
+ * filtros, `Breadcrumbs` como hermano sobre el encabezado, `Badge`
+ * (calibrado con `class` aditiva) para distintivo y métrica, `Card`
+ * para cada proyecto, `CTA` (`tone="dark"`) para el cierre e `Icon`
+ * (`search`, catálogo cerrado) en el buscador. Sin componentes nuevos
+ * (§7). Spacing con tokens y patrones del sistema (§4); mobile-first
+ * con breakpoint `md` estándar, `flex-wrap` anti-overflow (§5);
+ * `display`/`headline-md`/`body-lg`/`label-bold` y un solo `h1` (§6).
  *
  * Contenido estático verbatim de Stitch (ES) como referencia visual,
  * pendiente del CPT Proyectos del épico RGW-325: la prop `projects`
@@ -23,24 +24,36 @@
  * neutro de maquetación (sin assets ni URLs inventadas). Los `href`
  * usan `projectDetailUrl` (ruta del épico RGW-325).
  *
- * Diferencias documentadas frente a Stitch (sin token equivalente o
- * fuera del alcance de maquetación):
- * - bloque métrico del encabezado (`+18 Entregas con éxito`): afirmación
- *   cuantitativa sin fuente CMS; se omite hasta la integración.
- * - barra de filtros (búsqueda, selects, pills) y paginación numerada:
- *   requieren taxonomías y datos de WordPress (lógica de consulta,
- *   excluida por la SPEC); se agregarán con la integración.
- * - CTA de cierre con una sola acción primaria (`/contact` existe);
- *   el secundario de Stitch (`/how-we-work`) no tiene ruta en el
- *   proyecto y se omite en lugar de enlazar a un 404.
- * - geometría decorativa del CTA oscuro: `Section` + `CTA dark`
- *   (patrón de `FinalCta.astro`), sin bloques flotantes adicionales.
+ * Filtros y paginación quedan maquetados como representación visual
+ * estática, sin funcionalidad ni lógica de consulta (SPEC): controles
+ * nativos (`input`, `select`, `button`) listos para la integración.
+ * Textos de taxonomías (pills, opciones de tecnología) verbatim ES en
+ * ambos locales hasta que WordPress los localice; el resto del chrome
+ * sí se traduce.
+ *
+ * Diferencias documentadas frente a Stitch (requieren tocar la `Card`
+ * global o no tienen equivalente en el sistema; no se modifican
+ * componentes UI globales por regla de la SPEC):
+ * - tarjetas sin imagen (bloque neutro `4/3` de `Card`, Stitch `16/10`
+ *   con foto); `Badge` en flujo en lugar de etiqueta superpuesta;
+ *   sin fila de tags técnicos ni código `#...` al pie (la `Card` no
+ *   expone slots); título `headline-md` del sistema (Stitch ~20-24px).
+ * - CTA secundario de Stitch (`/how-we-work`, outline claro): el
+ *   sistema no tiene variante de `Button` outline-clara para fondos
+ *   oscuros (`secondary` es borde ink, ilegible sobre `brand-primary`;
+ *   la calibración por `buttonClass` no puede imponerse porque las
+ *   utilidades base y aditiva comparten propiedad y gana la base en
+ *   cascada) y esa ruta aún no existe en el proyecto; se mantiene la
+ *   acción primaria y se documenta la discrepancia.
  */
 import Section from '../ui/Section.astro';
+import Container from '../ui/Container.astro';
 import SectionHeading from '../ui/SectionHeading.astro';
 import Breadcrumbs from '../ui/Breadcrumbs.astro';
+import Badge from '../ui/Badge.astro';
 import Card from '../ui/Card.astro';
 import CTA from '../ui/CTA.astro';
+import Icon from '../ui/Icon.astro';
 import { projectDetailUrl, getBreadcrumbHome } from '../../lib/routes';
 
 /** Ítem del listado (futura: resuelto desde el CPT Proyectos). */
@@ -106,11 +119,32 @@ const DEFAULT_PROJECTS: ProjectListItem[] = [
   },
 ];
 
+/** Categorías y tecnologías verbatim de Stitch (futura taxonomía WP). */
+const CATEGORIES = [
+  'Todas',
+  'Desarrollo Web',
+  'Aplicaciones Móviles',
+  'Sistemas Empresariales',
+  'APIs & Backend',
+  'DevOps & Cloud',
+];
+
+const TECHNOLOGIES = [
+  'Todas las tecnologías',
+  'React / Next.js',
+  'Node.js / Express',
+  'PHP / CodeIgniter',
+  'Python / FastAPI',
+  'Flutter / iOS',
+  'PostgreSQL / MySQL',
+  'AWS / Docker',
+];
+
 const { locale, projects = DEFAULT_PROJECTS } = Astro.props;
 const isEnglish = locale === 'en';
 const home = getBreadcrumbHome(locale);
 
-const header = isEnglish
+const copy = isEnglish
   ? {
       eyebrow: 'Portfolio & Case Studies',
       title: 'Our projects',
@@ -118,10 +152,26 @@ const header = isEnglish
         'Explore the technology solutions, enterprise platforms, and digital products our community of freelance specialists has designed and built for clients across industries.',
       indexLabel: 'Projects',
       linkLabel: 'View project',
+      metricCount: '+18',
+      metricLabel: 'Successful deliveries',
+      metricDescription:
+        'Modular architectures, open-source standards, and engineering focused on measurable results without bureaucratic intermediaries.',
+      searchPlaceholder: 'Search by name, client, or keyword...',
+      techLabel: 'Filter by technology',
+      sortLabel: 'Sort results',
+      sortOptions: ['Most recent', 'Name (A - Z)', 'Name (Z - A)'],
+      resultsOf: 'of 18 projects',
+      showing: 'Showing',
+      reset: 'Clear filters',
+      pageOf: 'Page 1 of 3 (18 projects total)',
+      paginationLabel: 'Projects pagination',
+      prev: '← Previous',
+      next: 'Next →',
+      emptyTitle: 'No projects found',
       ctaTitle: 'Have a project in mind?',
       ctaDescription:
         'We connect your idea with qualified specialists who design and build tailored solutions. Robust architecture, scalable code, and verified periodic deliveries.',
-      ctaAction: 'Start a conversation',
+      ctaPrimary: 'Start a conversation',
     }
   : {
       eyebrow: 'Portafolio & Casos de estudio',
@@ -130,55 +180,214 @@ const header = isEnglish
         'Explora las soluciones tecnológicas, plataformas empresariales y productos digitales que nuestra comunidad de especialistas freelance ha diseñado y desarrollado para clientes en diversos sectores.',
       indexLabel: 'Proyectos',
       linkLabel: 'Ver proyecto',
+      metricCount: '+18',
+      metricLabel: 'Entregas con éxito',
+      metricDescription:
+        'Arquitecturas modulares, estándares de código abierto e ingeniería orientada a resultados medibles sin intermediarios burocráticos.',
+      searchPlaceholder: 'Buscar por nombre, cliente o palabra clave...',
+      techLabel: 'Filtrar por tecnología',
+      sortLabel: 'Ordenar resultados',
+      sortOptions: ['Más recientes', 'Nombre (A - Z)', 'Nombre (Z - A)'],
+      resultsOf: 'de 18 proyectos',
+      showing: 'Mostrando',
+      reset: 'Limpiar filtros',
+      pageOf: 'Página 1 de 3 (18 proyectos en total)',
+      paginationLabel: 'Paginación de proyectos',
+      prev: '← Anterior',
+      next: 'Siguiente →',
+      emptyTitle: 'No se encontraron proyectos',
       ctaTitle: '¿Tienes un proyecto en mente?',
       ctaDescription:
         'Conectamos tu idea con especialistas calificados que diseñan y construyen soluciones a tu medida. Arquitectura robusta, código escalable y entregas periódicas verificadas.',
-      ctaAction: 'Iniciar una conversación',
+      ctaPrimary: 'Iniciar una conversación',
     };
+
+const pillActive =
+  'text-label-bold bg-supporting-blue-dark text-brand-surface rounded-none px-3 py-1.5 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
+const pillInactive =
+  'text-label-bold bg-gw-surface-primary text-gw-text-secondary border-gw-border-subtle rounded-none border px-3 py-1.5 transition-colors duration-200 hover:bg-gw-surface-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
+const fieldControl =
+  'text-body-md text-gw-text-secondary border-gw-border-subtle bg-gw-surface-primary w-full rounded-none border px-3 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
+const pageButton =
+  'text-label-bold border-gw-border-subtle text-gw-text-secondary bg-gw-surface-primary rounded-none border px-3 transition-colors duration-200 hover:bg-gw-surface-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark';
 ---
 
 <Section>
   <Breadcrumbs
-    items={[
-      { label: home.label, href: home.href },
-      { label: header.indexLabel },
-    ]}
+    items={[{ label: home.label, href: home.href }, { label: copy.indexLabel }]}
     class="mb-8"
   />
-  <SectionHeading
-    level={1}
-    eyebrow={header.eyebrow}
-    title={header.title}
-    description={header.description}
-  />
+  <div class="grid grid-cols-1 items-end gap-8 lg:grid-cols-12">
+    <div class="lg:col-span-8">
+      <div class="mb-4">
+        <Badge class="border-brand-accent text-supporting-blue-dark border-l-2">
+          {copy.eyebrow}
+        </Badge>
+      </div>
+      <h1 class="text-gw-text-primary text-display-lg-mobile md:text-display-lg">
+        {copy.title}
+      </h1>
+      <p class="text-gw-text-secondary text-body-lg mt-6 max-w-2xl">
+        {copy.description}
+      </p>
+    </div>
+    <div class="lg:col-span-4">
+      <div class="bg-gw-surface-secondary border-supporting-blue-dark border-l-4 p-6">
+        <p class="text-supporting-blue-dark flex items-baseline gap-2 font-bold">
+          <span class="text-3xl tracking-tight">{copy.metricCount}</span>
+          <span class="text-label-bold uppercase">{copy.metricLabel}</span>
+        </p>
+        <p class="text-gw-text-secondary text-body-md mt-2">
+          {copy.metricDescription}
+        </p>
+      </div>
+    </div>
+  </div>
+</Section>
+
+<div class="bg-gw-surface-secondary border-gw-border-subtle sticky top-16 z-40 border-y py-6">
+  <Container>
+    <div class="space-y-5">
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-12">
+        <div class="relative md:col-span-7">
+          <Icon
+            name="search"
+            size={4}
+            class="text-gw-text-secondary pointer-events-none absolute top-1/2 left-3 -translate-y-1/2"
+          />
+          <label class="sr-only" for="projects-search">
+            {copy.searchPlaceholder}
+          </label>
+          <input
+            id="projects-search"
+            name="search"
+            type="text"
+            placeholder={copy.searchPlaceholder}
+            class={`${fieldControl} pl-10`}
+          />
+        </div>
+        <div class="md:col-span-3">
+          <label class="sr-only" for="projects-tech">
+            {copy.techLabel}
+          </label>
+          <select id="projects-tech" name="technology" class={fieldControl}>
+            {TECHNOLOGIES.map((tech) => (
+              <option value={tech}>{tech}</option>
+            ))}
+          </select>
+        </div>
+        <div class="md:col-span-2">
+          <label class="sr-only" for="projects-sort">
+            {copy.sortLabel}
+          </label>
+          <select id="projects-sort" name="sort" class={fieldControl}>
+            {copy.sortOptions.map((option) => (
+              <option value={option}>{option}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+      <div class="flex flex-col gap-4 pt-2 lg:flex-row lg:items-center lg:justify-between">
+        <div class="flex flex-wrap items-center gap-2" role="tablist">
+          {CATEGORIES.map((category, index) => (
+            <button
+              type="button"
+              role="tab"
+              aria-selected={index === 0 ? 'true' : 'false'}
+              class={index === 0 ? pillActive : pillInactive}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+        <div class="flex items-center justify-between gap-5 lg:justify-end">
+          <p class="text-navigation text-gw-text-secondary">
+            {copy.showing}{' '}
+            <strong class="text-supporting-blue-dark font-bold">
+              {projects.length}
+            </strong>{' '}
+            {copy.resultsOf}
+          </p>
+          <button
+            type="button"
+            class="text-label-bold text-brand-secondary transition-colors duration-200 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+          >
+            {copy.reset}
+          </button>
+        </div>
+      </div>
+    </div>
+  </Container>
+</div>
+
+<Section>
   {projects.length > 0 ? (
-    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 mt-12">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       {projects.map((project) => (
         <Card
           badge={project.category}
           title={project.title}
           description={project.description}
           href={projectDetailUrl(locale, project.slug)}
-          linkLabel={header.linkLabel}
+          linkLabel={copy.linkLabel}
         />
       ))}
     </div>
   ) : (
-    <div class="mt-12">
-      <SectionHeading title="No se encontraron proyectos" align="center" />
-    </div>
+    <SectionHeading title={copy.emptyTitle} align="center" />
   )}
+  <div class="border-gw-border-subtle mt-16 flex flex-col items-center justify-between gap-6 border-t pt-10 md:flex-row">
+    <p class="text-body-md text-gw-text-secondary order-2 md:order-1">
+      {copy.pageOf}
+    </p>
+    <nav
+      aria-label={copy.paginationLabel}
+      class="order-1 flex items-center gap-1 md:order-2"
+    >
+      <span
+        aria-disabled="true"
+        class={`${pageButton} cursor-not-allowed py-2 opacity-50`}
+      >
+        {copy.prev}
+      </span>
+      <span
+        aria-current="page"
+        class="text-label-bold bg-supporting-blue-dark text-brand-surface flex h-10 w-10 items-center justify-center rounded-none"
+      >
+        1
+      </span>
+      <button type="button" class={`${pageButton} h-10 w-10`}>
+        2
+      </button>
+      <button type="button" class={`${pageButton} h-10 w-10`}>
+        3
+      </button>
+      <button type="button" class={`${pageButton} py-2`}>
+        {copy.next}
+      </button>
+    </nav>
+  </div>
 </Section>
 
 <Section class="bg-brand-primary text-brand-surface relative overflow-hidden">
-  <CTA
-    tone="dark"
-    align="left"
-    eyebrow={header.eyebrow}
-    title={header.ctaTitle}
-    description={header.ctaDescription}
-    actions={[
-      { label: header.ctaAction, href: '/contact', variant: 'primary' },
-    ]}
-  />
+  <div
+    aria-hidden="true"
+    class="bg-brand-secondary pointer-events-none absolute -right-12 -bottom-12 h-64 w-64 opacity-40"
+  ></div>
+  <div
+    aria-hidden="true"
+    class="bg-brand-accent pointer-events-none absolute top-8 right-32 h-24 w-24 opacity-30"
+  ></div>
+  <div class="relative z-10">
+    <CTA
+      tone="dark"
+      align="left"
+      eyebrow={copy.eyebrow}
+      title={copy.ctaTitle}
+      description={copy.ctaDescription}
+      actions={[
+        { label: copy.ctaPrimary, href: '/contact', variant: 'primary' },
+      ]}
+    />
+  </div>
 </Section>
