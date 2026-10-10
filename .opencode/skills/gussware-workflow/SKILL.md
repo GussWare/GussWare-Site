@@ -47,9 +47,10 @@ Sin ID Jira explícito en la solicitud, continuar con §1.
 
 ## 1. Initial Verification
 
-Antes de realizar operaciones Git, verificar el estado actual:
+Antes de realizar operaciones Git, actualizar referencias y verificar el estado actual (paso obligatorio, no opcional):
 
 ```bash
+git fetch origin
 pwd
 git status --short --branch
 git branch --show-current
@@ -59,23 +60,24 @@ git remote -v
 git rev-parse --abbrev-ref --symbolic-full-name '@{upstream}'
 ```
 
-Nunca asumir que el upstream configurado es correcto.
+Nunca asumir que el upstream configurado es correcto ni que las referencias remotas están actualizadas.
+
+No sobrescribir, descartar ni incorporar automáticamente cambios existentes. Si el estado es ambiguo, hay cambios que puedan verse afectados o existe una condición insegura (conflictos, árbol sucio inesperado, upstream incorrecto, referencias desactualizadas), detenerse y explicar el problema antes de modificar archivos.
 
 ---
 
 ## 2. Remote Synchronization
 
-Antes de crear una nueva rama de tarea:
+Antes de crear una nueva rama de tarea (paso obligatorio):
 
 ```bash
 git fetch origin
+git rev-parse origin/develop
 ```
 
-Las nuevas ramas de tarea deben partir de:
+Anotar el commit esperado de `origin/develop`: la rama de trabajo deberá partir exactamente de él (§4).
 
-```text
-origin/develop
-```
+Las nuevas ramas de trabajo deben crearse explícitamente desde `origin/develop` actualizado, nunca desde `develop` local ni desde otra rama de trabajo.
 
 No utilizar automáticamente el `develop` local como base.
 
@@ -171,6 +173,23 @@ git branch -vv
 git worktree list
 ```
 
+`git worktree add -b` hereda automáticamente `origin/develop` como upstream: ese upstream heredado es incorrecto y debe anularse de inmediato en el worktree de la tarea (paso obligatorio):
+
+```bash
+git branch --unset-upstream <branch-name>
+git status --short --branch
+```
+
+Verificar obligatoriamente:
+
+* `git rev-parse HEAD` coincide con el commit esperado de `origin/develop` anotado en §2;
+* la rama no tiene upstream (`git status` no muestra `...` y `git rev-parse --abbrev-ref --symbolic-full-name '@{upstream}'` falla);
+* la rama remota `origin/<branch-name>` aún no existe (`git ls-remote --heads origin <branch-name>` vacío).
+
+Una rama de trabajo nueva sin rama remota correspondiente debe permanecer sin upstream hasta su primer push autorizado.
+
+Si la rama de trabajo ya existe (local o remota), no recrearla ni cambiarla de base automáticamente. Inspeccionar su estado (divergencia, contenido, upstream) y aplicar el procedimiento seguro correspondiente (§6, §8, §9) antes de modificar archivos.
+
 ---
 
 ## 5. Worktree Safety
@@ -199,20 +218,26 @@ No asumir que `develop` está disponible para checkout en cualquier worktree.
 
 ## 6. Branch and Upstream Verification
 
-En el worktree de la tarea:
+En el worktree de la tarea (verificación obligatoria después de crear o seleccionar una rama de trabajo):
 
 ```bash
 git branch --show-current
 git status --short --branch
 git branch -vv
+git ls-remote --heads origin <branch-name>
 ```
 
 La rama debe cumplir:
 
 ```text
 branch actual = branch de la tarea
-upstream = origin/<mismo branch>
+upstream = origin/<mismo branch> (solo cuando existe su rama remota)
 ```
+
+Estados válidos, sin excepción:
+
+* sin upstream y sin rama remota (rama nueva, antes de su primer push autorizado);
+* upstream = `origin/<mismo branch>` con rama remota existente y verificada.
 
 Ejemplo:
 
@@ -226,7 +251,7 @@ feature/RGW-300-nueva-seccion...origin/feature/RGW-300-nueva-seccion
 
 ## 7. First Push
 
-Después del primer commit:
+Antes del primer push, verificar expresamente el destino (§13): rama local, `origin/<branch-name>` como único destino válido y commits a publicar (`git ls-remote --heads origin <branch-name>` debe estar vacío). Recién entonces, después del primer commit:
 
 ```bash
 git push -u origin <branch-name>
@@ -279,8 +304,7 @@ Si una rama de tarea muestra:
 ...origin/develop
 ```
 
-como upstream, verificar el estado (§1) y comprobar si existe el
-branch remoto correcto:
+como upstream, detenerse antes de comenzar el trabajo. Inspeccionar el estado y determinar cómo corregirlo de forma segura, sin publicar cambios ni alterar trabajo existente. No cambiar configuraciones automáticamente cuando exista riesgo de pérdida o publicación indebida: solo corregir cuando haya cero riesgo (árbol limpio, sin divergencias, rama remota correspondiente inexistente o verificada como esperada) y únicamente si el push correctivo está autorizado.
 
 ```bash
 git ls-remote --heads origin <branch-name>
@@ -311,7 +335,7 @@ git fetch
       ↓
 crear branch + worktree
       ↓
-verificar branch + upstream
+verificar branch + anular upstream heredado + re-verificar sin upstream (§4, §6)
       ↓
 implementar tarea
       ↓
@@ -395,7 +419,25 @@ salvo instrucción explícita.
 
 ## 13. Push
 
-Después de crear el commit:
+Antes de cada push, verificar expresamente el destino real (paso obligatorio, en cada push):
+
+```bash
+git branch --show-current
+git status --short --branch
+git log --oneline origin/<branch-name>..HEAD
+```
+
+El rango `origin/<branch-name>..HEAD` muestra exactamente los commits que se publicarían (en el primer push la rama remota aún no existe: verificar con `git ls-remote --heads origin <branch-name>` vacío más `git log --oneline -n 5` local).
+
+Reglas obligatorias:
+
+* el upstream apunta a `origin/<mismo branch>`, nunca a `origin/develop`;
+* el destino es exclusivamente la rama remota de trabajo autorizada;
+* un upstream correcto no garantiza por sí solo el destino: la verificación del destino es obligatoria aunque el upstream parezca correcto;
+* prohibido `git push` sin argumentos con upstream no verificado;
+* prohibido publicar en `origin/develop` por vía implícita o explícita.
+
+Después de crear el commit y solo con destino verificado:
 
 ```bash
 git push
@@ -448,6 +490,7 @@ git reset --hard
 git clean -fd
 git push --force
 git push --force-with-lease
+git push origin develop
 git branch -D
 git worktree remove
 git worktree prune
@@ -564,7 +607,7 @@ Antes de finalizar:
 * [ ] Existe un branch propio para la tarea.
 * [ ] El branch se originó desde `origin/develop`.
 * [ ] El branch actual es el correcto.
-* [ ] El upstream apunta al branch remoto correspondiente.
+* [ ] El upstream fue verificado: sin upstream heredado antes del primer push autorizado; propio (`origin/<mismo branch>`) después; verificado de nuevo antes de cada push.
 * [ ] El diff fue revisado.
 * [ ] La validación correspondiente fue ejecutada.
 * [ ] Existe un commit de la tarea.
