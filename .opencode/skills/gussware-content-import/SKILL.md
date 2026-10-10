@@ -13,31 +13,13 @@ Import the 6 services defined in an Obsidian Markdown source document into the e
 - Destination: existing WordPress via REST API.
 - Scope: CPT `service` only, plus its ACF group and Polylang relations.
 - Idempotent: re-running must not create duplicates.
+- Incorporated common core: `gussware-import-core` v1.0 (see Domain File below). This file is self-contained: use it with a single skill load, without loading another skill or reading additional files for the operative instructions.
 
 Do not perform cleanup, refactors, config changes, or unrelated code changes.
 
-## Integration
+## Ficha del dominio — Servicios
 
-Use WordPress REST API as the primary mechanism:
-
-```text
-/wp-json/wp/v2/services
-/wp-json/wp/v2/service-categories
-/wp-json/pll/v1/languages
-```
-
-Use MCP only if a WordPress MCP is already configured and exposes the required operations. Do not assume an MCP exists. Do not create one.
-
-Before writes, inspect schema if needed:
-
-```http
-OPTIONS /wp-json/wp/v2/services
-OPTIONS /wp-json/wp/v2/services/{id}
-```
-
-Use authenticated requests. Follow the installed schema; do not assume undocumented shapes.
-
-## WordPress Model
+Concrete values for this adapter. The incorporated common blocks below refer to this file.
 
 ```text
 post_type: service
@@ -54,19 +36,62 @@ show_in_rest: true, exposed as `acf` object
 
 All fields in this group use `translations: ignore`. ES and EN must receive explicit independent payloads. Never rely on automatic sync.
 
+```text
+Primary language: es (source frontmatter `es-MX` maps to `es`)
+Secondary language: en (source frontmatter `English` maps to `en`)
+Logical items: 6 services (see Source Structure)
+Inspected fields: id, slug, title, lang, translations, service-categories, acf
+Estados: publish,draft (los listados excluyen borradores por defecto; consultar ambos estados para no tratar un borrador existente como inexistente)
+```
+
+```text
+Endpoints:
+GET /wp-json/wp/v2/services?lang=es&per_page=100&status=publish,draft
+GET /wp-json/wp/v2/services?lang=en&per_page=100&status=publish,draft
+GET /wp-json/wp/v2/service-categories?per_page=100
+GET /wp-json/pll/v1/languages
+OPTIONS /wp-json/wp/v2/services
+OPTIONS /wp-json/wp/v2/services/{id}
+POST /wp-json/wp/v2/services
+POST /wp-json/wp/v2/services/{id}
+```
+
+## Integration
+
+<!-- BLOQUE-NUCLEO v1.0 INICIO: integration -->
+
+Use WordPress REST API as the primary mechanism with the endpoints listed in the adapter's Domain File (content listing per language, taxonomy terms, languages).
+
+Use MCP only if a WordPress MCP is already configured and exposes the required operations. Do not assume an MCP exists. Do not create one.
+
+Before writes, inspect schema if needed:
+
+```http
+OPTIONS {item endpoint from the Domain File}
+OPTIONS {single-item endpoint from the Domain File}
+```
+
+Use authenticated requests. Follow the installed schema; do not assume undocumented shapes.
+
+<!-- BLOQUE-NUCLEO v1.0 FIN: integration -->
+
 ## Languages
 
-Support exactly `es` and `en`.
+<!-- BLOQUE-NUCLEO v1.0 INICIO: languages -->
 
-Source frontmatter uses `es-MX` + English. Map `es-MX → es`, `English → en` unless WordPress reports different codes.
+Support exactly the language codes listed in the adapter's Domain File.
+
+Map source frontmatter language labels to those codes per the Domain File, unless WordPress reports different codes.
 
 Before import:
 
 ```http
-GET /wp-json/pll/v1/languages
+GET {languages endpoint from the Domain File}
 ```
 
-Verify `es` and `en` exist. Do not create or modify languages, ACF config, Polylang config, or CPT definition.
+Verify the configured codes exist. Do not create or modify languages, ACF config, Polylang config, or CPT definition.
+
+<!-- BLOQUE-NUCLEO v1.0 FIN: languages -->
 
 ## Source Structure
 
@@ -104,14 +129,16 @@ Do not treat every Markdown heading as a WP field. Map semantically per tables b
 
 ## Existing Detection
 
-Before creating anything:
+<!-- BLOQUE-NUCLEO v1.0 INICIO: detection -->
+
+Before creating anything, query the primary- and secondary-language listing endpoints from the Domain File:
 
 ```http
-GET /wp-json/wp/v2/services?lang=es&per_page=100
-GET /wp-json/wp/v2/services?lang=en&per_page=100
+GET {listing endpoint, primary language}
+GET {listing endpoint, secondary language}
 ```
 
-Inspect `id, slug, title, lang, translations, service_category, acf`.
+Inspect `id, slug, title, lang, translations` plus the taxonomy field and `acf` named in the Domain File.
 
 Match in this order:
 
@@ -119,51 +146,57 @@ Match in this order:
 2. Exact normalized WP `slug`.
 3. Exact normalized `title` within same `lang`.
 
-Normalization: trim, case-insensitive, collapse repeated whitespace. No fuzzy matching for auto-merge. If ambiguous, stop for that service and report `AMBIGUOUS`.
+Normalization: trim, case-insensitive, collapse repeated whitespace. No fuzzy matching for auto-merge. If ambiguous, stop for that item and report `AMBIGUOUS`.
 
-Also query categories first:
+Also query taxonomy terms first:
 
 ```http
-GET /wp-json/wp/v2/service-categories?per_page=100
+GET {taxonomy endpoint from the Domain File}
 ```
+
+<!-- BLOQUE-NUCLEO v1.0 FIN: detection -->
 
 ## Create ES and EN
 
-For each logical service:
+<!-- BLOQUE-NUCLEO v1.0 INICIO: create-link -->
 
-1. Find ES post, find EN post per matching above.
+For each logical item:
+
+1. Find primary-language post, find secondary-language post per matching above.
 2. Create only missing side. Reuse existing post and ID.
 3. Never create a second translation if link already exists.
-4. Populate ES ACF independently to ES post.
-5. Populate EN ACF independently to EN post.
+4. Populate primary-language ACF independently to primary post.
+5. Populate secondary-language ACF independently to secondary post.
 6. Assign `lang` explicitly on create/update.
 7. Link translations via Polylang, then verify both directions.
 
 New post:
 
 ```http
-POST /wp-json/wp/v2/services
+POST {collection endpoint from the Domain File}
 ```
 
 Update ACF via same resource:
 
 ```http
-POST /wp-json/wp/v2/services/{id}
+POST {single-item endpoint from the Domain File}
 ```
 
-Link translations (follow installed schema):
+Link translations (follow installed schema; language codes from the Domain File):
 
 ```text
-Spanish: lang=es + translations[en]=EN_ID
-English: lang=en + translations[es]=ES_ID
+Primary: lang=[A] + translations[[B]]=[B]_ID
+Secondary: lang=[B] + translations[[A]]=[A]_ID
 ```
 
 Verify afterwards:
 
 ```text
-ES: lang=es, translations.en=EN_ID
-EN: lang=en, translations.es=ES_ID
+[A]: lang=[A], translations.[B]=[B]_ID
+[B]: lang=[B], translations.[A]=[A]_ID
 ```
+
+<!-- BLOQUE-NUCLEO v1.0 FIN: create-link -->
 
 ## Post Field Mapping
 
@@ -172,7 +205,7 @@ EN: lang=en, translations.es=ES_ID
 | Información principal → Título de WordPress / Main Information → WordPress Title | `title` |
 | Extracto | `excerpt` |
 | Contenido | `content` |
-| service_category from `## Identificación` if present | `service_category` term IDs |
+| service_category from `## Identificación` if present | `service-categories` term IDs (clave REST; taxonomía interna `service_category`) |
 
 Preserve editorial meaning when converting Markdown to WP content. Do not put structural ACF data into `post_content`.
 
@@ -207,6 +240,8 @@ Rules: preserve order; do not invent features, URLs, technologies, categories, t
 
 ## Categories
 
+<!-- BLOQUE-NUCLEO v1.0 INICIO: categories -->
+
 1. Match by normalized name within same language.
 2. Reuse existing term.
 3. Create only if explicitly in source and missing.
@@ -214,9 +249,13 @@ Rules: preserve order; do not invent features, URLs, technologies, categories, t
 
 Do not invent or duplicate categories.
 
+<!-- BLOQUE-NUCLEO v1.0 FIN: categories -->
+
 ## Status Values
 
-Report per service:
+<!-- BLOQUE-NUCLEO v1.0 INICIO: status -->
+
+Report per logical item:
 
 ```text
 CREATED: post(s) newly created
@@ -226,6 +265,8 @@ SKIPPED: intentionally not touched (reason required)
 AMBIGUOUS: identity unclear, stopped to avoid duplicate
 ERROR: operation failed, include detail
 ```
+
+<!-- BLOQUE-NUCLEO v1.0 FIN: status -->
 
 ## Validation
 
@@ -239,11 +280,15 @@ After all 6:
 
 ## Failure Rules
 
-Stop instead of guessing when: auth fails; `services` endpoint missing; `acf` object unavailable; `es`/`en` not configured; ambiguous match; inconsistent translation relation; required ACF field unwritable; schema mismatch.
+<!-- BLOQUE-NUCLEO v1.0 INICIO: failure -->
+
+Stop instead of guessing when: auth fails; the domain endpoints are missing (see Domain File); `acf` object unavailable; the configured languages are not present; ambiguous match; inconsistent translation relation; required ACF field unwritable; schema mismatch.
 
 Never fix by: duplicating posts, deleting posts, changing Polylang/ACF/plugin/CPT config, inventing content.
 
-Report exact problem + affected service.
+Report exact problem + affected item.
+
+<!-- BLOQUE-NUCLEO v1.0 FIN: failure -->
 
 ## Final Report Template
 
