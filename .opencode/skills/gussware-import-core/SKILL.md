@@ -166,3 +166,24 @@ Never fix by: duplicating posts, deleting posts, changing Polylang/ACF/plugin/CP
 Report exact problem + affected item.
 
 <!-- BLOQUE-NUCLEO v1.0 FIN: failure -->
+
+## Normalization
+
+<!-- BLOQUE-NUCLEO v1.0 INICIO: normalization -->
+
+Compare and resolve names with normalized equality. Normalization `norm(s)`:
+
+1. Require text input; empty or whitespace-only values never match anything.
+2. Apply Unicode NFC canonical composition (composed sequences equal their decomposed equivalents).
+3. Trim leading/trailing whitespace; collapse every interior run of whitespace (spaces, tabs, newlines, non-breaking spaces) to one ASCII space.
+4. Compare case-insensitively (Unicode casefold): `Php` equals `PHP`; `"  MySQL "` equals `"mysql"`.
+5. Never strip accents or diacritics: `papa` does not equal `papá`. Accent differences never auto-merge; multiple conflicting candidates stop as `AMBIGUOUS`.
+
+Resolution (always within one language, never across languages):
+
+1. An explicit stable anchor from the source (slug or WP ID) matches exactly first. An anchor pointing at different entities, or a slug collision between different entities, stops the item (`SLUG_COLLISION` / `AMBIGUOUS`) — never reuse across entities.
+2. Otherwise match by `norm(name)` equality within the same language: zero matches follow the create path; exactly one is reused (report its id); two or more stop as `AMBIGUOUS` — never pick one.
+3. Derive slugs with the platform rule (lowercase, accent-transliterated, words joined by `-`); empty slugs never match. If the derived slug already belongs to a different term or post, stop (`SLUG_COLLISION`) instead of reusing it or silently accepting a suffixed variant; record the final slug of everything created.
+4. Pre-flight indexes plus an intra-source duplicate scan make retries converge: a second run resolves to the same records (`REUSED` / `EXISTING`) and creates nothing new.
+
+<!-- BLOQUE-NUCLEO v1.0 FIN: normalization -->

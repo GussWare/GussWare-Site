@@ -143,7 +143,7 @@ GET {taxonomy endpoint from the Domain File}
 
 <!-- BLOQUE-NUCLEO v1.0 FIN: detection -->
 
-`project_code` is the logical primary key (decided: RGW-319 comments 10242/10243; the earlier "pending" state is closed). Identity and creation follow Project Code Resolution below. Safety tiebreaker: if a translations/slug/title match points to an item whose stored `project_code` differs non-empty from the resolved code, stop that item as `AMBIGUOUS` instead of updating — never overwrite a different project.
+`project_code` is the logical primary key (decided: RGW-319 comments 10242/10243; the earlier "pending" state is closed). Identity and creation follow Project Code Resolution below. Safety tiebreaker: if a translations/slug/title match points to an item whose stored `project_code` differs non-empty from the resolved code, stop that item as `AMBIGUOUS` instead of updating — never overwrite a different project. Every name comparison here uses Normalization below (`norm`, same language, anchors first).
 
 ## Project Code Resolution
 
@@ -248,7 +248,7 @@ Use exact keys. Never rename keys.
 Rules: preserve order; do not invent values, URLs, technologies, terms, translations, or subfield names. Subfield names marked as 2º-cycle references must be confirmed against the live group before writing. If the source has no value for an optional field, leave absent/empty per existing field behavior.
 
 Complex-field constraints (documented limits, not procedures):
-- `client_company`: resolve by exact native title within the item's language (optional WP-ID anchor from Import Notes wins when given); write order matters — the company must be resolved before the project is persisted. Unique match → reuse. Zero matches → create automatically from the source title (title-only is complete under the current client model: group `Cliente / Empresa - CPT` holds no fields yet, RGW-315 "basta el título por ahora"); use the same title for the EN counterpart when the CPT is Polylang-enabled, otherwise create once in the default language and relate from both sides by ID. Never invent other company data. Multiple exact matches → stop as `AMBIGUOUS`; missing/empty title in source → stop as `COMPANY_UNRESOLVED` (nothing to create from). The stop affects only that item: other projects continue.
+- `client_company`: resolve by normalized native title (`norm`, per Normalization) within the item's language (optional WP-ID anchor from Import Notes wins when given); write order matters — the company must be resolved before the project is persisted. Unique match → reuse. Zero matches → create automatically from the source title (title-only is complete under the current client model: group `Cliente / Empresa - CPT` holds no fields yet, RGW-315 "basta el título por ahora"); use the same title for the EN counterpart when the CPT is Polylang-enabled, otherwise create once in the default language and relate from both sides by ID. Never invent other company data. Multiple exact matches → stop as `AMBIGUOUS`; missing/empty title in source → stop as `COMPANY_UNRESOLVED` (nothing to create from). The stop affects only that item: other projects continue.
 - `additional_images`: gallery payloads need uploaded attachment IDs; the media-upload playbook is unproven in this project — blocked until proven.
 - `project_code`: resolved per Project Code Resolution above (never `PROJECT_CODE_MISSING` by default; stops are `PROJECT_CODE_CONFLICT` / `PROJECT_CODE_MISSING` only when no unequivocal code is derivable).
 
@@ -265,7 +265,7 @@ Do not invent or duplicate categories.
 
 <!-- BLOQUE-NUCLEO v1.0 FIN: categories -->
 
-Applies independently to `projects_type`, `technology` (`technologies` endpoint) and `industry_sector` (`industries_sector` endpoint). Term translations follow the pre-flight Polylang configuration.
+Applies independently to `projects_type`, `technology` (`technologies` endpoint) and `industry_sector` (`industries_sector` endpoint). Term translations follow the pre-flight Polylang configuration. Term lookup order and matching follow Normalization below (slug anchor, then `norm(name)`).
 
 ## Dependency Order (anti-orphan)
 
@@ -317,6 +317,27 @@ Never fix by: duplicating posts, deleting posts, changing Polylang/ACF/plugin/CP
 Report exact problem + affected item.
 
 <!-- BLOQUE-NUCLEO v1.0 FIN: failure -->
+
+## Normalization
+
+<!-- BLOQUE-NUCLEO v1.0 INICIO: normalization -->
+
+Compare and resolve names with normalized equality. Normalization `norm(s)`:
+
+1. Require text input; empty or whitespace-only values never match anything.
+2. Apply Unicode NFC canonical composition (composed sequences equal their decomposed equivalents).
+3. Trim leading/trailing whitespace; collapse every interior run of whitespace (spaces, tabs, newlines, non-breaking spaces) to one ASCII space.
+4. Compare case-insensitively (Unicode casefold): `Php` equals `PHP`; `"  MySQL "` equals `"mysql"`.
+5. Never strip accents or diacritics: `papa` does not equal `papá`. Accent differences never auto-merge; multiple conflicting candidates stop as `AMBIGUOUS`.
+
+Resolution (always within one language, never across languages):
+
+1. An explicit stable anchor from the source (slug or WP ID) matches exactly first. An anchor pointing at different entities, or a slug collision between different entities, stops the item (`SLUG_COLLISION` / `AMBIGUOUS`) — never reuse across entities.
+2. Otherwise match by `norm(name)` equality within the same language: zero matches follow the create path; exactly one is reused (report its id); two or more stop as `AMBIGUOUS` — never pick one.
+3. Derive slugs with the platform rule (lowercase, accent-transliterated, words joined by `-`); empty slugs never match. If the derived slug already belongs to a different term or post, stop (`SLUG_COLLISION`) instead of reusing it or silently accepting a suffixed variant; record the final slug of everything created.
+4. Pre-flight indexes plus an intra-source duplicate scan make retries converge: a second run resolves to the same records (`REUSED` / `EXISTING`) and creates nothing new.
+
+<!-- BLOQUE-NUCLEO v1.0 FIN: normalization -->
 
 Project-specific stops: missing source specification; unresolvable `project_code` (underivable or colliding); ambiguous or uncreatable `client_company` (multiple matches, or no title to create from); ambiguous terms; gallery without uploaded attachment IDs.
 
