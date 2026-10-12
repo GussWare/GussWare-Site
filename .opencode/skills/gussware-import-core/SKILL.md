@@ -1,6 +1,6 @@
 ---
 name: gussware-import-core
-description: Shared WordPress content-import protocol (REST transport, auth, pre-flight, existing detection and idempotency, Polylang translation linking, failure rules, status values). Single hand-edited source of the common instructions; domain adapters incorporate it at authoring time. Do not execute directly: load the domain adapter (e.g. gussware-content-import) to run an import.
+description: Shared WordPress content-import protocol (REST transport, auth, pre-flight, existing detection and idempotency, Polylang translation linking, failure rules, status values). Single hand-edited source of the common instructions; domain adapters incorporate it at authoring time. Do not execute directly: load the domain adapter (e.g. gussware-services-import) to run an import.
 ---
 
 # GussWare Import Core
