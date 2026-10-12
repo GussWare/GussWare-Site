@@ -52,10 +52,12 @@ def slugify(s):
     return s
 
 
-def resolve(terms, source_name, anchor_slug=None):
+def resolve(terms, source_name, anchor_slug=None, query_lang=None):
     """Mirror of the block's Resolution within one language.
 
-    terms: [{id, name, slug}]. Returns (decision, payload).
+    terms: [{id, name, slug, lang?}]. lang None = legacy record with no
+    assigned language: participates as a candidate in every language,
+    without being treated as a translation. Returns (decision, payload).
     Decisions: reuse | create | ambiguous | slug_collision | invalid.
     """
     if anchor_slug:
@@ -66,7 +68,8 @@ def resolve(terms, source_name, anchor_slug=None):
     key = norm(source_name)
     if key is None:
         return ("invalid", None)
-    hits = [t for t in terms if norm(t["name"]) == key]
+    candidates = [t for t in terms if t.get("lang", query_lang) in (query_lang, None)]
+    hits = [t for t in candidates if norm(t["name"]) == key]
     if len(hits) == 1:
         return ("reuse", hits[0]["id"])
     if len(hits) > 1:
@@ -205,6 +208,43 @@ def main():
     check("block_sets", set(core) == set(svc) == set(prj) == expected)
     for name in sorted(expected):
         check(f"block_{name}_identical", core[name] == svc[name] == prj[name])
+    check(
+        "normalization_covers_legacy",
+        all("lang: false" in b["normalization"] for b in (core, svc, prj)),
+    )
+
+    # 11. Legacy records with no assigned language (live case: Php id 34).
+    LEGACY_TECH = [
+        {"id": 34, "name": "Php", "slug": "php", "lang": None},
+        {"id": 66, "name": "MySQL", "slug": "mysql", "lang": "es"},
+    ]
+    check(
+        "legacy_php_reused",
+        resolve(LEGACY_TECH, "PHP", query_lang="es") == ("reuse", 34),
+    )
+    check(
+        "legacy_plus_lang_ambiguous",
+        resolve(
+            LEGACY_TECH + [{"id": 90, "name": "PHP", "slug": "php-2", "lang": "es"}],
+            "PHP",
+            query_lang="es",
+        )
+        == ("ambiguous", [34, 90]),
+    )
+    check(
+        "legacy_no_match_not_reused",
+        resolve(LEGACY_TECH, "PostgreSQL", query_lang="es")
+        == ("create", "postgresql"),
+    )
+    check(
+        "legacy_other_lang_excluded",
+        resolve(
+            LEGACY_TECH + [{"id": 91, "name": "MySQL", "slug": "mysql-en", "lang": "en"}],
+            "mysql",
+            query_lang="es",
+        )
+        == ("reuse", 66),
+    )
 
     print(f"\n{len(PASS)} passed, {len(FAIL)} failed")
     return 1 if FAIL else 0

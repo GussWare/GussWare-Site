@@ -182,7 +182,7 @@ Compare and resolve names with normalized equality. Normalization `norm(s)`:
 Resolution (always within one language, never across languages):
 
 1. An explicit stable anchor from the source (slug or WP ID) matches exactly first. An anchor pointing at different entities, or a slug collision between different entities, stops the item (`SLUG_COLLISION` / `AMBIGUOUS`) — never reuse across entities.
-2. Otherwise match by `norm(name)` equality within the same language: zero matches follow the create path; exactly one is reused (report its id); two or more stop as `AMBIGUOUS` — never pick one.
+2. Otherwise match by `norm(name)` equality among records in the requested language, including legacy records with no assigned language (`lang: false`), which participate as candidates in every language: zero matches follow the create path; exactly one is reused (report its id, preserving it); two or more stop as `AMBIGUOUS` — never pick one. A legacy record is never confused with an existing translation nor assigned a language automatically. Query terms so that unassigned records stay visible (unfiltered listing, or per-language plus unassigned).
 3. Derive slugs with the platform rule (lowercase, accent-transliterated, words joined by `-`); empty slugs never match. If the derived slug already belongs to a different term or post, stop (`SLUG_COLLISION`) instead of reusing it or silently accepting a suffixed variant; record the final slug of everything created.
 4. Pre-flight indexes plus an intra-source duplicate scan make retries converge: a second run resolves to the same records (`REUSED` / `EXISTING`) and creates nothing new.
 
