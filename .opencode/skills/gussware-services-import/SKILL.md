@@ -1,5 +1,5 @@
 ---
-name: gussware-content-import
+name: gussware-services-import
 description: Imports the 6 GussWare services from an Obsidian Markdown document into the WordPress service CPT via REST API, with Service Detail ACF fields, service_category taxonomy, and Polylang es/en translations. Use when importing services, creating service translations, or syncing Markdown service content to WordPress.
 ---
 
