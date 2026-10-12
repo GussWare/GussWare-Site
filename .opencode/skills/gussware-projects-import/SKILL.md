@@ -108,11 +108,11 @@ The source is a document following `TEMPLATE.md` in this skill directory.
 
 Item boundaries: each `## Proyecto: [Nombre]` under `# Proyectos` is one logical project. All other headings are content hierarchy mapped per the tables below.
 
-Per-language sections: `# 🇲🇽 Español` and `# 🇺🇸 English` represent the same project (same order, same slots). `# Import Notes` carries import-specific data (exact taxonomy terms, existing `client_company` title, verified featured-image ID, translation notes). `# End of Project` closes the item.
+Per-language sections: `# 🇲🇽 Español` and `# 🇺🇸 English` represent the same project (same order, same slots). `# Import Notes` carries import-specific data (exact taxonomy terms, `client_company` title — reused when unique, created when missing — verified featured-image ID, translation notes). `# End of Project` closes the item.
 
 Template sections map 1:1 to Post/ACF Mapping rows below (Identificación → native fields + `project_code`; Descripción → `description`/`short_description`/`executive_summary`; Contexto → `context_objective`/`problem_need`/`implemented_solution`; Funcionalidades/Responsabilidades/Resultados/Métricas → repeaters in order; Enlaces → URL fields).
 
-If the source deviates (missing required `project_code`, reordered/renamed sections, ES/EN mismatch), stop for that item before any write and report `TEMPLATE_MISMATCH`. Do not map ad-hoc documents.
+If the source deviates (reordered/renamed sections, ES/EN mismatch), stop for that item before any write and report `TEMPLATE_MISMATCH`. Do not map ad-hoc documents. A missing `project_code` is not a mismatch: it triggers Project Code Resolution below.
 
 ## Existing Detection
 
@@ -143,7 +143,17 @@ GET {taxonomy endpoint from the Domain File}
 
 <!-- BLOQUE-NUCLEO v1.0 FIN: detection -->
 
-Natural key candidate (pending source-spec decision): `project_code` (required by RGW-315 closure). Until decided, match per the order above; never auto-merge on `project_code` alone without an approved rule. Safety tiebreaker without uniqueness claim: if a translations/slug/title match points to an item whose stored `project_code` differs from the source value, stop that item as `AMBIGUOUS` instead of updating — never overwrite a different project.
+`project_code` is the logical primary key (decided: RGW-319 comments 10242/10243; the earlier "pending" state is closed). Identity and creation follow Project Code Resolution below. Safety tiebreaker: if a translations/slug/title match points to an item whose stored `project_code` differs non-empty from the resolved code, stop that item as `AMBIGUOUS` instead of updating — never overwrite a different project.
+
+## Project Code Resolution
+
+Binding rules (RGW-319 comments 10242/10243; the 10243 correction supersedes any numeric-suffix example). The WordPress ID stays the technical record identifier; `project_code` is the business logical key, shared verbatim by the ES and EN translations.
+
+1. Source provides `project_code` → look it up in the live pre-flight index (`acf.project_code`, normalized: trim, case-insensitive). Exactly one logical project → update it. Zero matches → create by code, but only after validating no conflict (steps 4–5). Never fall back to title/slug matching when a code was provided.
+2. Source omits `project_code` → search by exact normalized `slug` for safe reuse. Found and codeless → assign it the corresponding project code automatically and report `CODE_ASSIGNED`.
+3. Slug search finds nothing → derive a stable project code from the project or its Jira project key (e.g. `RGW` for Rediseño de GussWare Site), without consecutives that mimic card keys. The candidate must be unique against the live index and stable across future updates.
+4. Before assigning or saving any code, verify it is unused by another project. If code or slug lookup returns multiple matches, stop that item and report `PROJECT_CODE_CONFLICT`; never pick one arbitrarily.
+5. If no unequivocal code can be derived, or a collision exists, stop that item and report the conflict instead of silently inventing a variant. An empty code with no derivable candidate is reported as `PROJECT_CODE_MISSING`.
 
 ## Create ES and EN
 
@@ -205,7 +215,7 @@ Full/short/executive descriptions live in ACF (`description`, `short_description
 
 ## ACF Mapping
 
-Model: RGW-315 dictionary + closure. Provenance per row in brackets. Live key confirmation is PENDING (no items exist to read); confirm exact keys against the live group before any write.
+Model: RGW-315 dictionary + closure. Provenance per row in brackets. Live keys CONFIRMED against group `group_6ab87ad1eb78e` (`Proyectos - CPT`, 26 fields, verified 2026-10-12): every name, type, required flag and repeater subfield below matches the live group. Re-confirm at pre-flight if the group changed.
 
 Use exact keys. Never rename keys.
 
@@ -238,9 +248,9 @@ Use exact keys. Never rename keys.
 Rules: preserve order; do not invent values, URLs, technologies, terms, translations, or subfield names. Subfield names marked as 2º-cycle references must be confirmed against the live group before writing. If the source has no value for an optional field, leave absent/empty per existing field behavior.
 
 Complex-field constraints (documented limits, not procedures):
-- `client_company`: the related `client_company` post must exist first (resolve by exact native title within the item's language); write order matters. No auto-creation of companies. Zero exact matches → stop that item (`COMPANY_UNRESOLVED`); multiple exact matches → stop as `AMBIGUOUS`; never pick one. The stop affects only that item: other projects continue.
+- `client_company`: resolve by exact native title within the item's language (optional WP-ID anchor from Import Notes wins when given); write order matters — the company must be resolved before the project is persisted. Unique match → reuse. Zero matches → create automatically from the source title (title-only is complete under the current client model: group `Cliente / Empresa - CPT` holds no fields yet, RGW-315 "basta el título por ahora"); use the same title for the EN counterpart when the CPT is Polylang-enabled, otherwise create once in the default language and relate from both sides by ID. Never invent other company data. Multiple exact matches → stop as `AMBIGUOUS`; missing/empty title in source → stop as `COMPANY_UNRESOLVED` (nothing to create from). The stop affects only that item: other projects continue.
 - `additional_images`: gallery payloads need uploaded attachment IDs; the media-upload playbook is unproven in this project — blocked until proven.
-- Required `project_code`: stop if missing (`PROJECT_CODE_MISSING`).
+- `project_code`: resolved per Project Code Resolution above (never `PROJECT_CODE_MISSING` by default; stops are `PROJECT_CODE_CONFLICT` / `PROJECT_CODE_MISSING` only when no unequivocal code is derivable).
 
 ## Categories
 
@@ -256,6 +266,10 @@ Do not invent or duplicate categories.
 <!-- BLOQUE-NUCLEO v1.0 FIN: categories -->
 
 Applies independently to `projects_type`, `technology` (`technologies` endpoint) and `industry_sector` (`industries_sector` endpoint). Term translations follow the pre-flight Polylang configuration.
+
+## Dependency Order (anti-orphan)
+
+Resolve and validate everything before persisting the project, in this order: (1) validate source; (2) environment pre-flight; (3) project-code resolution (read-only gate — identity conflicts stop here, before any write); (4) resolve/create terms per language, linking ES/EN term translations when both sides are known (`TERM_TRANSLATION_PENDING` otherwise); (5) resolve/create the company; (6) gate: all dependencies resolved, else stop the item; (7) persist the project (update-if-one / create-if-zero by code); (8) assign resolved terms and relationships; (9) re-verify via GET. Terms/companies are created only after the read-only gates pass, so conflicts never leave orphans; if persistence itself fails afterwards, created dependencies are reported as `CREATED` and retries reuse them by name (convergent, never duplicated). Per-dependency report codes: `TERM_REUSED`, `TERM_CREATED`, `COMPANY_REUSED`, `COMPANY_CREATED`.
 
 ## Status Values
 
@@ -274,7 +288,7 @@ ERROR: operation failed, include detail
 
 <!-- BLOQUE-NUCLEO v1.0 FIN: status -->
 
-Additional stop codes for this adapter: `TEMPLATE_MISMATCH`, `PROJECT_CODE_MISSING`, `COMPANY_UNRESOLVED`.
+Additional stop codes for this adapter: `TEMPLATE_MISMATCH`, `PROJECT_CODE_CONFLICT`, `PROJECT_CODE_MISSING` (no unequivocal code derivable), `TERM_AMBIGUOUS`, `COMPANY_AMBIGUOUS`, `COMPANY_UNRESOLVED` (no company title in source to create from). Report flag (not a stop): `CODE_ASSIGNED`.
 
 ## Validation
 
@@ -284,11 +298,11 @@ After all items:
 - [ ] Every logical project exists (ES + EN each, unless source has single language).
 - [ ] `ES lang=es`, `EN lang=en`.
 - [ ] `ES translations.en=EN_ID`, `EN translations.es=ES_ID`.
-- [ ] `project_code` present on every item.
+- [ ] `project_code` present on every item (from source, or assigned per Project Code Resolution — flagged `CODE_ASSIGNED`).
 - [ ] ACF `status` válido (`in_development` / `completed`) en cada ítem.
-- [ ] `technology` terms assigned (required); no terms invented.
-- [ ] `client_company` resolves to an existing `client_company` post in both languages.
-- [ ] `acf` contains the expected keys for both languages per the ACF Mapping above (exact live keys pending confirmation).
+- [ ] `technology` terms assigned (required); each term `REUSED` (id reported) or `CREATED` then reused on retry; equivalents never duplicated by case differences.
+- [ ] `client_company` reused (unique title match) or created from the source title, related from both languages; ambiguous or title-less cases stopped with code.
+- [ ] `acf` contains the expected keys for both languages per the ACF Mapping above (live keys confirmed 2026-10-12 against `group_6ab87ad1eb78e`; re-confirm if the group changed).
 - [ ] Taxonomies assigned from the three project taxonomies; no terms invented.
 - [ ] Same payloads retrievable via Astro-consumed REST: `title, slug, status, featured_media, lang, translations, acf` independently per language (no `content`/`excerpt` on this CPT).
 
@@ -304,7 +318,7 @@ Report exact problem + affected item.
 
 <!-- BLOQUE-NUCLEO v1.0 FIN: failure -->
 
-Project-specific stops: missing source specification; missing `project_code`; unresolvable `client_company`; gallery without uploaded attachment IDs; live ACF keys not yet confirmed.
+Project-specific stops: missing source specification; unresolvable `project_code` (underivable or colliding); ambiguous or uncreatable `client_company` (multiple matches, or no title to create from); ambiguous terms; gallery without uploaded attachment IDs.
 
 ## Final Report Template
 
@@ -342,4 +356,13 @@ IDs:
 Project
 ├── ES: ID
 └── EN: ID
+
+Dependencies per project (REUSED with id, or CREATED):
+Terms:
+- ...
+Company:
+- ...
+
+Codes assigned during this run (`CODE_ASSIGNED`):
+- ...
 ```
