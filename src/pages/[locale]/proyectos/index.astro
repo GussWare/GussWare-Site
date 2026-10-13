@@ -1,18 +1,25 @@
 ---
 /**
- * RGW-312 — Índice de proyectos por locale (`/en/proyectos`).
+ * RGW-322 — Índice de proyectos por locale (`/en/proyectos`).
  *
  * Réplica de `proyectos/index.astro` con el locale de la URL;
- * renderiza `ProjectListView` (compartida, sin duplicar lógica).
- * Sin integración WordPress (SPEC).
+ * renderiza `ProjectListView` (compartida, sin duplicar lógica) con el
+ * listado normalizado (`getProjectListing`). Solo publicados del idioma
+ * activo, sin mezclar traducciones.
  */
 import Layout from '../../../layouts/Layout.astro';
 import ProjectListView from '../../../components/projects/ProjectListView.astro';
+import { getProjectListing } from '../../../lib/wordpress/projects';
 import { proyectosBaseUrl } from '../../../lib/routes';
 
 export const prerender = false;
 
 const locale = Astro.params.locale ?? 'es';
+
+const data = await getProjectListing({
+  locale,
+  searchParams: Astro.url.searchParams,
+});
 
 const localeUrls = {
   es: proyectosBaseUrl('es'),
@@ -30,5 +37,5 @@ const localeUrls = {
   localeUrls={localeUrls}
   lang={locale}
 >
-  <ProjectListView locale={locale} />
+  <ProjectListView locale={locale} {...data} />
 </Layout>

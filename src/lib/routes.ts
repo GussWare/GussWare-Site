@@ -81,6 +81,49 @@ export function projectDetailUrl(locale: string, slug: string): string {
   );
 }
 
+export interface ProjectListQuery {
+  page?: number;
+  search?: string;
+  technology?: number;
+  type?: number;
+  sort?: string;
+}
+
+/**
+ * RGW-322 — URL del listado de Proyectos con sus parámetros de consulta
+ * (patrón de `blogListUrl`). Solo incluye parámetros activos.
+ */
+export function projectListUrl(
+  locale: string,
+  query: ProjectListQuery = {},
+): string {
+  const params = new URLSearchParams();
+
+  if (query.search) {
+    params.set('search', query.search);
+  }
+
+  if (query.technology) {
+    params.set('technology', String(query.technology));
+  }
+
+  if (query.type) {
+    params.set('type', String(query.type));
+  }
+
+  if (query.sort && query.sort !== 'recent') {
+    params.set('sort', query.sort);
+  }
+
+  if (query.page && query.page > 1) {
+    params.set('page', String(query.page));
+  }
+
+  const base = proyectosBaseUrl(locale);
+  const queryString = params.toString();
+  return queryString ? `${base}?${queryString}` : base;
+}
+
 function removeBlogTrailingSlash(url: string): string {
   return url.length > 1 && url.endsWith('/') ? url.slice(0, -1) : url;
 }

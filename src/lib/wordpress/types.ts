@@ -529,6 +529,8 @@ export interface WpProject {
   id: number;
   slug: string;
   status: string;
+  /** Fecha nativa de publicación (criterio «Más recientes», RGW-322). */
+  date: string;
   title: WpPostRendered;
   content?: WpPostRendered;
   excerpt?: WpPostRendered;
@@ -546,6 +548,20 @@ export interface WpTechnology {
   id: number;
   name: string;
   slug: string;
+  /**
+   * RGW-322 — Idioma Polylang del término (`false` = legado sin idioma,
+   * válido en todos los idiomas según la skill de importación).
+   */
+  lang: string | false;
+}
+
+/** Término de la taxonomía `projects_type` (`/wp/v2/projects_type`). */
+export interface WpProjectType {
+  id: number;
+  name: string;
+  slug: string;
+  /** RGW-322 — Idioma Polylang (`false` = legado sin idioma). */
+  lang: string | false;
 }
 
 /** Idioma de Polylang (`/pll/v1/languages`). */

@@ -1,17 +1,25 @@
 ---
 /**
- * RGW-312 — Índice de proyectos ES (`/proyectos`).
+ * RGW-322 — Índice de proyectos ES (`/proyectos`).
  *
- * Ruta fina de maquetación: renderiza `ProjectListView` (compartida
- * con `[locale]`, sin duplicar lógica) con el contenido estático de
- * referencia Stitch. Sin integración WordPress (SPEC). La integración
- * con el CPT Proyectos llegará con el épico RGW-325.
+ * Ruta fina: obtiene el listado normalizado (`getProjectListing`, con
+ * `searchParams` de la URL para búsqueda, filtros, orden y paginación)
+ * y lo renderiza con `ProjectListView` (compartida con `[locale]`, sin
+ * duplicar lógica). Datos reales del CPT Proyectos, solo publicados en
+ * `es`; sin resultados o ante error, la vista muestra el estado
+ * correspondiente.
  */
 import Layout from '../../layouts/Layout.astro';
 import ProjectListView from '../../components/projects/ProjectListView.astro';
+import { getProjectListing } from '../../lib/wordpress/projects';
 import { proyectosBaseUrl } from '../../lib/routes';
 
 export const prerender = false;
+
+const data = await getProjectListing({
+  locale: 'es',
+  searchParams: Astro.url.searchParams,
+});
 
 const localeUrls = {
   es: proyectosBaseUrl('es'),
@@ -25,5 +33,5 @@ const localeUrls = {
   localeUrls={localeUrls}
   lang="es"
 >
-  <ProjectListView locale="es" />
+  <ProjectListView locale="es" {...data} />
 </Layout>
