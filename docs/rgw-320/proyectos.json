@@ -74,20 +74,25 @@
               "metric_description": "Desc ficticia"
             }
           ]
+        },
+        "taxonomia_ids": {
+          "projects_type": [
+            62
+          ],
+          "technologies": [
+            71
+          ],
+          "industries_sector": [
+            64
+          ]
         }
       },
       "en": {
         "titulo": "TEST — Integration project RGW-A",
         "slug": "test-integration-project-rgw-a",
-        "tipos": [
-          "Sistemas empresariales"
-        ],
-        "tecnologias": [
-          "Php"
-        ],
-        "sectores": [
-          "Comercio"
-        ],
+        "tipos": [],
+        "tecnologias": [],
+        "sectores": [],
         "empresa": "Empresa Demo Inventario",
         "acf": {
           "additional_images": null,
@@ -222,6 +227,18 @@
               "metric_unit": "ud",
               "metric_description": "Desc ficticia"
             }
+          ]
+        },
+        "taxonomia_ids": {
+          "projects_type": [
+            62
+          ],
+          "technologies": [
+            66,
+            71
+          ],
+          "industries_sector": [
+            64
           ]
         }
       },

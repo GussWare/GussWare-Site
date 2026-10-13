@@ -29,6 +29,7 @@ Cada ítem:
 | `es.titulo` / `en.titulo` | string no vacío | ES sí; EN solo si `en` presente | Título por idioma. |
 | `es.slug` / `en.slug` | string | ES sí | Slug por idioma (los EN vivos pueden traer slug propio). |
 | `es.tipos` / `tecnologias` / `sectores` | string[] (nombres exactos) | no | Taxonomías ES (`Sistemas empresariales`, `MySQL`/`Php`, `Comercio`). Lado EN: sin términos EN vivos → no se asigna taxonomía en EN. |
+| `es.taxonomia_ids` | objeto opcional `{projects_type: int[], tecnologias: int[], sectores: int[]}` | no | Anclas de IDs verificados (mecanismo de la skill: el ancla gana al nombre). Obligatorio en la práctica para `Php`: collisiona entre legado 34 (`lang:false`) y `es` 71 → sin ancla es `TERM_AMBIGUOUS`. Cada ancla debe existir y corresponder a un nombre declarado. |
 | `es.empresa` / `en.empresa` | string o null | sí (título exacto `client_company`) | Se reutiliza si el match es único; si no existe se crea solo con título (modelo actual sin campos); ambiguo → AMBIGUOUS. |
 | `es.acf` / `en.acf` | objeto | sí | Claves ACF exactas del grupo vivo: `description`, `short_description`, `executive_summary`, `role_performed`, `start_date`/`end_date` (`AAAAMMDD`), `is_ongoing`, `is_featured`, `display_order`, `context_objective`, `problem_need`, `implemented_solution`, `status` (`in_development`/`completed`, requerido), repeaters `funcionalidades_desarrolladas[]: {feature_name, feature_description}`, `responsibilities_contributions[]: {responsibility, responsibility_description}`, `results_achievements[]: {achievement_name, achievement_description}`, `verifiable_metrics[]: {nombre_de_la_metrica, metric_value, metric_unit, metric_description}`, URLs `project_url`/`demo_url`/`repository_url`. |
 | `en` | objeto o null | no | `null` = ítem monolingüe: NO se crea la traducción (documentado). |
@@ -51,8 +52,10 @@ Cada ítem:
 5. Escritura solo por `title, slug, featured_media, projects_type,
    technologies, industries_sector, acf, lang, translations`
    (verificado en `OPTIONS`). Sin `content`/`excerpt` (inexistentes en
-   el esquema). Espejos ACF de taxonomías no se escriben: se verifican
-   en lectura posterior.
+   el esquema). Los espejos ACF de taxonomías (`project_type`,
+   `technology`, `industry_sector`) SON requeridos por el esquema vivo
+   (`rest_property_required`) y se escriben con los IDs resueltos (ES)
+   o preservados (EN).
 6. Repertibilidad: segunda ejecución → mismos registros
    (EXISTING/UPDATED), cero creados.
 
