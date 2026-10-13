@@ -21,6 +21,7 @@ Referencia de importación: `.opencode/skills/gussware-projects-import/SKILL.md`
 - El contenido en español y en inglés debe representar el mismo proyecto.
 - No agregar contenido directamente en WordPress que no exista en este documento durante una importación.
 - Los valores técnicos como IDs de WordPress, IDs de traducción o slugs serán determinados por el workflow de importación.
+- Los nombres (términos, empresas, títulos) se comparan sin distinguir mayúsculas/minúsculas ni espacios sobrantes: escribe cada nombre siempre igual y no crees variantes del mismo registro.
 
 ---
 
@@ -30,7 +31,7 @@ Referencia de importación: `.opencode/skills/gussware-projects-import/SKILL.md`
 
 ### Identificación
 
-**Clave interna:** `[código del proyecto, requerido, p. ej. PRY-2024-001]`
+**Clave interna:** `[código del proyecto, p. ej. PRY-2024-001; si se omite, se asigna según la regla aprobada en RGW-319]`
 
 **Tipo:** `[tipo de proyecto, taxonomía projects_type]`
 
@@ -416,7 +417,7 @@ Esta sección es para información específica de importación que deba conocer 
 
 **Tipos y sectores WordPress:** `[términos exactos de projects_type, industry_sector y technology]`
 
-**Cliente WordPress:** `[título exacto del post client_company; debe existir antes de importar]`
+**Cliente WordPress:** `[título exacto del post client_company; se reutiliza si es único, se crea si no existe]`
 
 **Notas sobre imágenes:** `[ID de destacada verificado; las imágenes adicionales (galería) no se importan en esta fase]`
 

@@ -21,6 +21,7 @@ Referencia de importación: `.opencode/skills/gussware-services-import/SKILL.md`
 - El contenido en español y en inglés debe representar el mismo servicio.
 - No agregar contenido directamente en WordPress que no exista en este documento durante una importación.
 - Los valores técnicos como IDs de WordPress, IDs de traducción o slugs serán determinados por el workflow de importación.
+- Los nombres (términos, títulos) se comparan sin distinguir mayúsculas/minúsculas ni espacios sobrantes: escribe cada nombre siempre igual y no crees variantes del mismo registro.
 
 ---
 
