@@ -78,6 +78,22 @@ export const wpRoutes = {
   serviceBySlug: (slug: string, lang: string) =>
     `/wp/v2/services?slug=${encodeURIComponent(slug)}&lang=${encodeURIComponent(lang)}`,
   service: (serviceId: number) => `/wp/v2/services/${serviceId}`,
+  /**
+   * RGW-321 — CPT `projects` (`rest_base: projects`, verificado en
+   * `/wp/v2/types`). Solo registros publicados del idioma activo; los
+   * borradores se excluyen por defecto.
+   */
+  projects: (lang: string) =>
+    `/wp/v2/projects?per_page=100&status=publish&lang=${encodeURIComponent(lang)}`,
+  projectBySlug: (slug: string, lang: string) =>
+    `/wp/v2/projects?slug=${encodeURIComponent(slug)}&status=publish&lang=${encodeURIComponent(lang)}`,
+  project: (projectId: number) => `/wp/v2/projects/${projectId}`,
+  /**
+   * RGW-321 — Taxonomía `technology` (`rest_base: technologies`,
+   * verificado en `/wp/v2/taxonomies`). Nombres para las capacidades
+   * del Home; sin términos inventados.
+   */
+  projectTechnologies: () => `/wp/v2/technologies?per_page=100`,
   user: (userId: number) => `/wp/v2/users/${userId}`,
   tags: (lang?: string) =>
     `/wp/v2/tags?per_page=100${lang ? `&lang=${encodeURIComponent(lang)}` : ''}`,

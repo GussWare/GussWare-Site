@@ -18,10 +18,16 @@ import Projects from '../components/home/Projects.astro';
 import Faq from '../components/home/Faq.astro';
 import FinalCta from '../components/home/FinalCta.astro';
 import type { LocaleUrls } from '../lib/routes';
-import { serviceDetailUrl } from '../lib/routes';
+import { proyectosBaseUrl, serviceDetailUrl } from '../lib/routes';
 import { getFrontPage } from '../lib/wordpress/pages';
 import { wpFetch } from '../lib/wordpress/client';
 import { wpRoutes } from '../lib/wordpress/routes';
+import {
+  buildTechnologyMap,
+  getFeaturedProjects,
+  getProjectImage,
+  getTechnologies,
+} from '../lib/wordpress/projects';
 import { stripHtml } from '../lib/wordpress/text';
 import type {
   WpMedia,
@@ -68,6 +74,38 @@ try {
   }
 } catch {
   // Sin catálogo: la sección se renderiza con ítems ACF.
+}
+
+// RGW-321: proyecto destacado del Home desde el CPT `projects`
+// (fuente de verdad, locale `es`, solo publicados con `is_featured`,
+// ordenados por `display_order`). Sin destacados o ante un fallo, la
+// sección conserva su contenido de referencia sin romper el Home.
+const featuredProjects = await getFeaturedProjects('es');
+const homeProject = featuredProjects[0] ?? null;
+
+let homeProjectTitle = '';
+let homeProjectDescription = '';
+let homeProjectCapabilities: string[] = [];
+let homeProjectImage: { src: string; alt: string } | null = null;
+let homeProjectCounter = '';
+
+if (homeProject) {
+  homeProjectTitle = stripHtml(homeProject.title.rendered);
+  homeProjectDescription = stripHtml(
+    homeProject.acf?.short_description ||
+      homeProject.excerpt?.rendered ||
+      '',
+  );
+  const [resolvedImage, technologies] = await Promise.all([
+    getProjectImage(homeProject),
+    getTechnologies(),
+  ]);
+  homeProjectImage = resolvedImage;
+  const technologyMap = buildTechnologyMap(technologies);
+  homeProjectCapabilities = (homeProject.technologies ?? [])
+    .map((id) => technologyMap[id])
+    .filter((name): name is string => Boolean(name));
+  homeProjectCounter = `${String(1).padStart(2, '0')} / ${String(featuredProjects.length).padStart(2, '0')}`;
 }
 
 const process = page?.acf?.process ?? null;
@@ -134,9 +172,22 @@ const stepImages = await Promise.all(
         <Process process={process} images={stepImages} id="como-trabajamos" />
       )}
       {technology && <CommunityModel technology={technology} />}
-      {/* RGW-311: sección Home de Proyectos (maquetación Stitch,
-          contenido estático pendiente del CPT; sin integración WP). */}
-      <Projects />
+      {/* RGW-321: sección Home de Proyectos integrada con el CPT
+          `projects` (primer destacado por `display_order`); sin datos,
+          conserva la maquetación de referencia. Enlace al listado real
+          (`/proyectos`). */}
+      {homeProject ? (
+        <Projects
+          title={homeProjectTitle}
+          description={homeProjectDescription}
+          capabilities={homeProjectCapabilities}
+          counter={homeProjectCounter}
+          linkHref={proyectosBaseUrl('es')}
+          image={homeProjectImage}
+        />
+      ) : (
+        <Projects linkHref={proyectosBaseUrl('es')} />
+      )}
       {faq && <Faq faq={faq} />}
       {finalCta && <FinalCta finalCta={finalCta} />}
     </>

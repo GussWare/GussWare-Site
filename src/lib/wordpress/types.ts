@@ -504,6 +504,50 @@ export interface WpService {
   translations: Record<string, number>;
 }
 
+/**
+ * RGW-321 — Campo `acf` del CPT `projects` (grupo `Proyectos - CPT`,
+ * `show_in_rest: true`). Solo los campos consumidos por las vistas
+ * Astro; el modelo completo vive en la skill `gussware-projects-import`
+ * (diccionario RGW-315). Sin contenido inventado: opcionales ausentes
+ * se tratan como vacíos en la vista.
+ */
+export interface WpProjectAcf {
+  project_code?: string;
+  short_description?: string | null;
+  /** Marca de destacado para la sección de Home (RGW-321). */
+  is_featured?: boolean;
+  /** Orden de presentación; ausente = orden estable por id (RGW-321). */
+  display_order?: number | null;
+}
+
+/**
+ * RGW-321 — Ítem del CPT `projects` (`/wp/v2/projects`, `rest_base:
+ * projects`). Sin `content`/`excerpt` nativos escribibles: las
+ * descripciones viven en ACF (`description`, `short_description`).
+ */
+export interface WpProject {
+  id: number;
+  slug: string;
+  status: string;
+  title: WpPostRendered;
+  content?: WpPostRendered;
+  excerpt?: WpPostRendered;
+  featured_media: number;
+  acf?: WpProjectAcf | null;
+  projects_type?: number[];
+  technologies?: number[];
+  industries_sector?: number[];
+  lang: string;
+  translations: Record<string, number>;
+}
+
+/** Término de la taxonomía `technology` (`/wp/v2/technologies`). */
+export interface WpTechnology {
+  id: number;
+  name: string;
+  slug: string;
+}
+
 /** Idioma de Polylang (`/pll/v1/languages`). */
 export interface WpLanguage {
   slug: string;
