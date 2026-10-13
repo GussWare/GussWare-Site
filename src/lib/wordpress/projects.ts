@@ -2,8 +2,17 @@ import { wpFetch } from './client';
 import { wpRoutes } from './routes';
 import { WP_PROJECTS_PER_PAGE } from './constants';
 import { projectDetailUrl } from '../routes';
+import type { LocaleUrls } from '../routes';
 import { stripHtml } from './text';
-import type { WpMedia, WpProject, WpProjectType, WpTechnology } from './types';
+import type { ProjectDetailData } from '../projects/mock';
+import type {
+  WpClientCompanyRef,
+  WpIndustry,
+  WpMedia,
+  WpProject,
+  WpProjectType,
+  WpTechnology,
+} from './types';
 
 /**
  * RGW-321 — Proyectos publicados de un locale.
@@ -367,4 +376,234 @@ export async function getProjectImage(
   }
 
   return null;
+}
+
+/** RGW-323 — Catálogo de sectores (`null` si la petición falla). */
+export async function getProjectIndustries(): Promise<WpIndustry[] | null> {
+  try {
+    const data = await wpFetch<WpIndustry[]>(wpRoutes.projectIndustries());
+    return Array.isArray(data) ? data : null;
+  } catch (error) {
+    console.error('Error fetching project industries:', error);
+    return null;
+  }
+}
+
+/**
+ * RGW-323 — Párrafos de texto plano desde un WYSIWYG: conserva los
+ * saltos `<p>` reales como párrafos, sin inventar estructura.
+ */
+export function paragraphsFromHtml(html: string | null | undefined): string[] {
+  if (!html) {
+    return [];
+  }
+
+  return html
+    .split(/<\/p\s*>/i)
+    .map((chunk) => stripHtml(chunk))
+    .filter((paragraph) => paragraph.length > 0);
+}
+
+export interface ProjectDetailResult {
+  detail: ProjectDetailData;
+  localeUrls: LocaleUrls | undefined;
+}
+
+/**
+ * RGW-323 — Orquesta el detalle de un proyecto para un locale: lo
+ * resuelve por slug (`publish` + idioma, sin fallback), mapea los campos
+ * nativos y ACF verificados al template existente y resuelve la URL del
+ * otro idioma vía `translations` (patrón de `getBlogArticle`).
+ *
+ * Solo bloques con datos válidos: secciones opcionales vacías se omiten
+ * en la vista; los contadores derivan de los elementos reales. Sin
+ * proyecto, devuelve `null` (la página reescribe a `/404`).
+ */
+export async function getProjectDetail(
+  slug: string,
+  locale: string,
+  pathname: string,
+): Promise<ProjectDetailResult | null> {
+  const project = await getProjectBySlug(slug, locale).catch(() => null);
+
+  if (!project) {
+    return null;
+  }
+
+  const acf = project.acf ?? {};
+  const otherLocale = locale === 'es' ? 'en' : 'es';
+  const translationId = project.translations?.[otherLocale];
+
+  const rawCompany = (acf.client_company ?? [])[0];
+  const companyId =
+    typeof rawCompany === 'number' ? rawCompany : rawCompany?.ID;
+
+  const [company, technologies, projectTypes, industries, translated] =
+    await Promise.all([
+      typeof companyId === 'number'
+        ? wpFetch<WpClientCompanyRef>(wpRoutes.clientCompany(companyId)).catch(
+            () => null,
+          )
+        : null,
+      getTechnologies(),
+      getProjectTypes(),
+      getProjectIndustries(),
+      typeof translationId === 'number'
+        ? wpFetch<WpProject>(wpRoutes.project(translationId)).catch(() => null)
+        : null,
+    ]);
+
+  const techMap = buildTechnologyMap(technologies);
+  const typeMap: Record<number, string> = {};
+
+  for (const type of projectTypes ?? []) {
+    typeMap[type.id] = type.name;
+  }
+
+  const industryMap: Record<number, string> = {};
+
+  for (const industry of industries ?? []) {
+    industryMap[industry.id] = industry.name;
+  }
+
+  const title = stripHtml(project.title.rendered);
+  const descriptionBlocks: ProjectDetailData['descriptionBlocks'] = [];
+  const shortDescription = stripHtml(acf.short_description ?? '');
+
+  if (shortDescription) {
+    descriptionBlocks.push({ paragraphs: [shortDescription] });
+  }
+
+  const description = paragraphsFromHtml(acf.description);
+
+  if (description.length > 0) {
+    descriptionBlocks.push({ title: 'Descripción', paragraphs: description });
+  }
+
+  const executiveSummary = paragraphsFromHtml(acf.executive_summary);
+
+  if (executiveSummary.length > 0) {
+    descriptionBlocks.push({ paragraphs: executiveSummary });
+  }
+
+  const contextSections: Array<[string, string | null | undefined]> = [
+    ['Contexto y objetivo', acf.context_objective],
+    ['Problema o necesidad', acf.problem_need],
+    ['Solución implementada', acf.implemented_solution],
+  ];
+
+  for (const [sectionTitle, sectionHtml] of contextSections) {
+    const paragraphs = paragraphsFromHtml(sectionHtml);
+
+    if (paragraphs.length > 0) {
+      descriptionBlocks.push({ title: sectionTitle, paragraphs });
+    }
+  }
+
+  const features = (acf.funcionalidades_desarrolladas ?? []).filter((item) =>
+    stripHtml(item.feature_name ?? ''),
+  );
+  const scopeNodes: ProjectDetailData['scopeNodes'] = features.map(
+    (item, index) => ({
+      index: String(index + 1).padStart(2, '0'),
+      title: stripHtml(item.feature_name ?? ''),
+      count: `${index + 1} de ${features.length}`,
+      description: stripHtml(item.feature_description ?? '') || undefined,
+    }),
+  );
+
+  const groupSources: Array<{ title: string; items: string[] }> = [
+    {
+      title: 'Responsabilidades y contribuciones',
+      items: (acf.responsibilities_contributions ?? [])
+        .map((item) => {
+          const name = stripHtml(item.responsibility ?? '');
+          const detail = stripHtml(item.responsibility_description ?? '');
+          return name ? (detail ? `${name} — ${detail}` : name) : '';
+        })
+        .filter((item) => item.length > 0),
+    },
+    {
+      title: 'Resultados y logros',
+      items: (acf.results_achievements ?? [])
+        .map((item) => {
+          const name = stripHtml(item.achievement_name ?? '');
+          const detail = stripHtml(item.achievement_description ?? '');
+          return name ? (detail ? `${name} — ${detail}` : name) : '';
+        })
+        .filter((item) => item.length > 0),
+    },
+    {
+      title: 'Métricas verificables',
+      items: (acf.verifiable_metrics ?? [])
+        .map((item) => {
+          const name = stripHtml(item.nombre_de_la_metrica ?? '');
+          const value = String(item.metric_value ?? '').trim();
+          const unit = stripHtml(item.metric_unit ?? '');
+          const detail = stripHtml(item.metric_description ?? '');
+          const head = [name, value, unit].filter((part) => part).join(' ');
+          return head ? (detail ? `${head} — ${detail}` : head) : '';
+        })
+        .filter((item) => item.length > 0),
+    },
+  ];
+
+  const groups: ProjectDetailData['groups'] = groupSources
+    .filter((group) => group.items.length > 0)
+    .map((group, index) => ({
+      index: String(index + 1).padStart(2, '0'),
+      title: group.title,
+      count: `${group.items.length} ${group.items.length === 1 ? 'elemento' : 'elementos'}`,
+      items: group.items,
+    }));
+
+  const tools: ProjectDetailData['tools'] = [
+    ...(project.technologies ?? [])
+      .map((id) => techMap[id])
+      .filter((name): name is string => Boolean(name))
+      .map((name) => ({ category: 'Tecnologías utilizadas', value: name })),
+    ...(project.projects_type ?? [])
+      .map((id) => typeMap[id])
+      .filter((name): name is string => Boolean(name))
+      .map((name) => ({ category: 'Tipos de proyecto', value: name })),
+    ...(project.industries_sector ?? [])
+      .map((id) => industryMap[id])
+      .filter((name): name is string => Boolean(name))
+      .map((name) => ({ category: 'Sector / industria', value: name })),
+  ];
+
+  const translatedSlug =
+    translated && translated.status === 'publish' ? translated.slug : null;
+  const localeUrls: LocaleUrls | undefined = translatedSlug
+    ? {
+        es: locale === 'es' ? pathname : projectDetailUrl('es', translatedSlug),
+        en: locale === 'en' ? pathname : projectDetailUrl('en', translatedSlug),
+      }
+    : undefined;
+
+  return {
+    detail: {
+      slug: project.slug,
+      title,
+      employer: company ? stripHtml(company.title.rendered) : undefined,
+      assignee: undefined,
+      role: stripHtml(acf.role_performed ?? '') || undefined,
+      descriptionBlocks,
+      scopeEyebrow: undefined,
+      scopeCentralNode: scopeNodes.length > 0 ? title : undefined,
+      scopeCount:
+        scopeNodes.length > 0
+          ? `${scopeNodes.length} ${scopeNodes.length === 1 ? 'funcionalidad' : 'funcionalidades'}`
+          : undefined,
+      scopeNodes,
+      detailEyebrow: undefined,
+      detailTitle: undefined,
+      detailDescription: undefined,
+      groups,
+      tools,
+      toolNotes: [],
+      closingTitle: title,
+    },
+    localeUrls,
+  };
 }

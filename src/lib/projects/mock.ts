@@ -5,8 +5,10 @@
  * Contenido verbatim de las dos pantallas Stitch indicadas en la tarea
  * (`GussWare Project Detail - Sistema de Nóminas y Outsorcing` y
  * `GussWare Project Detail - Multiples proyectos`), que representan dos
- * ejemplos del mismo template. RGW-323 sustituirá este mock por la
- * lectura del CPT Proyectos de WordPress sin cambiar el componente.
+ * ejemplos del mismo template. RGW-323 alimenta el template desde el
+ * CPT Proyectos de WordPress: los campos sin fuente real en el modelo
+ * (`assignee`, etiquetas de sección, `toolNotes`) son opcionales y la
+ * vista oculta los bloques vacíos.
  */
 
 export interface ProjectDescriptionBlock {
@@ -43,21 +45,22 @@ export interface ProjectToolNote {
 export interface ProjectDetailData {
   slug: string;
   title: string;
-  employer: string;
-  assignee: string;
-  role: string;
+  /** RGW-323 — Opcionales: sin fuente real se omiten en la vista. */
+  employer?: string;
+  assignee?: string;
+  role?: string;
   descriptionBlocks: ProjectDescriptionBlock[];
-  scopeEyebrow: string;
-  scopeCentralNode: string;
-  scopeCount: string;
+  scopeEyebrow?: string;
+  scopeCentralNode?: string;
+  scopeCount?: string;
   scopeNodes: ProjectScopeNode[];
-  detailEyebrow: string;
-  detailTitle: string;
-  detailDescription: string;
+  detailEyebrow?: string;
+  detailTitle?: string;
+  detailDescription?: string;
   groups: ProjectDetailGroup[];
   tools: ProjectTool[];
   toolNotes: ProjectToolNote[];
-  closingTitle: string;
+  closingTitle?: string;
 }
 
 const nominas: ProjectDetailData = {
