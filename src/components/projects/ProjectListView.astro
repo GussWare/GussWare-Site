@@ -20,19 +20,21 @@
  * estándar, `flex-wrap` anti-overflow (§5);
  * `display`/`headline-md`/`body-lg`/`label-bold` y un solo `h1` (§6).
  *
- * Contenido estático verbatim de Stitch (ES) como referencia visual,
- * pendiente del CPT Proyectos del épico RGW-325: la prop `projects`
- * deja la vista preparada para recibir datos de WordPress/i18n sin
- * cambiar la estructura. Sin `image` la tarjeta renderiza su bloque
- * neutro de maquetación (sin assets ni URLs inventadas). Los `href`
- * usan `projectDetailUrl` (ruta del épico RGW-325).
+ * Contenido real del CPT Proyectos (RGW-322, épico RGW-325): la prop
+ * `cards` recibe las tarjetas normalizadas (`getProjectListing`, con
+ * slug, título, descripción corta, tipo, tecnologías, código, enlace al
+ * detalle e imagen resuelta); sin `image` la tarjeta renderiza su bloque
+ * neutro (sin assets inventados). Los filtros (búsqueda, tecnología,
+ * tipo), el orden y la paginación viajan por query params (patrón del
+ * Blog) y solo ofrecen términos reales de WordPress. Sin resultados se
+ * muestra el vacío; ante fallo del catálogo, el error (sin romper la
+ * vista).
  *
- * Filtros y paginación quedan maquetados como representación visual
- * estática, sin funcionalidad ni lógica de consulta (SPEC): controles
- * nativos (`input`, `select`, `button`) listos para la integración.
- * Textos de taxonomías (pills, opciones de tecnología) verbatim ES en
- * ambos locales hasta que WordPress los localice; el resto del chrome
- * sí se traduce.
+ * Filtros, orden y paginación funcionales vía query params (SPEC
+ * RGW-322, patrón del Blog): controles nativos (`input`, `select`,
+ * enlaces) que navegan con el estado de consulta; `select`s con
+ * auto-envío. Textos de taxonomías desde WordPress por idioma; el resto
+ * del chrome se traduce con `copy`.
  *
  * Diferencias documentadas frente a Stitch (sin equivalente en el
  * sistema):
@@ -52,109 +54,56 @@ import Badge from '../ui/Badge.astro';
 import ProjectCard from './ProjectCard.astro';
 import CTA from '../ui/CTA.astro';
 import Icon from '../ui/Icon.astro';
-import { projectDetailUrl, getBreadcrumbHome } from '../../lib/routes';
-
-/** Ítem del listado (futura: resuelto desde el CPT Proyectos). */
-interface ProjectListItem {
-  slug: string;
-  title: string;
-  description: string;
-  category: string;
-  tags: string[];
-  code: string;
-}
+import { projectListUrl, proyectosBaseUrl, getBreadcrumbHome } from '../../lib/routes';
+import type {
+  ProjectListCard,
+  ProjectSort,
+} from '../../lib/wordpress/projects';
+import type {
+  WpProjectType,
+  WpTechnology,
+} from '../../lib/wordpress/types';
 
 interface Props {
   locale: string;
-  projects?: ProjectListItem[];
+  /** RGW-322 — Tarjetas reales de WordPress (sin mocks). */
+  cards?: ProjectListCard[];
+  total?: number;
+  totalPages?: number;
+  currentPage?: number;
+  currentSearch?: string;
+  currentTechId?: number;
+  currentTypeId?: number;
+  currentSort?: ProjectSort;
+  /** RGW-322 — Términos reales para los filtros (sin opciones inventadas). */
+  technologies?: WpTechnology[];
+  projectTypes?: WpProjectType[];
+  /** RGW-322 — Fallo de la petición del catálogo (bloque de error). */
+  initialError?: boolean;
 }
 
-/**
- * Contenido de referencia verbatim de Stitch (`Proyectos - Listado`,
- * 6 tarjetas). Provisional hasta el CPT Proyectos (RGW-325); los
- * `slug` son los de Stitch sobre la base `/proyectos` del épico.
- */
-const DEFAULT_PROJECTS: ProjectListItem[] = [
-  {
-    slug: 'sistema-nominas',
-    title: 'Sistema de Nóminas Tradicionales y Estrategia en la Nube',
-    description:
-      'Plataforma integral para gestión de nóminas gravadas al 100% y con estrategia para empresas de outsourcing con 7 módulos clave y reportes consolidados.',
-    category: 'Sistemas Empresariales',
-    tags: ['PHP', 'CodeIgniter', 'MySQL', 'Apache', 'JS'],
-    code: '#ERP-2024',
-  },
-  {
-    slug: 'fintech-connect',
-    title: 'FinTech Connect — App Móvil de Pagos Transfronterizos',
-    description:
-      'Aplicación móvil multiplataforma de alta seguridad con autenticación biométrica, procesamiento de remesas instantáneas y conexión con redes bancarias.',
-    category: 'Aplicaciones Móviles',
-    tags: ['Flutter', 'Dart', 'Node.js', 'AWS', 'PostgreSQL'],
-    code: '#MOB-781',
-  },
-  {
-    slug: 'apex-commerce',
-    title: 'Apex Commerce — Portal Headless y Catálogo B2B',
-    description:
-      'Arquitectura de comercio digital de alto rendimiento con renderizado estático, sincronización de inventarios multitienda y checkout optimizado.',
-    category: 'Desarrollo Web',
-    tags: ['Next.js', 'TypeScript', 'GraphQL', 'Stripe'],
-    code: '#WEB-302',
-  },
-  {
-    slug: 'gateway-fiscal',
-    title: 'Gateway Unificado de Facturación y Servicios Fiscales',
-    description:
-      'Infraestructura de microservicios para timbrado masivo, conciliación tributaria y orquestación con proveedores de certificación autorizados.',
-    category: 'APIs & Backend',
-    tags: ['Python', 'FastAPI', 'Docker', 'Redis', 'RabbitMQ'],
-    code: '#API-909',
-  },
-  {
-    slug: 'cloud-infra',
-    title: 'Infraestructura Automatizada Multi-Región y CI/CD',
-    description:
-      'Migración a contenedores orquestados con despliegue automatizado, tolerancia a fallos y reducción del 40% en costos de operación en la nube.',
-    category: 'DevOps & Cloud',
-    tags: ['Terraform', 'Kubernetes', 'AWS ECS', 'GitHub Actions'],
-    code: '#OPS-411',
-  },
-  {
-    slug: 'nexus-talent',
-    title: 'Nexus Talent — Red Colaborativa para Especialistas Tech',
-    description:
-      'Plataforma de emparejamiento inteligente entre proyectos tecnológicos de alto impacto y consultores independientes verificados.',
-    category: 'Desarrollo Web',
-    tags: ['React', 'Node.js', 'MongoDB', 'WebSockets'],
-    code: '#COMM-104',
-  },
-];
-
-/** Categorías y tecnologías verbatim de Stitch (futura taxonomía WP). */
-const CATEGORIES = [
-  'Todas',
-  'Desarrollo Web',
-  'Aplicaciones Móviles',
-  'Sistemas Empresariales',
-  'APIs & Backend',
-  'DevOps & Cloud',
-];
-
-const TECHNOLOGIES = [
-  'Todas las tecnologías',
-  'React / Next.js',
-  'Node.js / Express',
-  'PHP / CodeIgniter',
-  'Python / FastAPI',
-  'Flutter / iOS',
-  'PostgreSQL / MySQL',
-  'AWS / Docker',
-];
-
-const { locale, projects = DEFAULT_PROJECTS } = Astro.props;
+const {
+  locale,
+  cards = [],
+  total = 0,
+  totalPages = 1,
+  currentPage = 1,
+  currentSearch = '',
+  currentTechId = 0,
+  currentTypeId = 0,
+  currentSort = 'recent',
+  technologies = [],
+  projectTypes = [],
+  initialError = false,
+} = Astro.props;
 const isEnglish = locale === 'en';
 const home = getBreadcrumbHome(locale);
+const baseParams = {
+  search: currentSearch || undefined,
+  technology: currentTechId || undefined,
+  type: currentTypeId || undefined,
+  sort: currentSort,
+};
 
 const copy = isEnglish
   ? {
@@ -172,14 +121,16 @@ const copy = isEnglish
       techLabel: 'Filter by technology',
       sortLabel: 'Sort results',
       sortOptions: ['Most recent', 'Name (A - Z)', 'Name (Z - A)'],
-      resultsOf: 'of 18 projects',
+      resultsOf: `of ${total} projects`,
       showing: 'Showing',
       reset: 'Clear filters',
-      pageOf: 'Page 1 of 3 (18 projects total)',
+      pageOf: `Page ${currentPage} of ${totalPages} (${total} projects total)`,
       paginationLabel: 'Projects pagination',
       prev: '← Previous',
       next: 'Next →',
       emptyTitle: 'No projects found',
+      errorTitle: 'Projects could not be loaded',
+      errorDescription: 'Please try again later.',
       ctaTitle: 'Have a project in mind?',
       ctaDescription:
         'We connect your idea with qualified specialists who design and build tailored solutions. Robust architecture, scalable code, and verified periodic deliveries.',
@@ -201,14 +152,16 @@ const copy = isEnglish
       techLabel: 'Filtrar por tecnología',
       sortLabel: 'Ordenar resultados',
       sortOptions: ['Más recientes', 'Nombre (A - Z)', 'Nombre (Z - A)'],
-      resultsOf: 'de 18 proyectos',
+      resultsOf: `de ${total} proyectos`,
       showing: 'Mostrando',
       reset: 'Limpiar filtros',
-      pageOf: 'Página 1 de 3 (18 proyectos en total)',
+      pageOf: `Página ${currentPage} de ${totalPages} (${total} proyectos en total)`,
       paginationLabel: 'Paginación de proyectos',
       prev: '← Anterior',
       next: 'Siguiente →',
       emptyTitle: 'No se encontraron proyectos',
+      errorTitle: 'No se pudieron cargar los proyectos',
+      errorDescription: 'Inténtalo de nuevo más tarde.',
       ctaTitle: '¿Tienes un proyecto en mente?',
       ctaDescription:
         'Conectamos tu idea con especialistas calificados que diseñan y construyen soluciones a tu medida. Arquitectura robusta, código escalable y entregas periódicas verificadas.',
@@ -261,7 +214,12 @@ const pageButton =
 
 <div class="bg-gw-surface-secondary border-gw-border-subtle sticky top-16 z-40 border-y py-6">
   <Container>
-    <div class="space-y-5">
+    <form
+      id="projects-filters"
+      method="get"
+      action={proyectosBaseUrl(locale)}
+      class="space-y-5"
+    >
       <div class="grid grid-cols-1 gap-4 md:grid-cols-12">
         <div class="relative md:col-span-7">
           <Icon
@@ -276,6 +234,7 @@ const pageButton =
             id="projects-search"
             name="search"
             type="text"
+            value={currentSearch}
             placeholder={copy.searchPlaceholder}
             class={`${fieldControl} pl-10`}
           />
@@ -284,9 +243,19 @@ const pageButton =
           <label class="sr-only" for="projects-tech">
             {copy.techLabel}
           </label>
-          <select id="projects-tech" name="technology" class={fieldControl}>
-            {TECHNOLOGIES.map((tech) => (
-              <option value={tech}>{tech}</option>
+          <select
+            id="projects-tech"
+            name="technology"
+            class={fieldControl}
+          >
+            <option value="0">Todas las tecnologías</option>
+            {technologies.map((tech) => (
+              <option
+                value={String(tech.id)}
+                selected={tech.id === currentTechId}
+              >
+                {tech.name}
+              </option>
             ))}
           </select>
         </div>
@@ -295,56 +264,87 @@ const pageButton =
             {copy.sortLabel}
           </label>
           <select id="projects-sort" name="sort" class={fieldControl}>
-            {copy.sortOptions.map((option) => (
-              <option value={option}>{option}</option>
-            ))}
+            <option value="recent" selected={currentSort === 'recent'}>
+              {copy.sortOptions[0]}
+            </option>
+            <option value="az" selected={currentSort === 'az'}>
+              {copy.sortOptions[1]}
+            </option>
+            <option value="za" selected={currentSort === 'za'}>
+              {copy.sortOptions[2]}
+            </option>
           </select>
         </div>
       </div>
       <div class="flex flex-col gap-4 pt-2 lg:flex-row lg:items-center lg:justify-between">
         <div class="flex flex-wrap items-center gap-2" role="tablist">
-          {CATEGORIES.map((category, index) => (
-            <button
-              type="button"
+          <a
+            href={projectListUrl(locale, { ...baseParams, type: undefined, page: undefined })}
+            role="tab"
+            aria-selected={currentTypeId === 0 ? 'true' : 'false'}
+            class={currentTypeId === 0 ? pillActive : pillInactive}
+          >
+            Todas
+          </a>
+          {projectTypes.map((type) => (
+            <a
+              href={projectListUrl(locale, { ...baseParams, type: type.id, page: undefined })}
               role="tab"
-              aria-selected={index === 0 ? 'true' : 'false'}
-              class={index === 0 ? pillActive : pillInactive}
+              aria-selected={type.id === currentTypeId ? 'true' : 'false'}
+              class={type.id === currentTypeId ? pillActive : pillInactive}
             >
-              {category}
-            </button>
+              {type.name}
+            </a>
           ))}
         </div>
         <div class="flex items-center justify-between gap-5 lg:justify-end">
           <p class="text-navigation text-gw-text-secondary">
             {copy.showing}{' '}
             <strong class="text-supporting-blue-dark font-bold">
-              {projects.length}
+              {cards.length}
             </strong>{' '}
             {copy.resultsOf}
           </p>
-          <button
-            type="button"
+          <a
+            href={proyectosBaseUrl(locale)}
             class="text-label-bold text-brand-secondary transition-colors duration-200 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
           >
             {copy.reset}
-          </button>
+          </a>
         </div>
       </div>
-    </div>
+    </form>
+    <script>
+      const filters = document.getElementById('projects-filters');
+      if (filters instanceof HTMLFormElement) {
+        filters.querySelectorAll('select').forEach((select) => {
+          select.addEventListener('change', () => filters.requestSubmit());
+        });
+      }
+    </script>
   </Container>
 </div>
 
 <Section>
-  {projects.length > 0 ? (
+  {initialError ? (
+    <div role="alert">
+      <SectionHeading
+        title={copy.errorTitle}
+        description={copy.errorDescription}
+        align="center"
+      />
+    </div>
+  ) : cards.length > 0 ? (
     <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {projects.map((project) => (
+      {cards.map((card) => (
         <ProjectCard
-          badge={project.category}
-          title={project.title}
-          description={project.description}
-          tags={project.tags}
-          code={project.code}
-          href={projectDetailUrl(locale, project.slug)}
+          badge={card.category ?? undefined}
+          title={card.title}
+          description={card.description || undefined}
+          tags={card.tags}
+          code={card.code ?? undefined}
+          href={card.href}
+          image={card.image ?? undefined}
           linkLabel={copy.linkLabel}
         />
       ))}
@@ -352,37 +352,66 @@ const pageButton =
   ) : (
     <SectionHeading title={copy.emptyTitle} align="center" />
   )}
-  <div class="border-gw-border-subtle mt-16 flex flex-col items-center justify-between gap-6 border-t pt-10 md:flex-row">
-    <p class="text-body-md text-gw-text-secondary order-2 md:order-1">
-      {copy.pageOf}
-    </p>
-    <nav
-      aria-label={copy.paginationLabel}
-      class="order-1 flex items-center gap-1 md:order-2"
-    >
-      <span
-        aria-disabled="true"
-        class={`${pageButton} cursor-not-allowed py-2 opacity-50`}
+  {!initialError && totalPages > 1 && (
+    <div class="border-gw-border-subtle mt-16 flex flex-col items-center justify-between gap-6 border-t pt-10 md:flex-row">
+      <p class="text-body-md text-gw-text-secondary order-2 md:order-1">
+        {copy.pageOf}
+      </p>
+      <nav
+        aria-label={copy.paginationLabel}
+        class="order-1 flex items-center gap-1 md:order-2"
       >
-        {copy.prev}
-      </span>
-      <span
-        aria-current="page"
-        class="text-label-bold bg-supporting-blue-dark text-brand-surface flex h-10 w-10 items-center justify-center rounded-none"
-      >
-        1
-      </span>
-      <button type="button" class={`${pageButton} h-10 w-10`}>
-        2
-      </button>
-      <button type="button" class={`${pageButton} h-10 w-10`}>
-        3
-      </button>
-      <button type="button" class={`${pageButton} py-2`}>
-        {copy.next}
-      </button>
-    </nav>
-  </div>
+        {currentPage > 1 ? (
+          <a
+            href={projectListUrl(locale, { ...baseParams, page: currentPage - 1 })}
+            aria-label={copy.prev}
+            class={`${pageButton} py-2`}
+          >
+            {copy.prev}
+          </a>
+        ) : (
+          <span
+            aria-disabled="true"
+            aria-label={copy.prev}
+            class={`${pageButton} cursor-not-allowed py-2 opacity-50`}
+          >
+            {copy.prev}
+          </span>
+        )}
+        {Array.from({ length: totalPages }).map((_, index) => (
+          <a
+            href={projectListUrl(locale, { ...baseParams, page: index + 1 })}
+            aria-label={`Page ${index + 1}`}
+            aria-current={index + 1 === currentPage ? 'page' : undefined}
+            class={`text-label-bold flex h-10 w-10 items-center justify-center rounded-none ${
+              index + 1 === currentPage
+                ? 'bg-supporting-blue-dark text-brand-surface'
+                : `${pageButton} h-10 w-10`
+            }`}
+          >
+            {index + 1}
+          </a>
+        ))}
+        {currentPage < totalPages ? (
+          <a
+            href={projectListUrl(locale, { ...baseParams, page: currentPage + 1 })}
+            aria-label={copy.next}
+            class={`${pageButton} py-2`}
+          >
+            {copy.next}
+          </a>
+        ) : (
+          <span
+            aria-disabled="true"
+            aria-label={copy.next}
+            class={`${pageButton} cursor-not-allowed py-2 opacity-50`}
+          >
+            {copy.next}
+          </span>
+        )}
+      </nav>
+    </div>
+  )}
 </Section>
 
 <Section class="bg-brand-primary text-brand-surface relative overflow-hidden">

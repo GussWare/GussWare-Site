@@ -94,6 +94,11 @@ export const wpRoutes = {
    * del Home; sin términos inventados.
    */
   projectTechnologies: () => `/wp/v2/technologies?per_page=100`,
+  /**
+   * RGW-322 — Taxonomía `projects_type` (tipos de proyecto). Etiquetas
+   * de filtro del listado; solo términos reales de WordPress.
+   */
+  projectTypes: () => `/wp/v2/projects_type?per_page=100`,
   user: (userId: number) => `/wp/v2/users/${userId}`,
   tags: (lang?: string) =>
     `/wp/v2/tags?per_page=100${lang ? `&lang=${encodeURIComponent(lang)}` : ''}`,
