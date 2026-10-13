@@ -1,0 +1,2505 @@
+{
+  "version": 1,
+  "type": "servicios",
+  "items": [
+    {
+      "clave": "consultoria-tecnica",
+      "categoria": "Consultoría",
+      "es": {
+        "titulo": "Consultoría técnica",
+        "slug": "consultoria-tecnica",
+        "acf": {
+          "approach": [
+            {
+              "title": "Entender",
+              "description": "Identificamos las necesidades, objetivos y contexto técnico del proyecto."
+            },
+            {
+              "title": "Definir",
+              "description": "Establecemos la arquitectura y las decisiones tecnológicas necesarias para avanzar."
+            },
+            {
+              "title": "Planificar",
+              "description": "Organizamos el trabajo y definimos una estrategia de desarrollo utilizando metodologías ágiles como Scrum o Kanban."
+            },
+            {
+              "title": "Documentar",
+              "description": "Generamos la documentación técnica necesaria para mantener claras las decisiones y facilitar el desarrollo del proyecto."
+            }
+          ],
+          "approach_description": "Trabajamos de forma estructurada para entender el proyecto, definir sus necesidades técnicas y establecer una base sólida para su desarrollo.",
+          "approach_title": "Un enfoque técnico orientado a decisiones claras",
+          "cta": {
+            "title": "¿Tienes un proyecto y necesitas definir el camino técnico?",
+            "description": "Hablemos sobre tus necesidades y definamos una estrategia técnica clara para llevar tu proyecto adelante.",
+            "button_text": "Hablemos",
+            "button_url": "/contacto"
+          },
+          "development_content": "Analizamos las necesidades del proyecto para definir una arquitectura adecuada, seleccionar las tecnologías que mejor se ajusten a sus objetivos y establecer una planificación clara para su desarrollo. Complementamos este proceso con documentación técnica y metodologías ágiles como Scrum o Kanban.",
+          "development_tags": [
+            {
+              "tag": "Arquitectura de software"
+            },
+            {
+              "tag": "Selección de tecnologías"
+            },
+            {
+              "tag": "Planificación"
+            },
+            {
+              "tag": "Documentación técnica"
+            },
+            {
+              "tag": "Scrum"
+            },
+            {
+              "tag": "Kanban"
+            }
+          ],
+          "development_title": "Planificación técnica con una visión integral",
+          "faq_items": [
+            {
+              "pregunta": "¿Qué incluye la consultoría técnica?",
+              "respuesta": "La consultoría puede incluir definición de arquitectura, selección de tecnologías, planificación y documentación del proyecto, de acuerdo con sus necesidades."
+            },
+            {
+              "pregunta": "¿Pueden ayudar a seleccionar las tecnologías para un proyecto?",
+              "respuesta": "Sí. Evaluamos las necesidades y objetivos del proyecto para orientar la selección de tecnologías adecuadas."
+            },
+            {
+              "pregunta": "¿Trabajan con Scrum y Kanban?",
+              "respuesta": "Sí. Podemos utilizar metodologías ágiles como Scrum o Kanban para planificar y organizar el desarrollo del proyecto."
+            },
+            {
+              "pregunta": "¿También realizan documentación técnica?",
+              "respuesta": "Sí. La documentación forma parte del proceso de consultoría para dejar claras las decisiones técnicas y facilitar el desarrollo."
+            }
+          ],
+          "hero_stats": [
+            {
+              "label": "Arquitectura",
+              "value": "Diseño técnico"
+            },
+            {
+              "label": "Tecnologías",
+              "value": "Selección estratégica"
+            },
+            {
+              "label": "Metodologías",
+              "value": "Scrum / Kanban"
+            }
+          ],
+          "intro_description": "Te ayudamos a tomar decisiones técnicas con una visión clara del proyecto, desde la definición de la arquitectura y la selección de tecnologías hasta la planificación y documentación del desarrollo.",
+          "intro_eyebrow": "Consultoría técnica",
+          "intro_eyebrow_suffix": "",
+          "intro_title": "Arquitectura, tecnología y estrategia para construir proyectos sólidos",
+          "solutions": [
+            {
+              "title": "Definición de arquitectura",
+              "description": "Diseñamos y definimos la arquitectura técnica del proyecto considerando sus necesidades, objetivos y evolución esperada.",
+              "features": [
+                {
+                  "feature": "Diseño de arquitectura"
+                },
+                {
+                  "feature": "Definición de componentes"
+                },
+                {
+                  "feature": "Evaluación de necesidades técnicas"
+                },
+                {
+                  "feature": "Documentación de arquitectura"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            },
+            {
+              "title": "Selección y planificación tecnológica",
+              "description": "Evaluamos alternativas tecnológicas y establecemos una planificación que permita organizar y documentar el desarrollo del proyecto mediante metodologías ágiles.",
+              "features": [
+                {
+                  "feature": "Selección de tecnologías"
+                },
+                {
+                  "feature": "Planificación del proyecto"
+                },
+                {
+                  "feature": "Documentación técnica"
+                },
+                {
+                  "feature": "Scrum"
+                },
+                {
+                  "feature": "Kanban"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            }
+          ],
+          "solutions_description": "Acompañamos cada etapa de definición para convertir las necesidades del proyecto en una estrategia técnica clara y ejecutable.",
+          "solutions_eyebrow": "Nuestras soluciones",
+          "solutions_title": "Decisiones técnicas que dan dirección al proyecto",
+          "tech_description": "Seleccionamos las tecnologías y herramientas de acuerdo con las necesidades y objetivos específicos de cada proyecto.",
+          "tech_groups": [
+            {
+              "title": "Metodologías",
+              "items": [
+                {
+                  "name": "Scrum"
+                },
+                {
+                  "name": "Kanban"
+                }
+              ]
+            },
+            {
+              "title": "Arquitectura y desarrollo",
+              "items": [
+                {
+                  "name": "Arquitectura de software"
+                },
+                {
+                  "name": "Tecnologías de desarrollo"
+                }
+              ]
+            }
+          ],
+          "tech_title": "Tecnologías y metodologías adecuadas para cada proyecto"
+        }
+      },
+      "en": {
+        "titulo": "Technical Consulting",
+        "slug": null,
+        "acf": {
+          "approach": [
+            {
+              "title": "Understand",
+              "description": "We identify the project's needs, objectives, and technical context."
+            },
+            {
+              "title": "Define",
+              "description": "We establish the architecture and technology decisions needed to move forward."
+            },
+            {
+              "title": "Plan",
+              "description": "We organize the work and define a development strategy using agile methodologies such as Scrum or Kanban."
+            },
+            {
+              "title": "Document",
+              "description": "We create the technical documentation needed to keep decisions clear and facilitate development."
+            }
+          ],
+          "approach_description": "We work in a structured way to understand the project, define its technical needs, and establish a solid foundation for development.",
+          "approach_title": "A technical approach focused on clear decisions",
+          "cta": {
+            "title": "Have a project and need to define the right technical path?",
+            "description": "Let's talk about your needs and define a clear technical strategy to move your project forward.",
+            "button_text": "Let's talk",
+            "button_url": ""
+          },
+          "development_content": "We analyze project needs to define an appropriate architecture, select the technologies that best fit its objectives, and establish a clear development plan. We complement this process with technical documentation and agile methodologies such as Scrum or Kanban.",
+          "development_tags": [
+            {
+              "tag": "Software architecture"
+            },
+            {
+              "tag": "Technology selection"
+            },
+            {
+              "tag": "Planning"
+            },
+            {
+              "tag": "Technical documentation"
+            },
+            {
+              "tag": "Scrum"
+            },
+            {
+              "tag": "Kanban"
+            }
+          ],
+          "development_title": "Technical planning with a comprehensive vision",
+          "faq_items": [
+            {
+              "pregunta": "What does technical consulting include?",
+              "respuesta": "Consulting may include architecture definition, technology selection, project planning, and documentation according to the project's needs."
+            },
+            {
+              "pregunta": "Can you help select the technologies for a project?",
+              "respuesta": "Yes. We evaluate the project's needs and objectives to guide the selection of appropriate technologies."
+            },
+            {
+              "pregunta": "Do you work with Scrum and Kanban?",
+              "respuesta": "Yes. We can use agile methodologies such as Scrum or Kanban to plan and organize project development."
+            },
+            {
+              "pregunta": "Do you also provide technical documentation?",
+              "respuesta": "Yes. Documentation is part of the consulting process to keep technical decisions clear and facilitate development."
+            }
+          ],
+          "hero_stats": [
+            {
+              "label": "Architecture",
+              "value": "Technical design"
+            },
+            {
+              "label": "Technologies",
+              "value": "Strategic selection"
+            },
+            {
+              "label": "Methodologies",
+              "value": "Scrum / Kanban"
+            }
+          ],
+          "intro_description": "We help you make technical decisions with a clear vision of the project, from defining the architecture and selecting technologies to planning and documenting development.",
+          "intro_eyebrow": "Technical Consulting",
+          "intro_eyebrow_suffix": "",
+          "intro_title": "Architecture, technology, and strategy for building solid projects",
+          "solutions": [
+            {
+              "title": "Architecture definition",
+              "description": "We design and define the project's technical architecture based on its needs, objectives, and expected evolution.",
+              "features": [
+                {
+                  "feature": "Architecture design"
+                },
+                {
+                  "feature": "Component definition"
+                },
+                {
+                  "feature": "Technical needs assessment"
+                },
+                {
+                  "feature": "Architecture documentation"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            },
+            {
+              "title": "Technology selection and planning",
+              "description": "We evaluate technology alternatives and establish a plan to organize and document project development using agile methodologies.",
+              "features": [
+                {
+                  "feature": "Technology selection"
+                },
+                {
+                  "feature": "Project planning"
+                },
+                {
+                  "feature": "Technical documentation"
+                },
+                {
+                  "feature": "Scrum"
+                },
+                {
+                  "feature": "Kanban"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            }
+          ],
+          "solutions_description": "We support each definition stage to turn project needs into a clear and executable technical strategy.",
+          "solutions_eyebrow": "Our solutions",
+          "solutions_title": "Technical decisions that give your project direction",
+          "tech_description": "We select technologies and tools according to each project's specific needs and objectives.",
+          "tech_groups": [
+            {
+              "title": "Methodologies",
+              "items": [
+                {
+                  "name": "Scrum"
+                },
+                {
+                  "name": "Kanban"
+                }
+              ]
+            },
+            {
+              "title": "Architecture and development",
+              "items": [
+                {
+                  "name": "Software architecture"
+                },
+                {
+                  "name": "Development technologies"
+                }
+              ]
+            }
+          ],
+          "tech_title": "The right technologies and methodologies for each project"
+        }
+      }
+    },
+    {
+      "clave": "diseno-sitios-web-tiendas-en-linea",
+      "categoria": "Desarrollo web",
+      "es": {
+        "titulo": "Diseño de sitios web y E-commerce",
+        "slug": "diseno-sitios-web-tiendas-en-linea",
+        "acf": {
+          "approach": [
+            {
+              "title": "Entender",
+              "description": "Conocemos tu negocio, tus objetivos y las necesidades de tus usuarios para definir el enfoque adecuado."
+            },
+            {
+              "title": "Diseñar",
+              "description": "Diseñamos la experiencia y la interfaz buscando equilibrio entre identidad visual, usabilidad y funcionalidad."
+            },
+            {
+              "title": "Desarrollar",
+              "description": "Convertimos el diseño en una solución digital funcional utilizando tecnologías adecuadas para las necesidades del proyecto."
+            },
+            {
+              "title": "Escalar",
+              "description": "Construimos soluciones con una base técnica preparada para evolucionar junto con tu negocio y sus nuevas necesidades."
+            }
+          ],
+          "approach_description": "Trabajamos de forma estructurada para transformar las necesidades de tu negocio en una solución digital clara, funcional y preparada para crecer.",
+          "approach_title": "Del concepto a una experiencia digital funcional",
+          "cta": {
+            "title": "¿Listo para construir tu próxima experiencia digital?",
+            "description": "Cuéntanos sobre tu negocio y tus objetivos. Diseñemos juntos una solución digital que pueda crecer contigo.",
+            "button_text": "Hablemos",
+            "button_url": "/contacto"
+          },
+          "development_content": "Convertimos las necesidades de tu negocio en experiencias digitales funcionales, atractivas y escalables. Diseñamos y desarrollamos sitios web, plataformas personalizadas y tiendas en línea considerando tanto la experiencia de usuario como las necesidades técnicas del proyecto.",
+          "development_tags": [
+            {
+              "tag": "Diseño web"
+            },
+            {
+              "tag": "Desarrollo web"
+            },
+            {
+              "tag": "Plataformas personalizadas"
+            },
+            {
+              "tag": "Tiendas en línea"
+            },
+            {
+              "tag": "Experiencia de usuario"
+            },
+            {
+              "tag": "Escalabilidad"
+            }
+          ],
+          "development_title": "Diseño y desarrollo con visión de negocio",
+          "faq_items": [
+            {
+              "pregunta": "¿Qué tipo de sitios web desarrollan?",
+              "respuesta": "Diseñamos y desarrollamos sitios web profesionales adaptados a las necesidades, objetivos y características de cada negocio."
+            },
+            {
+              "pregunta": "¿También desarrollan plataformas personalizadas?",
+              "respuesta": "Sí. Desarrollamos plataformas digitales personalizadas cuando el proyecto requiere funcionalidades o procesos específicos que van más allá de un sitio web convencional."
+            },
+            {
+              "pregunta": "¿Desarrollan tiendas en línea?",
+              "respuesta": "Sí. Creamos tiendas en línea enfocadas en ofrecer una experiencia de compra clara y funcional, con una base preparada para crecer."
+            },
+            {
+              "pregunta": "¿Los sitios web funcionan en celulares y tabletas?",
+              "respuesta": "Sí. Diseñamos las experiencias digitales considerando diferentes tamaños de pantalla para ofrecer una experiencia consistente en dispositivos móviles y de escritorio."
+            },
+            {
+              "pregunta": "¿Pueden integrar funcionalidades o servicios externos?",
+              "respuesta": "Sí. Podemos incorporar integraciones y funcionalidades específicas de acuerdo con las necesidades y arquitectura de cada proyecto."
+            }
+          ],
+          "hero_stats": [
+            {
+              "label": "Sitios web",
+              "value": "Diseño y desarrollo"
+            },
+            {
+              "label": "Plataformas",
+              "value": "Soluciones personalizadas"
+            },
+            {
+              "label": "Tiendas en línea",
+              "value": "Comercio digital"
+            }
+          ],
+          "intro_description": "Diseñamos y desarrollamos sitios web, plataformas personalizadas y tiendas en línea que combinan una experiencia visual atractiva con funcionalidad, rendimiento y una arquitectura preparada para crecer.",
+          "intro_eyebrow": "Diseño y desarrollo web",
+          "intro_eyebrow_suffix": "",
+          "intro_title": "Experiencias digitales diseñadas para hacer crecer tu negocio",
+          "solutions": [
+            {
+              "title": "Sitios web",
+              "description": "Diseñamos y desarrollamos sitios web profesionales que comunican el valor de tu negocio y ofrecen una experiencia clara y atractiva a tus usuarios.",
+              "features": [
+                {
+                  "feature": "Diseño de interfaces"
+                },
+                {
+                  "feature": "Desarrollo web"
+                },
+                {
+                  "feature": "Diseño responsive"
+                },
+                {
+                  "feature": "Experiencia de usuario"
+                },
+                {
+                  "feature": "Arquitectura escalable"
+                }
+              ],
+              "link": {
+                "text": "Conoce más",
+                "url": "/contacto"
+              }
+            },
+            {
+              "title": "Tiendas en línea",
+              "description": "Creamos tiendas en línea orientadas a ofrecer una experiencia de compra clara, funcional y preparada para acompañar el crecimiento de tu negocio digital.",
+              "features": [
+                {
+                  "feature": "Diseño de tiendas en línea"
+                },
+                {
+                  "feature": "Experiencia de compra"
+                },
+                {
+                  "feature": "Catálogo de productos"
+                },
+                {
+                  "feature": "Diseño responsive"
+                },
+                {
+                  "feature": "Escalabilidad"
+                }
+              ],
+              "link": {
+                "text": "Conoce más",
+                "url": "/contacto"
+              }
+            }
+          ],
+          "solutions_description": "Creamos experiencias digitales que combinan diseño, funcionalidad y tecnología para responder a diferentes necesidades de negocio.",
+          "solutions_eyebrow": "Nuestras soluciones",
+          "solutions_title": "Soluciones digitales adaptadas a tu negocio",
+          "tech_description": "Seleccionamos las tecnologías y herramientas adecuadas según el tipo de solución, sus objetivos y las necesidades de crecimiento del proyecto.",
+          "tech_groups": [
+            {
+              "title": "Soluciones web",
+              "items": [
+                {
+                  "name": "Sitios web"
+                },
+                {
+                  "name": "Plataformas personalizadas"
+                },
+                {
+                  "name": "Tiendas en línea"
+                }
+              ]
+            },
+            {
+              "title": "Experiencia digital",
+              "items": [
+                {
+                  "name": "Diseño responsive"
+                },
+                {
+                  "name": "Diseño de interfaces"
+                },
+                {
+                  "name": "Experiencia de usuario"
+                }
+              ]
+            },
+            {
+              "title": "Arquitectura",
+              "items": [
+                {
+                  "name": "Integraciones"
+                },
+                {
+                  "name": "Escalabilidad"
+                },
+                {
+                  "name": "Desarrollo personalizado"
+                }
+              ]
+            }
+          ],
+          "tech_title": "Tecnologías para construir experiencias digitales modernas"
+        }
+      },
+      "en": {
+        "titulo": "Website and Online Store Design",
+        "slug": null,
+        "acf": {
+          "approach": [
+            {
+              "title": "Understand",
+              "description": "We learn about your business, objectives, and user needs to define the right approach."
+            },
+            {
+              "title": "Design",
+              "description": "We design the experience and interface by balancing visual identity, usability, and functionality."
+            },
+            {
+              "title": "Develop",
+              "description": "We turn the design into a functional digital solution using technologies suited to the project's needs."
+            },
+            {
+              "title": "Scale",
+              "description": "We build solutions on a technical foundation designed to evolve alongside your business and its future needs."
+            }
+          ],
+          "approach_description": "We work in a structured way to transform your business needs into a clear, functional digital solution built to grow.",
+          "approach_title": "From concept to a functional digital experience",
+          "cta": {
+            "title": "Ready to build your next digital experience?",
+            "description": "Tell us about your business and your goals. Let's build a digital solution that can grow with you.",
+            "button_text": "Let's talk",
+            "button_url": ""
+          },
+          "development_content": "We turn your business needs into functional, engaging, and scalable digital experiences. We design and develop websites, custom platforms, and online stores while considering both the user experience and the project's technical requirements.",
+          "development_tags": [
+            {
+              "tag": "Web design"
+            },
+            {
+              "tag": "Web development"
+            },
+            {
+              "tag": "Custom platforms"
+            },
+            {
+              "tag": "Online stores"
+            },
+            {
+              "tag": "User experience"
+            },
+            {
+              "tag": "Scalability"
+            }
+          ],
+          "development_title": "Design and development with a business-driven vision",
+          "faq_items": [
+            {
+              "pregunta": "What type of websites do you develop?",
+              "respuesta": "We design and develop professional websites tailored to the needs, objectives, and characteristics of each business."
+            },
+            {
+              "pregunta": "Do you also develop custom platforms?",
+              "respuesta": "Yes. We develop custom digital platforms when a project requires specific features or processes beyond a conventional website."
+            },
+            {
+              "pregunta": "Do you develop online stores?",
+              "respuesta": "Yes. We create online stores focused on providing a clear and functional shopping experience, with a foundation built for growth."
+            },
+            {
+              "pregunta": "Do websites work on mobile phones and tablets?",
+              "respuesta": "Yes. We design digital experiences for different screen sizes to provide a consistent experience across mobile and desktop devices."
+            },
+            {
+              "pregunta": "Can you integrate external services or features?",
+              "respuesta": "Yes. We can incorporate integrations and specific features according to the needs and architecture of each project."
+            }
+          ],
+          "hero_stats": [
+            {
+              "label": "Websites",
+              "value": "Design and development"
+            },
+            {
+              "label": "Platforms",
+              "value": "Custom solutions"
+            },
+            {
+              "label": "Online stores",
+              "value": "Digital commerce"
+            }
+          ],
+          "intro_description": "We design and develop websites, custom platforms, and online stores that combine an engaging visual experience with functionality, performance, and an architecture built to scale.",
+          "intro_eyebrow": "Web Design and Development",
+          "intro_eyebrow_suffix": "",
+          "intro_title": "Digital experiences designed to grow your business",
+          "solutions": [
+            {
+              "title": "Websites",
+              "description": "We design and develop professional websites that communicate your business value and provide users with a clear and engaging experience.",
+              "features": [
+                {
+                  "feature": "Interface design"
+                },
+                {
+                  "feature": "Web development"
+                },
+                {
+                  "feature": "Responsive design"
+                },
+                {
+                  "feature": "User experience"
+                },
+                {
+                  "feature": "Scalable architecture"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            },
+            {
+              "title": "Custom platforms",
+              "description": "We develop digital platforms tailored to specific processes and needs, with an architecture designed to evolve alongside your business.",
+              "features": [
+                {
+                  "feature": "Custom development"
+                },
+                {
+                  "feature": "Feature integration"
+                },
+                {
+                  "feature": "Scalable architecture"
+                },
+                {
+                  "feature": "Custom digital experiences"
+                },
+                {
+                  "feature": "External service integrations"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            },
+            {
+              "title": "Online stores",
+              "description": "We create online stores focused on delivering a clear and functional shopping experience, built to support the growth of your digital business.",
+              "features": [
+                {
+                  "feature": "Online store design"
+                },
+                {
+                  "feature": "Shopping experience"
+                },
+                {
+                  "feature": "Product catalog"
+                },
+                {
+                  "feature": "Responsive design"
+                },
+                {
+                  "feature": "Scalability"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            }
+          ],
+          "solutions_description": "We create digital experiences that combine design, functionality, and technology to address different business needs.",
+          "solutions_eyebrow": "Our solutions",
+          "solutions_title": "Digital solutions tailored to your business",
+          "tech_description": "We select the right technologies and tools based on the type of solution, its objectives, and the project's growth requirements.",
+          "tech_groups": [
+            {
+              "title": "Web solutions",
+              "items": [
+                {
+                  "name": "Websites"
+                },
+                {
+                  "name": "Custom platforms"
+                },
+                {
+                  "name": "Online stores"
+                }
+              ]
+            },
+            {
+              "title": "Digital experience",
+              "items": [
+                {
+                  "name": "Responsive design"
+                },
+                {
+                  "name": "Interface design"
+                },
+                {
+                  "name": "User experience"
+                }
+              ]
+            },
+            {
+              "title": "Architecture",
+              "items": [
+                {
+                  "name": "Integrations"
+                },
+                {
+                  "name": "Scalability"
+                },
+                {
+                  "name": "Custom development"
+                }
+              ]
+            }
+          ],
+          "tech_title": "Technologies for building modern digital experiences"
+        }
+      }
+    },
+    {
+      "clave": "aplicaciones-moviles",
+      "categoria": "Desarrollo de aplicaciones",
+      "es": {
+        "titulo": "Aplicaciones móviles",
+        "slug": "aplicaciones-moviles",
+        "acf": {
+          "approach": [
+            {
+              "title": "Entender",
+              "description": "Analizamos los objetivos del proyecto, las necesidades de los usuarios y las características de la solución móvil."
+            },
+            {
+              "title": "Diseñar",
+              "description": "Diseñamos la experiencia móvil considerando usabilidad, navegación y las características propias de cada plataforma."
+            },
+            {
+              "title": "Desarrollar",
+              "description": "Construimos la aplicación utilizando un enfoque nativo o multiplataforma según las necesidades del proyecto."
+            },
+            {
+              "title": "Optimizar",
+              "description": "Orientamos el desarrollo hacia el rendimiento, estabilidad y una experiencia consistente para los usuarios."
+            }
+          ],
+          "approach_description": "Trabajamos de forma estructurada para transformar una necesidad de negocio en una aplicación móvil funcional, intuitiva y preparada para ofrecer un buen rendimiento.",
+          "approach_title": "De la idea a una experiencia móvil funcional",
+          "cta": {
+            "title": "¿Tienes una idea para una aplicación móvil?",
+            "description": "Cuéntanos sobre tu proyecto y exploremos juntos la mejor forma de convertirlo en una experiencia móvil funcional y de alto rendimiento.",
+            "button_text": "Hablemos",
+            "button_url": "/contacto"
+          },
+          "development_content": "Diseñamos y desarrollamos aplicaciones móviles considerando las características de cada plataforma y las necesidades específicas del proyecto. Combinamos una experiencia de usuario cuidada con un desarrollo orientado al rendimiento y la estabilidad.",
+          "development_tags": [
+            {
+              "tag": "Aplicaciones móviles"
+            },
+            {
+              "tag": "iOS"
+            },
+            {
+              "tag": "Android"
+            },
+            {
+              "tag": "Desarrollo nativo"
+            },
+            {
+              "tag": "Desarrollo multiplataforma"
+            },
+            {
+              "tag": "Experiencia de usuario"
+            },
+            {
+              "tag": "Rendimiento"
+            }
+          ],
+          "development_title": "Experiencias móviles construidas para rendir",
+          "faq_items": [
+            {
+              "pregunta": "¿Desarrollan aplicaciones para iOS y Android?",
+              "respuesta": "Sí. Desarrollamos aplicaciones para ambas plataformas utilizando enfoques nativos o multiplataforma según las necesidades del proyecto."
+            },
+            {
+              "pregunta": "¿Qué diferencia hay entre una aplicación nativa y una multiplataforma?",
+              "respuesta": "Una aplicación nativa se desarrolla específicamente para una plataforma, mientras que una aplicación multiplataforma permite compartir una base de desarrollo entre diferentes plataformas."
+            },
+            {
+              "pregunta": "¿Pueden desarrollar una aplicación para ambas plataformas?",
+              "respuesta": "Sí. Podemos desarrollar soluciones para iOS y Android, seleccionando el enfoque técnico más adecuado para los objetivos del proyecto."
+            },
+            {
+              "pregunta": "¿Las aplicaciones están enfocadas en el rendimiento?",
+              "respuesta": "Sí. El rendimiento es uno de los principales aspectos considerados durante el diseño y desarrollo de las aplicaciones."
+            },
+            {
+              "pregunta": "¿También consideran la experiencia de usuario?",
+              "respuesta": "Sí. Diseñamos y desarrollamos las aplicaciones buscando una experiencia intuitiva y adecuada a las características de cada plataforma."
+            }
+          ],
+          "hero_stats": [
+            {
+              "label": "Plataformas",
+              "value": "iOS / Android"
+            },
+            {
+              "label": "Desarrollo",
+              "value": "Nativo / Multiplataforma"
+            },
+            {
+              "label": "Enfoque",
+              "value": "Experiencia y rendimiento"
+            }
+          ],
+          "intro_description": "Desarrollamos aplicaciones nativas y multiplataforma para iOS y Android, combinando experiencia de usuario, rendimiento y una base tecnológica preparada para las necesidades de cada proyecto.",
+          "intro_eyebrow": "Desarrollo de aplicaciones móviles",
+          "intro_eyebrow_suffix": "",
+          "intro_title": "Aplicaciones móviles Androd y Iphone",
+          "solutions": [
+            {
+              "title": "Aplicaciones nativas",
+              "description": "Desarrollamos aplicaciones nativas para aprovechar las capacidades específicas de iOS y Android y ofrecer experiencias optimizadas para cada plataforma.",
+              "features": [
+                {
+                  "feature": "Desarrollo para iOS"
+                },
+                {
+                  "feature": "Desarrollo para Android"
+                },
+                {
+                  "feature": "Integración con capacidades del dispositivo"
+                },
+                {
+                  "feature": "Alto rendimiento"
+                },
+                {
+                  "feature": "Experiencia específica por plataforma"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            },
+            {
+              "title": "Aplicaciones multiplataforma",
+              "description": "Desarrollamos aplicaciones multiplataforma que permiten construir experiencias para iOS y Android a partir de una base de desarrollo compartida.",
+              "features": [
+                {
+                  "feature": "Desarrollo multiplataforma"
+                },
+                {
+                  "feature": "iOS y Android"
+                },
+                {
+                  "feature": "Código compartido"
+                },
+                {
+                  "feature": "Experiencia consistente"
+                },
+                {
+                  "feature": "Desarrollo eficiente"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            }
+          ],
+          "solutions_description": "Creamos aplicaciones móviles utilizando el enfoque de desarrollo más adecuado para las necesidades, objetivos y alcance de cada proyecto.",
+          "solutions_eyebrow": "Nuestras soluciones",
+          "solutions_title": "Desarrollo móvil adaptado a cada proyecto",
+          "tech_description": "Seleccionamos el enfoque tecnológico más adecuado para construir aplicaciones móviles con una experiencia sólida y buen rendimiento.",
+          "tech_groups": [
+            {
+              "title": "Plataformas",
+              "items": [
+                {
+                  "name": "iOS"
+                },
+                {
+                  "name": "Android"
+                }
+              ]
+            },
+            {
+              "title": "Enfoques de desarrollo",
+              "items": [
+                {
+                  "name": "Desarrollo nativo"
+                },
+                {
+                  "name": "Desarrollo multiplataforma"
+                }
+              ]
+            },
+            {
+              "title": "Experiencia",
+              "items": [
+                {
+                  "name": "Experiencia de usuario"
+                },
+                {
+                  "name": "Rendimiento"
+                },
+                {
+                  "name": "Integración con dispositivos"
+                }
+              ]
+            }
+          ],
+          "tech_title": "Tecnologías para experiencias móviles modernas"
+        }
+      },
+      "en": {
+        "titulo": "Mobile Applications",
+        "slug": null,
+        "acf": {
+          "approach": [
+            {
+              "title": "Understand",
+              "description": "We analyze the project's objectives, user needs, and the characteristics of the mobile solution."
+            },
+            {
+              "title": "Design",
+              "description": "We design the mobile experience considering usability, navigation, and the specific characteristics of each platform."
+            },
+            {
+              "title": "Develop",
+              "description": "We build the application using a native or cross-platform approach according to the project's needs."
+            },
+            {
+              "title": "Optimize",
+              "description": "We focus development on performance, stability, and a consistent experience for users."
+            }
+          ],
+          "approach_description": "We work in a structured way to transform a business need into a functional, intuitive mobile application built to deliver strong performance.",
+          "approach_title": "From idea to a functional mobile experience",
+          "cta": {
+            "title": "Have an idea for a mobile application?",
+            "description": "Tell us about your project and let's explore the best way to turn it into a functional, high-performance mobile experience.",
+            "button_text": "Let's talk",
+            "button_url": ""
+          },
+          "development_content": "We design and develop mobile applications while considering the characteristics of each platform and the specific needs of the project. We combine a carefully designed user experience with development focused on performance and stability.",
+          "development_tags": [
+            {
+              "tag": "Mobile applications"
+            },
+            {
+              "tag": "iOS"
+            },
+            {
+              "tag": "Android"
+            },
+            {
+              "tag": "Native development"
+            },
+            {
+              "tag": "Cross-platform development"
+            },
+            {
+              "tag": "User experience"
+            },
+            {
+              "tag": "Performance"
+            }
+          ],
+          "development_title": "Mobile experiences built to perform",
+          "faq_items": [
+            {
+              "pregunta": "Do you develop applications for iOS and Android?",
+              "respuesta": "Yes. We develop applications for both platforms using native or cross-platform approaches according to the project's needs."
+            },
+            {
+              "pregunta": "What is the difference between a native and a cross-platform application?",
+              "respuesta": "A native application is developed specifically for one platform, while a cross-platform application allows a shared development foundation to be used across different platforms."
+            },
+            {
+              "pregunta": "Can you develop an application for both platforms?",
+              "respuesta": "Yes. We can develop solutions for iOS and Android, selecting the technical approach that best fits the project's objectives."
+            },
+            {
+              "pregunta": "Are the applications focused on performance?",
+              "respuesta": "Yes. Performance is one of the key aspects considered throughout the application design and development process."
+            },
+            {
+              "pregunta": "Do you also consider user experience?",
+              "respuesta": "Yes. We design and develop applications with an intuitive experience adapted to the characteristics of each platform."
+            }
+          ],
+          "hero_stats": [
+            {
+              "label": "Platforms",
+              "value": "iOS / Android"
+            },
+            {
+              "label": "Development",
+              "value": "Native / Cross-platform"
+            },
+            {
+              "label": "Focus",
+              "value": "Experience and performance"
+            }
+          ],
+          "intro_description": "We develop native and cross-platform applications for iOS and Android, combining user experience, performance, and a technology foundation built around each project's needs.",
+          "intro_eyebrow": "Mobile Application Development",
+          "intro_eyebrow_suffix": "",
+          "intro_title": "Mobile applications designed for great experiences",
+          "solutions": [
+            {
+              "title": "Native applications",
+              "description": "We develop native applications to take advantage of the specific capabilities of iOS and Android and deliver optimized experiences for each platform.",
+              "features": [
+                {
+                  "feature": "iOS development"
+                },
+                {
+                  "feature": "Android development"
+                },
+                {
+                  "feature": "Device capability integration"
+                },
+                {
+                  "feature": "High performance"
+                },
+                {
+                  "feature": "Platform-specific experience"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            },
+            {
+              "title": "Cross-platform applications",
+              "description": "We develop cross-platform applications that make it possible to build experiences for iOS and Android from a shared development foundation.",
+              "features": [
+                {
+                  "feature": "Cross-platform development"
+                },
+                {
+                  "feature": "iOS and Android"
+                },
+                {
+                  "feature": "Shared codebase"
+                },
+                {
+                  "feature": "Consistent experience"
+                },
+                {
+                  "feature": "Efficient development"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            }
+          ],
+          "solutions_description": "We create mobile applications using the development approach best suited to each project's needs, objectives, and scope.",
+          "solutions_eyebrow": "Our solutions",
+          "solutions_title": "Mobile development tailored to each project",
+          "tech_description": "We select the most appropriate technology approach to build mobile applications with a strong experience and reliable performance.",
+          "tech_groups": [
+            {
+              "title": "Platforms",
+              "items": [
+                {
+                  "name": "iOS"
+                },
+                {
+                  "name": "Android"
+                }
+              ]
+            },
+            {
+              "title": "Development approaches",
+              "items": [
+                {
+                  "name": "Native development"
+                },
+                {
+                  "name": "Cross-platform development"
+                }
+              ]
+            },
+            {
+              "title": "Experience",
+              "items": [
+                {
+                  "name": "User experience"
+                },
+                {
+                  "name": "Performance"
+                },
+                {
+                  "name": "Device integration"
+                }
+              ]
+            }
+          ],
+          "tech_title": "Technologies for modern mobile experiences"
+        }
+      }
+    },
+    {
+      "clave": "desarrollo-a-medida",
+      "categoria": "Desarrollo de software",
+      "es": {
+        "titulo": "Desarrollo a medida",
+        "slug": "desarrollo-a-medida",
+        "acf": {
+          "approach": [
+            {
+              "title": "Entender",
+              "description": "Analizamos tus procesos, necesidades y objetivos para comprender qué debe resolver la solución."
+            },
+            {
+              "title": "Diseñar",
+              "description": "Definimos la arquitectura, funcionalidades y experiencia necesarias para construir una solución adecuada al problema."
+            },
+            {
+              "title": "Desarrollar",
+              "description": "Construimos el software de acuerdo con los requerimientos definidos, priorizando funcionalidad y calidad técnica."
+            },
+            {
+              "title": "Evolucionar",
+              "description": "Diseñamos una base tecnológica que permita adaptar y ampliar la solución conforme evolucionen las necesidades de tu empresa."
+            }
+          ],
+          "approach_description": "Trabajamos de forma colaborativa para entender el problema, diseñar la solución adecuada y construir software que responda a las necesidades reales de tu empresa.",
+          "approach_title": "Construimos alrededor de tu necesidad",
+          "cta": {
+            "title": "¿Necesitas una solución diseñada para tu empresa?",
+            "description": "Cuéntanos qué necesitas resolver y construyamos una solución de software alrededor de las necesidades reales de tu negocio.",
+            "button_text": "Hablemos",
+            "button_url": "/contacto"
+          },
+          "development_content": "Analizamos las necesidades específicas de tu empresa para diseñar y desarrollar soluciones de software que se adapten a tus procesos. Desde sistemas internos hasta aplicaciones complejas, construimos soluciones enfocadas en funcionalidad, mantenibilidad y capacidad de evolución.",
+          "development_tags": [
+            {
+              "tag": "Software a medida"
+            },
+            {
+              "tag": "Sistemas internos"
+            },
+            {
+              "tag": "Aplicaciones empresariales"
+            },
+            {
+              "tag": "Desarrollo personalizado"
+            },
+            {
+              "tag": "Integraciones"
+            },
+            {
+              "tag": "Arquitectura de software"
+            }
+          ],
+          "development_title": "Tecnología construida para resolver necesidades reales",
+          "faq_items": [
+            {
+              "pregunta": "¿Qué tipo de software pueden desarrollar?",
+              "respuesta": "Desarrollamos soluciones de software adaptadas a las necesidades específicas de cada empresa, desde sistemas internos hasta aplicaciones empresariales y soluciones más complejas."
+            },
+            {
+              "pregunta": "¿Pueden adaptar la solución a nuestros procesos actuales?",
+              "respuesta": "Sí. El desarrollo a medida parte de las necesidades y procesos específicos de cada empresa para construir una solución adaptada a su operación."
+            },
+            {
+              "pregunta": "¿Pueden integrar el software con sistemas existentes?",
+              "respuesta": "Sí. Podemos desarrollar integraciones con sistemas y servicios existentes cuando forman parte de las necesidades del proyecto."
+            },
+            {
+              "pregunta": "¿El software puede crecer con nuestra empresa?",
+              "respuesta": "Sí. Diseñamos las soluciones considerando su capacidad de evolución para permitir incorporar nuevas funcionalidades y necesidades conforme crece el proyecto."
+            },
+            {
+              "pregunta": "¿Desarrollan sistemas internos para empresas?",
+              "respuesta": "Sí. Podemos crear sistemas internos orientados a digitalizar procesos, centralizar información y facilitar la operación de diferentes áreas de una empresa."
+            }
+          ],
+          "hero_stats": [
+            {
+              "label": "Soluciones",
+              "value": "100% a medida"
+            },
+            {
+              "label": "Alcance",
+              "value": "Sistemas y aplicaciones"
+            },
+            {
+              "label": "Enfoque",
+              "value": "Necesidades específicas"
+            }
+          ],
+          "intro_description": "Creamos soluciones de software a medida para resolver necesidades específicas de tu empresa, desde sistemas internos hasta aplicaciones complejas, con una arquitectura preparada para evolucionar.",
+          "intro_eyebrow": "Desarrollo de software",
+          "intro_eyebrow_suffix": "",
+          "intro_title": "Software diseñado para tu empresa",
+          "solutions": [
+            {
+              "title": "Sistemas internos",
+              "description": "Desarrollamos sistemas internos adaptados a los procesos y necesidades operativas específicas de tu empresa.",
+              "features": [
+                {
+                  "feature": "Digitalización de procesos"
+                },
+                {
+                  "feature": "Automatización"
+                },
+                {
+                  "feature": "Gestión de información"
+                },
+                {
+                  "feature": "Flujos de trabajo personalizados"
+                },
+                {
+                  "feature": "Integración con sistemas existentes"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            },
+            {
+              "title": "Aplicaciones empresariales",
+              "description": "Creamos aplicaciones diseñadas alrededor de las necesidades específicas de tu organización y sus usuarios.",
+              "features": [
+                {
+                  "feature": "Aplicaciones personalizadas"
+                },
+                {
+                  "feature": "Funcionalidades específicas"
+                },
+                {
+                  "feature": "Interfaces adaptadas"
+                },
+                {
+                  "feature": "Integraciones"
+                },
+                {
+                  "feature": "Arquitectura escalable"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            },
+            {
+              "title": "Soluciones complejas",
+              "description": "Diseñamos y desarrollamos soluciones de software para proyectos que requieren funcionalidades, integraciones o arquitecturas específicas.",
+              "features": [
+                {
+                  "feature": "Arquitecturas personalizadas"
+                },
+                {
+                  "feature": "Integraciones complejas"
+                },
+                {
+                  "feature": "Desarrollo de funcionalidades específicas"
+                },
+                {
+                  "feature": "Escalabilidad"
+                },
+                {
+                  "feature": "Evolución tecnológica"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            }
+          ],
+          "solutions_description": "Desarrollamos soluciones personalizadas para digitalizar procesos, resolver necesidades específicas y crear nuevas capacidades para tu empresa.",
+          "solutions_eyebrow": "Nuestras soluciones",
+          "solutions_title": "Software adaptado a cada necesidad",
+          "tech_description": "Seleccionamos las tecnologías y herramientas de acuerdo con las necesidades funcionales y técnicas de cada proyecto.",
+          "tech_groups": [
+            {
+              "title": "Tipos de solución",
+              "items": [
+                {
+                  "name": "Sistemas internos"
+                },
+                {
+                  "name": "Aplicaciones empresariales"
+                },
+                {
+                  "name": "Software a medida"
+                }
+              ]
+            },
+            {
+              "title": "Capacidades",
+              "items": [
+                {
+                  "name": "Automatización"
+                },
+                {
+                  "name": "Integraciones"
+                },
+                {
+                  "name": "Gestión de información"
+                }
+              ]
+            },
+            {
+              "title": "Arquitectura",
+              "items": [
+                {
+                  "name": "Arquitectura personalizada"
+                },
+                {
+                  "name": "Escalabilidad"
+                },
+                {
+                  "name": "Evolución tecnológica"
+                }
+              ]
+            }
+          ],
+          "tech_title": "Tecnología adaptada a cada solución"
+        }
+      },
+      "en": {
+        "titulo": "Custom Software Development",
+        "slug": null,
+        "acf": {
+          "approach": [
+            {
+              "title": "Understand",
+              "description": "We analyze your processes, needs, and objectives to understand what the solution needs to solve."
+            },
+            {
+              "title": "Design",
+              "description": "We define the architecture, functionality, and experience needed to build the right solution for the problem."
+            },
+            {
+              "title": "Develop",
+              "description": "We build the software according to the defined requirements, prioritizing functionality and technical quality."
+            },
+            {
+              "title": "Evolve",
+              "description": "We design a technology foundation that allows the solution to adapt and expand as your company's needs evolve."
+            }
+          ],
+          "approach_description": "We work collaboratively to understand the problem, design the right solution, and build software that addresses your company's real needs.",
+          "approach_title": "We build around your needs",
+          "cta": {
+            "title": "Need a solution designed for your business?",
+            "description": "Tell us what you need to solve and let's build a software solution around your business's real needs.",
+            "button_text": "Let's talk",
+            "button_url": ""
+          },
+          "development_content": "We analyze your company's specific needs to design and develop software solutions that adapt to your processes. From internal systems to complex applications, we build solutions focused on functionality, maintainability, and the ability to evolve.",
+          "development_tags": [
+            {
+              "tag": "Custom software"
+            },
+            {
+              "tag": "Internal systems"
+            },
+            {
+              "tag": "Business applications"
+            },
+            {
+              "tag": "Custom development"
+            },
+            {
+              "tag": "Integrations"
+            },
+            {
+              "tag": "Software architecture"
+            }
+          ],
+          "development_title": "Technology built to solve real needs",
+          "faq_items": [
+            {
+              "pregunta": "What type of software can you develop?",
+              "respuesta": "We develop software solutions tailored to each company's specific needs, from internal systems to business applications and more complex solutions."
+            },
+            {
+              "pregunta": "Can you adapt the solution to our current processes?",
+              "respuesta": "Yes. Custom development starts from each company's specific needs and processes to build a solution adapted to its operations."
+            },
+            {
+              "pregunta": "Can you integrate the software with existing systems?",
+              "respuesta": "Yes. We can develop integrations with existing systems and services when they are part of the project's requirements."
+            },
+            {
+              "pregunta": "Can the software grow with our company?",
+              "respuesta": "Yes. We design solutions with the ability to evolve, allowing new features and requirements to be incorporated as the project grows."
+            },
+            {
+              "pregunta": "Do you develop internal systems for companies?",
+              "respuesta": "Yes. We can create internal systems designed to digitize processes, centralize information, and facilitate operations across different areas of a company."
+            }
+          ],
+          "hero_stats": [
+            {
+              "label": "Solutions",
+              "value": "100% Custom"
+            },
+            {
+              "label": "Scope",
+              "value": "Systems and applications"
+            },
+            {
+              "label": "Focus",
+              "value": "Specific needs"
+            }
+          ],
+          "intro_description": "We create custom software solutions to address your company's specific needs, from internal systems to complex applications, with an architecture built to evolve.",
+          "intro_eyebrow": "Software Development",
+          "intro_eyebrow_suffix": "",
+          "intro_title": "Software designed around your business needs",
+          "solutions": [
+            {
+              "title": "Internal systems",
+              "description": "We develop internal systems tailored to your company's specific operational processes and needs.",
+              "features": [
+                {
+                  "feature": "Process digitization"
+                },
+                {
+                  "feature": "Automation"
+                },
+                {
+                  "feature": "Information management"
+                },
+                {
+                  "feature": "Custom workflows"
+                },
+                {
+                  "feature": "Integration with existing systems"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            },
+            {
+              "title": "Business applications",
+              "description": "We create applications designed around the specific needs of your organization and its users.",
+              "features": [
+                {
+                  "feature": "Custom applications"
+                },
+                {
+                  "feature": "Specific functionality"
+                },
+                {
+                  "feature": "Tailored interfaces"
+                },
+                {
+                  "feature": "Integrations"
+                },
+                {
+                  "feature": "Scalable architecture"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            },
+            {
+              "title": "Complex solutions",
+              "description": "We design and develop software solutions for projects that require specific functionality, integrations, or architectures.",
+              "features": [
+                {
+                  "feature": "Custom architectures"
+                },
+                {
+                  "feature": "Complex integrations"
+                },
+                {
+                  "feature": "Specific feature development"
+                },
+                {
+                  "feature": "Scalability"
+                },
+                {
+                  "feature": "Technology evolution"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            }
+          ],
+          "solutions_description": "We develop custom solutions to digitize processes, address specific needs, and create new capabilities for your business.",
+          "solutions_eyebrow": "Our solutions",
+          "solutions_title": "Software tailored to every need",
+          "tech_description": "We select technologies and tools according to the functional and technical needs of each project.",
+          "tech_groups": [
+            {
+              "title": "Solution types",
+              "items": [
+                {
+                  "name": "Internal systems"
+                },
+                {
+                  "name": "Business applications"
+                },
+                {
+                  "name": "Custom software"
+                }
+              ]
+            },
+            {
+              "title": "Capabilities",
+              "items": [
+                {
+                  "name": "Automation"
+                },
+                {
+                  "name": "Integrations"
+                },
+                {
+                  "name": "Information management"
+                }
+              ]
+            },
+            {
+              "title": "Architecture",
+              "items": [
+                {
+                  "name": "Custom architecture"
+                },
+                {
+                  "name": "Scalability"
+                },
+                {
+                  "name": "Technology evolution"
+                }
+              ]
+            }
+          ],
+          "tech_title": "Technology adapted to each solution"
+        }
+      }
+    },
+    {
+      "clave": "devops-y-soporte-tecnico",
+      "categoria": "Infraestructura y soporte tecnológico",
+      "es": {
+        "titulo": "DevOps y Soporte Técnico",
+        "slug": "devops-y-soporte-tecnico",
+        "acf": {
+          "approach": [
+            {
+              "title": "Evaluamos",
+              "description": "Analizamos la infraestructura, los procesos actuales y las necesidades operativas del proyecto para identificar oportunidades de mejora."
+            },
+            {
+              "title": "Automatizamos",
+              "description": "Identificamos tareas repetitivas y procesos manuales que pueden automatizarse para reducir errores y mejorar la eficiencia."
+            },
+            {
+              "title": "Desplegamos",
+              "description": "Implementamos procesos de despliegue controlados que facilitan la entrega de nuevas versiones y actualizaciones."
+            },
+            {
+              "title": "Monitoreamos",
+              "description": "Supervisamos el funcionamiento de los servicios y atendemos incidencias para mantener la continuidad operativa."
+            }
+          ],
+          "approach_description": "Trabajamos de forma estructurada para que la operación tecnológica sea más confiable, automatizada y fácil de mantener.",
+          "approach_title": "Un enfoque orientado a la estabilidad y mejora continua",
+          "cta": {
+            "title": "Mantén tu infraestructura lista para crecer",
+            "description": "Automatiza procesos, mejora la operación de tus sistemas y cuenta con soporte técnico para mantener tu tecnología funcionando de forma confiable.",
+            "button_text": "Hablemos de tu proyecto",
+            "button_url": "/contacto"
+          },
+          "development_content": "Diseñamos y gestionamos procesos que facilitan la operación, actualización y mantenimiento de tus sistemas. Automatizamos tareas repetitivas, mejoramos los procesos de despliegue y proporcionamos soporte técnico para reducir interrupciones y mantener tus aplicaciones funcionando de forma confiable.",
+          "development_tags": [
+            {
+              "tag": "Automatización"
+            },
+            {
+              "tag": "CI/CD"
+            },
+            {
+              "tag": "Infraestructura"
+            },
+            {
+              "tag": "Despliegues"
+            },
+            {
+              "tag": "Monitoreo"
+            },
+            {
+              "tag": "Soporte técnico"
+            }
+          ],
+          "development_title": "Operación tecnológica estable y preparada para crecer",
+          "faq_items": [
+            {
+              "pregunta": "¿Qué incluye el servicio de DevOps y Soporte Técnico?",
+              "respuesta": "Incluye gestión de infraestructura, automatización de procesos, despliegues, mantenimiento, monitoreo y soporte técnico de acuerdo con las necesidades de cada proyecto."
+            },
+            {
+              "pregunta": "¿Pueden trabajar con infraestructura existente?",
+              "respuesta": "Sí. Podemos trabajar sobre la infraestructura y las herramientas que ya utiliza tu organización, identificando oportunidades de mejora sin necesidad de reemplazar todo el entorno."
+            },
+            {
+              "pregunta": "¿Pueden automatizar nuestros procesos de despliegue?",
+              "respuesta": "Sí. Podemos implementar procesos automatizados de integración y despliegue para reducir tareas manuales, errores y tiempos de entrega."
+            },
+            {
+              "pregunta": "¿El soporte es únicamente para resolver incidencias?",
+              "respuesta": "No. Además de atender incidencias, podemos realizar mantenimiento, monitoreo, optimización y mejoras continuas para mantener una operación tecnológica estable."
+            }
+          ],
+          "hero_stats": [
+            {
+              "label": "Infraestructura",
+              "value": "Gestionada"
+            },
+            {
+              "label": "Despliegues",
+              "value": "Automatizados"
+            },
+            {
+              "label": "Soporte",
+              "value": "Continuo"
+            }
+          ],
+          "intro_description": "Gestionamos la infraestructura, automatizamos procesos, desplegamos actualizaciones y brindamos soporte continuo para garantizar el rendimiento y la disponibilidad de tus sistemas.",
+          "intro_eyebrow": "DevOps y Soporte Técnico",
+          "intro_eyebrow_suffix": "",
+          "intro_title": "Infraestructura confiable para que tu tecnología siga avanzando",
+          "solutions": [
+            {
+              "title": "Automatización y despliegues",
+              "description": "Automatizamos procesos de integración y despliegue para reducir tareas manuales, acelerar las entregas y hacer más consistentes las actualizaciones de tus aplicaciones.",
+              "features": [
+                {
+                  "feature": "Automatización de procesos"
+                },
+                {
+                  "feature": "Integración y despliegue continuo"
+                },
+                {
+                  "feature": "Configuración de pipelines"
+                },
+                {
+                  "feature": "Gestión de ambientes"
+                },
+                {
+                  "feature": "Actualizaciones controladas"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            },
+            {
+              "title": "Infraestructura y operación",
+              "description": "Gestionamos los componentes necesarios para mantener tus aplicaciones y servicios disponibles, facilitando su administración y evolución.",
+              "features": [
+                {
+                  "feature": "Configuración de servidores"
+                },
+                {
+                  "feature": "Administración de servicios"
+                },
+                {
+                  "feature": "Gestión de ambientes"
+                },
+                {
+                  "feature": "Optimización de recursos"
+                },
+                {
+                  "feature": "Mantenimiento de infraestructura"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            },
+            {
+              "title": "Monitoreo y soporte técnico",
+              "description": "Brindamos seguimiento y soporte para identificar problemas, atender incidencias y mantener la continuidad operativa de tus sistemas.",
+              "features": [
+                {
+                  "feature": "Monitoreo de servicios"
+                },
+                {
+                  "feature": "Diagnóstico de incidencias"
+                },
+                {
+                  "feature": "Resolución de problemas"
+                },
+                {
+                  "feature": "Mantenimiento preventivo"
+                },
+                {
+                  "feature": "Soporte técnico continuo"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            }
+          ],
+          "solutions_description": "Integramos prácticas de automatización, infraestructura y soporte para facilitar la administración y evolución continua de tus soluciones tecnológicas.",
+          "solutions_eyebrow": "Soluciones",
+          "solutions_title": "Todo lo necesario para mantener tus sistemas operativos",
+          "tech_description": "Utilizamos herramientas y tecnologías adecuadas para automatizar procesos, administrar infraestructura y facilitar la operación de tus sistemas.",
+          "tech_groups": [
+            {
+              "title": "DevOps",
+              "items": [
+                {
+                  "name": "CI/CD"
+                },
+                {
+                  "name": "Git"
+                },
+                {
+                  "name": "Docker"
+                },
+                {
+                  "name": "Automatización"
+                }
+              ]
+            },
+            {
+              "title": "Infraestructura",
+              "items": [
+                {
+                  "name": "Linux"
+                },
+                {
+                  "name": "Servidores"
+                },
+                {
+                  "name": "Cloud"
+                },
+                {
+                  "name": "Contenedores"
+                }
+              ]
+            },
+            {
+              "title": "Monitoreo y operación",
+              "items": [
+                {
+                  "name": "Logs"
+                },
+                {
+                  "name": "Monitoreo"
+                },
+                {
+                  "name": "Backups"
+                },
+                {
+                  "name": "Gestión de servicios"
+                }
+              ]
+            }
+          ],
+          "tech_title": "Tecnologías para una operación moderna"
+        }
+      },
+      "en": {
+        "titulo": "DevOps &#038; Technical Support",
+        "slug": null,
+        "acf": {
+          "approach": [
+            {
+              "title": "We Assess",
+              "description": "We analyze your infrastructure, current processes, and operational needs to identify opportunities for improvement."
+            },
+            {
+              "title": "We Automate",
+              "description": "We identify repetitive tasks and manual processes that can be automated to reduce errors and improve efficiency."
+            },
+            {
+              "title": "We Deploy",
+              "description": "We implement controlled deployment processes that make it easier to release new versions and updates."
+            },
+            {
+              "title": "We Monitor",
+              "description": "We monitor services and address incidents to maintain operational continuity."
+            }
+          ],
+          "approach_description": "We work in a structured way to make your technology operations more reliable, automated, and easier to maintain.",
+          "approach_title": "An approach focused on stability and continuous improvement",
+          "cta": {
+            "title": "Keep your infrastructure ready to grow",
+            "description": "Automate processes, improve your systems' operations, and rely on technical support to keep your technology running reliably.",
+            "button_text": "Let's talk about your project",
+            "button_url": ""
+          },
+          "development_content": "We design and manage processes that make it easier to operate, update, and maintain your systems. We automate repetitive tasks, improve deployment processes, and provide technical support to reduce interruptions and keep your applications running reliably.",
+          "development_tags": [
+            {
+              "tag": "Automation"
+            },
+            {
+              "tag": "CI/CD"
+            },
+            {
+              "tag": "Infrastructure"
+            },
+            {
+              "tag": "Deployments"
+            },
+            {
+              "tag": "Monitoring"
+            },
+            {
+              "tag": "Technical support"
+            }
+          ],
+          "development_title": "Stable technology operations built to scale",
+          "faq_items": [
+            {
+              "pregunta": "What does the DevOps and Technical Support service include?",
+              "respuesta": "It includes infrastructure management, process automation, deployments, maintenance, monitoring, and technical support according to the needs of each project."
+            },
+            {
+              "pregunta": "Can you work with existing infrastructure?",
+              "respuesta": "Yes. We can work with the infrastructure and tools your organization already uses, identifying opportunities for improvement without requiring a complete replacement of the existing environment."
+            },
+            {
+              "pregunta": "Can you automate our deployment processes?",
+              "respuesta": "Yes. We can implement automated integration and deployment processes to reduce manual tasks, errors, and delivery times."
+            },
+            {
+              "pregunta": "Is support only for resolving incidents?",
+              "respuesta": "No. In addition to incident resolution, we can provide maintenance, monitoring, optimization, and continuous improvements to keep your technology operations stable."
+            }
+          ],
+          "hero_stats": [
+            {
+              "label": "Infrastructure",
+              "value": "Managed"
+            },
+            {
+              "label": "Deployments",
+              "value": "Automated"
+            },
+            {
+              "label": "Support",
+              "value": "Continuous"
+            }
+          ],
+          "intro_description": "We manage infrastructure, automate processes, deploy updates, and provide continuous support to ensure the performance and availability of your systems.",
+          "intro_eyebrow": "DevOps & Technical Support",
+          "intro_eyebrow_suffix": "",
+          "intro_title": "Reliable infrastructure to keep your technology moving forward",
+          "solutions": [
+            {
+              "title": "Automation & Deployments",
+              "description": "We automate integration and deployment processes to reduce manual tasks, accelerate releases, and make application updates more consistent.",
+              "features": [
+                {
+                  "feature": "Process automation"
+                },
+                {
+                  "feature": "Continuous integration and deployment"
+                },
+                {
+                  "feature": "Pipeline configuration"
+                },
+                {
+                  "feature": "Environment management"
+                },
+                {
+                  "feature": "Controlled updates"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            },
+            {
+              "title": "Infrastructure & Operations",
+              "description": "We manage the components required to keep your applications and services available while making them easier to operate and evolve.",
+              "features": [
+                {
+                  "feature": "Server configuration"
+                },
+                {
+                  "feature": "Service management"
+                },
+                {
+                  "feature": "Environment management"
+                },
+                {
+                  "feature": "Resource optimization"
+                },
+                {
+                  "feature": "Infrastructure maintenance"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            },
+            {
+              "title": "Monitoring & Technical Support",
+              "description": "We provide monitoring and support to identify problems, resolve incidents, and maintain the operational continuity of your systems.",
+              "features": [
+                {
+                  "feature": "Service monitoring"
+                },
+                {
+                  "feature": "Incident diagnosis"
+                },
+                {
+                  "feature": "Problem resolution"
+                },
+                {
+                  "feature": "Preventive maintenance"
+                },
+                {
+                  "feature": "Continuous technical support"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            }
+          ],
+          "solutions_description": "We combine automation, infrastructure, and technical support practices to simplify the management and continuous evolution of your technology solutions.",
+          "solutions_eyebrow": "Solutions",
+          "solutions_title": "Everything you need to keep your systems running",
+          "tech_description": "We use appropriate tools and technologies to automate processes, manage infrastructure, and simplify the operation of your systems.",
+          "tech_groups": [
+            {
+              "title": "DevOps",
+              "items": [
+                {
+                  "name": "CI/CD"
+                },
+                {
+                  "name": "Git"
+                },
+                {
+                  "name": "Docker"
+                },
+                {
+                  "name": "Automation"
+                }
+              ]
+            },
+            {
+              "title": "Infrastructure",
+              "items": [
+                {
+                  "name": "Linux"
+                },
+                {
+                  "name": "Servers"
+                },
+                {
+                  "name": "Cloud"
+                },
+                {
+                  "name": "Containers"
+                }
+              ]
+            },
+            {
+              "title": "Monitoring & Operations",
+              "items": [
+                {
+                  "name": "Logs"
+                },
+                {
+                  "name": "Monitoring"
+                },
+                {
+                  "name": "Backups"
+                },
+                {
+                  "name": "Service management"
+                }
+              ]
+            }
+          ],
+          "tech_title": "Technology for modern operations"
+        }
+      }
+    },
+    {
+      "clave": "integracion-de-apis-y-servicios-externos",
+      "categoria": "Integración y desarrollo de software",
+      "es": {
+        "titulo": "Integracion de Apis y Servicios Externos",
+        "slug": "integracion-de-apis-y-servicios-externos",
+        "acf": {
+          "approach": [
+            {
+              "title": "Analizamos",
+              "description": "Identificamos los sistemas involucrados, las fuentes de información y los procesos que deben conectarse."
+            },
+            {
+              "title": "Diseñamos",
+              "description": "Definimos cómo se comunicarán los sistemas, qué información intercambiarán y cómo se manejarán los diferentes escenarios."
+            },
+            {
+              "title": "Integramos",
+              "description": "Implementamos las conexiones necesarias entre tus aplicaciones y los servicios externos seleccionados."
+            },
+            {
+              "title": "Validamos",
+              "description": "Comprobamos el funcionamiento de las integraciones y validamos que el intercambio de información sea consistente y confiable."
+            }
+          ],
+          "approach_description": "Analizamos tus sistemas y procesos para construir integraciones estables, seguras y alineadas con las necesidades de tu negocio.",
+          "approach_title": "Una integración diseñada para funcionar de forma confiable",
+          "cta": {
+            "title": "Conecta tus sistemas y automatiza tus procesos",
+            "description": "Integra las plataformas que utilizas y aprovecha nuevas funcionalidades sin complicar la operación de tus sistemas.",
+            "button_text": "Hablemos de tu proyecto",
+            "button_url": "/contacto"
+          },
+          "development_content": "Desarrollamos integraciones entre tus aplicaciones y servicios externos para facilitar el intercambio de información y automatizar operaciones. Analizamos las necesidades de cada proyecto y construimos conexiones que permitan aprovechar las capacidades de plataformas existentes sin interrumpir tus procesos actuales.",
+          "development_tags": [
+            {
+              "tag": "APIs REST"
+            },
+            {
+              "tag": "Webhooks"
+            },
+            {
+              "tag": "Integraciones"
+            },
+            {
+              "tag": "Automatización"
+            },
+            {
+              "tag": "Servicios externos"
+            },
+            {
+              "tag": "Sincronización de datos"
+            }
+          ],
+          "development_title": "Sistemas que trabajan juntos",
+          "faq_items": [
+            {
+              "pregunta": "¿Qué tipo de servicios pueden integrar?",
+              "respuesta": "Podemos integrar APIs, plataformas, aplicaciones y servicios externos siempre que cuenten con mecanismos de comunicación disponibles, como APIs, webhooks u otros métodos de integración."
+            },
+            {
+              "pregunta": "¿Pueden conectar sistemas que utilizan tecnologías diferentes?",
+              "respuesta": "Sí. Las integraciones pueden conectar sistemas desarrollados con diferentes tecnologías siempre que exista una forma de comunicación compatible entre ellos."
+            },
+            {
+              "pregunta": "¿Pueden automatizar procesos entre diferentes plataformas?",
+              "respuesta": "Sí. Podemos conectar diferentes servicios para automatizar el intercambio de información y reducir tareas manuales dentro de tus procesos."
+            },
+            {
+              "pregunta": "¿Qué pasa si una plataforma cambia su API?",
+              "respuesta": "Podemos adaptar la integración a los cambios realizados por el proveedor para mantener la comunicación entre los sistemas y reducir interrupciones en el servicio."
+            }
+          ],
+          "hero_stats": [
+            {
+              "label": "Integraciones",
+              "value": "Conectadas"
+            },
+            {
+              "label": "Procesos",
+              "value": "Automatizados"
+            },
+            {
+              "label": "Sistemas",
+              "value": "Integrados"
+            }
+          ],
+          "intro_description": "Conectamos tu software con plataformas y servicios externos, optimizando flujos de trabajo y ampliando funcionalidades.",
+          "intro_eyebrow": "Integración de APIs y Servicios Externos",
+          "intro_eyebrow_suffix": "",
+          "intro_title": "Conecta tus sistemas y lleva tus procesos más lejos",
+          "solutions": [
+            {
+              "title": "Integración de APIs",
+              "description": "Conectamos tus aplicaciones con APIs de terceros para intercambiar información y utilizar funcionalidades proporcionadas por otras plataformas.",
+              "features": [
+                {
+                  "feature": "Integración de APIs REST"
+                },
+                {
+                  "feature": "Consumo de servicios externos"
+                },
+                {
+                  "feature": "Autenticación y autorización"
+                },
+                {
+                  "feature": "Manejo de respuestas y errores"
+                },
+                {
+                  "feature": "Sincronización de información"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            },
+            {
+              "title": "Automatización de flujos",
+              "description": "Integramos diferentes servicios para automatizar procesos que anteriormente requerían intervención manual y mejorar la eficiencia operativa.",
+              "features": [
+                {
+                  "feature": "Automatización de procesos"
+                },
+                {
+                  "feature": "Integración entre plataformas"
+                },
+                {
+                  "feature": "Webhooks"
+                },
+                {
+                  "feature": "Procesamiento de eventos"
+                },
+                {
+                  "feature": "Flujos automatizados"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            },
+            {
+              "title": "Sincronización de sistemas",
+              "description": "Conectamos diferentes fuentes de información para mantener los datos sincronizados y facilitar el intercambio de información entre sistemas.",
+              "features": [
+                {
+                  "feature": "Sincronización de datos"
+                },
+                {
+                  "feature": "Integración entre sistemas"
+                },
+                {
+                  "feature": "Transformación de información"
+                },
+                {
+                  "feature": "Validación de datos"
+                },
+                {
+                  "feature": "Actualizaciones automáticas"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            }
+          ],
+          "solutions_description": "Creamos conexiones entre aplicaciones, plataformas y servicios externos para eliminar procesos manuales, mejorar el flujo de información y ampliar las funcionalidades de tus sistemas.",
+          "solutions_eyebrow": "Soluciones",
+          "solutions_title": "Integra las herramientas que tu negocio necesita",
+          "tech_description": "Utilizamos tecnologías y herramientas adecuadas para integrar aplicaciones, APIs y servicios externos de forma eficiente.",
+          "tech_groups": [
+            {
+              "title": "APIs y comunicación",
+              "items": [
+                {
+                  "name": "REST APIs"
+                },
+                {
+                  "name": "JSON"
+                },
+                {
+                  "name": "HTTP"
+                },
+                {
+                  "name": "OAuth"
+                }
+              ]
+            },
+            {
+              "title": "Integración",
+              "items": [
+                {
+                  "name": "Webhooks"
+                },
+                {
+                  "name": "API Clients"
+                },
+                {
+                  "name": "Integración de servicios"
+                },
+                {
+                  "name": "Automatización"
+                }
+              ]
+            },
+            {
+              "title": "Datos",
+              "items": [
+                {
+                  "name": "JSON"
+                },
+                {
+                  "name": "XML"
+                },
+                {
+                  "name": "Transformación de datos"
+                },
+                {
+                  "name": "Sincronización"
+                }
+              ]
+            }
+          ],
+          "tech_title": "Tecnologías para conectar tus sistemas"
+        }
+      },
+      "en": {
+        "titulo": "API and External Service Integration",
+        "slug": null,
+        "acf": {
+          "approach": [
+            {
+              "title": "We Analyze",
+              "description": "We identify the systems involved, information sources, and processes that need to be connected."
+            },
+            {
+              "title": "We Design",
+              "description": "We define how the systems will communicate, what information they will exchange, and how different scenarios will be handled."
+            },
+            {
+              "title": "We Integrate",
+              "description": "We implement the necessary connections between your applications and selected external services."
+            },
+            {
+              "title": "We Validate",
+              "description": "We test the integrations and validate that information exchange is consistent and reliable."
+            }
+          ],
+          "approach_description": "We analyze your systems and processes to build stable, secure integrations aligned with your business needs.",
+          "approach_title": "An integration designed to work reliably",
+          "cta": {
+            "title": "Connect your systems and automate your processes",
+            "description": "Integrate the platforms you use and take advantage of new functionality without complicating the operation of your systems.",
+            "button_text": "Let's talk about your project",
+            "button_url": ""
+          },
+          "development_content": "We develop integrations between your applications and external services to simplify information exchange and automate operations. We analyze each project's needs and build connections that allow you to take advantage of existing platforms without disrupting your current processes.",
+          "development_tags": [
+            {
+              "tag": "REST APIs"
+            },
+            {
+              "tag": "Webhooks"
+            },
+            {
+              "tag": "Integrations"
+            },
+            {
+              "tag": "Automation"
+            },
+            {
+              "tag": "External services"
+            },
+            {
+              "tag": "Data synchronization"
+            }
+          ],
+          "development_title": "Systems that work together",
+          "faq_items": [
+            {
+              "pregunta": "What types of services can you integrate?",
+              "respuesta": "We can integrate APIs, platforms, applications, and external services as long as they provide available communication mechanisms such as APIs, webhooks, or other integration methods."
+            },
+            {
+              "pregunta": "Can you connect systems that use different technologies?",
+              "respuesta": "Yes. Integrations can connect systems built with different technologies as long as there is a compatible communication method between them."
+            },
+            {
+              "pregunta": "Can you automate processes between different platforms?",
+              "respuesta": "Yes. We can connect different services to automate information exchange and reduce manual tasks within your processes."
+            },
+            {
+              "pregunta": "What happens if a platform changes its API?",
+              "respuesta": "We can adapt the integration to changes made by the provider to maintain communication between systems and reduce service interruptions."
+            }
+          ],
+          "hero_stats": [
+            {
+              "label": "Integrations",
+              "value": "Connected"
+            },
+            {
+              "label": "Processes",
+              "value": "Automated"
+            },
+            {
+              "label": "Systems",
+              "value": "Integrated"
+            }
+          ],
+          "intro_description": "We connect your software with external platforms and services, optimizing workflows and expanding functionality.",
+          "intro_eyebrow": "API and External Service Integration",
+          "intro_eyebrow_suffix": "",
+          "intro_title": "Connect your systems and take your processes further",
+          "solutions": [
+            {
+              "title": "API Integration",
+              "description": "We connect your applications with third-party APIs to exchange information and use functionality provided by other platforms.",
+              "features": [
+                {
+                  "feature": "REST API integration"
+                },
+                {
+                  "feature": "External service consumption"
+                },
+                {
+                  "feature": "Authentication and authorization"
+                },
+                {
+                  "feature": "Response and error handling"
+                },
+                {
+                  "feature": "Information synchronization"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            },
+            {
+              "title": "Workflow Automation",
+              "description": "We integrate different services to automate processes that previously required manual intervention and improve operational efficiency.",
+              "features": [
+                {
+                  "feature": "Process automation"
+                },
+                {
+                  "feature": "Platform integration"
+                },
+                {
+                  "feature": "Webhooks"
+                },
+                {
+                  "feature": "Event processing"
+                },
+                {
+                  "feature": "Automated workflows"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            },
+            {
+              "title": "System Synchronization",
+              "description": "We connect different information sources to keep data synchronized and facilitate information exchange between systems.",
+              "features": [
+                {
+                  "feature": "Data synchronization"
+                },
+                {
+                  "feature": "System integration"
+                },
+                {
+                  "feature": "Data transformation"
+                },
+                {
+                  "feature": "Data validation"
+                },
+                {
+                  "feature": "Automatic updates"
+                }
+              ],
+              "link": {
+                "text": "",
+                "url": ""
+              }
+            }
+          ],
+          "solutions_description": "We create connections between applications, platforms, and external services to eliminate manual processes, improve information flow, and expand the functionality of your systems.",
+          "solutions_eyebrow": "Solutions",
+          "solutions_title": "Integrate the tools your business needs",
+          "tech_description": "We use appropriate technologies and tools to integrate applications, APIs, and external services efficiently.",
+          "tech_groups": [
+            {
+              "title": "APIs & Communication",
+              "items": [
+                {
+                  "name": "REST APIs"
+                },
+                {
+                  "name": "JSON"
+                },
+                {
+                  "name": "HTTP"
+                },
+                {
+                  "name": "OAuth"
+                }
+              ]
+            },
+            {
+              "title": "Integration",
+              "items": [
+                {
+                  "name": "Webhooks"
+                },
+                {
+                  "name": "API Clients"
+                },
+                {
+                  "name": "Service integration"
+                },
+                {
+                  "name": "Automation"
+                }
+              ]
+            },
+            {
+              "title": "Data",
+              "items": [
+                {
+                  "name": "JSON"
+                },
+                {
+                  "name": "XML"
+                },
+                {
+                  "name": "Data transformation"
+                },
+                {
+                  "name": "Synchronization"
+                }
+              ]
+            }
+          ],
+          "tech_title": "Technology for connecting your systems"
+        }
+      }
+    }
+  ]
+}
