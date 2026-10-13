@@ -43,7 +43,7 @@ const { project, locale, indexLabel = 'Proyectos' } = Astro.props;
 const homeCrumb = getBreadcrumbHome(locale);
 const singleBlock =
   project.descriptionBlocks.length === 1 &&
-  !project.descriptionBlocks[0].title;
+  !project.descriptionBlocks[0]?.title;
 ---
 
 {/* 01 · Identidad del proyecto (Breadcrumbs hermanos sobre el h1). */}
@@ -82,42 +82,49 @@ const singleBlock =
     <div class="bg-brand-accent absolute top-0 left-0 h-0.5 w-24"></div>
   </div>
   <dl class="grid grid-cols-1 gap-6 sm:grid-cols-3">
-    <div class="border-gw-border-subtle border-l-2 pl-4">
-      <dt
-        class="text-label-bold text-gw-text-muted mb-1 block uppercase"
-      >
-        Empleador
-      </dt>
-      <dd class="text-gw-text-primary text-xl font-bold tracking-tight">
-        {project.employer}
-      </dd>
-    </div>
-    <div class="border-gw-border-subtle border-l-2 pl-4">
-      <dt
-        class="text-label-bold text-gw-text-muted mb-1 block uppercase"
-      >
-        Asignado a
-      </dt>
-      <dd class="text-gw-text-primary text-xl font-bold tracking-tight">
-        {project.assignee}
-      </dd>
-    </div>
-    <div class="border-brand-accent border-l-2 pl-4">
-      <dt
-        class="text-label-bold text-gw-text-muted mb-1 block uppercase"
-      >
-        Rol
-      </dt>
-      <dd
-        class="text-brand-primary text-xl font-bold tracking-tight uppercase"
-      >
-        {project.role}
-      </dd>
-    </div>
+    {project.employer && (
+      <div class="border-gw-border-subtle border-l-2 pl-4">
+        <dt
+          class="text-label-bold text-gw-text-muted mb-1 block uppercase"
+        >
+          Empleador
+        </dt>
+        <dd class="text-gw-text-primary text-xl font-bold tracking-tight">
+          {project.employer}
+        </dd>
+      </div>
+    )}
+    {project.assignee && (
+      <div class="border-gw-border-subtle border-l-2 pl-4">
+        <dt
+          class="text-label-bold text-gw-text-muted mb-1 block uppercase"
+        >
+          Asignado a
+        </dt>
+        <dd class="text-gw-text-primary text-xl font-bold tracking-tight">
+          {project.assignee}
+        </dd>
+      </div>
+    )}
+    {project.role && (
+      <div class="border-brand-accent border-l-2 pl-4">
+        <dt
+          class="text-label-bold text-gw-text-muted mb-1 block uppercase"
+        >
+          Rol
+        </dt>
+        <dd
+          class="text-brand-primary text-xl font-bold tracking-tight uppercase"
+        >
+          {project.role}
+        </dd>
+      </div>
+    )}
   </dl>
 </Section>
 
 {/* 02 · Breve descripción de actividades. */}
+{project.descriptionBlocks.length > 0 && (
 <Section class="bg-gw-surface-secondary border-gw-border-subtle border-b">
   <div class="mb-6 flex items-center gap-2">
     <span
@@ -172,36 +179,44 @@ const singleBlock =
     </div>
   )}
 </Section>
+)}
 
 {/* 03 · Alcance funcional (elemento principal: nodo central + grid). */}
+{project.scopeNodes.length > 0 && (
 <Section class="border-gw-border-subtle border-b">
   <div class="mx-auto mb-12 max-w-2xl text-center">
-    <span
-      class="text-label-bold text-brand-primary mb-2 inline-block uppercase"
-    >
-      {project.scopeEyebrow}
-    </span>
+    {project.scopeEyebrow && (
+      <span
+        class="text-label-bold text-brand-primary mb-2 inline-block uppercase"
+      >
+        {project.scopeEyebrow}
+      </span>
+    )}
     <h2
       class="text-gw-text-primary text-headline-md tracking-tight uppercase"
     >
       Alcance funcional
     </h2>
-    <div class="mt-3">
-      <Badge>{project.scopeCount}</Badge>
-    </div>
+    {project.scopeCount && (
+      <div class="mt-3">
+        <Badge>{project.scopeCount}</Badge>
+      </div>
+    )}
   </div>
   <div class="mx-auto max-w-5xl">
-    <div class="flex flex-col items-center">
-      <span
-        class="bg-brand-primary text-label-bold px-5 py-2 text-white uppercase"
-      >
-        {project.scopeCentralNode}
-      </span>
-      <span
-        aria-hidden="true"
-        class="bg-brand-primary block h-8 w-0.5"
-      ></span>
-    </div>
+    {project.scopeCentralNode && (
+      <div class="flex flex-col items-center">
+        <span
+          class="bg-brand-primary text-label-bold px-5 py-2 text-white uppercase"
+        >
+          {project.scopeCentralNode}
+        </span>
+        <span
+          aria-hidden="true"
+          class="bg-brand-primary block h-8 w-0.5"
+        ></span>
+      </div>
+    )}
     <div
       aria-hidden="true"
       class="bg-brand-primary/30 mx-auto hidden h-px w-3/4 md:block"
@@ -236,24 +251,34 @@ const singleBlock =
     </div>
   </div>
 </Section>
+)}
 
 {/* 04 · Detalle de funcionalidades (inventario completo visible). */}
+{project.groups.length > 0 && (
 <Section class="bg-gw-surface-secondary border-gw-border-subtle border-b">
-  <div class="mb-12">
-    <span
-      class="text-label-bold text-brand-primary mb-2 inline-block uppercase"
-    >
-      {project.detailEyebrow}
-    </span>
-    <h2
-      class="text-gw-text-primary text-headline-md tracking-tight uppercase"
-    >
-      {project.detailTitle}
-    </h2>
-    <p class="text-gw-text-secondary mt-1 text-sm">
-      {project.detailDescription}
-    </p>
-  </div>
+  {(project.detailEyebrow || project.detailTitle || project.detailDescription) && (
+    <div class="mb-12">
+      {project.detailEyebrow && (
+        <span
+          class="text-label-bold text-brand-primary mb-2 inline-block uppercase"
+        >
+          {project.detailEyebrow}
+        </span>
+      )}
+      {project.detailTitle && (
+        <h2
+          class="text-gw-text-primary text-headline-md tracking-tight uppercase"
+        >
+          {project.detailTitle}
+        </h2>
+      )}
+      {project.detailDescription && (
+        <p class="text-gw-text-secondary mt-1 text-sm">
+          {project.detailDescription}
+        </p>
+      )}
+    </div>
+  )}
   <div class="space-y-8">
     {project.groups.map((group) => (
       <article
@@ -304,8 +329,10 @@ const singleBlock =
     ))}
   </div>
 </Section>
+)}
 
 {/* 05 · Herramientas utilizadas. */}
+{project.tools.length > 0 && (
 <Section class="border-gw-border-subtle border-b">
   <div class="mb-10 max-w-2xl">
     <span
@@ -344,8 +371,10 @@ const singleBlock =
     </div>
   )}
 </Section>
+)}
 
 {/* 06 · Cierre del proyecto (ficha técnica sobria, sin CTAs). */}
+{project.closingTitle && (
 <Section class="bg-supporting-blue-dark">
   <div class="mx-auto max-w-4xl text-center">
     <div
@@ -357,16 +386,25 @@ const singleBlock =
     >
       {project.closingTitle}
     </h2>
-    <p class="text-sm font-medium tracking-wide text-white/80">
-      {project.employer}
-      <span aria-hidden="true" class="mx-2">
-        ·
-      </span>
-      {project.assignee}
-      <span aria-hidden="true" class="mx-2">
-        ·
-      </span>
-      <span class="font-bold text-white">{project.role}</span>
-    </p>
+    {(project.employer || project.assignee || project.role) && (
+      <p class="text-sm font-medium tracking-wide text-white/80">
+        {project.employer}
+        {project.employer && (project.assignee || project.role) && (
+          <span aria-hidden="true" class="mx-2">
+            ·
+          </span>
+        )}
+        {project.assignee}
+        {project.assignee && project.role && (
+          <span aria-hidden="true" class="mx-2">
+            ·
+          </span>
+        )}
+        {project.role && (
+          <span class="font-bold text-white">{project.role}</span>
+        )}
+      </p>
+    )}
   </div>
 </Section>
+)}

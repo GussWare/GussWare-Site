@@ -1,39 +1,44 @@
 ---
 /**
- * RGW-313 — Detalle de proyecto por locale (`/en/proyectos/[slug]`).
+ * RGW-323 — Detalle de proyecto por locale (`/en/proyectos/[slug]`).
  *
- * Ruta fina de maquetación: resuelve el proyecto desde el mock Stitch
- * (`getProjectMock`) y lo renderiza con `ProjectDetail` (compartido con
- * `/proyectos`, sin duplicar lógica). Sin proyecto, reescribe a `/404`
- * (render nativo de la 404 con HTTP 404, sin redirect).
- * RGW-323 sustituirá el mock por el CPT Proyectos de WordPress.
+ * Ruta fina: resuelve el proyecto desde el CPT Proyectos
+ * (`getProjectDetail`, por slug e idioma) y lo renderiza con
+ * `ProjectDetail` (compartido con `/proyectos`, sin duplicar lógica).
+ * Sin proyecto, reescribe a `/404` (render nativo de la 404 con HTTP
+ * 404, sin redirect).
  */
 import Layout from '../../../layouts/Layout.astro';
 import ProjectDetail from '../../../components/projects/ProjectDetail.astro';
-import { getProjectMock } from '../../../lib/projects/mock';
-import { routes, projectDetailUrl } from '../../../lib/routes';
+import { getProjectDetail } from '../../../lib/wordpress/projects';
+import { routes } from '../../../lib/routes';
 
 export const prerender = false;
 
 const locale = Astro.params.locale ?? 'es';
 const { slug } = Astro.params;
-const project =
-  typeof slug === 'string' ? getProjectMock(slug) : null;
+const result =
+  typeof slug === 'string'
+    ? await getProjectDetail(slug, locale, Astro.url.pathname).catch(
+        () => null,
+      )
+    : null;
 
-if (!project) {
+if (!result) {
   Astro.response.status = 404;
   return Astro.rewrite(routes.notFound);
 }
 
-const localeUrls = {
-  es: projectDetailUrl('es', project.slug),
-  en: projectDetailUrl('en', project.slug),
-};
+const { detail: project, localeUrls } = result;
+const seoDescription =
+  project.detailDescription ??
+  project.descriptionBlocks.flatMap((block) => block.paragraphs)[0] ??
+  '';
 ---
 
 <Layout
   title={`${project.title} — GussWare`}
-  description={project.detailDescription.slice(0, 160) || undefined}
+  description={seoDescription.slice(0, 160) || undefined}
   localeUrls={localeUrls}
   lang={locale}
 >

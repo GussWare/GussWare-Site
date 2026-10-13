@@ -518,6 +518,19 @@ export interface WpProjectAcf {
   is_featured?: boolean;
   /** Orden de presentación; ausente = orden estable por id (RGW-321). */
   display_order?: number | null;
+  /** RGW-323 — Campos del detalle (solo los consumidos por la vista). */
+  description?: string | null;
+  executive_summary?: string | null;
+  role_performed?: string;
+  client_company?: Array<number | { ID?: number }> | null;
+  industry_sector?: number[];
+  context_objective?: string | null;
+  problem_need?: string | null;
+  implemented_solution?: string | null;
+  funcionalidades_desarrolladas?: WpProjectFeature[] | null;
+  responsibilities_contributions?: WpProjectResponsibility[] | null;
+  results_achievements?: WpProjectAchievement[] | null;
+  verifiable_metrics?: WpProjectMetric[] | null;
 }
 
 /**
@@ -562,6 +575,47 @@ export interface WpProjectType {
   slug: string;
   /** RGW-322 — Idioma Polylang (`false` = legado sin idioma). */
   lang: string | false;
+}
+
+/** Término de `industry_sector` (`/wp/v2/industries_sector`). */
+export interface WpIndustry {
+  id: number;
+  name: string;
+  slug: string;
+  lang: string | false;
+}
+
+/** Relación `client_company` (título nativo = nombre del cliente). */
+export interface WpClientCompanyRef {
+  id: number;
+  slug: string;
+  title: WpPostRendered;
+}
+
+/** Ítem de `funcionalidades_desarrolladas` (subcampos del grupo vivo). */
+export interface WpProjectFeature {
+  feature_name?: string;
+  feature_description?: string;
+}
+
+/** Ítem de `responsibilities_contributions`. */
+export interface WpProjectResponsibility {
+  responsibility?: string;
+  responsibility_description?: string;
+}
+
+/** Ítem de `results_achievements`. */
+export interface WpProjectAchievement {
+  achievement_name?: string;
+  achievement_description?: string;
+}
+
+/** Ítem de `verifiable_metrics`. */
+export interface WpProjectMetric {
+  nombre_de_la_metrica?: string;
+  metric_value?: string | number;
+  metric_unit?: string;
+  metric_description?: string;
 }
 
 /** Idioma de Polylang (`/pll/v1/languages`). */

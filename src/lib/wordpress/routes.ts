@@ -99,6 +99,17 @@ export const wpRoutes = {
    * de filtro del listado; solo términos reales de WordPress.
    */
   projectTypes: () => `/wp/v2/projects_type?per_page=100`,
+  /**
+   * RGW-323 — Taxonomía `industry_sector`
+   * (`rest_base: industries_sector`). Nombres para el detalle.
+   */
+  projectIndustries: () => `/wp/v2/industries_sector?per_page=100`,
+  /**
+   * RGW-323 — CPT relacionado `client_company` (nombre del cliente desde
+   * su título nativo).
+   */
+  clientCompany: (companyId: number) =>
+    `/wp/v2/client_company/${companyId}`,
   user: (userId: number) => `/wp/v2/users/${userId}`,
   tags: (lang?: string) =>
     `/wp/v2/tags?per_page=100${lang ? `&lang=${encodeURIComponent(lang)}` : ''}`,
