@@ -256,7 +256,11 @@ def main():
         print("BLOQUEO: sin credenciales (WP_USER/WP_APP_PASSWORD o .env)")
         return 2
     api = Api(args.base, user, password)
-    lote = json.loads(Path(args.lote).read_text())
+    try:
+        lote = json.loads(Path(args.lote).read_text())
+    except (OSError, json.JSONDecodeError) as e:
+        print(f"lote inválido ({args.lote}): {e}")
+        return 2
 
     errores = validar(lote)
     print(f"validación estructural: {len(errores)} errores")
