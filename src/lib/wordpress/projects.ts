@@ -73,9 +73,7 @@ export async function getProjectBySlug(
   lang: string,
 ): Promise<WpProject | null> {
   try {
-    const data = await wpFetch<WpProject[]>(
-      wpRoutes.projectBySlug(slug, lang),
-    );
+    const data = await wpFetch<WpProject[]>(wpRoutes.projectBySlug(slug, lang));
     const project = Array.isArray(data)
       ? data.find(
           (item) =>
@@ -127,10 +125,9 @@ export async function getProjectTypes(): Promise<WpProjectType[] | null> {
  * Evita duplicados como el `Php` legado (34) frente a su equivalente
  * `es` (71, creado por Polylang al asignar).
  */
-export function buildTermOptions<T extends { name: string; lang: string | false }>(
-  terms: T[] | null | undefined,
-  locale: string,
-): T[] {
+export function buildTermOptions<
+  T extends { name: string; lang: string | false },
+>(terms: T[] | null | undefined, locale: string): T[] {
   const byName = new Map<string, T>();
 
   for (const term of terms ?? []) {
@@ -196,10 +193,7 @@ export interface ProjectListingData {
 export async function getProjectListing(
   query: ProjectListingQuery,
 ): Promise<ProjectListingData> {
-  const parsedPage = Number.parseInt(
-    query.searchParams.get('page') ?? '1',
-    10,
-  );
+  const parsedPage = Number.parseInt(query.searchParams.get('page') ?? '1', 10);
   const currentPage =
     Number.isInteger(parsedPage) && parsedPage >= 1 ? parsedPage : 1;
   const currentSearch = (query.searchParams.get('search') ?? '').trim();
@@ -209,10 +203,7 @@ export async function getProjectListing(
   );
   const currentTechId =
     Number.isInteger(parsedTech) && parsedTech > 0 ? parsedTech : 0;
-  const parsedType = Number.parseInt(
-    query.searchParams.get('type') ?? '0',
-    10,
-  );
+  const parsedType = Number.parseInt(query.searchParams.get('type') ?? '0', 10);
   const currentTypeId =
     Number.isInteger(parsedType) && parsedType > 0 ? parsedType : 0;
   const rawSort = query.searchParams.get('sort') ?? 'recent';
@@ -254,7 +245,10 @@ export async function getProjectListing(
       return false;
     }
 
-    if (currentTechId > 0 && !(item.technologies ?? []).includes(currentTechId)) {
+    if (
+      currentTechId > 0 &&
+      !(item.technologies ?? []).includes(currentTechId)
+    ) {
       return false;
     }
 
@@ -268,9 +262,7 @@ export async function getProjectListing(
     if (needle) {
       const haystack = [
         stripHtml(item.title.rendered),
-        stripHtml(
-          item.acf?.short_description ?? item.excerpt?.rendered ?? '',
-        ),
+        stripHtml(item.acf?.short_description ?? item.excerpt?.rendered ?? ''),
         item.acf?.project_code ?? '',
       ]
         .join(' ')
@@ -307,14 +299,11 @@ export async function getProjectListing(
         description: stripHtml(
           item.acf?.short_description ?? item.excerpt?.rendered ?? '',
         ),
-        category:
-          typeId != null ? (typeMap[typeId] ?? null) : null,
+        category: typeId != null ? (typeMap[typeId] ?? null) : null,
         tags: (item.technologies ?? [])
           .map((id) => techMap[id])
           .filter((name): name is string => Boolean(name)),
-        code: item.acf?.project_code
-          ? `#${item.acf.project_code}`
-          : null,
+        code: item.acf?.project_code ? `#${item.acf.project_code}` : null,
         href: projectDetailUrl(query.locale, item.slug),
         image: await getProjectImage(item),
       };
@@ -337,9 +326,7 @@ export async function getProjectListing(
 }
 export async function getTechnologies(): Promise<WpTechnology[] | null> {
   try {
-    const data = await wpFetch<WpTechnology[]>(
-      wpRoutes.projectTechnologies(),
-    );
+    const data = await wpFetch<WpTechnology[]>(wpRoutes.projectTechnologies());
     return Array.isArray(data) ? data : null;
   } catch (error) {
     console.error('Error fetching project technologies:', error);

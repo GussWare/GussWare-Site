@@ -54,15 +54,16 @@ import Badge from '../ui/Badge.astro';
 import ProjectCard from './ProjectCard.astro';
 import CTA from '../ui/CTA.astro';
 import Icon from '../ui/Icon.astro';
-import { projectListUrl, proyectosBaseUrl, getBreadcrumbHome } from '../../lib/routes';
+import {
+  projectListUrl,
+  proyectosBaseUrl,
+  getBreadcrumbHome,
+} from '../../lib/routes';
 import type {
   ProjectListCard,
   ProjectSort,
 } from '../../lib/wordpress/projects';
-import type {
-  WpProjectType,
-  WpTechnology,
-} from '../../lib/wordpress/types';
+import type { WpProjectType, WpTechnology } from '../../lib/wordpress/types';
 
 interface Props {
   locale: string;
@@ -243,11 +244,7 @@ const pageButton =
           <label class="sr-only" for="projects-tech">
             {copy.techLabel}
           </label>
-          <select
-            id="projects-tech"
-            name="technology"
-            class={fieldControl}
-          >
+          <select id="projects-tech" name="technology" class={fieldControl}>
             <option value="0">Todas las tecnologías</option>
             {technologies.map((tech) => (
               <option
@@ -279,7 +276,11 @@ const pageButton =
       <div class="flex flex-col gap-4 pt-2 lg:flex-row lg:items-center lg:justify-between">
         <div class="flex flex-wrap items-center gap-2" role="tablist">
           <a
-            href={projectListUrl(locale, { ...baseParams, type: undefined, page: undefined })}
+            href={projectListUrl(locale, {
+              ...baseParams,
+              type: undefined,
+              page: undefined,
+            })}
             role="tab"
             aria-selected={currentTypeId === 0 ? 'true' : 'false'}
             class={currentTypeId === 0 ? pillActive : pillInactive}
@@ -288,7 +289,11 @@ const pageButton =
           </a>
           {projectTypes.map((type) => (
             <a
-              href={projectListUrl(locale, { ...baseParams, type: type.id, page: undefined })}
+              href={projectListUrl(locale, {
+                ...baseParams,
+                type: type.id,
+                page: undefined,
+              })}
               role="tab"
               aria-selected={type.id === currentTypeId ? 'true' : 'false'}
               class={type.id === currentTypeId ? pillActive : pillInactive}
@@ -363,7 +368,10 @@ const pageButton =
       >
         {currentPage > 1 ? (
           <a
-            href={projectListUrl(locale, { ...baseParams, page: currentPage - 1 })}
+            href={projectListUrl(locale, {
+              ...baseParams,
+              page: currentPage - 1,
+            })}
             aria-label={copy.prev}
             class={`${pageButton} py-2`}
           >
@@ -394,7 +402,10 @@ const pageButton =
         ))}
         {currentPage < totalPages ? (
           <a
-            href={projectListUrl(locale, { ...baseParams, page: currentPage + 1 })}
+            href={projectListUrl(locale, {
+              ...baseParams,
+              page: currentPage + 1,
+            })}
             aria-label={copy.next}
             class={`${pageButton} py-2`}
           >
