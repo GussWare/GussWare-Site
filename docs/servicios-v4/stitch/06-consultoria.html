@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+
+<html lang="es-MX">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GussWare - Servicio: Consultoría técnica</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;0,900;1,400&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              primary: '#004A98',
+              deep: '#00346E',
+              secondary: '#2164A6',
+              accent: '#FF5000',
+              ink: '#242126',
+              muted: '#5C6068',
+              surface: '#FFFFFF',
+              surfaceAlt: '#F2F2F2',
+              highlight: '#FFD8D8',
+              line: '#E2E5E9'
+            }
+          },
+          fontFamily: {
+            sans: ['"Source Sans 3"', 'sans-serif'],
+          },
+          borderRadius: {
+            none: '0px',
+            DEFAULT: '0px',
+            sm: '0px',
+            md: '0px',
+            lg: '0px',
+            xl: '0px',
+            '2xl': '0px',
+            '3xl': '0px',
+            full: '0px'
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    * {
+      border-radius: 0px !important;
+      box-shadow: none !important;
+    }
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      color: #242126;
+      background-color: #FFFFFF;
+      -webkit-font-smoothing: antialiased;
+    }
+    .max-w-content {
+      max-width: 1280px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    details > summary::-webkit-details-marker {
+      display: none;
+    }
+    details summary {
+      list-style: none;
+    }
+  </style>
+</head>
+<body class="bg-white text-brand-ink antialiased selection:bg-brand-highlight selection:text-brand-ink">
+<!-- 1. HEADER / NAVIGATION GLOBAL -->
+<header class="sticky top-0 z-50 bg-white border-b border-brand-line">
+<div class="max-w-content px-6 md:px-8 h-20 flex items-center justify-between">
+<!-- Wordmark Brand -->
+<a aria-label="GussWare Home" class="flex items-center gap-3 group focus:outline-none focus:ring-1 focus:ring-brand-primary" href="/">
+<svg class="w-8 h-8 flex-shrink-0" viewbox="0 0 1333.3333 1333.3333" xmlns="http://www.w3.org/2000/svg">
+<g>
+<path d="M 9987.74,10000 H 11.1797 V 7535.99 H 9987.74 V 10000" style="fill:#004a98;fill-opacity:1;fill-rule:nonzero;stroke:none" transform="matrix(0.13333333,0,0,-0.13333333,0,1333.3333)"></path>
+<path d="M 11.1797,4931.37 H 2408.24 V 2400.4 H 4939.2 V 0 H 11.1797 v 4931.37" style="fill:#004a98;fill-opacity:1;fill-rule:nonzero;stroke:none" transform="matrix(0.13333333,0,0,-0.13333333,0,1333.3333)"></path>
+<path d="M 9988.82,0.410156 H 7586.94 V 3638.56 H 3948.78 V 6038.3 H 9988.82 V 0.410156" style="fill:#ff5000;fill-opacity:1;fill-rule:nonzero;stroke:none" transform="matrix(0.13333333,0,0,-0.13333333,0,1333.3333)"></path>
+</g>
+</svg>
+<span class="text-2xl font-bold tracking-tight text-brand-ink">GussWare</span>
+</a>
+<!-- Horizontal Navigation Links -->
+<nav class="hidden md:flex items-center space-x-8 text-[15px] font-semibold text-brand-ink">
+<a class="text-brand-primary border-b-2 border-brand-primary pb-1 font-bold" href="/services">Servicios</a>
+<a class="hover:text-brand-primary transition-colors pb-1" href="/how-we-work">Cómo trabajamos</a>
+<a class="hover:text-brand-primary transition-colors pb-1" href="/projects">Proyectos</a>
+<a class="hover:text-brand-primary transition-colors pb-1" href="/community">Comunidad</a>
+</nav>
+<!-- Primary Header CTA -->
+<div class="flex items-center">
+<a class="inline-flex items-center justify-center bg-brand-accent text-white font-bold text-sm px-6 h-11 tracking-normal hover:bg-[#e04700] transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-accent" href="/contact">
+          Hablemos
+        </a>
+</div>
+</div>
+</header>
+<!-- 2. HERO SECTION -->
+<section class="bg-white pt-10 pb-24 border-b border-brand-line">
+<div class="max-w-content px-6 md:px-8">
+<!-- Breadcrumb -->
+<nav aria-label="Ruta de navegación" class="text-xs uppercase tracking-wider text-brand-muted mb-8 font-medium">
+<a class="hover:text-brand-ink transition-colors" href="/">Inicio</a>
+<span class="mx-2 text-slate-300">/</span>
+<a class="hover:text-brand-ink transition-colors" href="/services">Servicios</a>
+<span class="mx-2 text-slate-300">/</span>
+<span class="text-brand-primary font-bold">Consultoría técnica</span>
+</nav>
+<!-- Asymmetric 12-Column Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+<!-- Left Column: Narrative (7 Cols) -->
+<div class="lg:col-span-7">
+<!-- Eyebrow label -->
+<div class="flex items-center gap-3 mb-6">
+<span class="inline-block w-3 h-3 bg-brand-accent flex-shrink-0"></span>
+<span class="text-xs font-bold uppercase tracking-wider text-brand-muted">
+              CONSULTORÍA TÉCNICA — ESTRATEGIA Y ARQUITECTURA
+            </span>
+</div>
+<!-- H1 -->
+<h1 class="text-4xl sm:text-5xl lg:text-[64px] leading-[1.08] font-bold text-brand-ink tracking-tight mb-8">
+            Decide cómo construir tu proyecto antes de invertir en construirlo
+          </h1>
+<!-- Lead Paragraph -->
+<p class="text-lg md:text-[19px] leading-relaxed text-brand-muted mb-10 max-w-[64ch]">
+            No necesitas conocer todas las tecnologías para iniciar un proyecto. Te ayudamos a definir qué necesitas, elegir las herramientas adecuadas y establecer prioridades. Al terminar, tendrás una ruta técnica documentada que podrás utilizar con tu equipo de desarrollo.
+          </p>
+<!-- CTAs -->
+<div class="flex flex-wrap items-center gap-6 pt-2">
+<a class="inline-flex items-center justify-center bg-brand-accent text-white font-bold text-base px-8 h-13 py-3.5 hover:bg-[#e04700] transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-accent" href="/contact">
+              Hablemos de tu idea
+            </a>
+<a class="inline-flex items-center font-bold text-brand-primary text-base hover:text-brand-deep transition-colors group" href="#soluciones">
+<span>Ver soluciones</span>
+<span class="ml-2 transform group-hover:translate-y-1 transition-transform">↓</span>
+</a>
+</div>
+</div>
+<!-- Right Column: 3 Stacked Stats (5 Cols) -->
+<div class="lg:col-span-5 pt-4 lg:pt-12">
+<div class="border-t border-brand-line">
+<!-- Stat 01 -->
+<div class="py-6 border-b border-brand-line">
+<span class="block text-4xl lg:text-[40px] font-bold text-brand-primary leading-none mb-2">01</span>
+<h2 class="text-lg font-bold text-brand-ink mb-1">Menos improvisación</h2>
+<p class="text-sm text-brand-muted leading-relaxed">Decisiones tomadas antes de programar</p>
+</div>
+<!-- Stat 02 -->
+<div class="py-6 border-b border-brand-line">
+<span class="block text-4xl lg:text-[40px] font-bold text-brand-primary leading-none mb-2">02</span>
+<h2 class="text-lg font-bold text-brand-ink mb-1">Inversión mejor dirigida</h2>
+<p class="text-sm text-brand-muted leading-relaxed">Prioridades alineadas con tus objetivos</p>
+</div>
+<!-- Stat 03 -->
+<div class="py-6 border-b border-brand-line">
+<span class="block text-4xl lg:text-[40px] font-bold text-brand-primary leading-none mb-2">03</span>
+<h2 class="text-lg font-bold text-brand-ink mb-1">Un plan ejecutable</h2>
+<p class="text-sm text-brand-muted leading-relaxed">Tu equipo sabe qué construir y por qué</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. SECTION 01: EL PROBLEMA (White, 120px padding) -->
+<section class="bg-white py-[120px] border-b border-brand-line">
+<div class="max-w-content px-6 md:px-8">
+<!-- Eyebrow & Number -->
+<div class="flex items-center gap-3 mb-4">
+<span class="text-xs font-bold uppercase tracking-wider text-brand-primary">01 — EL PROBLEMA</span>
+</div>
+<!-- Section Title & Intro (Asymmetric Split) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 mb-16">
+<div class="lg:col-span-7">
+<h2 class="text-3xl lg:text-[42px] leading-tight font-bold text-brand-ink">
+            Evita decisiones que después cuestan tiempo y dinero
+          </h2>
+</div>
+<div class="lg:col-span-5 flex items-end">
+<p class="text-base lg:text-[17px] text-brand-muted leading-relaxed">
+            Empezar a desarrollar sin tener claro qué se necesita puede llevar a elegir herramientas inadecuadas, construir funciones que nadie utiliza o tener que rehacer partes del sistema.
+          </p>
+</div>
+</div>
+<!-- Three Rows -->
+<div class="border-t border-brand-line">
+<!-- Row 01 -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-4 py-8 border-b border-brand-line items-baseline">
+<div class="md:col-span-2">
+<span class="text-2xl font-bold text-brand-primary">01</span>
+</div>
+<div class="md:col-span-10">
+<p class="text-lg font-medium text-brand-ink">
+              No sabes qué construir primero ni qué herramientas elegir.
+            </p>
+</div>
+</div>
+<!-- Row 02 -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-4 py-8 border-b border-brand-line items-baseline">
+<div class="md:col-span-2">
+<span class="text-2xl font-bold text-brand-primary">02</span>
+</div>
+<div class="md:col-span-10">
+<p class="text-lg font-medium text-brand-ink">
+              Eliges tecnología sin comparar alternativas y después cuesta cambiarla.
+            </p>
+</div>
+</div>
+<!-- Row 03 -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-4 py-8 border-b border-brand-line items-baseline">
+<div class="md:col-span-2">
+<span class="text-2xl font-bold text-brand-primary">03</span>
+</div>
+<div class="md:col-span-10">
+<p class="text-lg font-medium text-brand-ink">
+              Ya tienes un sistema y no sabes si conviene mejorarlo, cambiarlo o conservarlo.
+            </p>
+</div>
+</div>
+</div>
+<!-- Semantic Tags -->
+<div class="mt-12 pt-4">
+<p class="text-xs uppercase tracking-widest text-brand-muted font-semibold">
+          Estrategia técnica · Arquitectura · Elección de tecnología · Planificación · Documentación · Asesoría técnica
+        </p>
+</div>
+</div>
+</section>
+<!-- 4. SECTION 02: QUÉ PUEDES CONTRATAR (#F2F2F2, 120px padding) -->
+<section class="bg-brand-surfaceAlt py-[120px] border-b border-brand-line" id="soluciones">
+<div class="max-w-content px-6 md:px-8">
+<!-- Eyebrow -->
+<div class="flex items-center gap-3 mb-4">
+<span class="text-xs font-bold uppercase tracking-wider text-brand-primary">02 — QUÉ PUEDES CONTRATAR</span>
+</div>
+<!-- Title & Description -->
+<div class="max-w-[720px] mb-16">
+<h2 class="text-3xl lg:text-[42px] leading-tight font-bold text-brand-ink mb-4">
+          De una idea a un plan que puedes ejecutar
+        </h2>
+<p class="text-base lg:text-[17px] text-brand-muted leading-relaxed">
+          Definimos la estructura técnica de tu proyecto y te ayudamos a elegir cómo llevarlo a cabo, desde la primera decisión hasta la planificación del desarrollo.
+        </p>
+</div>
+<!-- Two Equal White Cards Side by Side (strict 2 columns) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+<!-- Card 01: Arquitectura y estructura del sistema -->
+<div class="bg-white p-8 lg:p-10 border border-brand-line flex flex-col justify-between">
+<div>
+<!-- Number -->
+<span class="block text-4xl font-bold text-brand-primary mb-6">01</span>
+<!-- Title -->
+<h3 class="text-2xl font-bold text-brand-ink mb-4">
+              Arquitectura y estructura del sistema
+            </h3>
+<!-- Description -->
+<p class="text-[16px] text-brand-muted leading-relaxed mb-8">
+              Definimos cómo se organiza tu sistema antes de construirlo, para que cada componente tenga una función clara y las partes trabajen en conjunto.
+            </p>
+<!-- Divider -->
+<div class="border-t border-brand-line my-6"></div>
+<!-- Qué Recibes -->
+<span class="block text-xs font-bold uppercase tracking-wider text-brand-ink mb-4">
+              QUÉ RECIBES
+            </span>
+<!-- Bullets -->
+<ul class="space-y-3 mb-8 text-[15px] text-brand-ink">
+<li class="flex items-start gap-3">
+<span class="w-1.5 h-1.5 bg-brand-accent mt-2 flex-shrink-0"></span>
+<span>Documento de arquitectura explicado en términos claros</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="w-1.5 h-1.5 bg-brand-accent mt-2 flex-shrink-0"></span>
+<span>Mapa de componentes y sus relaciones</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="w-1.5 h-1.5 bg-brand-accent mt-2 flex-shrink-0"></span>
+<span>Decisiones técnicas justificadas y alternativas evaluadas</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="w-1.5 h-1.5 bg-brand-accent mt-2 flex-shrink-0"></span>
+<span>Recomendaciones para ampliar el sistema sin rediseñarlo por completo</span>
+</li>
+</ul>
+</div>
+<!-- Beneficio -->
+<div class="pt-6 border-t border-brand-line bg-brand-surfaceAlt/50 -mx-8 -mb-8 lg:-mx-10 lg:-mb-10 p-6 lg:p-8">
+<span class="text-xs font-bold uppercase tracking-wider text-brand-muted block mb-1">Beneficio</span>
+<p class="text-sm font-semibold text-brand-ink">
+              Una estructura clara antes de escribir la primera línea.
+            </p>
+</div>
+</div>
+<!-- Card 02: Elección de tecnología y plan de trabajo -->
+<div class="bg-white p-8 lg:p-10 border border-brand-line flex flex-col justify-between">
+<div>
+<!-- Number -->
+<span class="block text-4xl font-bold text-brand-primary mb-6">02</span>
+<!-- Title -->
+<h3 class="text-2xl font-bold text-brand-ink mb-4">
+              Elección de tecnología y plan de trabajo
+            </h3>
+<!-- Description -->
+<p class="text-[16px] text-brand-muted leading-relaxed mb-8">
+              Comparamos las opciones disponibles y definimos una ruta de desarrollo que considere tus objetivos, presupuesto y equipo.
+            </p>
+<!-- Divider -->
+<div class="border-t border-brand-line my-6"></div>
+<!-- Qué Recibes -->
+<span class="block text-xs font-bold uppercase tracking-wider text-brand-ink mb-4">
+              QUÉ RECIBES
+            </span>
+<!-- Bullets -->
+<ul class="space-y-3 mb-8 text-[15px] text-brand-ink">
+<li class="flex items-start gap-3">
+<span class="w-1.5 h-1.5 bg-brand-accent mt-2 flex-shrink-0"></span>
+<span>Comparativa de tecnologías con ventajas y desventajas</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="w-1.5 h-1.5 bg-brand-accent mt-2 flex-shrink-0"></span>
+<span>Recomendación de herramientas con argumentos claros</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="w-1.5 h-1.5 bg-brand-accent mt-2 flex-shrink-0"></span>
+<span>Plan por etapas con resultados esperados</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="w-1.5 h-1.5 bg-brand-accent mt-2 flex-shrink-0"></span>
+<span>Estimación de esfuerzo para organizar tiempo y presupuesto</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="w-1.5 h-1.5 bg-brand-accent mt-2 flex-shrink-0"></span>
+<span>Esquema de trabajo y seguimiento del proyecto</span>
+</li>
+</ul>
+</div>
+<!-- Beneficio -->
+<div class="pt-6 border-t border-brand-line bg-brand-surfaceAlt/50 -mx-8 -mb-8 lg:-mx-10 lg:-mb-10 p-6 lg:p-8">
+<span class="text-xs font-bold uppercase tracking-wider text-brand-muted block mb-1">Beneficio</span>
+<p class="text-sm font-semibold text-brand-ink">
+              Decisiones justificadas y un plan que tu equipo puede ejecutar.
+            </p>
+</div>
+</div>
+</div>
+<!-- Ghost Link below cards -->
+<div class="pt-4">
+<a class="inline-flex items-center text-brand-primary font-bold text-base hover:text-brand-deep transition-colors" href="/contact">
+          Hablemos de tu proyecto →
+        </a>
+</div>
+</div>
+</section>
+<!-- 5. SECTION 03: CÓMO TRABAJAMOS (#F2F2F2, 120px padding) -->
+<section class="bg-brand-surfaceAlt py-[120px] border-b border-brand-line">
+<div class="max-w-content px-6 md:px-8">
+<!-- Eyebrow -->
+<div class="flex items-center gap-3 mb-4">
+<span class="text-xs font-bold uppercase tracking-wider text-brand-primary">03 — CÓMO TRABAJAMOS</span>
+</div>
+<!-- Title & Description -->
+<div class="max-w-[720px] mb-16">
+<h2 class="text-3xl lg:text-[42px] leading-tight font-bold text-brand-ink mb-4">
+          De la incertidumbre a las decisiones claras
+        </h2>
+<p class="text-base lg:text-[17px] text-brand-muted leading-relaxed">
+          Primero entendemos el problema; después evaluamos las alternativas y documentamos una ruta de trabajo que puedas poner en marcha.
+        </p>
+</div>
+<!-- Static Horizontal Four-Step Stepper -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+<!-- Step 01 -->
+<div class="border-t-2 border-brand-primary pt-6">
+<div class="flex items-center justify-between mb-4">
+<span class="text-xs font-bold uppercase tracking-widest text-brand-primary">01 ETAPA</span>
+<span class="w-2 h-2 bg-brand-primary"></span>
+</div>
+<h3 class="text-xl font-bold text-brand-ink mb-3">Entender</h3>
+<p class="text-sm text-brand-muted leading-relaxed">
+            Revisamos tus objetivos, necesidades, recursos y sistemas existentes.
+          </p>
+</div>
+<!-- Step 02 -->
+<div class="border-t-2 border-brand-primary pt-6">
+<div class="flex items-center justify-between mb-4">
+<span class="text-xs font-bold uppercase tracking-widest text-brand-primary">02 ETAPA</span>
+<span class="w-2 h-2 bg-brand-primary"></span>
+</div>
+<h3 class="text-xl font-bold text-brand-ink mb-3">Definir</h3>
+<p class="text-sm text-brand-muted leading-relaxed">
+            Proponemos la estructura y las tecnologías, explicando las razones de cada decisión.
+          </p>
+</div>
+<!-- Step 03 -->
+<div class="border-t-2 border-brand-primary pt-6">
+<div class="flex items-center justify-between mb-4">
+<span class="text-xs font-bold uppercase tracking-widest text-brand-primary">03 ETAPA</span>
+<span class="w-2 h-2 bg-brand-primary"></span>
+</div>
+<h3 class="text-xl font-bold text-brand-ink mb-3">Planificar</h3>
+<p class="text-sm text-brand-muted leading-relaxed">
+            Organizamos el desarrollo por etapas, con prioridades, entregables y estimaciones.
+          </p>
+</div>
+<!-- Step 04 -->
+<div class="border-t-2 border-brand-primary pt-6">
+<div class="flex items-center justify-between mb-4">
+<span class="text-xs font-bold uppercase tracking-widest text-brand-primary">04 ETAPA</span>
+<span class="w-2 h-2 bg-brand-primary"></span>
+</div>
+<h3 class="text-xl font-bold text-brand-ink mb-3">Documentar</h3>
+<p class="text-sm text-brand-muted leading-relaxed">
+            Dejamos las decisiones por escrito para que tu equipo pueda consultarlas y ejecutarlas.
+          </p>
+</div>
+</div>
+</div>
+</section>
+<!-- 6. SECTION 04: MARCO DE TRABAJO (White, secondary, low emphasis) -->
+<section class="bg-white py-[96px] border-b border-brand-line">
+<div class="max-w-content px-6 md:px-8">
+<!-- Eyebrow -->
+<div class="flex items-center gap-3 mb-3">
+<span class="text-xs font-bold uppercase tracking-wider text-brand-muted">04 — MARCO DE TRABAJO</span>
+</div>
+<!-- Header & Subtitle -->
+<div class="max-w-[720px] mb-12">
+<h2 class="text-2xl lg:text-3xl font-bold text-brand-ink mb-3">
+          Cómo organizamos el proyecto
+        </h2>
+<p class="text-sm md:text-base text-brand-muted leading-relaxed">
+          Elegimos las herramientas técnicas y la forma de trabajo según la complejidad del proyecto y las necesidades del equipo.
+        </p>
+</div>
+<!-- Compact Three-Column Strip -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-brand-line pt-8">
+<!-- Col 01 -->
+<div class="space-y-2">
+<h4 class="text-xs font-bold uppercase tracking-wider text-brand-ink">Organización del trabajo</h4>
+<p class="text-sm text-brand-muted">
+            Scrum (trabajo por ciclos) · Kanban (tablero de tareas)
+          </p>
+</div>
+<!-- Col 02 -->
+<div class="space-y-2">
+<h4 class="text-xs font-bold uppercase tracking-wider text-brand-ink">Diseño técnico</h4>
+<p class="text-sm text-brand-muted">
+            Arquitectura de software · Componentes del sistema · Tecnologías
+          </p>
+</div>
+<!-- Col 03 -->
+<div class="space-y-2">
+<h4 class="text-xs font-bold uppercase tracking-wider text-brand-ink">Planificación</h4>
+<p class="text-sm text-brand-muted">
+            Prioridades · Documentación técnica · Estimación
+          </p>
+</div>
+</div>
+</div>
+</section>
+<!-- 7. SECTION 05: DUDAS FRECUENTES (#F2F2F2, 120px padding) -->
+<section class="bg-brand-surfaceAlt py-[120px] border-b border-brand-line">
+<div class="max-w-content px-6 md:px-8">
+<!-- Eyebrow -->
+<div class="flex items-center gap-3 mb-4">
+<span class="text-xs font-bold uppercase tracking-wider text-brand-primary">05 — DUDAS FRECUENTES</span>
+</div>
+<!-- Only H2 (strict: no intro sentence) -->
+<h2 class="text-3xl lg:text-[42px] leading-tight font-bold text-brand-ink mb-12">
+        Lo que suele preguntarse antes de empezar
+      </h2>
+<!-- Six Accordion Rows (First open, others closed) -->
+<div class="border-t border-brand-line bg-white">
+<!-- Row 1: Open -->
+<details class="group border-b border-brand-line" open="">
+<summary class="flex justify-between items-center py-6 px-6 lg:px-8 cursor-pointer hover:bg-brand-surfaceAlt/40 transition-colors focus:outline-none">
+<span class="text-lg font-bold text-brand-ink">¿Qué recibo al terminar la consultoría?</span>
+<span class="text-2xl font-light text-brand-primary ml-4 transition-transform group-open:rotate-45">−</span>
+</summary>
+<div class="px-6 lg:px-8 pb-6 pt-1 text-brand-muted text-base leading-relaxed border-t border-brand-line/50">
+            Una propuesta técnica documentada con la estructura recomendada, las tecnologías evaluadas, las decisiones principales y un plan de trabajo para orientar el desarrollo.
+          </div>
+</details>
+<!-- Row 2: Closed -->
+<details class="group border-b border-brand-line">
+<summary class="flex justify-between items-center py-6 px-6 lg:px-8 cursor-pointer hover:bg-brand-surfaceAlt/40 transition-colors focus:outline-none">
+<span class="text-lg font-bold text-brand-ink">¿Puedo contratarla si solo tengo una idea?</span>
+<span class="text-2xl font-light text-brand-primary ml-4 transition-transform group-open:rotate-45">+</span>
+</summary>
+<div class="px-6 lg:px-8 pb-6 pt-1 text-brand-muted text-base leading-relaxed border-t border-brand-line/50">Sí. Partimos del problema que quieres resolver y te ayudamos a convertirlo en requerimientos, prioridades y una primera ruta de trabajo.</div>
+</details>
+<!-- Row 3: Closed -->
+<details class="group border-b border-brand-line">
+<summary class="flex justify-between items-center py-6 px-6 lg:px-8 cursor-pointer hover:bg-brand-surfaceAlt/40 transition-colors focus:outline-none">
+<span class="text-lg font-bold text-brand-ink">¿Pueden trabajar con mi equipo de desarrollo?</span>
+<span class="text-2xl font-light text-brand-primary ml-4 transition-transform group-open:rotate-45">+</span>
+</summary>
+<div class="px-6 lg:px-8 pb-6 pt-1 text-brand-muted text-base leading-relaxed border-t border-brand-line/50">Sí. Podemos colaborar con tu equipo actual o con otro proveedor para orientar las decisiones técnicas y resolver dudas durante la planificación.</div>
+</details>
+<!-- Row 4: Closed -->
+<details class="group border-b border-brand-line">
+<summary class="flex justify-between items-center py-6 px-6 lg:px-8 cursor-pointer hover:bg-brand-surfaceAlt/40 transition-colors focus:outline-none">
+<span class="text-lg font-bold text-brand-ink">¿Tengo que contratar el desarrollo con GussWare?</span>
+<span class="text-2xl font-light text-brand-primary ml-4 transition-transform group-open:rotate-45">+</span>
+</summary>
+<div class="px-6 lg:px-8 pb-6 pt-1 text-brand-muted text-base leading-relaxed border-t border-brand-line/50">No. Puedes utilizar el plan con el equipo que elijas. Si decides continuar con nosotros, ya contaremos con una base definida.</div>
+</details>
+<!-- Row 5: Closed -->
+<details class="group border-b border-brand-line">
+<summary class="flex justify-between items-center py-6 px-6 lg:px-8 cursor-pointer hover:bg-brand-surfaceAlt/40 transition-colors focus:outline-none">
+<span class="text-lg font-bold text-brand-ink">¿Cuánto cuesta una consultoría técnica?</span>
+<span class="text-2xl font-light text-brand-primary ml-4 transition-transform group-open:rotate-45">+</span>
+</summary>
+<div class="px-6 lg:px-8 pb-6 pt-1 text-brand-muted text-base leading-relaxed border-t border-brand-line/50">Depende de la complejidad del proyecto y del análisis necesario. Revisamos tus necesidades y te presentamos una propuesta económica antes de iniciar.</div>
+</details>
+<!-- Row 6: Closed -->
+<details class="group border-b border-brand-line">
+<summary class="flex justify-between items-center py-6 px-6 lg:px-8 cursor-pointer hover:bg-brand-surfaceAlt/40 transition-colors focus:outline-none">
+<span class="text-lg font-bold text-brand-ink">¿Qué pasa si ya tengo un sistema y necesito mejorarlo?</span>
+<span class="text-2xl font-light text-brand-primary ml-4 transition-transform group-open:rotate-45">+</span>
+</summary>
+<div class="px-6 lg:px-8 pb-6 pt-1 text-brand-muted text-base leading-relaxed border-t border-brand-line/50">Revisamos su situación actual, identificamos oportunidades de mejora y definimos qué conviene conservar, corregir o ampliar.</div>
+</details>
+</div>
+<!-- Micro-copy after list -->
+<div class="mt-8">
+<a class="inline-flex items-center text-sm font-bold text-brand-primary hover:text-brand-deep transition-colors" href="/contact">
+          ¿Te queda otra duda? Escríbenos →
+        </a>
+</div>
+</div>
+</section>
+<!-- 8. SECTION 06: CIERRE (Deep Blue #00346E) -->
+<section class="bg-brand-deep text-white py-[120px] border-b border-brand-line relative overflow-hidden">
+<div class="max-w-content px-6 md:px-8 relative z-10">
+<!-- Eyebrow -->
+<div class="flex items-center gap-3 mb-6">
+<span class="inline-block w-3 h-3 bg-brand-accent flex-shrink-0"></span>
+<span class="text-xs font-bold uppercase tracking-wider text-slate-300">06 — INICIA TU PROYECTO</span>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<!-- Left: Action Statement -->
+<div class="lg:col-span-8">
+<h2 class="text-3xl sm:text-4xl lg:text-[44px] leading-tight font-bold mb-6 tracking-tight">
+            Antes de programar, define el camino correcto
+          </h2>
+<p class="text-lg text-slate-200 max-w-[58ch] leading-relaxed mb-10">
+            Cuéntanos qué quieres construir o qué problema necesitas resolver. Te ayudamos a convertirlo en un plan técnico claro.
+          </p>
+<div class="flex flex-wrap items-center gap-6">
+<a class="inline-flex items-center justify-center bg-brand-accent text-white font-bold text-base px-8 h-13 py-3.5 hover:bg-[#e04700] transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-accent" href="/contact">
+              Cuéntanos tu proyecto
+            </a>
+<a class="inline-flex items-center text-white font-bold text-base hover:text-brand-highlight transition-colors group" href="/services">
+<span>Ver todos los servicios</span>
+<span class="ml-2 transform group-hover:translate-x-1 transition-transform">→</span>
+</a>
+</div>
+</div>
+<!-- Right: Geometric Constructivist Accent -->
+<div class="lg:col-span-4 flex justify-start lg:justify-end">
+<div class="w-48 h-48 border border-white/20 p-6 flex flex-col justify-between relative">
+<div class="w-8 h-1 bg-brand-accent"></div>
+<div class="space-y-1">
+<span class="text-[10px] tracking-widest uppercase text-white/50 font-bold block">GUSSWARE · CORE</span>
+<span class="text-xs text-white/80 font-mono">ESTRATEGIA TÉCNICA</span>
+</div>
+<div class="absolute -bottom-2 -right-2 w-4 h-4 border-r-2 border-b-2 border-brand-accent"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 9. SECTION 07: SERVICIOS RELACIONADOS (White, 120px padding) -->
+<section class="bg-white py-[120px] border-b border-brand-line">
+<div class="max-w-content px-6 md:px-8">
+<!-- Eyebrow & Title -->
+<div class="mb-12">
+<span class="text-xs font-bold uppercase tracking-widest text-brand-muted block mb-3">
+          SIGUE EXPLORANDO
+        </span>
+<h2 class="text-3xl lg:text-[40px] font-bold text-brand-ink">
+          Otros servicios que pueden ayudarte
+        </h2>
+</div>
+<!-- Three Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Card 1: Desarrollo a medida -->
+<div class="bg-white p-8 border border-brand-line flex flex-col justify-between hover:border-brand-primary transition-colors group">
+<div>
+<span class="text-[11px] font-bold uppercase tracking-wider text-brand-muted block mb-3">SOFTWARE</span>
+<h3 class="text-xl font-bold text-brand-ink mb-3 group-hover:text-brand-primary transition-colors">
+              Desarrollo a medida
+            </h3>
+<p class="text-sm text-brand-muted leading-relaxed mb-8">
+              Tu empresa no debería tener que adaptarse a un software que no le funciona.
+            </p>
+</div>
+<div>
+<a class="inline-flex items-center text-sm font-bold text-brand-primary hover:text-brand-deep transition-colors" href="/services/custom-software">
+              Ver servicio →
+            </a>
+</div>
+</div>
+<!-- Card 2: Diseño de sitios web y tiendas en línea -->
+<div class="bg-white p-8 border border-brand-line flex flex-col justify-between hover:border-brand-primary transition-colors group">
+<div>
+<span class="text-[11px] font-bold uppercase tracking-wider text-brand-muted block mb-3">WEB &amp; E-COMMERCE</span>
+<h3 class="text-xl font-bold text-brand-ink mb-3 group-hover:text-brand-primary transition-colors">
+              Diseño de sitios web y tiendas en línea
+            </h3>
+<p class="text-sm text-brand-muted leading-relaxed mb-8">
+              Tu sitio web debe conseguir algo más que verse bien.
+            </p>
+</div>
+<div>
+<a class="inline-flex items-center text-sm font-bold text-brand-primary hover:text-brand-deep transition-colors" href="/services/web-development">
+              Ver servicio →
+            </a>
+</div>
+</div>
+<!-- Card 3: DevOps y Soporte Técnico -->
+<div class="bg-white p-8 border border-brand-line flex flex-col justify-between hover:border-brand-primary transition-colors group">
+<div>
+<span class="text-[11px] font-bold uppercase tracking-wider text-brand-muted block mb-3">INFRAESTRUCTURA</span>
+<h3 class="text-xl font-bold text-brand-ink mb-3 group-hover:text-brand-primary transition-colors">
+              DevOps y Soporte Técnico
+            </h3>
+<p class="text-sm text-brand-muted leading-relaxed mb-8">
+              Actualiza tus sistemas sin convertir cada cambio en un riesgo.
+            </p>
+</div>
+<div>
+<a class="inline-flex items-center text-sm font-bold text-brand-primary hover:text-brand-deep transition-colors" href="/services/devops">
+              Ver servicio →
+            </a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 10. FOOTER (Strict) -->
+<footer class="bg-brand-surfaceAlt py-16 text-brand-ink border-t border-brand-line">
+<div class="max-w-content px-6 md:px-8">
+<!-- Top Grid: Wordmark + Columns -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-12 pb-16 border-b border-brand-line">
+<!-- Brand & Tagline (4 cols) -->
+<div class="md:col-span-4">
+<a class="inline-flex items-center gap-3 mb-4 focus:outline-none focus:ring-1 focus:ring-brand-primary" href="/">
+<svg class="w-6 h-6 flex-shrink-0" viewbox="0 0 1333.3333 1333.3333" xmlns="http://www.w3.org/2000/svg">
+<g>
+<path d="M 9987.74,10000 H 11.1797 V 7535.99 H 9987.74 V 10000" style="fill:#004a98;fill-opacity:1;fill-rule:nonzero;stroke:none" transform="matrix(0.13333333,0,0,-0.13333333,0,1333.3333)"></path>
+<path d="M 11.1797,4931.37 H 2408.24 V 2400.4 H 4939.2 V 0 H 11.1797 v 4931.37" style="fill:#004a98;fill-opacity:1;fill-rule:nonzero;stroke:none" transform="matrix(0.13333333,0,0,-0.13333333,0,1333.3333)"></path>
+<path d="M 9988.82,0.410156 H 7586.94 V 3638.56 H 3948.78 V 6038.3 H 9988.82 V 0.410156" style="fill:#ff5000;fill-opacity:1;fill-rule:nonzero;stroke:none" transform="matrix(0.13333333,0,0,-0.13333333,0,1333.3333)"></path>
+</g>
+</svg>
+<span class="text-xl font-bold tracking-tight text-brand-ink">GussWare</span>
+</a>
+<p class="text-sm text-brand-muted leading-relaxed max-w-[32ch]">
+            Tecnología humana, impacto global
+          </p>
+</div>
+<!-- Column Servicios (3 cols) -->
+<div class="md:col-span-3">
+<h4 class="text-xs font-bold uppercase tracking-wider text-brand-ink mb-4">Servicios</h4>
+<ul class="space-y-2.5 text-sm text-brand-muted">
+<li><a class="hover:text-brand-primary transition-colors" href="/services/web-development">Diseño de sitios web y tiendas en línea</a></li>
+<li><a class="hover:text-brand-primary transition-colors" href="/services/mobile-apps">Aplicaciones móviles</a></li>
+<li><a class="hover:text-brand-primary transition-colors" href="/services/apis-integrations">Integración de APIs y Servicios Externos</a></li>
+<li><a class="hover:text-brand-primary transition-colors" href="/services/custom-software">Desarrollo a medida</a></li>
+<li><a class="text-brand-primary font-bold" href="/services/consulting">Consultoría técnica</a></li>
+<li><a class="hover:text-brand-primary transition-colors" href="/services/devops">DevOps e Infraestructura</a></li>
+</ul>
+</div>
+<!-- Column Explorar (3 cols) -->
+<div class="md:col-span-3">
+<h4 class="text-xs font-bold uppercase tracking-wider text-brand-ink mb-4">Explorar</h4>
+<ul class="space-y-2.5 text-sm text-brand-muted">
+<li><a class="hover:text-brand-primary transition-colors" href="/how-we-work">Cómo trabajamos</a></li>
+<li><a class="hover:text-brand-primary transition-colors" href="/projects">Proyectos</a></li>
+<li><a class="hover:text-brand-primary transition-colors" href="/community">Comunidad</a></li>
+<li><a class="hover:text-brand-primary transition-colors" href="/contact">Contacto</a></li>
+</ul>
+</div>
+<!-- Column Legal (2 cols) -->
+<div class="md:col-span-2">
+<h4 class="text-xs font-bold uppercase tracking-wider text-brand-ink mb-4">Legal</h4>
+<ul class="space-y-2.5 text-sm text-brand-muted">
+<li><a class="hover:text-brand-primary transition-colors" href="/aviso-de-privacidad">Aviso de privacidad</a></li>
+<li><a class="hover:text-brand-primary transition-colors" href="/terminos-y-condiciones">Términos y condiciones</a></li>
+</ul>
+</div>
+</div>
+<!-- Bottom Bar: Copyright Only -->
+<div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-brand-muted">
+<p>© 2026 GussWare</p>
+<p class="mt-2 sm:mt-0 font-medium tracking-wide">CONSTRUCTIVIST ARCHITECTURE &amp; MODULAR ENGINEERING</p>
+</div>
+</div>
+</footer>
+</body>
+</html>

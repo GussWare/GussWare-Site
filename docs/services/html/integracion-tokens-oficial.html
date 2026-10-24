@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GussWare — Integración de APIs y Servicios Externos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              primary: '#004A98',
+              secondary: '#2164A6',
+              accent: '#FF5000',
+              surface: '#FFFFFF',
+            },
+            supporting: {
+              blue: {
+                dark: '#00346E',
+                fixed: '#E2E8F0',
+                'fixed-dim': '#94A3B8',
+              }
+            },
+            gw: {
+              action: {
+                primary: '#FF5000',
+              },
+              text: {
+                primary: '#242126',
+                secondary: '#5C6068',
+                muted: '#94A3B8',
+              },
+              surface: {
+                primary: '#FFFFFF',
+                secondary: '#F2F2F2',
+                auxiliary: '#F8FAFC',
+              },
+              border: {
+                subtle: '#E2E8F0',
+                default: '#CBD5E1',
+              },
+              highlight: '#FFD8D8',
+            }
+          },
+          fontFamily: {
+            sans: ['"Source Sans 3"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          fontSize: {
+            'display-lg': ['64px', { lineHeight: '1.08', letterSpacing: '-0.02em' }],
+            'display-lg-mobile': ['40px', { lineHeight: '1.15', letterSpacing: '-0.02em' }],
+            'headline-lg': ['48px', { lineHeight: '1.15', letterSpacing: '-0.015em' }],
+            'headline-md': ['32px', { lineHeight: '1.2', letterSpacing: '-0.01em' }],
+            'body-lg': ['20px', { lineHeight: '1.5' }],
+            'body-md': ['16px', { lineHeight: '1.6' }],
+            'label-bold': ['14px', { lineHeight: '1.4', fontWeight: '700', letterSpacing: '0.05em' }],
+            'navigation': ['15px', { lineHeight: '1.4', fontWeight: '600' }],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --container-max: 1280px;
+      --section-padding-desktop: 120px;
+      --section-padding-mobile: 64px;
+    }
+    * {
+      border-radius: 0px !important;
+      box-shadow: none !important;
+    }
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      color: #242126;
+      background-color: #FFFFFF;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  </style>
+</head>
+<body class="bg-gw-surface-primary text-gw-text-primary antialiased">
+
+  <!-- CABECERA GLOBAL DEL SITIO -->
+  <header class="sticky top-0 z-50 bg-gw-surface-primary border-b border-gw-border-subtle w-full">
+    <div class="mx-auto w-full max-w-[var(--container-max)] px-4 md:px-6 h-20 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3" aria-label="GussWare Inicio">
+        <svg class="w-8 h-8 flex-shrink-0" viewBox="0 0 1333.33 1333.33" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1331.67 0H1.49V328.53H1331.67V0Z" fill="#004A98"/>
+          <path d="M1.49 675.81H321.09V1013.27H658.55V1333.33H1.49V675.81Z" fill="#004A98"/>
+          <path d="M1331.81 1333.28H1011.56V848.18H526.47V528.22H1331.81V1333.28Z" fill="#FF5000"/>
+        </svg>
+        <span class="font-bold text-2xl tracking-tight text-gw-text-primary">GussWare</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 text-navigation text-gw-text-primary" aria-label="Navegación principal">
+        <a href="/servicios" class="text-brand-primary border-b-2 border-brand-primary pb-1">Servicios</a>
+        <a href="/como-trabajamos" class="hover:text-brand-primary transition-colors pb-1">Cómo trabajamos</a>
+        <a href="/proyectos" class="hover:text-brand-primary transition-colors pb-1">Proyectos</a>
+        <a href="/comunidad" class="hover:text-brand-primary transition-colors pb-1">Comunidad</a>
+      </nav>
+
+      <div class="flex items-center">
+        <a href="/contact" class="text-label-bold bg-gw-action-primary text-brand-surface px-6 py-2.5 rounded-none uppercase hover:opacity-90 transition-opacity">
+          Hablemos
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 0. MIGAS DE PAN -->
+  <section class="bg-gw-surface-primary pt-8">
+    <div class="mx-auto w-full max-w-[var(--container-max)] px-4 md:px-6">
+      <nav aria-label="Migas de pan" class="mb-8">
+        <ol class="flex flex-wrap items-center gap-2">
+          <li>
+            <a href="/" class="text-label-bold uppercase text-gw-text-secondary hover:text-brand-secondary transition-colors">Inicio</a>
+          </li>
+          <li class="text-gw-text-muted text-label-bold" aria-hidden="true">›</li>
+          <li>
+            <a href="/servicios" class="text-label-bold uppercase text-gw-text-secondary hover:text-brand-secondary transition-colors">Servicios</a>
+          </li>
+          <li class="text-gw-text-muted text-label-bold" aria-hidden="true">›</li>
+          <li class="text-label-bold uppercase text-supporting-blue-dark font-bold" aria-current="page">
+            Integración de APIs y Servicios Externos
+          </li>
+        </ol>
+      </nav>
+    </div>
+  </section>
+
+  <!-- 1. HERO (Fondo blanco) -->
+  <section class="bg-gw-surface-primary pb-[var(--section-padding-mobile)] md:pb-[var(--section-padding-desktop)] border-b border-gw-border-subtle">
+    <div class="mx-auto w-full max-w-[var(--container-max)] px-4 md:px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        
+        <!-- Columna Izquierda -->
+        <div class="lg:col-span-8">
+          <div class="flex items-center gap-2.5 mb-5">
+            <span class="w-2.5 h-2.5 bg-brand-primary inline-block flex-shrink-0"></span>
+            <span class="text-label-bold uppercase text-brand-primary tracking-wider">INTEGRACIÓN DE SISTEMAS</span>
+          </div>
+
+          <h1 class="text-gw-text-primary text-display-lg-mobile md:text-display-lg font-bold leading-[1.08] tracking-tight mb-8">
+            Deja de copiar datos de un programa a otro
+          </h1>
+
+          <p class="text-gw-text-secondary text-body-lg leading-relaxed max-w-[68ch] mb-10">
+            Si tu equipo registra un pedido en una herramienta, vuelve a capturarlo en otra y después verifica que todo coincida, hay trabajo que se puede automatizar. Conectamos tus sistemas para que intercambien información con reglas claras y puedas dedicar menos tiempo a tareas repetitivas.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-6">
+            <a href="/contact" class="text-label-bold bg-gw-action-primary text-brand-surface px-6 py-3 rounded-none uppercase hover:opacity-90 transition-opacity">
+              Cuéntanos tu caso
+            </a>
+            <a href="#soluciones" class="text-navigation text-brand-secondary hover:underline">
+              Ver soluciones ↓
+            </a>
+          </div>
+        </div>
+
+        <!-- Columna Derecha: 3 Indicadores -->
+        <div class="lg:col-span-4 border-l-0 lg:border-l border-gw-border-subtle lg:pl-10 pt-4 lg:pt-0">
+          <div class="divide-y divide-gw-border-subtle border-t lg:border-t-0 border-b border-gw-border-subtle">
+            <!-- 01 -->
+            <div class="py-6 first:pt-0">
+              <span class="font-mono font-bold text-brand-primary text-headline-md block mb-2">01</span>
+              <h3 class="text-gw-text-primary text-body-lg font-bold mb-1">Menos captura manual</h3>
+              <p class="text-gw-text-muted text-body-md">Un dato puede actualizar varios sistemas</p>
+            </div>
+            <!-- 02 -->
+            <div class="py-6">
+              <span class="font-mono font-bold text-brand-primary text-headline-md block mb-2">02</span>
+              <h3 class="text-gw-text-primary text-body-lg font-bold mb-1">Información coordinada</h3>
+              <p class="text-gw-text-muted text-body-md">Reglas claras para compartir datos</p>
+            </div>
+            <!-- 03 -->
+            <div class="py-6 last:pb-0">
+              <span class="font-mono font-bold text-brand-primary text-headline-md block mb-2">03</span>
+              <h3 class="text-gw-text-primary text-body-lg font-bold mb-1">Errores detectables</h3>
+              <p class="text-gw-text-muted text-body-md">Registro de operaciones y fallas</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 01 — EL PROBLEMA (Fondo blanco) -->
+  <section class="bg-gw-surface-primary py-[var(--section-padding-mobile)] md:py-[var(--section-padding-desktop)] border-b border-gw-border-subtle">
+    <div class="mx-auto w-full max-w-[var(--container-max)] px-4 md:px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        
+        <!-- Columna Izquierda -->
+        <div class="lg:col-span-5">
+          <p class="text-label-bold uppercase text-brand-primary mb-3">01 — EL PROBLEMA</p>
+          <h2 class="text-gw-text-primary text-headline-lg font-bold mb-6">
+            Tus programas, trabajando en equipo
+          </h2>
+          <p class="text-gw-text-secondary text-body-md leading-relaxed">
+            Cuando las herramientas de tu negocio están desconectadas, los pedidos, clientes, productos y facturas pueden terminar duplicados o desactualizados.
+          </p>
+        </div>
+
+        <!-- Columna Derecha -->
+        <div class="lg:col-span-7">
+          <div class="divide-y divide-gw-border-subtle border-t border-b border-gw-border-subtle">
+            <!-- Fila 01 -->
+            <div class="py-6 grid grid-cols-12 gap-4 items-baseline">
+              <span class="col-span-2 font-mono font-bold text-brand-primary text-headline-md">01</span>
+              <p class="col-span-10 text-gw-text-primary text-body-md font-medium leading-snug">
+                Los pedidos, clientes, productos o facturas se duplican entre herramientas.
+              </p>
+            </div>
+            <!-- Fila 02 -->
+            <div class="py-6 grid grid-cols-12 gap-4 items-baseline">
+              <span class="col-span-2 font-mono font-bold text-brand-primary text-headline-md">02</span>
+              <p class="col-span-10 text-gw-text-primary text-body-md font-medium leading-snug">
+                Tu equipo vuelve a capturar la misma información en otro programa.
+              </p>
+            </div>
+            <!-- Fila 03 -->
+            <div class="py-6 grid grid-cols-12 gap-4 items-baseline">
+              <span class="col-span-2 font-mono font-bold text-brand-primary text-headline-md">03</span>
+              <p class="col-span-10 text-gw-text-primary text-body-md font-medium leading-snug">
+                Cuando algo falla, no queda claro qué se envió, cuándo ni a dónde.
+              </p>
+            </div>
+          </div>
+
+          <div class="pt-6">
+            <p class="text-label-bold uppercase text-gw-text-muted tracking-wider">
+              Integración de sistemas · Sincronización de datos · Automatización · Servicios externos
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 02 — NUESTRAS SOLUCIONES (Fondo gris) -->
+  <section id="soluciones" class="bg-gw-surface-secondary py-[var(--section-padding-mobile)] md:py-[var(--section-padding-desktop)] border-b border-gw-border-subtle">
+    <div class="mx-auto w-full max-w-[var(--container-max)] px-4 md:px-6">
+      
+      <div class="max-w-3xl mb-12">
+        <p class="text-label-bold uppercase text-brand-primary mb-3">02 — NUESTRAS SOLUCIONES</p>
+        <h2 class="text-gw-text-primary text-headline-lg font-bold mb-5">
+          Conecta tus herramientas y automatiza el intercambio de información
+        </h2>
+        <p class="text-gw-text-secondary text-body-md leading-relaxed">
+          Creamos conexiones entre las aplicaciones que ya utilizas para reducir capturas repetidas, coordinar procesos y mantener los datos actualizados.
+        </p>
+      </div>
+
+      <!-- 3 Tarjetas de Solución -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch mb-12">
+        
+        <!-- Tarjeta 01 -->
+        <div class="bg-gw-surface-primary border border-gw-border-subtle rounded-none p-6 md:p-8 flex flex-col justify-between">
+          <div>
+            <span class="font-mono font-bold text-brand-primary text-headline-md block mb-4">01</span>
+            <h3 class="text-gw-text-primary text-headline-md font-bold tracking-tight mb-3">
+              Conectar tus programas entre sí
+            </h3>
+            <p class="text-gw-text-secondary text-body-md leading-relaxed mb-6">
+              Haz que la información registrada en una herramienta pueda utilizarse en otra sin depender de transferencias manuales.
+            </p>
+
+            <div class="border-t border-gw-border-subtle pt-6 mb-6">
+              <p class="text-label-bold uppercase text-brand-primary mb-4">QUÉ RECIBES</p>
+              <ul class="space-y-3 text-gw-text-primary text-body-md">
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-primary font-bold select-none">—</span>
+                  <span>Conexión entre tienda, facturación, CRM o inventario</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-primary font-bold select-none">—</span>
+                  <span>Transferencia automática de los datos definidos</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-primary font-bold select-none">—</span>
+                  <span>Validación de la información antes de procesarla</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-primary font-bold select-none">—</span>
+                  <span>Registro de operaciones para consultar qué se envió y cuándo</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-primary font-bold select-none">—</span>
+                  <span>Reintentos y alertas para atender transferencias fallidas</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="border-t border-gw-border-subtle pt-5">
+            <p class="text-label-bold uppercase text-gw-text-muted mb-1">Beneficio</p>
+            <p class="text-gw-text-primary text-body-md font-semibold">
+              Menos capturas manuales y datos más consistentes.
+            </p>
+          </div>
+        </div>
+
+        <!-- Tarjeta 02 -->
+        <div class="bg-gw-surface-primary border border-gw-border-subtle rounded-none p-6 md:p-8 flex flex-col justify-between">
+          <div>
+            <span class="font-mono font-bold text-brand-primary text-headline-md block mb-4">02</span>
+            <h3 class="text-gw-text-primary text-headline-md font-bold tracking-tight mb-3">
+              Automatizar tareas entre sistemas
+            </h3>
+            <p class="text-gw-text-secondary text-body-md leading-relaxed mb-6">
+              Define qué debe suceder cuando ocurre un evento para que tus herramientas ejecuten acciones sin intervención manual en cada paso.
+            </p>
+
+            <div class="border-t border-gw-border-subtle pt-6 mb-6">
+              <p class="text-label-bold uppercase text-brand-primary mb-4">QUÉ RECIBES</p>
+              <ul class="space-y-3 text-gw-text-primary text-body-md">
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-primary font-bold select-none">—</span>
+                  <span>Generación o actualización de registros a partir de eventos</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-primary font-bold select-none">—</span>
+                  <span>Automatización de tareas como notificaciones y cambios de estado</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-primary font-bold select-none">—</span>
+                  <span>Reglas para determinar cuándo debe ejecutarse una acción</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-primary font-bold select-none">—</span>
+                  <span>Avisos cuando una operación requiere atención</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-primary font-bold select-none">—</span>
+                  <span>Historial de resultados para identificar errores y dar seguimiento</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="border-t border-gw-border-subtle pt-5">
+            <p class="text-label-bold uppercase text-gw-text-muted mb-1">Beneficio</p>
+            <p class="text-gw-text-primary text-body-md font-semibold">
+              Menos pasos manuales y respuestas más rápidas.
+            </p>
+          </div>
+        </div>
+
+        <!-- Tarjeta 03 -->
+        <div class="bg-gw-surface-primary border border-gw-border-subtle rounded-none p-6 md:p-8 flex flex-col justify-between">
+          <div>
+            <span class="font-mono font-bold text-brand-primary text-headline-md block mb-4">03</span>
+            <h3 class="text-gw-text-primary text-headline-md font-bold tracking-tight mb-3">
+              Mantener la información sincronizada
+            </h3>
+            <p class="text-gw-text-secondary text-body-md leading-relaxed mb-6">
+              Coordina los datos que utilizan diferentes áreas para reducir diferencias entre registros y evitar trabajar con información desactualizada.
+            </p>
+
+            <div class="border-t border-gw-border-subtle pt-6 mb-6">
+              <p class="text-label-bold uppercase text-brand-primary mb-4">QUÉ RECIBES</p>
+              <ul class="space-y-3 text-gw-text-primary text-body-md">
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-primary font-bold select-none">—</span>
+                  <span>Sincronización de clientes, productos, precios u otros registros</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-primary font-bold select-none">—</span>
+                  <span>Reglas para definir qué sistema actualiza cada dato</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-primary font-bold select-none">—</span>
+                  <span>Validaciones para reducir duplicados e inconsistencias</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-primary font-bold select-none">—</span>
+                  <span>Actualización programada o basada en eventos</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-primary font-bold select-none">—</span>
+                  <span>Registro de errores y procedimientos para corregirlos</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="border-t border-gw-border-subtle pt-5">
+            <p class="text-label-bold uppercase text-gw-text-muted mb-1">Beneficio</p>
+            <p class="text-gw-text-primary text-body-md font-semibold">
+              Un solo dato actualizado para todas las áreas.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Cierre de Soluciones -->
+      <div>
+        <a href="/contact" class="inline-flex items-center text-navigation text-brand-secondary hover:underline font-bold">
+          Hablemos de tu caso →
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4. 03 — EJEMPLOS DE INTEGRACIÓN (Fondo blanco) -->
+  <section class="bg-gw-surface-primary py-[var(--section-padding-mobile)] md:py-[var(--section-padding-desktop)] border-b border-gw-border-subtle">
+    <div class="mx-auto w-full max-w-[var(--container-max)] px-4 md:px-6">
+      
+      <div class="max-w-3xl mb-12">
+        <p class="text-label-bold uppercase text-brand-primary mb-3">03 — EJEMPLOS DE INTEGRACIÓN</p>
+        <h2 class="text-gw-text-primary text-headline-lg font-bold mb-5">
+          ¿Qué plataformas podemos conectar?
+        </h2>
+        <p class="text-gw-text-secondary text-body-md leading-relaxed">
+          Estos son ejemplos de plataformas sobre las que puedes consultar una integración. No implican que todas las conexiones estén implementadas, probadas o disponibles de inmediato: revisamos tu caso y las condiciones de acceso de cada sistema.
+        </p>
+      </div>
+
+      <!-- Rejilla de Plataformas (Solo Tipografía) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <!-- SAP -->
+        <div class="border border-gw-border-subtle rounded-none p-7 bg-gw-surface-primary flex flex-col justify-between">
+          <h3 class="text-gw-text-primary text-headline-md font-bold tracking-tight mb-4">SAP</h3>
+          <div class="border-t border-gw-border-subtle pt-4">
+            <p class="text-label-bold uppercase text-brand-primary mb-1">EJEMPLO DE USO</p>
+            <p class="text-gw-text-secondary text-body-md leading-snug">
+              Sincronizar inventario o pedidos con un sistema empresarial.
+            </p>
+          </div>
+        </div>
+
+        <!-- Zoho -->
+        <div class="border border-gw-border-subtle rounded-none p-7 bg-gw-surface-primary flex flex-col justify-between">
+          <h3 class="text-gw-text-primary text-headline-md font-bold tracking-tight mb-4">Zoho</h3>
+          <div class="border-t border-gw-border-subtle pt-4">
+            <p class="text-label-bold uppercase text-brand-primary mb-1">EJEMPLO DE USO</p>
+            <p class="text-gw-text-secondary text-body-md leading-snug">
+              Compartir clientes y oportunidades con tu sistema de facturación.
+            </p>
+          </div>
+        </div>
+
+        <!-- Salesforce -->
+        <div class="border border-gw-border-subtle rounded-none p-7 bg-gw-surface-primary flex flex-col justify-between">
+          <h3 class="text-gw-text-primary text-headline-md font-bold tracking-tight mb-4">Salesforce</h3>
+          <div class="border-t border-gw-border-subtle pt-4">
+            <p class="text-label-bold uppercase text-brand-primary mb-1">EJEMPLO DE USO</p>
+            <p class="text-gw-text-secondary text-body-md leading-snug">
+              Mantener actualizados clientes y oportunidades comerciales.
+            </p>
+          </div>
+        </div>
+
+        <!-- Shopify -->
+        <div class="border border-gw-border-subtle rounded-none p-7 bg-gw-surface-primary flex flex-col justify-between">
+          <h3 class="text-gw-text-primary text-headline-md font-bold tracking-tight mb-4">Shopify</h3>
+          <div class="border-t border-gw-border-subtle pt-4">
+            <p class="text-label-bold uppercase text-brand-primary mb-1">EJEMPLO DE USO</p>
+            <p class="text-gw-text-secondary text-body-md leading-snug">
+              Enviar pedidos y niveles de inventario entre la tienda y tu operación.
+            </p>
+          </div>
+        </div>
+
+        <!-- Microsoft 365 -->
+        <div class="border border-gw-border-subtle rounded-none p-7 bg-gw-surface-primary flex flex-col justify-between">
+          <h3 class="text-gw-text-primary text-headline-md font-bold tracking-tight mb-4">Microsoft 365</h3>
+          <div class="border-t border-gw-border-subtle pt-4">
+            <p class="text-label-bold uppercase text-brand-primary mb-1">EJEMPLO DE USO</p>
+            <p class="text-gw-text-secondary text-body-md leading-snug">
+              Conectar solicitudes, archivos o flujos de trabajo con tu CRM.
+            </p>
+          </div>
+        </div>
+
+        <!-- WooCommerce -->
+        <div class="border border-gw-border-subtle rounded-none p-7 bg-gw-surface-primary flex flex-col justify-between">
+          <h3 class="text-gw-text-primary text-headline-md font-bold tracking-tight mb-4">WooCommerce</h3>
+          <div class="border-t border-gw-border-subtle pt-4">
+            <p class="text-label-bold uppercase text-brand-primary mb-1">EJEMPLO DE USO</p>
+            <p class="text-gw-text-secondary text-body-md leading-snug">
+              Sincronizar productos, pedidos y existencias de la tienda en línea.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bloque de Consulta -->
+      <div class="bg-gw-surface-auxiliary border border-supporting-blue-fixed-dim rounded-none p-8 md:p-10">
+        <p class="text-label-bold uppercase text-brand-primary mb-2">¿TIENES OTRA PLATAFORMA EN MENTE?</p>
+        <h3 class="text-gw-text-primary text-headline-md font-bold mb-3">¿Tienes otra plataforma en mente?</h3>
+        <p class="text-gw-text-secondary text-body-md leading-relaxed max-w-3xl mb-6">
+          ¿No sabes si podemos conectar el sistema que utilizas? Cuéntanos cuál es y qué necesitas hacer. Revisaremos tu caso y te orientaremos sobre las posibilidades de integración.
+        </p>
+        <a href="/contact" class="inline-flex items-center text-navigation text-brand-secondary hover:underline font-bold">
+          Consultar mi integración →
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 5. 04 — CÓMO TRABAJAMOS (Fondo gris) -->
+  <section class="bg-gw-surface-secondary py-[var(--section-padding-mobile)] md:py-[var(--section-padding-desktop)] border-b border-gw-border-subtle">
+    <div class="mx-auto w-full max-w-[var(--container-max)] px-4 md:px-6">
+      
+      <!-- Encabezado max-w-3xl -->
+      <div class="max-w-3xl mb-12">
+        <p class="text-label-bold uppercase text-brand-primary mb-3">04 — CÓMO TRABAJAMOS</p>
+        <h2 class="text-gw-text-primary text-headline-lg font-bold leading-tight mb-5">
+          Conexiones diseñadas para manejar los datos correctamente
+        </h2>
+        <p class="text-gw-text-secondary text-body-md leading-relaxed">
+          Antes de conectar los sistemas definimos qué información se mueve, cómo debe transformarse y qué hacer cuando ocurre un error.
+        </p>
+      </div>
+
+      <!-- Rejilla de 4 etapas con línea conectora en desktop -->
+      <div class="relative">
+        <div class="hidden lg:block absolute top-6 left-6 right-6 h-px bg-gw-border-subtle z-0"></div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
+          
+          <!-- Etapa 01 -->
+          <div class="bg-gw-surface-primary border border-gw-border-subtle p-6 flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 border-2 border-brand-primary text-brand-primary font-mono font-bold text-headline-md flex items-center justify-center mb-6 bg-gw-surface-primary">
+                01
+              </div>
+              <h3 class="text-gw-text-primary text-headline-md font-bold mb-3">
+                Analizar
+              </h3>
+              <p class="text-gw-text-secondary text-body-md leading-relaxed">
+                Identificamos las herramientas, los datos y las tareas que hoy se realizan manualmente.
+              </p>
+            </div>
+          </div>
+
+          <!-- Etapa 02 -->
+          <div class="bg-gw-surface-primary border border-gw-border-subtle p-6 flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 border-2 border-brand-primary text-brand-primary font-mono font-bold text-headline-md flex items-center justify-center mb-6 bg-gw-surface-primary">
+                02
+              </div>
+              <h3 class="text-gw-text-primary text-headline-md font-bold mb-3">
+                Diseñar
+              </h3>
+              <p class="text-gw-text-secondary text-body-md leading-relaxed">
+                Definimos el flujo de información, las reglas de validación y el tratamiento de errores.
+              </p>
+            </div>
+          </div>
+
+          <!-- Etapa 03 -->
+          <div class="bg-gw-surface-primary border border-gw-border-subtle p-6 flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 border-2 border-brand-primary text-brand-primary font-mono font-bold text-headline-md flex items-center justify-center mb-6 bg-gw-surface-primary">
+                03
+              </div>
+              <h3 class="text-gw-text-primary text-headline-md font-bold mb-3">
+                Conectar
+              </h3>
+              <p class="text-gw-text-secondary text-body-md leading-relaxed">
+                Implementamos la integración y probamos los escenarios de operación acordados.
+              </p>
+            </div>
+          </div>
+
+          <!-- Etapa 04 -->
+          <div class="bg-gw-surface-primary border border-gw-border-subtle p-6 flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 border-2 border-brand-primary text-brand-primary font-mono font-bold text-headline-md flex items-center justify-center mb-6 bg-gw-surface-primary">
+                04
+              </div>
+              <h3 class="text-gw-text-primary text-headline-md font-bold mb-3">
+                Supervisar
+              </h3>
+              <p class="text-gw-text-secondary text-body-md leading-relaxed">
+                Configuramos registros y mecanismos de seguimiento para detectar fallas y facilitar su diagnóstico.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 6. 05 — DUDAS FRECUENTES (Fondo gris) -->
+  <section class="bg-gw-surface-secondary py-[var(--section-padding-mobile)] md:py-[var(--section-padding-desktop)] border-b border-gw-border-subtle">
+    <div class="mx-auto w-full max-w-[var(--container-max)] px-4 md:px-6">
+      
+      <p class="text-label-bold uppercase text-brand-secondary mb-4">05 — DUDAS FRECUENTES</p>
+      <h2 class="text-gw-text-primary text-headline-lg font-bold tracking-tight mb-12">
+        Lo que suele preguntarse antes de conectar sistemas
+      </h2>
+
+      <!-- Tarjeta Acordeón -->
+      <div class="border-t border-gw-border-subtle divide-y divide-gw-border-subtle bg-gw-surface-primary border-b border-gw-border-subtle mb-8">
+        
+        <!-- Fila 01 (Abierta) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-gw-text-primary text-body-lg font-bold">
+              ¿Qué sistemas puedo conectar?
+            </h3>
+            <span class="text-headline-md font-bold text-brand-primary flex-shrink-0 leading-none select-none">−</span>
+          </div>
+          <div class="mt-4 pt-4 border-t border-gw-border-subtle">
+            <p class="text-gw-text-secondary text-body-md leading-relaxed max-w-[70ch]">
+              Podemos evaluar tiendas en línea, facturación, CRM, inventarios, hojas de cálculo y otras aplicaciones. La viabilidad depende de los accesos y mecanismos de integración que ofrezca cada sistema.
+            </p>
+          </div>
+        </div>
+
+        <!-- Fila 02 (Cerrada) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-gw-text-primary text-body-lg font-bold">
+              ¿Se pueden conectar programas antiguos?
+            </h3>
+            <span class="text-headline-md font-bold text-gw-text-muted flex-shrink-0 leading-none select-none">+</span>
+          </div>
+        </div>
+
+        <!-- Fila 03 (Cerrada) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-gw-text-primary text-body-lg font-bold">
+              ¿Qué pasa si falla una transferencia de información?
+            </h3>
+            <span class="text-headline-md font-bold text-gw-text-muted flex-shrink-0 leading-none select-none">+</span>
+          </div>
+        </div>
+
+        <!-- Fila 04 (Cerrada) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-gw-text-primary text-body-lg font-bold">
+              ¿Qué ocurre si uno de los sistemas cambia?
+            </h3>
+            <span class="text-headline-md font-bold text-gw-text-muted flex-shrink-0 leading-none select-none">+</span>
+          </div>
+        </div>
+
+        <!-- Fila 05 (Cerrada) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-gw-text-primary text-body-lg font-bold">
+              ¿Puedo saber qué información se transfirió?
+            </h3>
+            <span class="text-headline-md font-bold text-gw-text-muted flex-shrink-0 leading-none select-none">+</span>
+          </div>
+        </div>
+
+        <!-- Fila 06 (Cerrada) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-gw-text-primary text-body-lg font-bold">
+              ¿Cuánto cuesta conectar mis sistemas?
+            </h3>
+            <span class="text-headline-md font-bold text-gw-text-muted flex-shrink-0 leading-none select-none">+</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Enlace microcopy -->
+      <div>
+        <a href="/contact" class="text-label-bold text-brand-primary inline-flex items-center hover:underline">
+          ¿Te queda otra duda? Escríbenos →
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 7. 06 — INICIA TU INTEGRACIÓN (Fondo azul profundo) -->
+  <section class="bg-supporting-blue-dark text-brand-surface py-[var(--section-padding-mobile)] md:py-[var(--section-padding-desktop)] relative overflow-hidden">
+    <div class="mx-auto w-full max-w-[var(--container-max)] px-4 md:px-6 relative z-10">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        
+        <!-- Columna Izquierda -->
+        <div class="lg:col-span-8">
+          <p class="text-label-bold uppercase text-brand-accent mb-4">06 — INICIA TU INTEGRACIÓN</p>
+          <h2 class="text-brand-surface text-headline-lg font-bold mb-6">
+            Deja que tus sistemas hagan el trabajo repetitivo
+          </h2>
+          <p class="text-supporting-blue-fixed text-body-lg leading-relaxed max-w-2xl mb-10">
+            Cuéntanos qué programas utilizas y qué información tienes que pasar de uno a otro. Revisaremos cómo automatizar ese proceso.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-6">
+            <a href="/contact" class="text-label-bold bg-gw-action-primary text-brand-surface px-6 py-3 rounded-none uppercase hover:opacity-90 transition-opacity">
+              Conectemos tus sistemas
+            </a>
+            <a href="/servicios" class="text-label-bold border-2 border-brand-surface text-brand-surface px-6 py-2.5 rounded-none uppercase hover:bg-brand-surface hover:text-brand-primary transition-colors">
+              Ver todos los servicios →
+            </a>
+          </div>
+        </div>
+
+        <!-- Columna Derecha: Adorno Geométrico -->
+        <div class="lg:col-span-4 hidden lg:flex justify-end">
+          <div class="w-[256px] h-[256px] border border-supporting-blue-dark p-6 bg-[#002855]/70 flex flex-col justify-between">
+            <div class="flex items-start justify-between">
+              <!-- Cuadrado 48x48 bg-brand-primary -->
+              <div class="w-12 h-12 bg-brand-primary"></div>
+              <!-- Cuadro 40x40 border-2 border-brand-accent -->
+              <div class="w-10 h-10 border-2 border-brand-accent"></div>
+            </div>
+
+            <!-- Tres barras horizontales -->
+            <div class="space-y-2 py-4">
+              <div class="w-full h-1 bg-supporting-blue-dark"></div>
+              <div class="w-3/4 h-1 bg-supporting-blue-dark"></div>
+              <div class="w-1/2 h-1 bg-brand-accent"></div>
+            </div>
+
+            <div class="font-mono text-label-bold uppercase text-supporting-blue-fixed-dim tracking-widest pt-2 border-t border-supporting-blue-dark">
+              GUSSWARE · CORE
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 8. SERVICIOS RELACIONADOS (Fondo blanco) -->
+  <section class="bg-gw-surface-primary py-[var(--section-padding-mobile)] md:py-[var(--section-padding-desktop)] border-b border-gw-border-subtle">
+    <div class="mx-auto w-full max-w-[var(--container-max)] px-4 md:px-6">
+      
+      <div class="mb-12">
+        <p class="text-label-bold uppercase text-brand-primary mb-3">SIGUE EXPLORANDO</p>
+        <h2 class="text-gw-text-primary text-headline-lg font-bold">
+          Otros servicios que pueden ayudarte
+        </h2>
+      </div>
+
+      <!-- 3 Tarjetas de Servicios Relacionados -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Tarjeta 1: Software a Medida -->
+        <div class="bg-gw-surface-primary border border-gw-border-subtle rounded-none p-8 flex flex-col justify-between hover:border-brand-primary transition-colors">
+          <div>
+            <p class="text-label-bold uppercase text-brand-primary mb-3">SOFTWARE A MEDIDA</p>
+            <h3 class="text-gw-text-primary text-headline-md font-bold mb-4">Desarrollo a medida</h3>
+            <p class="text-gw-text-secondary text-body-md leading-relaxed mb-8">
+              Tu empresa no debería tener que adaptarse a un software que no le funciona.
+            </p>
+          </div>
+          <div class="border-t border-gw-border-subtle pt-5">
+            <a href="/servicios/desarrollo-a-medida" class="text-label-bold text-brand-primary inline-flex items-center hover:underline">
+              Ver servicio →
+            </a>
+          </div>
+        </div>
+
+        <!-- Tarjeta 2: Web & E-commerce -->
+        <div class="bg-gw-surface-primary border border-gw-border-subtle rounded-none p-8 flex flex-col justify-between hover:border-brand-primary transition-colors">
+          <div>
+            <p class="text-label-bold uppercase text-brand-primary mb-3">WEB &amp; E-COMMERCE</p>
+            <h3 class="text-gw-text-primary text-headline-md font-bold mb-4">Diseño de sitios web y tiendas en línea</h3>
+            <p class="text-gw-text-secondary text-body-md leading-relaxed mb-8">
+              Tu sitio web debe conseguir algo más que verse bien.
+            </p>
+          </div>
+          <div class="border-t border-gw-border-subtle pt-5">
+            <a href="/servicios/diseno-sitios-web-tiendas-en-linea" class="text-label-bold text-brand-primary inline-flex items-center hover:underline">
+              Ver servicio →
+            </a>
+          </div>
+        </div>
+
+        <!-- Tarjeta 3: Infraestructura -->
+        <div class="bg-gw-surface-primary border border-gw-border-subtle rounded-none p-8 flex flex-col justify-between hover:border-brand-primary transition-colors">
+          <div>
+            <p class="text-label-bold uppercase text-brand-primary mb-3">INFRAESTRUCTURA</p>
+            <h3 class="text-gw-text-primary text-headline-md font-bold mb-4">DevOps y Soporte Técnico</h3>
+            <p class="text-gw-text-secondary text-body-md leading-relaxed mb-8">
+              Actualiza tus sistemas sin convertir cada cambio en un riesgo.
+            </p>
+          </div>
+          <div class="border-t border-gw-border-subtle pt-5">
+            <a href="/servicios/devops-y-soporte-tecnico" class="text-label-bold text-brand-primary inline-flex items-center hover:underline">
+              Ver servicio →
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PIE DE PÁGINA GLOBAL DEL SITIO -->
+  <footer class="bg-gw-surface-secondary border-t border-gw-border-subtle py-16">
+    <div class="mx-auto w-full max-w-[var(--container-max)] px-4 md:px-6">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-16 border-b border-gw-border-subtle">
+        
+        <!-- Identidad de Marca -->
+        <div class="md:col-span-5">
+          <div class="flex items-center gap-3 mb-4">
+            <svg class="w-7 h-7 flex-shrink-0" viewBox="0 0 1333.33 1333.33" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1331.67 0H1.49V328.53H1331.67V0Z" fill="#004A98"/>
+              <path d="M1.49 675.81H321.09V1013.27H658.55V1333.33H1.49V675.81Z" fill="#004A98"/>
+              <path d="M1331.81 1333.28H1011.56V848.18H526.47V528.22H1331.81V1333.28Z" fill="#FF5000"/>
+            </svg>
+            <span class="text-xl font-bold tracking-tight text-gw-text-primary">GussWare</span>
+          </div>
+          <p class="text-gw-text-secondary text-body-md leading-relaxed max-w-sm">
+            Tecnología humana, impacto global
+          </p>
+        </div>
+
+        <!-- Columna Servicios -->
+        <div class="md:col-span-3">
+          <p class="text-label-bold uppercase text-gw-text-primary mb-4">Servicios</p>
+          <ul class="space-y-2.5 text-body-md text-gw-text-secondary">
+            <li><a href="/servicios/desarrollo-a-medida" class="hover:text-brand-primary transition-colors">Desarrollo a medida</a></li>
+            <li><a href="/servicios/diseno-sitios-web-tiendas-en-linea" class="hover:text-brand-primary transition-colors">Diseño de sitios web y tiendas en línea</a></li>
+            <li><a href="/servicios/aplicaciones-moviles" class="hover:text-brand-primary transition-colors">Aplicaciones móviles</a></li>
+            <li><a href="/servicios/integracion-de-apis-y-servicios-externos" class="text-brand-primary font-bold" aria-current="page">Integración de APIs y Servicios Externos</a></li>
+            <li><a href="/servicios/consultoria-tecnica" class="hover:text-brand-primary transition-colors">Consultoría técnica</a></li>
+            <li><a href="/servicios/devops-y-soporte-tecnico" class="hover:text-brand-primary transition-colors">DevOps y Soporte Técnico</a></li>
+          </ul>
+        </div>
+
+        <!-- Columna Explorar -->
+        <div class="md:col-span-2">
+          <p class="text-label-bold uppercase text-gw-text-primary mb-4">Explorar</p>
+          <ul class="space-y-2.5 text-body-md text-gw-text-secondary">
+            <li><a href="/como-trabajamos" class="hover:text-brand-primary transition-colors">Cómo trabajamos</a></li>
+            <li><a href="/proyectos" class="hover:text-brand-primary transition-colors">Proyectos</a></li>
+            <li><a href="/comunidad" class="hover:text-brand-primary transition-colors">Comunidad</a></li>
+            <li><a href="/contact" class="hover:text-brand-primary transition-colors">Contacto</a></li>
+          </ul>
+        </div>
+
+        <!-- Columna Legal -->
+        <div class="md:col-span-2">
+          <p class="text-label-bold uppercase text-gw-text-primary mb-4">Legal</p>
+          <ul class="space-y-2.5 text-body-md text-gw-text-secondary">
+            <li><a href="/aviso-de-privacidad" class="hover:text-brand-primary transition-colors">Aviso de privacidad</a></li>
+            <li><a href="/terminos-y-condiciones" class="hover:text-brand-primary transition-colors">Términos y condiciones</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Barra de Copyright -->
+      <div class="pt-8 flex flex-col md:flex-row items-center justify-between text-gw-text-muted text-sm gap-4">
+        <p>© 2026 GussWare</p>
+        <p class="font-mono text-xs uppercase tracking-wider text-gw-text-muted">
+          CONSTRUCTIVIST ARCHITECTURE &amp; MODULAR ENGINEERING
+        </p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

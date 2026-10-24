@@ -1,0 +1,342 @@
+{
+ "key": "group_gw_service_detail",
+ "id": 448,
+ "title": "Service - CPT",
+ "active": true,
+ "local": null,
+ "location": [
+  [
+   {
+    "param": "post_type",
+    "operator": "==",
+    "value": "service"
+   }
+  ]
+ ],
+ "position": "normal",
+ "fields": [
+  {
+   "key": "field_gw_svc_intro_eyebrow",
+   "name": "intro_eyebrow",
+   "label": "Intro Eyebrow",
+   "type": "text",
+   "required": true
+  },
+  {
+   "key": "field_gw_svc_intro_title",
+   "name": "intro_title",
+   "label": "Intro Title",
+   "type": "text",
+   "required": true
+  },
+  {
+   "key": "field_gw_svc_intro_description",
+   "name": "intro_description",
+   "label": "Intro Description",
+   "type": "textarea",
+   "required": true
+  },
+  {
+   "key": "field_gw_svc_intro_eyebrow_suffix",
+   "name": "intro_eyebrow_suffix",
+   "label": "Intro Eyebrow Suffix",
+   "type": "text",
+   "required": false
+  },
+  {
+   "key": "field_gw_svc_hero_stats",
+   "name": "hero_stats",
+   "label": "Hero — Indicadores",
+   "type": "repeater",
+   "required": false,
+   "min": 0,
+   "max": 0,
+   "sub_fields": [
+    {
+     "key": "field_gw_svc_hero_stat_label",
+     "name": "label",
+     "label": "Label",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "field_gw_svc_hero_stat_value",
+     "name": "value",
+     "label": "Value",
+     "type": "text",
+     "required": true
+    }
+   ]
+  },
+  {
+   "key": "field_gw_svc_dev_title",
+   "name": "development_title",
+   "label": "Development Title",
+   "type": "text",
+   "required": true
+  },
+  {
+   "key": "field_gw_svc_dev_content",
+   "name": "development_content",
+   "label": "Development Content",
+   "type": "textarea",
+   "required": true
+  },
+  {
+   "key": "field_gw_svc_dev_tags",
+   "name": "development_tags",
+   "label": "Development Tags",
+   "type": "repeater",
+   "required": false,
+   "min": 0,
+   "max": 0,
+   "sub_fields": [
+    {
+     "key": "field_gw_svc_dev_tag_text",
+     "name": "tag",
+     "label": "Tag",
+     "type": "text",
+     "required": true
+    }
+   ]
+  },
+  {
+   "key": "field_gw_svc_sol_eyebrow",
+   "name": "solutions_eyebrow",
+   "label": "Solutions Eyebrow",
+   "type": "text",
+   "required": false
+  },
+  {
+   "key": "field_gw_svc_sol_title",
+   "name": "solutions_title",
+   "label": "Solutions Title",
+   "type": "text",
+   "required": true
+  },
+  {
+   "key": "field_gw_svc_sol_description",
+   "name": "solutions_description",
+   "label": "Solutions Description",
+   "type": "textarea",
+   "required": true
+  },
+  {
+   "key": "field_gw_svc_solutions",
+   "name": "solutions",
+   "label": "Solutions",
+   "type": "repeater",
+   "required": true,
+   "min": 1,
+   "max": 0,
+   "sub_fields": [
+    {
+     "key": "field_gw_svc_sol_item_title",
+     "name": "title",
+     "label": "Title",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "field_gw_svc_sol_item_description",
+     "name": "description",
+     "label": "Description",
+     "type": "textarea",
+     "required": true
+    },
+    {
+     "key": "field_gw_svc_sol_item_features",
+     "name": "features",
+     "label": "Features",
+     "type": "repeater",
+     "required": false,
+     "min": 0,
+     "max": 0,
+     "sub_fields": [
+      {
+       "key": "field_gw_svc_sol_feature_text",
+       "name": "feature",
+       "label": "Feature",
+       "type": "text",
+       "required": true
+      }
+     ]
+    },
+    {
+     "key": "field_gw_svc_sol_item_link",
+     "name": "link",
+     "label": "Link",
+     "type": "group",
+     "required": false,
+     "sub_fields": [
+      {
+       "key": "field_gw_svc_sol_link_text",
+       "name": "text",
+       "label": "Text",
+       "type": "text",
+       "required": false
+      },
+      {
+       "key": "field_gw_svc_sol_link_url",
+       "name": "url",
+       "label": "URL",
+       "type": "text",
+       "required": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "key": "field_gw_svc_app_title",
+   "name": "approach_title",
+   "label": "Approach Title",
+   "type": "text",
+   "required": true
+  },
+  {
+   "key": "field_gw_svc_app_description",
+   "name": "approach_description",
+   "label": "Approach Description",
+   "type": "textarea",
+   "required": true
+  },
+  {
+   "key": "field_gw_svc_approach",
+   "name": "approach",
+   "label": "Approach Items",
+   "type": "repeater",
+   "required": true,
+   "min": 1,
+   "max": 0,
+   "sub_fields": [
+    {
+     "key": "field_gw_svc_app_item_title",
+     "name": "title",
+     "label": "Title",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "field_gw_svc_app_item_description",
+     "name": "description",
+     "label": "Description",
+     "type": "textarea",
+     "required": true
+    }
+   ]
+  },
+  {
+   "key": "field_gw_svc_tech_title",
+   "name": "tech_title",
+   "label": "Technologies Title",
+   "type": "text",
+   "required": true
+  },
+  {
+   "key": "field_gw_svc_tech_description",
+   "name": "tech_description",
+   "label": "Technologies Description",
+   "type": "textarea",
+   "required": true
+  },
+  {
+   "key": "field_gw_svc_tech_groups",
+   "name": "tech_groups",
+   "label": "Technology Groups",
+   "type": "repeater",
+   "required": true,
+   "min": 1,
+   "max": 0,
+   "sub_fields": [
+    {
+     "key": "field_gw_svc_tech_group_title",
+     "name": "title",
+     "label": "Title",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "field_gw_svc_tech_group_items",
+     "name": "items",
+     "label": "Items",
+     "type": "repeater",
+     "required": true,
+     "min": 1,
+     "max": 0,
+     "sub_fields": [
+      {
+       "key": "field_gw_svc_tech_item_name",
+       "name": "name",
+       "label": "Name",
+       "type": "text",
+       "required": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "key": "field_gw_svc_faq",
+   "name": "faq_items",
+   "label": "FAQ Items",
+   "type": "repeater",
+   "required": false,
+   "min": 0,
+   "max": 0,
+   "sub_fields": [
+    {
+     "key": "field_gw_svc_faq_q",
+     "name": "pregunta",
+     "label": "Pregunta",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "field_gw_svc_faq_a",
+     "name": "respuesta",
+     "label": "Respuesta",
+     "type": "textarea",
+     "required": true
+    }
+   ]
+  },
+  {
+   "key": "field_gw_svc_cta",
+   "name": "cta",
+   "label": "CTA",
+   "type": "group",
+   "required": true,
+   "sub_fields": [
+    {
+     "key": "field_gw_svc_cta_title",
+     "name": "title",
+     "label": "Title",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "field_gw_svc_cta_description",
+     "name": "description",
+     "label": "Description",
+     "type": "textarea",
+     "required": true
+    },
+    {
+     "key": "field_gw_svc_cta_button_text",
+     "name": "button_text",
+     "label": "Button Text",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "field_gw_svc_cta_button_url",
+     "name": "button_url",
+     "label": "Button URL",
+     "type": "text",
+     "required": false
+    }
+   ]
+  }
+ ]
+}
