@@ -59,7 +59,7 @@ const localeUrls = {
           <Card
             title={stripHtml(service.title.rendered)}
             description={stripHtml(
-              service.excerpt?.rendered || service.acf?.intro_description || '',
+              service.excerpt?.rendered || service.acf?.hero?.intro_description || '',
             )}
             href={serviceDetailUrl('es', service.slug)}
           />

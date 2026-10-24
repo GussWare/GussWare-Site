@@ -1,23 +1,38 @@
 ---
 /**
- * Header del Service Detail (Variant B: Editorial Timeline).
+ * Header del Service Detail (Stitch `Servicio Detalle`, S01).
  *
- * Composición propia de la referencia —fila de contexto, H1 display
- * bicolor y rail editorial con stats— que ningún componente existente
- * reproduce (SectionHeading es 1 columna fija, Hero incluye visual y
- * botones): NO es un Hero.
+ * Composición de la referencia: breadcrumb, fila eyebrow, H1 display,
+ * descripción y acciones en la columna 8/12; rail de stats numerados en
+ * la columna 4/12 separada por `border-l`.
  *
  * Todo el contenido llega por props desde WordPress (eyebrow, sufijo,
- * título, descripción, `hero_stats[]`). Regla de presentación genérica:
- * títulos "A / B" pintan la segunda parte en `brand-secondary`.
- * Nota tipográfica: la referencia usa peso 800, no cargado en el
- * proyecto (400/600/700); se usa 700 y resto de propiedades exactas.
+ * título, descripción, `hero_stats[]`, CTAs del hero y migas). Las
+ * migas reutilizan `Breadcrumbs.astro` y las acciones `Button.astro`
+ * (`primary` + `ghost`, el enlace secundario de la referencia).
+ *
+ * Los stats usan la forma real de ACF: `label` = número (`01`), `value`
+ * = titular y `description` = detalle. Sin fallbacks de contenido.
+ *
+ * Validación independiente: cada elemento se renderiza solo con datos
+ * válidos. El breadcrumb puede mostrarse sin título; el H1 no se pinta
+ * vacío. El contenedor desaparece solo cuando no queda ningún elemento
+ * sustantivo (título, breadcrumb, descripción, stats o acciones).
  */
 import Section from '../ui/Section.astro';
+import Breadcrumbs from '../ui/Breadcrumbs.astro';
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
 
 interface HeroStat {
   label: string;
   value: string;
+  description?: string;
+}
+
+interface Crumb {
+  label: string;
+  href?: string;
 }
 
 interface Props {
@@ -26,69 +41,138 @@ interface Props {
   title: string;
   description: string;
   stats: HeroStat[];
+  breadcrumbs?: Crumb[];
+  primaryCta?: { label: string; href: string } | null;
+  secondaryCta?: { label: string; href: string } | null;
 }
 
-const { eyebrow, eyebrowSuffix, title, description, stats } = Astro.props;
+const {
+  eyebrow,
+  eyebrowSuffix,
+  title,
+  description,
+  stats,
+  breadcrumbs = [],
+  primaryCta = null,
+  secondaryCta = null,
+} = Astro.props;
 
-const titleParts = title.split(' / ');
-const hasTwoToneTitle = titleParts.length === 2;
+const hasText = (value?: string | null): value is string =>
+  typeof value === 'string' && value.trim().length > 0;
+
+const visibleBreadcrumbs = breadcrumbs.filter((crumb) => hasText(crumb.label));
+const visibleStats = stats.filter(
+  (stat) =>
+    hasText(stat.label) || hasText(stat.value) || hasText(stat.description),
+);
+
+const titleText = hasText(title) ? title : null;
+const descriptionText = hasText(description) ? description : null;
+const eyebrowText = hasText(eyebrow) ? eyebrow : null;
+const eyebrowSuffixText = hasText(eyebrowSuffix) ? eyebrowSuffix : null;
+const primary =
+  primaryCta && hasText(primaryCta.label) && hasText(primaryCta.href)
+    ? primaryCta
+    : null;
+const secondary =
+  secondaryCta && hasText(secondaryCta.label) && hasText(secondaryCta.href)
+    ? secondaryCta
+    : null;
+
+const hasBreadcrumbs = visibleBreadcrumbs.length > 0;
+const hasTitle = titleText !== null;
+const hasDescription = descriptionText !== null;
+const hasEyebrow = eyebrowText !== null || eyebrowSuffixText !== null;
+const hasActions = primary !== null || secondary !== null;
+const hasStats = visibleStats.length > 0;
+
+// El eyebrow es una etiqueta de acompañamiento: por sí solo no sostiene
+// el hero. El breadcrumb, en cambio, sí es información de navegación.
+const hasHero =
+  hasTitle || hasBreadcrumbs || hasDescription || hasStats || hasActions;
+const hasBody =
+  hasTitle || hasDescription || hasEyebrow || hasActions || hasStats;
 ---
 
-<Section class="border-b border-gw-border-subtle">
-  <div class="flex items-center gap-3 mb-6">
-    <span
-      aria-hidden="true"
-      class="w-2.5 h-2.5 bg-brand-primary inline-block flex-shrink-0"
-    ></span>
-    {eyebrow && (
-      <span class="text-label-bold uppercase text-brand-primary">
-        {eyebrow}
-      </span>
-    )}
-    {eyebrowSuffix && (
-      <>
-        <span aria-hidden="true" class="text-xs text-gw-text-muted">
-          /
-        </span>
-        <span class="text-label-bold uppercase text-gw-text-secondary">
-          {eyebrowSuffix}
-        </span>
-      </>
-    )}
-  </div>
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
-    <div class="lg:col-span-7">
-      <h1 class="text-gw-text-primary text-headline-md sm:text-6xl lg:text-7xl tracking-tight leading-[1.05]">
-        {hasTwoToneTitle ? (
-          <>
-            <span class="block">{titleParts[0]} /</span>
-            <span class="block text-brand-secondary">{titleParts[1]}</span>
-          </>
-        ) : (
-          title
-        )}
-      </h1>
-    </div>
-    <div class="lg:col-span-5 border-l-0 lg:border-l border-gw-border-subtle lg:pl-10 space-y-6">
-      {description && (
-        <p class="text-gw-text-secondary text-lg sm:text-xl leading-relaxed font-normal">
-          {description}
-        </p>
-      )}
-      {stats.length > 0 && (
-        <div class="grid grid-cols-2 gap-4 pt-6 border-t border-gw-border-subtle text-label-bold uppercase text-gw-text-secondary">
-          {stats.map((stat) => (
-            <div class="space-y-1 border border-gw-border-subtle bg-gw-surface-auxiliary p-3">
-              <span class="font-bold text-supporting-blue-dark block">
-                {stat.label}
-              </span>
-              <span class="text-gw-text-primary normal-case text-body-md block">
-                {stat.value}
-              </span>
+{hasHero && (
+  <Section class="bg-gw-surface-primary border-b border-gw-border-subtle pt-10 md:pt-10">
+    {hasBreadcrumbs && <Breadcrumbs items={visibleBreadcrumbs} class="mb-8" />}
+    {hasBody && (
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        <div class="lg:col-span-8">
+          {hasEyebrow && (
+            <div class="flex items-center gap-2.5 mb-5">
+              <span
+                aria-hidden="true"
+                class="w-2.5 h-2.5 bg-brand-primary inline-block flex-shrink-0"
+              ></span>
+              {eyebrowText && (
+                <span class="text-label-bold uppercase text-brand-primary">
+                  {eyebrowText}
+                </span>
+              )}
+              {eyebrowSuffixText && (
+                <>
+                  <span aria-hidden="true" class="text-xs text-gw-text-muted">
+                    /
+                  </span>
+                  <span class="text-label-bold uppercase text-gw-text-secondary">
+                    {eyebrowSuffixText}
+                  </span>
+                </>
+              )}
             </div>
-          ))}
+          )}
+          {titleText && (
+            <h1 class="text-gw-text-primary text-display-lg-mobile md:text-display-lg font-bold tracking-tight leading-display-lg-mobile md:leading-display-lg mb-8">
+              {titleText}
+            </h1>
+          )}
+          {descriptionText && (
+            <p class="text-gw-text-secondary text-body-lg leading-relaxed max-w-3xl mb-10">
+              {descriptionText}
+            </p>
+          )}
+          {hasActions && (
+            <div class="flex flex-wrap items-center gap-6 pt-2">
+              {primary && (
+                <Button href={primary.href} class="uppercase">
+                  {primary.label}
+                </Button>
+              )}
+              {secondary && (
+                <Button variant="ghost" href={secondary.href} class="gap-2">
+                  {secondary.label}
+                  <Icon name="arrow-down" size={4} />
+                </Button>
+              )}
+            </div>
+          )}
         </div>
-      )}
-    </div>
-  </div>
-</Section>
+        {hasStats && (
+          <div class="lg:col-span-4 border-l-0 lg:border-l border-gw-border-subtle lg:pl-10 space-y-8 pt-4 lg:pt-0">
+            {visibleStats.map((stat) => (
+              <div class="border-b border-gw-border-subtle pb-6 last:border-b-0 last:pb-0">
+                {hasText(stat.label) && (
+                  <span class="font-mono font-bold text-brand-primary text-headline-md block mb-1">
+                    {stat.label}
+                  </span>
+                )}
+                {hasText(stat.value) && (
+                  <p class="text-gw-text-primary text-body-lg font-bold mb-1">
+                    {stat.value}
+                  </p>
+                )}
+                {hasText(stat.description) && (
+                  <p class="text-gw-text-muted text-body-md">
+                    {stat.description}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    )}
+  </Section>
+)}

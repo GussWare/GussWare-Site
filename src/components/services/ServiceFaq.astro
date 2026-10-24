@@ -1,18 +1,20 @@
 ---
 /**
- * FAQ del detalle de servicio (Stitch `Servicio Detalle` S06).
+ * FAQ del detalle de servicios (Stitch `Servicio Detalle`, S05).
  *
- * Patrón propio de la pantalla —cabecera superior + lista de ancho
- * completo con divisores—, distinto del `Faq` del Home (grid intro 4 +
- * acordeón 8 con numeración): no se reutiliza para no forzar un
- * componente que no representa este diseño.
+ * Sección sobre superficie secundaria con un panel blanco de filas
+ * `p-6 lg:p-8`: pregunta `body-lg` en negrita, icono `−`/`+` en
+ * `headline-md` y respuesta `body-md` separada por un borde superior.
+ * El primer ítem abre por defecto, como en la referencia.
  *
- * `<details>`/`<summary>` nativos (como la referencia; icono `+` que
- * rota 45° al abrir vía `group-open`), sin JavaScript. Preguntas 100%
- * dinámicas (`faq_items[]` de WordPress); eyebrow y título son
- * etiquetas de UI por locale, como el resto del template.
+ * Interacción nativa con `<details>`/`<summary>` (sin JS): el icono
+ * alterna `+`/`−` con el estado `open` del propio elemento. Contenido
+ * desde `faq_items[]`; `faq_eyebrow` llega de WordPress y, si está
+ * vacío, se usa la etiqueta de UI por locale (mismo criterio que el
+ * resto de etiquetas del template).
  */
 import Section from '../ui/Section.astro';
+import { formatSectionEyebrow } from '../../lib/services/section-number';
 
 interface FaqItem {
   pregunta: string;
@@ -21,44 +23,65 @@ interface FaqItem {
 
 interface Props {
   id?: string;
+  /** Número de sección calculado por la plantilla (`01`, `02`…). */
+  number?: string;
+  eyebrow?: string;
   items: FaqItem[];
   locale: string;
 }
 
-const { id = undefined, items, locale } = Astro.props;
+const {
+  id = undefined,
+  number = undefined,
+  eyebrow = undefined,
+  items,
+  locale,
+} = Astro.props;
 
-const faqEyebrow =
-  locale === 'en' ? 'WE ANSWER YOUR QUESTIONS' : 'RESOLVEMOS TUS DUDAS';
+const faqEyebrow = formatSectionEyebrow(
+  number,
+  eyebrow && eyebrow.trim() !== ''
+    ? eyebrow
+    : locale === 'en'
+      ? 'WE ANSWER YOUR QUESTIONS'
+      : 'RESOLVEMOS TUS DUDAS',
+);
 const faqTitle =
   locale === 'en' ? 'FREQUENTLY ASKED QUESTIONS' : 'PREGUNTAS FRECUENTES';
 ---
 
 {items.length > 0 && (
-  <Section id={id} class="border-b border-gw-border-subtle">
+  <Section
+    id={id}
+    class="bg-gw-surface-secondary border-b border-gw-border-subtle"
+  >
     <div class="mb-12">
-      <span class="inline-block text-label-bold uppercase text-brand-primary mb-2">
+      <p class="text-label-bold uppercase text-brand-secondary mb-4">
         {faqEyebrow}
-      </span>
-      <h2 class="text-gw-text-primary text-headline-md tracking-tight uppercase">
+      </p>
+      <h2 class="text-gw-text-primary text-headline-lg font-bold leading-tight tracking-tight">
         {faqTitle}
       </h2>
     </div>
-    <div class="border-t border-gw-border-subtle divide-y divide-gw-border-subtle">
-      {items.map((item) => (
-        <details class="group py-6">
-          <summary class="flex justify-between items-center cursor-pointer list-none select-none text-left [&::-webkit-details-marker]:hidden">
-            <span class="text-gw-text-primary text-lg md:text-xl font-bold group-hover:text-brand-primary transition-colors pr-6">
+    <div class="border-t border-b border-gw-border-subtle bg-gw-surface-primary">
+      {items.map((item, index) => (
+        <details class="group p-6 lg:p-8" open={index === 0}>
+          <summary class="flex items-center justify-between gap-4 cursor-pointer list-none select-none text-left [&::-webkit-details-marker]:hidden">
+            <h3 class="text-gw-text-primary text-body-lg font-bold">
               {item.pregunta}
-            </span>
+            </h3>
             <span
               aria-hidden="true"
-              class="text-2xl font-light text-brand-primary transition-transform duration-200 group-open:rotate-45 flex-shrink-0"
+              class="text-headline-md text-brand-primary flex-shrink-0 leading-none select-none font-bold"
             >
-              +
+              <span class="group-open:hidden">+</span>
+              <span class="hidden group-open:inline">−</span>
             </span>
           </summary>
-          <div class="pt-4 text-gw-text-secondary text-base leading-relaxed max-w-4xl">
-            {item.respuesta}
+          <div class="mt-4 pt-4 border-t border-gw-border-subtle">
+            <p class="text-gw-text-secondary text-body-md leading-relaxed max-w-3xl">
+              {item.respuesta}
+            </p>
           </div>
         </details>
       ))}

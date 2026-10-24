@@ -1,19 +1,29 @@
 ---
 /**
- * RGW-EP09-06 (visual Variant B: Editorial Timeline) — Template único
- * del detalle de servicios.
+ * Template único del detalle de servicios (Stitch `Servicio Detalle`).
  *
  * Renderiza exclusivamente desde el CPT `service` (prop `service`);
- * sin literales de contenido ni lógica por slug. Etiquetas de UI
- * (`SOLUCIÓN`, `CAPACIDADES CLAVE`) por locale, como los breadcrumbs.
+ * sin literales de contenido ni lógica por slug. Las etiquetas de UI
+ * (`QUÉ RECIBES`, `BENEFICIO`) se resuelven por locale, como el resto
+ * de etiquetas del template.
+ *
+ * Composición de la referencia:
+ * - S01 header (breadcrumb + hero + rail de stats) en `ServiceHeader`.
+ * - S02 problema: 5/12 de texto y 7/12 de situaciones numeradas.
+ * - S03 soluciones: retícula derivada de la cantidad de tarjetas.
+ * - S04 cómo trabajamos en `ServiceApproach`.
+ * - S05 ficha técnica: encabezado 5/7 y grupos en 3 columnas.
+ * - S06 FAQ en `ServiceFaq`.
+ * - S07 cierre oscuro con eyebrow y acción secundaria de ACF.
  */
 import Section from '../ui/Section.astro';
-import Container from '../ui/Container.astro';
-import CTA from '../ui/CTA.astro';
+import Button from '../ui/Button.astro';
 import Icon from '../ui/Icon.astro';
 import ServiceHeader from './ServiceHeader.astro';
 import ServiceApproach from './ServiceApproach.astro';
 import ServiceFaq from './ServiceFaq.astro';
+import { stripHtml } from '../../lib/wordpress/text';
+import { formatSectionEyebrow } from '../../lib/services/section-number';
 import type { WpService } from '../../lib/wordpress/types';
 
 interface Props {
@@ -24,139 +34,249 @@ interface Props {
   indexLabel: string;
 }
 
-const { service, locale } = Astro.props;
+const { service, locale, indexUrl, indexLabel } = Astro.props;
 
 const acf = service.acf;
 const pad = (n: number): string => String(n).padStart(2, '0');
 
-const solutionLabel = locale === 'en' ? 'SOLUTION' : 'SOLUCIÓN';
-const capabilitiesLabel =
-  locale === 'en' ? 'KEY CAPABILITIES' : 'CAPACIDADES CLAVE';
-const techEyebrow =
-  locale === 'en' ? 'STACK & CAPABILITIES' : 'STACK & CAPACIDADES';
+const capabilitiesLabel = locale === 'en' ? 'WHAT YOU GET' : 'QUÉ RECIBES';
+const benefitLabel = locale === 'en' ? 'BENEFIT' : 'BENEFICIO';
+const techEyebrow = locale === 'en' ? 'TECHNICAL DETAILS' : 'FICHA TÉCNICA';
+
+const breadcrumbs = [
+  { label: indexLabel, href: indexUrl },
+  { label: stripHtml(service.title.rendered) },
+];
+
+const hasText = (value?: string | null): value is string =>
+  typeof value === 'string' && value.trim().length > 0;
 
 // Párrafos editoriales desde el textarea (saltos de línea del contenido).
-const developmentParagraphs = (acf.development_content ?? '')
+const developmentParagraphs = (acf.problema.development_content ?? '')
   .split(/\r?\n\r?\n|\r\n|\n/)
   .map((paragraph) => paragraph.trim())
   .filter((paragraph) => paragraph.length > 0);
 
-const ctaActions =
-  acf.cta.button_text?.trim() !== ''
-    ? [
-        {
-          label: acf.cta.button_text,
-          href: acf.cta.button_url,
-          icon: 'arrow-right',
-          buttonClass: 'px-8 py-4 text-label-bold uppercase gap-3',
-        },
-      ]
-    : [];
+const problemSituations = (acf.problema.development_situations ?? []).filter(
+  (situation) => hasText(situation.situation),
+);
+const problemTags = (acf.problema.development_tags ?? []).filter((tag) =>
+  hasText(tag.tag),
+);
+
+// S02: el titular y algo de cuerpo (párrafos o situaciones) son el
+// mínimo para que la sección aporte información.
+const hasProblem =
+  hasText(acf.problema.development_title) &&
+  (developmentParagraphs.length > 0 || problemSituations.length > 0);
+
+// S03: solo tarjetas con contenido propio (sin contar el número).
+const solutions = (acf.soluciones.solutions ?? [])
+  .map((solution) => ({
+    ...solution,
+    features: (solution.features ?? []).filter((feature) =>
+      hasText(feature.feature),
+    ),
+  }))
+  .filter(
+    (solution) =>
+      hasText(solution.title) ||
+      hasText(solution.description) ||
+      solution.features.length > 0 ||
+      hasText(solution.benefit),
+  );
+
+// Retícula según la cantidad que entregue WordPress (1..N).
+const solutionCols =
+  solutions.length === 1
+    ? 'mx-auto max-w-3xl'
+    : solutions.length === 2
+      ? 'md:grid-cols-2'
+      : solutions.length === 3
+        ? 'sm:grid-cols-2 lg:grid-cols-3'
+        : solutions.length === 4
+          ? 'sm:grid-cols-2 xl:grid-cols-4'
+          : 'sm:grid-cols-2 lg:grid-cols-3';
+
+const approachItems = (acf.proceso.approach ?? []).filter(
+  (item) => hasText(item.title) || hasText(item.description),
+);
+
+// S05: grupos con al menos una tecnología; el interruptor sigue
+// mandando (Integración lo desactiva).
+const techGroups = (acf.ficha.tech_groups ?? [])
+  .map((group) => ({
+    ...group,
+    items: (group.items ?? []).filter((tech) => hasText(tech.name)),
+  }))
+  .filter((group) => group.items.length > 0);
+
+// S06: una pregunta sin respuesta no se considera información suficiente.
+const faqItems = (acf.faq.faq_items ?? []).filter(
+  (item) => hasText(item.pregunta) && hasText(item.respuesta),
+);
+
+const heroPrimaryCta =
+  hasText(acf.hero.hero_cta_label) && hasText(acf.hero.hero_cta_url)
+    ? {
+        label: acf.hero.hero_cta_label,
+        href: acf.hero.hero_cta_url,
+      }
+    : null;
+
+const heroSecondaryCta =
+  hasText(acf.hero.hero_secondary_label) && hasText(acf.hero.hero_secondary_url)
+    ? {
+        label: acf.hero.hero_secondary_label,
+        href: acf.hero.hero_secondary_url,
+      }
+    : null;
+
+const heroStats = (acf.hero.hero_stats ?? []).filter(
+  (stat) =>
+    hasText(stat.label) || hasText(stat.value) || hasText(stat.description),
+);
+
+const cta = acf.cierre.cta;
+const closingPrimary = hasText(cta.button_text) && hasText(cta.button_url);
+const closingSecondary =
+  hasText(cta.secondary_text) && hasText(cta.secondary_url);
+
+const hasSolutions = solutions.length > 0;
+const hasApproach = approachItems.length > 0;
+const hasTech = Boolean(acf.ficha.tech_enabled) && techGroups.length > 0;
+const hasFaq = faqItems.length > 0;
+const hasClosing = hasText(cta.title) || hasText(cta.description);
+
+// Numeración consecutiva en el orden visual: solo cuenta lo que se
+// renderiza. El hero no lleva número (mantiene el formato actual).
+let visibleSection = 0;
+const nextSectionNumber = (): string => pad(++visibleSection);
+
+const problemNumber = hasProblem ? nextSectionNumber() : null;
+const solutionsNumber = hasSolutions ? nextSectionNumber() : null;
+const approachNumber = hasApproach ? nextSectionNumber() : null;
+const techNumber = hasTech ? nextSectionNumber() : null;
+const faqNumber = hasFaq ? nextSectionNumber() : null;
+const closingNumber = hasClosing ? nextSectionNumber() : null;
 ---
 
-{/* Header del detalle (componente específico, NO Hero). */}
+{/* S01 · Header del detalle (componente específico, NO Hero). */}
 <ServiceHeader
-  eyebrow={acf.intro_eyebrow}
-  eyebrowSuffix={acf.intro_eyebrow_suffix ?? ''}
-  title={acf.intro_title}
-  description={acf.intro_description}
-  stats={acf.hero_stats ?? []}
+  eyebrow={acf.hero.intro_eyebrow}
+  eyebrowSuffix={acf.hero.intro_eyebrow_suffix ?? ''}
+  title={acf.hero.intro_title}
+  description={acf.hero.intro_description}
+  stats={heroStats}
+  breadcrumbs={breadcrumbs}
+  primaryCta={heroPrimaryCta}
+  secondaryCta={heroSecondaryCta}
 />
 
-{/* Desarrollo editorial (S2: grilla 4/8, tags inferiores). */}
-{acf.development_title && (
-  <section class="border-b border-gw-border-subtle bg-gw-surface-primary py-16 md:py-20">
-    <Container>
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
-        <div class="lg:col-span-4 flex flex-col justify-between">
-          <div class="lg:sticky lg:top-28">
-            <div>
-              <h2 class="text-gw-text-primary text-headline-md uppercase tracking-tight mb-3">
-                {acf.development_title}
-              </h2>
-              <span
-                aria-hidden="true"
-                class="block h-0.5 w-12 bg-brand-primary my-3"
-              ></span>
-            </div>
-          </div>
-          {(acf.development_tags ?? []).length > 0 && (
-            <p class="text-label-bold font-mono text-gw-text-muted uppercase mt-8">
-              {(acf.development_tags ?? []).map((item) => item.tag).join(' · ')}
-            </p>
+{/* S02 · Problema: texto 5/12 + situaciones numeradas 7/12. */}
+{hasProblem && (
+  <Section class="bg-gw-surface-primary border-b border-gw-border-subtle">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+      <div class="lg:col-span-5">
+        <p class="text-label-bold uppercase text-brand-primary mb-3">
+          {formatSectionEyebrow(
+            problemNumber,
+            acf.problema.development_eyebrow,
           )}
-        </div>
-        <div class="lg:col-span-8 space-y-6 text-gw-text-secondary text-base sm:text-lg leading-relaxed">
-          {developmentParagraphs.map((paragraph) => (
-            <p class="leading-relaxed">{paragraph}</p>
-          ))}
-        </div>
+        </p>
+        <h2 class="text-gw-text-primary text-headline-lg font-bold leading-tight mb-6">
+          {acf.problema.development_title}
+        </h2>
+        {developmentParagraphs.length > 0 && (
+          <div class="space-y-4 text-gw-text-secondary text-body-md leading-relaxed">
+            {developmentParagraphs.map((paragraph) => (
+              <p>{paragraph}</p>
+            ))}
+          </div>
+        )}
       </div>
-    </Container>
-  </section>
+      <div class="lg:col-span-7">
+        {problemSituations.length > 0 && (
+          <div class="divide-y divide-gw-border-subtle border-t border-b border-gw-border-subtle">
+            {problemSituations.map((situation) => (
+              <div class="py-6 grid grid-cols-12 gap-4 items-baseline">
+                <span class="col-span-2 font-mono font-bold text-brand-primary text-headline-md">
+                  {situation.number}
+                </span>
+                <p class="col-span-10 text-gw-text-primary text-body-md font-medium leading-snug">
+                  {situation.situation}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+        {problemTags.length > 0 && (
+          <div class="pt-6">
+            <p class="text-label-bold uppercase text-gw-text-muted">
+              {problemTags.map((item) => item.tag).join(' · ')}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  </Section>
 )}
 
-{/* Soluciones: comparativa asimétrica bordeada (N elementos). */}
-{(acf.solutions ?? []).length > 0 && (
+{/* S03 · Soluciones: tarjetas con número, capacidades y beneficio. */}
+{hasSolutions && (
   <Section
     id="soluciones"
     class="bg-gw-surface-secondary border-b border-gw-border-subtle"
   >
-    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 md:mb-16 gap-4">
-      <div>
-        {acf.solutions_eyebrow && (
-          <span class="inline-block text-label-bold uppercase text-brand-primary mb-2">
-            {acf.solutions_eyebrow}
-          </span>
+    <div class="max-w-3xl mb-12">
+      <p class="text-label-bold uppercase text-brand-primary mb-3">
+        {formatSectionEyebrow(
+          solutionsNumber,
+          acf.soluciones.solutions_eyebrow,
         )}
-        <h2 class="text-gw-text-primary text-headline-md tracking-tight uppercase">
-          {acf.solutions_title}
+      </p>
+      {hasText(acf.soluciones.solutions_title) && (
+        <h2 class="text-gw-text-primary text-headline-lg font-bold leading-tight mb-5">
+          {acf.soluciones.solutions_title}
         </h2>
-      </div>
-      {acf.solutions_description && (
-        <p class="text-gw-text-secondary text-base max-w-xl">
-          {acf.solutions_description}
+      )}
+      {hasText(acf.soluciones.solutions_description) && (
+        <p class="text-gw-text-secondary text-body-md leading-relaxed">
+          {acf.soluciones.solutions_description}
         </p>
       )}
     </div>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 border border-gw-border-subtle bg-gw-surface-primary">
-      {(acf.solutions ?? []).map((solution, index) => (
-        <article
-          class:list={[
-            'p-8 sm:p-12 flex flex-col justify-between border-t-4 border-t-brand-primary transition-colors bg-gw-surface-primary hover:bg-gw-surface-auxiliary',
-            index > 0
-              ? ''
-              : 'border-b lg:border-b-0 lg:border-r border-gw-border-subtle',
-          ]}
-        >
+    <div class:list={['grid grid-cols-1 gap-8 items-stretch', solutionCols]}>
+      {solutions.map((solution, index) => (
+        <article class="bg-gw-surface-primary border border-gw-border-subtle p-6 md:p-8 flex flex-col justify-between">
           <div>
-            <div class="flex justify-between items-start mb-6">
-              <span class="text-label-bold uppercase px-2.5 py-1 bg-gw-surface-secondary text-supporting-blue-dark">
-                {solutionLabel} {pad(index + 1)}
-              </span>
-              <span
-                aria-hidden="true"
-                class="w-2.5 h-2.5 inline-block flex-shrink-0 bg-brand-primary"
-              ></span>
-            </div>
-            <h3 class="text-gw-text-primary text-headline-md tracking-tight uppercase mb-4">
-              {solution.title}
-            </h3>
-            <p class="text-gw-text-secondary text-base leading-relaxed mb-8">
-              {solution.description}
-            </p>
-            {(solution.features ?? []).length > 0 && (
-              <div class="pt-6 border-t border-gw-border-subtle mb-8">
-                <p class="text-label-bold uppercase text-gw-text-muted block mb-4">
+            <span class="font-mono font-bold text-brand-primary text-headline-md block mb-4">
+              {pad(index + 1)}
+            </span>
+            {hasText(solution.title) && (
+              <h3 class="text-gw-text-primary text-headline-md tracking-tight font-bold mb-3">
+                {solution.title}
+              </h3>
+            )}
+            {hasText(solution.description) && (
+              <p class="text-gw-text-secondary text-body-md leading-relaxed mb-6">
+                {solution.description}
+              </p>
+            )}
+            {solution.features.length > 0 && (
+              <div class="border-t border-gw-border-subtle pt-6 mb-6">
+                <p class="text-label-bold uppercase text-brand-primary mb-4">
                   {capabilitiesLabel}
                 </p>
-                <ul class="space-y-3.5 text-base font-medium text-gw-text-primary">
-                  {(solution.features ?? []).map((feature) => (
-                    <li class="flex items-center gap-3">
+                <ul class="space-y-3 text-gw-text-primary text-body-md">
+                  {solution.features.map((feature) => (
+                    <li class="flex items-start gap-2">
                       <span
                         aria-hidden="true"
-                        class="w-2 h-2 inline-block flex-shrink-0 bg-brand-primary"
-                      ></span>
+                        class="text-brand-primary font-bold select-none"
+                      >
+                        —
+                      </span>
                       <span>{feature.feature}</span>
                     </li>
                   ))}
@@ -164,115 +284,141 @@ const ctaActions =
               </div>
             )}
           </div>
-          {solution.link?.text && (
-            <div class="pt-6 border-t border-gw-border-subtle">
-              <a
-                href={solution.link.url || undefined}
-                class="w-full inline-flex items-center justify-between text-label-bold uppercase px-6 py-3.5 transition-colors group bg-gw-surface-primary hover:bg-brand-primary text-brand-primary hover:text-brand-surface border border-brand-primary"
-              >
-                <span>{solution.link.text}</span>
-                <Icon
-                  name="arrow-right"
-                  size={4}
-                  class="transition-transform group-hover:translate-x-1"
-                />
-              </a>
-            </div>
-          )}
+          <div>
+            {hasText(solution.benefit) && (
+              <div class="border-t border-gw-border-subtle pt-6">
+                <p class="text-label-bold uppercase text-gw-text-muted mb-1">
+                  {benefitLabel}
+                </p>
+                <p class="text-gw-text-primary text-body-md font-semibold">
+                  {solution.benefit}
+                </p>
+              </div>
+            )}
+            {hasText(solution.link?.text) && (
+              <div class="border-t border-gw-border-subtle pt-6 mt-6">
+                <a
+                  href={solution.link?.url || undefined}
+                  class="inline-flex items-center gap-2 text-label-bold uppercase text-brand-primary transition-colors hover:text-brand-secondary"
+                >
+                  <span>{solution.link?.text}</span>
+                  <Icon name="arrow-right" size={4} />
+                </a>
+              </div>
+            )}
+          </div>
         </article>
       ))}
     </div>
   </Section>
 )}
 
-{/* Enfoque: timeline editorial (sin acordeón, como la referencia). */}
-<ServiceApproach
-  id="metodologia"
-  title={acf.approach_title}
-  description={acf.approach_description}
-  items={acf.approach ?? []}
-  locale={locale}
-/>
+{/* S04 · Cómo trabajamos: tarjetas numeradas en retícula. */}
+{hasApproach && (
+  <ServiceApproach
+    id="metodologia"
+    number={approachNumber ?? undefined}
+    eyebrow={acf.proceso.approach_eyebrow}
+    title={acf.proceso.approach_title}
+    description={acf.proceso.approach_description}
+    items={approachItems}
+  />
+)}
 
-{/* Tecnologías: grupos apilados con badges (S05 de la referencia). */}
-{(acf.tech_groups ?? []).length > 0 && (
+{/* S05 · Ficha técnica: encabezado 5/7 y grupos en 3 columnas. */}
+{hasTech && (
   <Section
     id="tecnologias"
-    class="bg-gw-surface-secondary border-b border-gw-border-subtle"
+    class="bg-gw-surface-primary border-b border-gw-border-subtle"
   >
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
-      <div class="lg:col-span-5 space-y-6 lg:sticky lg:top-28 lg:self-start">
-        <div>
-          <span class="inline-block text-label-bold uppercase text-brand-primary mb-3">
-            {techEyebrow}
-          </span>
-          <h2 class="text-gw-text-primary text-headline-md tracking-tight uppercase mb-4">
-            {acf.tech_title}
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start mb-12">
+      <div class="lg:col-span-5">
+        <p class="text-label-bold uppercase text-brand-primary mb-3">
+          {formatSectionEyebrow(
+            techNumber,
+            hasText(acf.ficha.tech_eyebrow)
+              ? acf.ficha.tech_eyebrow
+              : techEyebrow,
+          )}
+        </p>
+        {hasText(acf.ficha.tech_title) && (
+          <h2 class="text-gw-text-primary text-headline-lg font-bold leading-tight">
+            {acf.ficha.tech_title}
           </h2>
-          {acf.tech_description && (
-            <p class="text-gw-text-secondary text-base sm:text-lg leading-relaxed">
-              {acf.tech_description}
+        )}
+      </div>
+      <div class="lg:col-span-7 lg:pt-8">
+        {hasText(acf.ficha.tech_description) && (
+          <p class="text-gw-text-secondary text-body-md leading-relaxed">
+            {acf.ficha.tech_description}
+          </p>
+        )}
+      </div>
+    </div>
+    <div class="pt-8 border-t border-gw-border-subtle grid grid-cols-1 md:grid-cols-3 gap-8">
+      {techGroups.map((group) => (
+        <div class="border-l-0 md:border-l-2 border-brand-primary pl-0 md:pl-6">
+          {hasText(group.title) && (
+            <p class="text-label-bold uppercase text-brand-primary mb-2">
+              {group.title}
             </p>
           )}
+          <p class="text-gw-text-primary text-body-md font-semibold leading-relaxed">
+            {group.items.map((tech) => tech.name).join(' · ')}
+          </p>
         </div>
-      </div>
-      <div class="lg:col-span-7 space-y-5">
-        {(acf.tech_groups ?? []).map((group, groupIndex) => (
-          <div class="bg-gw-surface-primary border border-gw-border-subtle p-6">
-            <div class="flex items-center gap-2.5 mb-4 pb-3 border-b border-gw-border-subtle">
-              <span
-                aria-hidden="true"
-                class:list={[
-                  'w-2 h-2 inline-block flex-shrink-0',
-                  groupIndex % 2 === 1
-                    ? 'bg-brand-secondary'
-                    : 'bg-brand-primary',
-                ]}
-              ></span>
-              <h3 class="text-supporting-blue-dark text-label-bold uppercase">
-                {group.title}
-              </h3>
-            </div>
-            <ul class="flex flex-wrap gap-2">
-              {(group.items ?? []).map((tech) => (
-                <li class="bg-gw-surface-auxiliary border border-gw-border-subtle text-gw-text-primary text-label-bold px-3 py-1.5">
-                  {tech.name}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
+      ))}
     </div>
   </Section>
 )}
 
-{/* FAQ del servicio (patrón propio S06, contenido dinámico). */}
-{(acf.faq_items ?? []).length > 0 && (
-  <ServiceFaq id="faq" items={acf.faq_items} locale={locale} />
+{/* S06 · FAQ del servicio (contenido dinámico). */}
+{hasFaq && (
+  <ServiceFaq
+    id="faq"
+    number={faqNumber ?? undefined}
+    eyebrow={acf.faq.faq_eyebrow}
+    items={faqItems}
+    locale={locale}
+  />
 )}
 
-{/* CTA sobre superficie oscura (S07: `#00346e`, acentos constructivistas). */}
-<section
-  id="contacto"
-  class="relative overflow-hidden bg-supporting-blue-dark py-20 md:py-28"
->
-  <div
-    aria-hidden="true"
-    class="bg-brand-secondary/20 pointer-events-none absolute top-0 right-0 h-32 w-32"
-  ></div>
-  <div
-    aria-hidden="true"
-    class="border-brand-surface/10 pointer-events-none absolute bottom-0 left-10 h-24 w-24 border-t border-r"
-  ></div>
-  <div class="relative z-10 mx-auto w-full max-w-3xl px-4 md:px-6 text-center">
-    <CTA
-      tone="dark"
-      align="center"
-      title={acf.cta.title}
-      titleClass="text-headline-md lg:text-headline-lg tracking-tight uppercase"
-      description={acf.cta.description}
-      actions={ctaActions}
-    />
-  </div>
-</section>
+{/* S07 · Cierre sobre superficie oscura. */}
+{hasClosing && (
+  <Section id="contacto" class="bg-supporting-blue-dark">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+      <div class="lg:col-span-8">
+        <p class="text-label-bold uppercase text-brand-accent mb-4">
+          {formatSectionEyebrow(closingNumber, cta.eyebrow)}
+        </p>
+        {hasText(cta.title) && (
+          <h2 class="text-brand-surface text-headline-lg font-bold leading-tight mb-6">
+            {cta.title}
+          </h2>
+        )}
+        {hasText(cta.description) && (
+          <p class="text-supporting-blue-fixed text-body-lg leading-relaxed max-w-2xl mb-10">
+            {cta.description}
+          </p>
+        )}
+        {(closingPrimary || closingSecondary) && (
+          <div class="flex flex-wrap items-center gap-6">
+            {closingPrimary && (
+              <Button href={cta.button_url}>{cta.button_text}</Button>
+            )}
+            {closingSecondary && (
+              <Button
+                variant="outline-light"
+                href={cta.secondary_url}
+                class="gap-3"
+              >
+                {cta.secondary_text}
+                <Icon name="arrow-right" size={4} />
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  </Section>
+)}
