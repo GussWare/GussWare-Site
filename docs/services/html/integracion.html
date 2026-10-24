@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+
+<html lang="es-MX"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GussWare — Integración de APIs y Servicios Externos</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              primary: '#004A98',
+              deep: '#00346E',
+              secondary: '#2164A6',
+              accent: '#FF5000',
+              ink: '#242126',
+              muted: '#5C6068',
+              surface: '#FFFFFF',
+              alt: '#F2F2F2',
+              highlight: '#FFD8D8'
+            }
+          },
+          fontFamily: {
+            sans: ['"Source Sans 3"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    * {
+      border-radius: 0 !important;
+      box-shadow: none !important;
+    }
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      color: #242126;
+      background-color: #FFFFFF;
+      -webkit-font-smoothing: antialiased;
+    }
+    .prose-custom {
+      max-width: 70ch;
+    }
+  </style>
+</head>
+<body class="bg-white text-brand-ink selection:bg-brand-primary selection:text-white">
+<!-- ========================================================
+       1. HEADER (White, 80px, Sticky)
+       ======================================================== -->
+<header class="sticky top-0 z-50 bg-white border-b border-[#E2E4E8] h-20">
+<div class="max-w-[1280px] mx-auto h-full px-6 md:px-10 flex items-center justify-between">
+<!-- Brand Logo / Wordmark -->
+<a aria-label="GussWare Home" class="flex items-center gap-3 group" href="/">
+<svg class="w-7 h-7 flex-shrink-0" fill="none" viewbox="0 0 1333.3 1333.3" xmlns="http://www.w3.org/2000/svg">
+<path d="M1331.7 0H1.5v328.5h1330.2V0z" fill="#004A98"></path>
+<path d="M1.5 675.8h320.9v337.5h337.5v320.1H1.5V675.8z" fill="#004A98"></path>
+<path d="M1331.8 1333.3h-320.2V848.2H663.2V528.2h668.6v805.1z" fill="#FF5000"></path>
+</svg>
+<span class="text-2xl font-bold tracking-tight text-brand-ink">GussWare</span>
+</a>
+<!-- Global Navigation -->
+<nav aria-label="Navegación principal" class="hidden md:flex items-center gap-8 text-[15px] font-semibold text-brand-ink">
+<a aria-current="page" class="text-brand-primary border-b-2 border-brand-primary pb-0.5" href="/servicios">Servicios</a>
+<a class="hover:text-brand-primary transition-colors" href="/como-trabajamos">Cómo trabajamos</a>
+<a class="hover:text-brand-primary transition-colors" href="/proyectos">Proyectos</a>
+<a class="hover:text-brand-primary transition-colors" href="/comunidad">Comunidad</a>
+</nav>
+<!-- Primary Action CTA -->
+<div class="flex items-center gap-4">
+<a class="inline-flex items-center justify-center bg-brand-accent text-white font-bold text-[15px] px-6 py-3 tracking-wide hover:bg-[#e04600] transition-colors" href="/contact">
+          Hablemos
+        </a>
+</div>
+</div>
+</header>
+<main>
+<!-- ========================================================
+         2. HERO (White, 120px top/bottom padding)
+         ======================================================== -->
+<section class="bg-white py-[120px] border-b border-[#E2E4E8]">
+<div class="max-w-[1280px] mx-auto px-6 md:px-10">
+<!-- Breadcrumb -->
+<nav aria-label="Miga de pan" class="mb-8 text-sm font-medium text-brand-muted">
+<ol class="flex items-center gap-2">
+<li><a class="hover:text-brand-primary" href="/">Inicio</a></li>
+<li class="text-[#A0A4AB]">/</li>
+<li><a class="hover:text-brand-primary" href="/servicios">Servicios</a></li>
+<li class="text-[#A0A4AB]">/</li>
+<li aria-current="page" class="text-brand-ink font-semibold">Integración de APIs y Servicios Externos</li>
+</ol>
+</nav>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+<!-- Left Column (8 cols): Eyebrow, H1, Lead, CTAs -->
+<div class="lg:col-span-8">
+<div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brand-primary mb-5">
+<span class="w-2 h-2 bg-brand-primary inline-block"></span>
+              INTEGRACIÓN DE SISTEMAS
+            </div>
+<h1 class="text-4xl sm:text-5xl lg:text-[64px] font-bold text-brand-ink leading-[1.08] tracking-tight mb-8">
+              Deja de copiar datos de un programa a otro
+            </h1>
+<p class="text-lg lg:text-[19px] leading-[1.6] text-brand-muted mb-10 prose-custom">
+              Si tu equipo registra un pedido en una herramienta, vuelve a capturarlo en otra y después verifica que todo coincida, hay trabajo que se puede automatizar. Conectamos tus sistemas para que intercambien información con reglas claras y puedas dedicar menos tiempo a tareas repetitivas.
+            </p>
+<div class="flex flex-wrap items-center gap-6">
+<a class="inline-flex items-center justify-center bg-brand-accent text-white font-bold text-base px-8 py-4 tracking-wide hover:bg-[#e04600] transition-colors" href="/contact">
+                Cuéntanos tu caso
+              </a>
+<a class="inline-flex items-center gap-2 text-base font-bold text-brand-primary hover:text-brand-deep transition-colors py-2" href="#soluciones">
+                Ver soluciones <span class="text-lg">↓</span>
+</a>
+</div>
+</div>
+<!-- Right Column (4 cols): Three Stacked Stats -->
+<div class="lg:col-span-4 border-l border-[#E2E4E8] pl-0 lg:pl-10 space-y-8 pt-4 lg:pt-0">
+<!-- Stat 01 -->
+<div class="border-b border-[#E2E4E8] pb-7">
+<div class="text-4xl font-extrabold text-brand-primary mb-2 font-mono tracking-tight">01</div>
+<div class="text-lg font-bold text-brand-ink mb-1.5">Menos captura manual</div>
+<div class="text-sm text-brand-muted leading-relaxed">Un dato puede actualizar varios sistemas</div>
+</div>
+<!-- Stat 02 -->
+<div class="border-b border-[#E2E4E8] pb-7">
+<div class="text-4xl font-extrabold text-brand-primary mb-2 font-mono tracking-tight">02</div>
+<div class="text-lg font-bold text-brand-ink mb-1.5">Información coordinada</div>
+<div class="text-sm text-brand-muted leading-relaxed">Reglas claras para compartir datos</div>
+</div>
+<!-- Stat 03 -->
+<div>
+<div class="text-4xl font-extrabold text-brand-primary mb-2 font-mono tracking-tight">03</div>
+<div class="text-lg font-bold text-brand-ink mb-1.5">Errores detectables</div>
+<div class="text-sm text-brand-muted leading-relaxed">Registro de operaciones y fallas</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ========================================================
+         3. SECTION 01 — "EL PROBLEMA" (White, 120px padding)
+         ======================================================== -->
+<section class="bg-white py-[120px] border-b border-[#E2E4E8]">
+<div class="max-w-[1280px] mx-auto px-6 md:px-10">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+<!-- Wayfinding & Intro (5 cols) -->
+<div class="lg:col-span-5">
+<div class="text-xs font-bold uppercase tracking-wider text-brand-primary mb-3">
+              01 — EL PROBLEMA
+            </div>
+<h2 class="text-3xl lg:text-[42px] font-bold text-brand-ink leading-tight mb-6">
+              Tus programas, trabajando en equipo
+            </h2>
+<p class="text-base lg:text-[17px] text-brand-muted leading-relaxed prose-custom">
+              Cuando las herramientas de tu negocio están desconectadas, los pedidos, clientes, productos y facturas pueden terminar duplicados o desactualizados.
+            </p>
+</div>
+<!-- Numbered Rows with Thin Dividers (7 cols) -->
+<div class="lg:col-span-7 flex flex-col justify-between">
+<div class="divide-y divide-[#E2E4E8] border-t border-b border-[#E2E4E8]">
+<!-- Row 01 -->
+<div class="py-6 grid grid-cols-12 gap-4 items-baseline">
+<span class="col-span-2 text-xl font-mono font-bold text-brand-primary">01</span>
+<p class="col-span-10 text-base lg:text-[17px] text-brand-ink font-medium leading-snug">
+                  Los pedidos, clientes, productos o facturas se duplican entre herramientas.
+                </p>
+</div>
+<!-- Row 02 -->
+<div class="py-6 grid grid-cols-12 gap-4 items-baseline">
+<span class="col-span-2 text-xl font-mono font-bold text-brand-primary">02</span>
+<p class="col-span-10 text-base lg:text-[17px] text-brand-ink font-medium leading-snug">
+                  Tu equipo vuelve a capturar la misma información en otro programa.
+                </p>
+</div>
+<!-- Row 03 -->
+<div class="py-6 grid grid-cols-12 gap-4 items-baseline">
+<span class="col-span-2 text-xl font-mono font-bold text-brand-primary">03</span>
+<p class="col-span-10 text-base lg:text-[17px] text-brand-ink font-medium leading-snug">
+                  Cuando algo falla, no queda claro qué se envió, cuándo ni a dónde.
+                </p>
+</div>
+</div>
+<!-- Low-emphasis Tag Row -->
+<div class="pt-6 text-xs tracking-wider uppercase text-brand-muted font-semibold">
+              Integración de sistemas · Sincronización de datos · Automatización · Servicios externos
+            </div>
+</div>
+</div>
+</div>
+</section>
+<!-- ========================================================
+         4. SECTION 02 — "NUESTRAS SOLUCIONES" (#F2F2F2, 120px)
+         ======================================================== -->
+<section class="bg-brand-alt py-[120px] border-b border-[#E2E4E8]" id="soluciones">
+<div class="max-w-[1280px] mx-auto px-6 md:px-10">
+<!-- Section Header -->
+<div class="mb-14 max-w-3xl">
+<div class="text-xs font-bold uppercase tracking-wider text-brand-primary mb-3">
+            02 — NUESTRAS SOLUCIONES
+          </div>
+<h2 class="text-3xl lg:text-[42px] font-bold text-brand-ink leading-tight mb-5">
+            Conecta tus herramientas y automatiza el intercambio de información
+          </h2>
+<p class="text-base lg:text-[18px] text-brand-muted leading-relaxed prose-custom">
+            Creamos conexiones entre las aplicaciones que ya utilizas para reducir capturas repetidas, coordinar procesos y mantener los datos actualizados.
+          </p>
+</div>
+<!-- 3 Equal-height White Cards in 1 Row -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch mb-12">
+<!-- Card 01 -->
+<div class="bg-white border border-[#E2E4E8] p-8 flex flex-col justify-between">
+<div>
+<div class="text-3xl font-extrabold font-mono text-brand-primary mb-4">01</div>
+<h3 class="text-2xl font-bold text-brand-ink mb-3 leading-snug">
+                Conectar tus programas entre sí
+              </h3>
+<p class="text-[15px] text-brand-muted leading-relaxed mb-6">
+                Haz que la información registrada en una herramienta pueda utilizarse en otra sin depender de transferencias manuales.
+              </p>
+<div class="border-t border-[#E2E4E8] pt-5 mb-6">
+<div class="text-[11px] font-bold uppercase tracking-wider text-brand-primary mb-4">
+                  QUÉ RECIBES
+                </div>
+<ul class="space-y-3 text-[14px] text-brand-ink">
+<li class="flex items-start gap-2.5">
+<span class="text-brand-primary font-bold text-sm leading-tight flex-shrink-0">—</span>
+<span>Conexión entre tienda, facturación, CRM o inventario</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="text-brand-primary font-bold text-sm leading-tight flex-shrink-0">—</span>
+<span>Transferencia automática de los datos definidos</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="text-brand-primary font-bold text-sm leading-tight flex-shrink-0">—</span>
+<span>Validación de la información antes de procesarla</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="text-brand-primary font-bold text-sm leading-tight flex-shrink-0">—</span>
+<span>Registro de operaciones para consultar qué se envió y cuándo</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="text-brand-primary font-bold text-sm leading-tight flex-shrink-0">—</span>
+<span>Reintentos y alertas para atender transferencias fallidas</span>
+</li>
+</ul>
+</div>
+</div>
+<div class="border-t border-[#E2E4E8] pt-4 mt-2">
+<span class="text-xs font-bold uppercase tracking-wider text-brand-muted block mb-1">Beneficio</span>
+<p class="text-[15px] font-semibold text-brand-ink">
+                Menos capturas manuales y datos más consistentes.
+              </p>
+</div>
+</div>
+<!-- Card 02 -->
+<div class="bg-white border border-[#E2E4E8] p-8 flex flex-col justify-between">
+<div>
+<div class="text-3xl font-extrabold font-mono text-brand-primary mb-4">02</div>
+<h3 class="text-2xl font-bold text-brand-ink mb-3 leading-snug">
+                Automatizar tareas entre sistemas
+              </h3>
+<p class="text-[15px] text-brand-muted leading-relaxed mb-6">
+                Define qué debe suceder cuando ocurre un evento para que tus herramientas ejecuten acciones sin intervención manual en cada paso.
+              </p>
+<div class="border-t border-[#E2E4E8] pt-5 mb-6">
+<div class="text-[11px] font-bold uppercase tracking-wider text-brand-primary mb-4">
+                  QUÉ RECIBES
+                </div>
+<ul class="space-y-3 text-[14px] text-brand-ink">
+<li class="flex items-start gap-2.5">
+<span class="text-brand-primary font-bold text-sm leading-tight flex-shrink-0">—</span>
+<span>Generación o actualización de registros a partir de eventos</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="text-brand-primary font-bold text-sm leading-tight flex-shrink-0">—</span>
+<span>Automatización de tareas como notificaciones y cambios de estado</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="text-brand-primary font-bold text-sm leading-tight flex-shrink-0">—</span>
+<span>Reglas para determinar cuándo debe ejecutarse una acción</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="text-brand-primary font-bold text-sm leading-tight flex-shrink-0">—</span>
+<span>Avisos cuando una operación requiere atención</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="text-brand-primary font-bold text-sm leading-tight flex-shrink-0">—</span>
+<span>Historial de resultados para identificar errores y dar seguimiento</span>
+</li>
+</ul>
+</div>
+</div>
+<div class="border-t border-[#E2E4E8] pt-4 mt-2">
+<span class="text-xs font-bold uppercase tracking-wider text-brand-muted block mb-1">Beneficio</span>
+<p class="text-[15px] font-semibold text-brand-ink">
+                Menos pasos manuales y respuestas más rápidas.
+              </p>
+</div>
+</div>
+<!-- Card 03 -->
+<div class="bg-white border border-[#E2E4E8] p-8 flex flex-col justify-between">
+<div>
+<div class="text-3xl font-extrabold font-mono text-brand-primary mb-4">03</div>
+<h3 class="text-2xl font-bold text-brand-ink mb-3 leading-snug">
+                Mantener la información sincronizada
+              </h3>
+<p class="text-[15px] text-brand-muted leading-relaxed mb-6">
+                Coordina los datos que utilizan diferentes áreas para reducir diferencias entre registros y evitar trabajar con información desactualizada.
+              </p>
+<div class="border-t border-[#E2E4E8] pt-5 mb-6">
+<div class="text-[11px] font-bold uppercase tracking-wider text-brand-primary mb-4">
+                  QUÉ RECIBES
+                </div>
+<ul class="space-y-3 text-[14px] text-brand-ink">
+<li class="flex items-start gap-2.5">
+<span class="text-brand-primary font-bold text-sm leading-tight flex-shrink-0">—</span>
+<span>Sincronización de clientes, productos, precios u otros registros</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="text-brand-primary font-bold text-sm leading-tight flex-shrink-0">—</span>
+<span>Reglas para definir qué sistema actualiza cada dato</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="text-brand-primary font-bold text-sm leading-tight flex-shrink-0">—</span>
+<span>Validaciones para reducir duplicados e inconsistencias</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="text-brand-primary font-bold text-sm leading-tight flex-shrink-0">—</span>
+<span>Actualización programada o basada en eventos</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="text-brand-primary font-bold text-sm leading-tight flex-shrink-0">—</span>
+<span>Registro de errores y procedimientos para corregirlos</span>
+</li>
+</ul>
+</div>
+</div>
+<div class="border-t border-[#E2E4E8] pt-4 mt-2">
+<span class="text-xs font-bold uppercase tracking-wider text-brand-muted block mb-1">Beneficio</span>
+<p class="text-[15px] font-semibold text-brand-ink">
+                Un solo dato actualizado para todas las áreas.
+              </p>
+</div>
+</div>
+</div>
+<!-- Ghost text link below cards -->
+<div>
+<a class="inline-flex items-center gap-2 text-base font-bold text-brand-primary hover:text-brand-deep transition-colors" href="/contact">
+            Hablemos de tu caso <span class="text-lg">→</span>
+</a>
+</div>
+</div>
+</section>
+<!-- ========================================================
+         5. SECTION 03 — "EJEMPLOS DE INTEGRACIÓN" (White, 120px)
+         ======================================================== -->
+<section class="bg-white py-[120px] border-b border-[#E2E4E8]">
+<div class="max-w-[1280px] mx-auto px-6 md:px-10">
+<!-- Section Header -->
+<div class="mb-14 max-w-3xl">
+<div class="text-xs font-bold uppercase tracking-wider text-brand-primary mb-3">
+            03 — EJEMPLOS DE INTEGRACIÓN
+          </div>
+<h2 class="text-3xl lg:text-[42px] font-bold text-brand-ink leading-tight mb-5">
+            ¿Qué plataformas podemos conectar?
+          </h2>
+<p class="text-base lg:text-[17px] text-brand-muted leading-relaxed prose-custom">
+            Estos son ejemplos de plataformas sobre las que puedes consultar una integración. No implican que todas las conexiones estén implementadas, probadas o disponibles de inmediato: revisamos tu caso y las condiciones de acceso de cada sistema.
+          </p>
+</div>
+<!-- 3x2 Grid of Typographic Cards (NO LOGOS) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+<!-- SAP -->
+<div class="border border-[#E2E4E8] p-7 bg-white">
+<h3 class="text-2xl font-bold text-brand-ink mb-4 tracking-tight">SAP</h3>
+<div class="border-t border-[#E2E4E8] pt-4">
+<span class="text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-1">
+                EJEMPLO DE USO
+              </span>
+<p class="text-[15px] text-brand-muted leading-snug">
+                Sincronizar inventario o pedidos con un sistema empresarial.
+              </p>
+</div>
+</div>
+<!-- Zoho -->
+<div class="border border-[#E2E4E8] p-7 bg-white">
+<h3 class="text-2xl font-bold text-brand-ink mb-4 tracking-tight">Zoho</h3>
+<div class="border-t border-[#E2E4E8] pt-4">
+<span class="text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-1">
+                EJEMPLO DE USO
+              </span>
+<p class="text-[15px] text-brand-muted leading-snug">
+                Compartir clientes y oportunidades con tu sistema de facturación.
+              </p>
+</div>
+</div>
+<!-- Salesforce -->
+<div class="border border-[#E2E4E8] p-7 bg-white">
+<h3 class="text-2xl font-bold text-brand-ink mb-4 tracking-tight">Salesforce</h3>
+<div class="border-t border-[#E2E4E8] pt-4">
+<span class="text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-1">
+                EJEMPLO DE USO
+              </span>
+<p class="text-[15px] text-brand-muted leading-snug">
+                Mantener actualizados clientes y oportunidades comerciales.
+              </p>
+</div>
+</div>
+<!-- Shopify -->
+<div class="border border-[#E2E4E8] p-7 bg-white">
+<h3 class="text-2xl font-bold text-brand-ink mb-4 tracking-tight">Shopify</h3>
+<div class="border-t border-[#E2E4E8] pt-4">
+<span class="text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-1">
+                EJEMPLO DE USO
+              </span>
+<p class="text-[15px] text-brand-muted leading-snug">
+                Enviar pedidos y niveles de inventario entre la tienda y tu operación.
+              </p>
+</div>
+</div>
+<!-- Microsoft 365 -->
+<div class="border border-[#E2E4E8] p-7 bg-white">
+<h3 class="text-2xl font-bold text-brand-ink mb-4 tracking-tight">Microsoft 365</h3>
+<div class="border-t border-[#E2E4E8] pt-4">
+<span class="text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-1">
+                EJEMPLO DE USO
+              </span>
+<p class="text-[15px] text-brand-muted leading-snug">
+                Conectar solicitudes, archivos o flujos de trabajo con tu CRM.
+              </p>
+</div>
+</div>
+<!-- WooCommerce -->
+<div class="border border-[#E2E4E8] p-7 bg-white">
+<h3 class="text-2xl font-bold text-brand-ink mb-4 tracking-tight">WooCommerce</h3>
+<div class="border-t border-[#E2E4E8] pt-4">
+<span class="text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-1">
+                EJEMPLO DE USO
+              </span>
+<p class="text-[15px] text-brand-muted leading-snug">
+                Sincronizar productos, pedidos y existencias de la tienda en línea.
+              </p>
+</div>
+</div>
+</div>
+<!-- Highlighted pale blue-grey block -->
+<div class="bg-[#F0F4F8] border border-[#D5DEE7] p-8 md:p-10">
+<div class="text-xs font-bold uppercase tracking-wider text-brand-primary mb-2">
+            ¿NO ENCUENTRAS TU PLATAFORMA?
+          </div>
+<h3 class="text-2xl font-bold text-brand-ink mb-3">
+            ¿Tienes otra plataforma en mente?
+          </h3>
+<p class="text-base text-brand-muted leading-relaxed mb-6 max-w-3xl prose-custom">
+            ¿No sabes si podemos conectar el sistema que utilizas? Cuéntanos cuál es y qué necesitas hacer. Revisaremos tu caso y te orientaremos sobre las posibilidades de integración.
+          </p>
+<a class="inline-flex items-center gap-2 text-base font-bold text-brand-primary hover:text-brand-deep transition-colors" href="/contact">
+            Consultar mi integración <span class="text-lg">→</span>
+</a>
+</div>
+</div>
+</section>
+<!-- ========================================================
+         6. SECTION 04 — "CÓMO TRABAJAMOS" (#F2F2F2, 120px)
+         ======================================================== -->
+<section class="bg-brand-alt py-[120px] border-b border-[#E2E4E8]">
+<div class="max-w-[1280px] mx-auto px-6 md:px-10">
+<!-- Section Header -->
+<div class="mb-16 max-w-3xl">
+<div class="text-xs font-bold uppercase tracking-wider text-brand-primary mb-3">
+            04 — CÓMO TRABAJAMOS
+          </div>
+<h2 class="text-3xl lg:text-[42px] font-bold text-brand-ink leading-tight mb-5">
+            Conexiones diseñadas para manejar los datos correctamente
+          </h2>
+<p class="text-base lg:text-[18px] text-brand-muted leading-relaxed prose-custom">
+            Antes de conectar los sistemas definimos qué información se mueve, cómo debe transformarse y qué hacer cuando ocurre un error.
+          </p>
+</div>
+<!-- Horizontal 4-step stepper (Static, not clickable) -->
+<div class="relative">
+<!-- Thin connecting line behind markers on desktop -->
+<div class="hidden lg:block absolute top-6 left-6 right-6 h-[1px] bg-[#CFD4DC] z-0"></div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-8 relative z-10">
+<!-- Step 01 -->
+<div class="bg-brand-alt pt-2">
+<div class="w-12 h-12 border-2 border-brand-primary bg-brand-alt text-brand-primary font-mono font-bold text-lg flex items-center justify-center mb-6">
+                01
+              </div>
+<h3 class="text-xl font-bold text-brand-ink mb-3">Analizar</h3>
+<p class="text-[15px] text-brand-muted leading-relaxed">
+                Identificamos las herramientas, los datos y las tareas que hoy se realizan manualmente.
+              </p>
+</div>
+<!-- Step 02 -->
+<div class="bg-brand-alt pt-2">
+<div class="w-12 h-12 border-2 border-brand-primary bg-brand-alt text-brand-primary font-mono font-bold text-lg flex items-center justify-center mb-6">
+                02
+              </div>
+<h3 class="text-xl font-bold text-brand-ink mb-3">Diseñar</h3>
+<p class="text-[15px] text-brand-muted leading-relaxed">
+                Definimos el flujo de información, las reglas de validación y el tratamiento de errores.
+              </p>
+</div>
+<!-- Step 03 -->
+<div class="bg-brand-alt pt-2">
+<div class="w-12 h-12 border-2 border-brand-primary bg-brand-alt text-brand-primary font-mono font-bold text-lg flex items-center justify-center mb-6">
+                03
+              </div>
+<h3 class="text-xl font-bold text-brand-ink mb-3">Conectar</h3>
+<p class="text-[15px] text-brand-muted leading-relaxed">
+                Implementamos la integración y probamos los escenarios de operación acordados.
+              </p>
+</div>
+<!-- Step 04 -->
+<div class="bg-brand-alt pt-2">
+<div class="w-12 h-12 border-2 border-brand-primary bg-brand-alt text-brand-primary font-mono font-bold text-lg flex items-center justify-center mb-6">
+                04
+              </div>
+<h3 class="text-xl font-bold text-brand-ink mb-3">Supervisar</h3>
+<p class="text-[15px] text-brand-muted leading-relaxed">
+                Configuramos registros y mecanismos de seguimiento para detectar fallas y facilitar su diagnóstico.
+              </p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ========================================================
+         7. SECTION 05 — "DUDAS FRECUENTES" (White, 120px)
+         ======================================================== -->
+<section class="bg-[#F2F2F2] py-[120px] border-b border-[#DADADA]">
+    <div class="max-w-[1280px] mx-auto px-6">
+      <div class="flex items-center gap-2 mb-4 text-xs font-bold uppercase tracking-wider text-brand-secondary">
+        <span>05</span>
+        <span>—</span>
+        <span>DUDAS FRECUENTES</span>
+      </div>
+      <h2 class="text-3xl lg:text-[42px] font-bold text-brand-ink leading-[1.15] tracking-tight mb-12">
+        Lo que suele preguntarse antes de conectar sistemas
+      </h2>
+      <div class="border-t border-[#DADADA] divide-y divide-[#DADADA] bg-white border-b border-[#DADADA] mb-8">
+        <!-- Row 1 (OPEN) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-lg lg:text-xl font-bold text-brand-ink">
+              ¿Qué sistemas puedo conectar?
+            </h3>
+            <span class="text-2xl font-bold text-brand-primary flex-shrink-0 leading-none">−</span>
+          </div>
+          <div class="mt-4 pt-4 border-t border-[#DADADA]">
+            <p class="text-base text-brand-muted leading-relaxed max-w-[70ch]">
+              Podemos evaluar tiendas en línea, facturación, CRM, inventarios, hojas de cálculo y otras aplicaciones. La viabilidad depende de los accesos y mecanismos de integración que ofrezca cada sistema.
+            </p>
+          </div>
+        </div>
+        <!-- Row 2 (CLOSED) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-lg lg:text-xl font-bold text-brand-ink">
+              ¿Se pueden conectar programas antiguos?
+            </h3>
+            <span class="text-2xl font-bold text-brand-muted flex-shrink-0 leading-none">+</span>
+          </div>
+        </div>
+        <!-- Row 3 (CLOSED) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-lg lg:text-xl font-bold text-brand-ink">
+              ¿Qué pasa si falla una transferencia de información?
+            </h3>
+            <span class="text-2xl font-bold text-brand-muted flex-shrink-0 leading-none">+</span>
+          </div>
+        </div>
+        <!-- Row 4 (CLOSED) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-lg lg:text-xl font-bold text-brand-ink">
+              ¿Qué ocurre si uno de los sistemas cambia?
+            </h3>
+            <span class="text-2xl font-bold text-brand-muted flex-shrink-0 leading-none">+</span>
+          </div>
+        </div>
+        <!-- Row 5 (CLOSED) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-lg lg:text-xl font-bold text-brand-ink">
+              ¿Puedo saber qué información se transfirió?
+            </h3>
+            <span class="text-2xl font-bold text-brand-muted flex-shrink-0 leading-none">+</span>
+          </div>
+        </div>
+        <!-- Row 6 (CLOSED) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-lg lg:text-xl font-bold text-brand-ink">
+              ¿Cuánto cuesta conectar mis sistemas?
+            </h3>
+            <span class="text-2xl font-bold text-brand-muted flex-shrink-0 leading-none">+</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <a href="/contact" class="inline-flex items-center gap-1.5 text-sm font-bold text-brand-primary hover:text-brand-deep transition-colors">
+          ¿Te queda otra duda? Escríbenos →
+        </a>
+      </div>
+    </div>
+  </section>
+<!-- ========================================================
+         8. SECTION 06 — FINAL CTA (Deep blue #00346E, white text)
+         ======================================================== -->
+<section class="bg-brand-deep text-white py-[120px] relative overflow-hidden">
+<div class="max-w-[1280px] mx-auto px-6 md:px-10 relative z-10">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<!-- Text and Actions (8 cols) -->
+<div class="lg:col-span-8">
+<div class="text-xs font-bold uppercase tracking-wider text-brand-accent mb-4">
+              06 — INICIA TU INTEGRACIÓN
+            </div>
+<h2 class="text-3xl sm:text-4xl lg:text-[44px] font-bold leading-tight mb-6">
+              Deja que tus sistemas hagan el trabajo repetitivo
+            </h2>
+<p class="text-lg text-[#D5E1F0] leading-relaxed mb-10 max-w-2xl prose-custom">
+              Cuéntanos qué programas utilizas y qué información tienes que pasar de uno a otro. Revisaremos cómo automatizar ese proceso.
+            </p>
+<div class="flex flex-wrap items-center gap-6">
+<a class="inline-flex items-center justify-center bg-brand-accent text-white font-bold text-base px-8 py-4 tracking-wide hover:bg-[#e04600] transition-colors" href="/contact">
+                Conectemos tus sistemas
+              </a>
+<a class="inline-flex items-center gap-2 text-base font-bold text-white hover:text-[#D5E1F0] transition-colors py-2" href="/servicios">
+                Ver todos los servicios <span class="text-lg">→</span>
+</a>
+</div>
+</div>
+<!-- Subtle geometric constructivist accent block (4 cols) -->
+<div class="lg:col-span-4 hidden lg:flex justify-end">
+<div class="relative w-64 h-64 border border-[#2164A6] p-6 flex flex-col justify-between">
+<div class="w-12 h-12 bg-brand-primary"></div>
+<div class="space-y-2">
+<div class="w-full h-1 bg-[#2164A6]"></div>
+<div class="w-3/4 h-1 bg-[#2164A6]"></div>
+<div class="w-1/2 h-1 bg-brand-accent"></div>
+</div>
+<div class="flex justify-between items-end">
+<span class="font-mono text-xs uppercase tracking-widest text-[#9BB4D4]">GUSSWARE · CORE</span>
+<div class="w-10 h-10 border-2 border-brand-accent"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ========================================================
+         9. SECTION 07 — RELATED SERVICES (White, 120px)
+         ======================================================== -->
+<section class="bg-white py-[120px] border-b border-[#E2E4E8]">
+<div class="max-w-[1280px] mx-auto px-6 md:px-10">
+<div class="mb-14">
+<div class="text-xs font-bold uppercase tracking-wider text-brand-primary mb-3">
+            SIGUE EXPLORANDO
+          </div>
+<h2 class="text-3xl lg:text-[40px] font-bold text-brand-ink leading-tight">
+            Otros servicios que pueden ayudarte
+          </h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Card 01 -->
+<div class="border border-[#E2E4E8] p-8 flex flex-col justify-between bg-white hover:border-brand-primary transition-colors">
+<div>
+<span class="text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-3">
+                SOFTWARE A MEDIDA
+              </span>
+<h3 class="text-2xl font-bold text-brand-ink mb-4 leading-snug">
+                Desarrollo a medida
+              </h3>
+<p class="text-[15px] text-brand-muted leading-relaxed mb-8">
+                Tu empresa no debería tener que adaptarse a un software que no le funciona.
+              </p>
+</div>
+<div class="border-t border-[#E2E4E8] pt-5">
+<a class="inline-flex items-center gap-2 text-[15px] font-bold text-brand-primary hover:text-brand-deep transition-colors" href="/servicios/desarrollo-a-medida">
+                Ver servicio <span class="text-base">→</span>
+</a>
+</div>
+</div>
+<!-- Card 02 -->
+<div class="border border-[#E2E4E8] p-8 flex flex-col justify-between bg-white hover:border-brand-primary transition-colors">
+<div>
+<span class="text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-3">
+                WEB &amp; E-COMMERCE
+              </span>
+<h3 class="text-2xl font-bold text-brand-ink mb-4 leading-snug">
+                Diseño de sitios web y tiendas en línea
+              </h3>
+<p class="text-[15px] text-brand-muted leading-relaxed mb-8">
+                Tu sitio web debe conseguir algo más que verse bien.
+              </p>
+</div>
+<div class="border-t border-[#E2E4E8] pt-5">
+<a class="inline-flex items-center gap-2 text-[15px] font-bold text-brand-primary hover:text-brand-deep transition-colors" href="/servicios/web-ecommerce">
+                Ver servicio <span class="text-base">→</span>
+</a>
+</div>
+</div>
+<!-- Card 03 -->
+<div class="border border-[#E2E4E8] p-8 flex flex-col justify-between bg-white hover:border-brand-primary transition-colors">
+<div>
+<span class="text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-3">
+                INFRAESTRUCTURA
+              </span>
+<h3 class="text-2xl font-bold text-brand-ink mb-4 leading-snug">
+                DevOps y Soporte Técnico
+              </h3>
+<p class="text-[15px] text-brand-muted leading-relaxed mb-8">
+                Actualiza tus sistemas sin convertir cada cambio en un riesgo.
+              </p>
+</div>
+<div class="border-t border-[#E2E4E8] pt-5">
+<a class="inline-flex items-center gap-2 text-[15px] font-bold text-brand-primary hover:text-brand-deep transition-colors" href="/servicios/devops">
+                Ver servicio <span class="text-base">→</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- ========================================================
+       10. FOOTER (Four columns, Spanish, Legal & Nav)
+       ======================================================== -->
+<footer class="bg-brand-alt border-t border-[#E2E4E8] pt-20 pb-16 text-brand-ink">
+<div class="max-w-[1280px] mx-auto px-6 md:px-10">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+<div>
+<div class="flex items-center gap-3 mb-5">
+<svg class="w-6 h-6 flex-shrink-0" fill="none" viewbox="0 0 1333.3 1333.3" xmlns="http://www.w3.org/2000/svg">
+<path d="M1331.7 0H1.5v328.5h1330.2V0z" fill="#004A98"></path>
+<path d="M1.5 675.8h320.9v337.5h337.5v320.1H1.5V675.8z" fill="#004A98"></path>
+<path d="M1331.8 1333.3h-320.2V848.2H663.2V528.2h668.6v805.1z" fill="#FF5000"></path>
+</svg>
+<span class="text-xl font-bold text-brand-ink tracking-tight">GussWare</span>
+</div>
+<p class="text-sm text-brand-muted leading-relaxed mb-6 prose-custom">Tecnología humana, impacto global</p>
+</div>
+<div>
+<h4 class="text-xs font-bold uppercase tracking-wider text-brand-primary mb-5">Servicios</h4>
+<ul class="space-y-3 text-sm text-brand-muted font-medium">
+<li><a class="hover:text-brand-primary transition-colors" href="/servicios/desarrollo-a-medida">Desarrollo a medida</a></li>
+<li><a class="hover:text-brand-primary transition-colors" href="/servicios/web-ecommerce">Diseño de sitios web y tiendas en línea</a></li>
+<li><a class="hover:text-brand-primary transition-colors" href="/servicios/aplicaciones-moviles">Aplicaciones móviles</a></li>
+<li><a aria-current="page" class="text-brand-primary font-bold" href="/servicios/integracion-apis">Integración de APIs y Servicios Externos</a></li>
+<li><a class="hover:text-brand-primary transition-colors" href="/servicios/consultoria-tecnica">Consultoría técnica</a></li>
+<li><a class="hover:text-brand-primary transition-colors" href="/servicios/devops">DevOps y Soporte Técnico</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-xs font-bold uppercase tracking-wider text-brand-primary mb-5">Explorar</h4>
+<ul class="space-y-3 text-sm text-brand-muted font-medium">
+<li><a class="hover:text-brand-primary transition-colors" href="/como-trabajamos">Cómo trabajamos</a></li>
+<li><a class="hover:text-brand-primary transition-colors" href="/proyectos">Proyectos</a></li>
+<li><a class="hover:text-brand-primary transition-colors" href="/comunidad">Comunidad</a></li>
+<li><a class="hover:text-brand-primary transition-colors" href="/contact">Contacto</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-xs font-bold uppercase tracking-wider text-brand-primary mb-5">Legal</h4>
+<ul class="space-y-3 text-sm text-brand-muted font-medium mb-6">
+<li><a class="hover:text-brand-primary transition-colors" href="/aviso-de-privacidad">Aviso de privacidad</a></li>
+<li><a class="hover:text-brand-primary transition-colors" href="/terminos-y-condiciones">Términos y condiciones</a></li>
+</ul>
+</div>
+</div>
+<div class="border-t border-[#E2E4E8] pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-brand-muted">
+<div>© 2026 GussWare</div>
+<div class="flex items-center gap-6">
+<span class="text-[#A0A4AB] tracking-widest uppercase text-[11px] font-mono">CONSTRUCTIVIST ARCHITECTURE &amp; MODULAR ENGINEERING</span>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

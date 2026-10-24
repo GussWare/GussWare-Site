@@ -422,6 +422,7 @@ export interface WpHomePage extends Omit<WpPage, 'acf'> {
 export interface WpHeroStat {
   label: string;
   value: string;
+  description?: string;
 }
 
 /** Enlace opcional `{text, url}` (patrón `WpHomeButton`). */
@@ -440,7 +441,15 @@ export interface WpSolutionItem {
   title: string;
   description: string;
   features: WpSolutionFeature[];
+  /** Beneficio resumido de la solución (`benefit`). */
+  benefit?: string;
   link: WpServiceLink | null;
+}
+
+/** Situación del problema (`development_situations[]`). */
+export interface WpProblemSituation {
+  number: string;
+  situation: string;
 }
 
 /** Elemento del acordeón de enfoque (`approach[]`). */
@@ -457,37 +466,92 @@ export interface WpTechGroup {
 
 /** CTA del servicio (forma de `WpFinalCta`). */
 export interface WpServiceCta {
+  /** Etiqueta superior (`06 — …`); opcional en el modelo. */
+  eyebrow?: string;
   title: string;
   description: string;
   button_text: string;
   button_url: string;
+  /** Acción secundaria (`Ver todos los servicios`). */
+  secondary_text?: string;
+  secondary_url?: string;
 }
 
-/**
- * Campo `acf` del CPT `service` (grupo `Service Detail`, plano en REST).
- * Preguntas reutilizan `WpFaqItem` (`{pregunta, respuesta}`).
- */
-export interface WpServiceAcf {
+/** Sección Hero del servicio (campo `Group` `hero`). */
+export interface WpServiceHeroAcf {
   intro_eyebrow: string;
   intro_eyebrow_suffix: string;
   intro_title: string;
   intro_description: string;
   hero_stats: WpHeroStat[];
+  /** Acción principal del hero (`hero_cta_*`). */
+  hero_cta_label?: string;
+  hero_cta_url?: string;
+  /** Acción secundaria del hero (`hero_secondary_*`). */
+  hero_secondary_label?: string;
+  hero_secondary_url?: string;
+}
+
+/** Sección Problema del servicio (campo `Group` `problema`). */
+export interface WpServiceProblemAcf {
+  development_eyebrow: string;
   development_title: string;
   development_content: string;
+  development_situations?: WpProblemSituation[];
   development_tags: { tag: string }[];
+}
+
+/** Sección Soluciones del servicio (campo `Group` `soluciones`). */
+export interface WpServiceSolutionsAcf {
   solutions_title: string;
   solutions_description: string;
   solutions_eyebrow: string;
   solutions: WpSolutionItem[];
+}
+
+/** Sección Cómo trabajamos del servicio (campo `Group` `proceso`). */
+export interface WpServiceProcessAcf {
+  approach_eyebrow?: string;
   approach_title: string;
   approach_description: string;
   approach: WpApproachItem[];
+}
+
+/** Sección Ficha técnica del servicio (campo `Group` `ficha`). */
+export interface WpServiceTechAcf {
+  /** Interruptor del bloque: en Integración el diseño no muestra la ficha. */
+  tech_enabled: boolean;
+  tech_eyebrow?: string;
   tech_title: string;
   tech_description: string;
   tech_groups: WpTechGroup[];
+}
+
+/** Sección FAQ del servicio (campo `Group` `faq`). */
+export interface WpServiceFaqAcf {
+  faq_eyebrow?: string;
   faq_items: WpFaqItem[];
+}
+
+/** Sección Cierre del servicio (campo `Group` `cierre`). */
+export interface WpServiceClosingAcf {
   cta: WpServiceCta;
+}
+
+/**
+ * Campo `acf` del CPT `service` (grupo `Service Detail`): un campo
+ * `Group` de ACF por sección de la plantilla, por lo que REST devuelve
+ * la estructura anidada (`acf.hero.intro_title`).
+ * Preguntas reutilizan `WpFaqItem` (`{pregunta, respuesta}`).
+ */
+export interface WpServiceAcf {
+  hero: WpServiceHeroAcf;
+  problema: WpServiceProblemAcf;
+  soluciones: WpServiceSolutionsAcf;
+  proceso: WpServiceProcessAcf;
+  ficha: WpServiceTechAcf;
+  faq: WpServiceFaqAcf;
+  cierre: WpServiceClosingAcf;
 }
 
 /** Ítem del CPT `service` (`/wp/v2/services`). */

@@ -1,29 +1,20 @@
 ---
 /**
- * RGW-EP09-06-04 — Enfoque como timeline editorial sobre un eje
- * vertical (Stitch `Servicio Detalle - Integración de APIs` S04),
- * sin acordeón: la referencia no tiene interacción.
+ * Cómo trabajamos (Stitch `Servicio Detalle`, S04).
  *
- * Columna izquierda fija (`lg:sticky`) con eyebrow, H2 y descripción;
- * eje `border-l-2` con marcadores numerados sobre la línea.
+ * Encabezado a ancho de lectura (`max-w-3xl`) y retícula de tarjetas
+ * con el número de fase en un cuadro mono, título y descripción. La
+ * retícula se deriva de la cantidad de pasos que entrega WordPress
+ * (1..N): una tarjeta se centra a ancho de lectura, dos y tres usan
+ * columnas equivalentes, cuatro usa 4 columnas en desktop y cinco o
+ * más reparte en 3.
  *
- * Scroll-driven active state: los items se activan de arriba hacia
- * abajo según su posición respecto al viewport (regla determinista:
- * activo ⟺ `top < 65%` del viewport) y se revierten en orden inverso
- * al subir. El estado vive en `data-active` del paso y los estilos
- * reutilizan las clases existentes vía `group-data-[active=…]`
- * (paleta y transiciones de la sección, sin CSS nuevo): la card activa
- * es la que antes era estática (`index === 0`) y la inactiva la del
- * resto. `IntersectionObserver` actúa solo como planificador (sin
- * listener de `scroll`); el atributo solo se escribe si cambia.
- *
- * Contenido 100% dinámico (`approach[]` de WordPress: solo
- * `{title, description}`); numeración y contador derivados del índice.
- * Sin fuente ACF para el kicker `// …` de la referencia ni para tags
- * por fase: eyebrow genérico `FASE 0N` + contador `0N / 0M`.
- * Etiquetas de UI por locale (`FASE`/`PHASE`, `METODOLOGÍA`).
+ * Todo el contenido es dinámico (`approach_eyebrow`, `approach_title`,
+ * `approach_description`, `approach[]`); la numeración (`01`) deriva
+ * del índice. Sin interacción: la referencia es estática.
  */
 import Section from '../ui/Section.astro';
+import { formatSectionEyebrow } from '../../lib/services/section-number';
 
 interface ApproachItem {
   title: string;
@@ -32,109 +23,77 @@ interface ApproachItem {
 
 interface Props {
   id?: string;
+  /** Número de sección calculado por la plantilla (`01`, `02`…). */
+  number?: string;
+  eyebrow?: string;
   title: string;
   description: string;
   items: ApproachItem[];
-  locale: string;
 }
 
-const { id = undefined, title, description, items, locale } = Astro.props;
+const {
+  id = undefined,
+  number = undefined,
+  eyebrow = undefined,
+  title,
+  description,
+  items,
+} = Astro.props;
+
+const displayEyebrow = formatSectionEyebrow(number, eyebrow);
 
 const pad = (n: number): string => String(n).padStart(2, '0');
-const phaseLabel = locale === 'en' ? 'PHASE' : 'FASE';
-const approachEyebrow = locale === 'en' ? 'METHODOLOGY' : 'METODOLOGÍA';
+
+const gridCols =
+  items.length === 1
+    ? 'max-w-3xl'
+    : items.length === 2
+      ? 'md:grid-cols-2'
+      : items.length === 3
+        ? 'sm:grid-cols-2 lg:grid-cols-3'
+        : items.length === 4
+          ? 'md:grid-cols-2 lg:grid-cols-4'
+          : 'md:grid-cols-2 lg:grid-cols-3';
 ---
 
 {items.length > 0 && (
-  <Section id={id} class="border-b border-gw-border-subtle">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-      <div class="lg:col-span-4">
-        <div class="lg:sticky lg:top-28">
-          <span class="inline-block text-label-bold uppercase text-brand-primary mb-3">
-            {approachEyebrow}
-          </span>
-          {title && (
-            <h2 class="text-gw-text-primary text-headline-md tracking-tight uppercase mb-4">
-              {title}
-            </h2>
-          )}
-          {description && (
-            <p class="text-gw-text-secondary text-base leading-relaxed mb-6">
-              {description}
-            </p>
-          )}
-        </div>
-      </div>
-      <div class="lg:col-span-8">
-        <div
-          data-approach-timeline
-          class="relative pl-8 md:pl-12 border-l-2 border-gw-border-subtle space-y-10"
-        >
-          {items.map((item, index) => (
-            <div data-approach-step data-active="false" class="relative group">
-              <span
-                aria-hidden="true"
-                class="absolute top-1.5 flex items-center justify-center font-bold group-data-[active=false]:-left-[39px] group-data-[active=false]:md:-left-[55px] group-data-[active=false]:h-5 group-data-[active=false]:w-5 group-data-[active=false]:border-2 group-data-[active=false]:border-brand-secondary group-data-[active=false]:bg-gw-surface-primary group-data-[active=false]:text-[9px] group-data-[active=false]:text-brand-secondary group-data-[active=true]:-left-[41px] group-data-[active=true]:md:-left-[57px] group-data-[active=true]:h-6 group-data-[active=true]:w-6 group-data-[active=true]:border-4 group-data-[active=true]:border-brand-surface group-data-[active=true]:bg-brand-primary group-data-[active=true]:text-[10px] group-data-[active=true]:text-brand-surface"
-              >
-                {index + 1}
-              </span>
-              <div class="border border-gw-border-subtle p-6 md:p-8 transition-colors group-data-[active=false]:bg-gw-surface-primary group-data-[active=false]:hover:border-brand-secondary group-data-[active=true]:border-l-4 group-data-[active=true]:border-l-brand-primary group-data-[active=true]:bg-gw-surface-auxiliary">
-                <div class="flex items-baseline justify-between gap-4 mb-3">
-                  <span class="text-label-bold uppercase group-data-[active=false]:text-brand-secondary group-data-[active=true]:text-brand-primary">
-                    {phaseLabel} {pad(index + 1)}
-                  </span>
-                  <span class="text-gw-text-muted text-label-bold font-mono whitespace-nowrap">
-                    {pad(index + 1)} / {pad(items.length)}
-                  </span>
-                </div>
-                <h3 class="text-gw-text-primary text-headline-md tracking-tight uppercase mb-3">
-                  {item.title}
-                </h3>
-                <p class="text-gw-text-secondary text-base leading-relaxed">
-                  {item.description}
-                </p>
-              </div>
+  <Section
+    id={id}
+    class="bg-gw-surface-secondary border-b border-gw-border-subtle"
+  >
+    <div class="max-w-3xl mb-12">
+      {displayEyebrow && (
+        <p class="text-label-bold uppercase text-brand-primary mb-3">
+          {displayEyebrow}
+        </p>
+      )}
+      {title && (
+        <h2 class="text-gw-text-primary text-headline-lg font-bold leading-tight mb-5">
+          {title}
+        </h2>
+      )}
+      {description && (
+        <p class="text-gw-text-secondary text-body-md leading-relaxed">
+          {description}
+        </p>
+      )}
+    </div>
+    <div class:list={['grid grid-cols-1 gap-8 items-stretch', gridCols]}>
+      {items.map((item, index) => (
+        <div class="bg-gw-surface-primary border border-gw-border-subtle p-6 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 border-2 border-brand-primary text-brand-primary font-mono font-bold text-headline-md flex items-center justify-center mb-6 bg-gw-surface-primary">
+              {pad(index + 1)}
             </div>
-          ))}
+            <h3 class="text-gw-text-primary text-headline-md font-bold mb-3">
+              {item.title}
+            </h3>
+            <p class="text-gw-text-secondary text-body-md leading-relaxed">
+              {item.description}
+            </p>
+          </div>
         </div>
-      </div>
+      ))}
     </div>
   </Section>
 )}
-
-<script>
-  const timeline = document.querySelector('[data-approach-timeline]');
-
-  if (timeline instanceof HTMLElement) {
-    const steps = [...timeline.querySelectorAll('[data-approach-step]')];
-
-    if (steps.length > 0) {
-      // Línea de activación: 65% de la altura del viewport. Regla
-      // puramente geométrica (mismo scroll ⇒ mismo estado) evaluada
-      // solo cuando el observer detecta un cruce: sin listener de scroll.
-      const LINE_RATIO = 0.65;
-
-      const update = (): void => {
-        const lineY = window.innerHeight * LINE_RATIO;
-
-        steps.forEach((step) => {
-          if (!(step instanceof HTMLElement)) return;
-
-          const next = String(step.getBoundingClientRect().top < lineY);
-
-          if (step.dataset.active !== next) {
-            step.dataset.active = next;
-          }
-        });
-      };
-
-      const observer = new IntersectionObserver(update, {
-        rootMargin: '0px 0px -35% 0px',
-        threshold: [0],
-      });
-
-      steps.forEach((step) => observer.observe(step));
-      update();
-    }
-  }
-</script>

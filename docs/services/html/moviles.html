@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GussWare - Aplicaciones móviles (Detalle de Servicio)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;0,900;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              primary: '#004A98',
+              deep: '#00346E',
+              secondary: '#2164A6',
+              accent: '#FF5000',
+              ink: '#242126',
+              muted: '#5C6068',
+              surface: '#FFFFFF',
+              surfaceAlt: '#F2F2F2',
+            }
+          },
+          fontFamily: {
+            sans: ['"Source Sans 3"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * {
+      border-radius: 0px !important;
+      box-shadow: none !important;
+    }
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      color: #242126;
+      background-color: #FFFFFF;
+      -webkit-font-smoothing: antialiased;
+    }
+    .content-container {
+      max-width: 1280px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+    .section-py {
+      padding-top: 120px;
+      padding-bottom: 120px;
+    }
+  </style>
+</head>
+<body class="bg-white text-brand-ink selection:bg-brand-secondary selection:text-white">
+
+  <!-- ==================== 1. HEADER ==================== -->
+  <header class="w-full bg-white border-b border-[#E5E5E5] sticky top-0 z-50">
+    <div class="content-container h-20 flex items-center justify-between">
+      <!-- Brand Logo / Wordmark with SVG Isotipo -->
+      <a href="/" class="flex items-center gap-3 group" aria-label="GussWare Home">
+        <svg class="w-8 h-8 flex-shrink-0" viewBox="0 0 1333.33 1333.33" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1331.67 0H1.49V328.53H1331.67V0Z" fill="#004A98"/>
+          <path d="M1.49 675.81H321.09V1013.27H658.55V1333.33H1.49V675.81Z" fill="#004A98"/>
+          <path d="M1331.81 1333.28H1011.56V848.18H526.47V528.22H1331.81V1333.28Z" fill="#FF5000"/>
+        </svg>
+        <span class="text-2xl font-bold tracking-tight text-brand-ink">GussWare</span>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex items-center gap-8 text-[15px] font-semibold text-brand-ink">
+        <a href="/servicios" class="text-brand-primary border-b-2 border-brand-primary pb-0.5">Servicios</a>
+        <a href="/como-trabajamos" class="hover:text-brand-primary transition-colors">Cómo trabajamos</a>
+        <a href="/proyectos" class="hover:text-brand-primary transition-colors">Proyectos</a>
+        <a href="/comunidad" class="hover:text-brand-primary transition-colors">Comunidad</a>
+      </nav>
+
+      <!-- Header Primary CTA -->
+      <div>
+        <a href="/contacto" class="inline-block bg-brand-accent text-white px-6 py-2.5 text-sm font-bold tracking-wide uppercase hover:bg-[#e04600] transition-colors">
+          Hablemos
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== 2. HERO ==================== -->
+  <section class="w-full bg-white pt-10 pb-20 border-b border-[#E5E5E5]">
+    <div class="content-container">
+      <!-- Breadcrumb -->
+      <nav class="text-xs font-semibold text-brand-muted uppercase tracking-wider mb-8">
+        <a href="/" class="hover:text-brand-primary">Inicio</a>
+        <span class="mx-2">/</span>
+        <a href="/servicios" class="hover:text-brand-primary">Servicios</a>
+        <span class="mx-2">/</span>
+        <span class="text-brand-ink">Aplicaciones móviles</span>
+      </nav>
+
+      <div class="grid grid-cols-12 gap-8 items-start">
+        <!-- Left: Main Title, Lead & CTAs -->
+        <div class="col-span-12 lg:col-span-8 pr-0 lg:pr-12">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="inline-block w-2.5 h-2.5 bg-brand-primary"></span>
+            <span class="text-xs font-bold uppercase tracking-widest text-brand-primary">
+              DESARROLLO DE APLICACIONES MÓVILES
+            </span>
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl lg:text-[64px] font-bold leading-[1.08] tracking-tight text-brand-ink mb-6">
+            Una aplicación que resuelve una necesidad desde el celular
+          </h1>
+
+          <p class="text-lg lg:text-xl text-brand-muted leading-relaxed max-w-[65ch] mb-10">
+            Si tus clientes o colaboradores necesitan consultar información, realizar operaciones o acceder a tus servicios desde cualquier lugar, desarrollamos una aplicación pensada para esas tareas. Definimos contigo qué debe hacer y cómo llevarla a iPhone y Android.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-6">
+            <a href="/contacto" class="bg-brand-accent text-white px-8 py-4 text-base font-bold tracking-wide hover:bg-[#e04600] transition-colors">
+              Hablemos de tu app
+            </a>
+            <a href="#soluciones" class="text-base font-bold text-brand-primary hover:text-brand-deep flex items-center gap-1.5 transition-colors">
+              Ver soluciones <span>↓</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Three Stacked Value Props -->
+        <div class="col-span-12 lg:col-span-4 mt-8 lg:mt-0 pt-6 lg:pt-0 border-t lg:border-t-0 lg:border-l border-[#E5E5E5] lg:pl-10 space-y-8">
+          <div class="border-b border-[#E5E5E5] pb-6 last:border-b-0">
+            <div class="text-3xl font-black text-brand-primary tracking-tight mb-2">01</div>
+            <h3 class="text-base font-bold text-brand-ink mb-1">La plataforma adecuada</h3>
+            <p class="text-sm text-brand-muted leading-snug">iOS, Android o ambas según lo que necesitas</p>
+          </div>
+
+          <div class="border-b border-[#E5E5E5] pb-6 last:border-b-0">
+            <div class="text-3xl font-black text-brand-primary tracking-tight mb-2">02</div>
+            <h3 class="text-base font-bold text-brand-ink mb-1">Tareas más sencillas</h3>
+            <p class="text-sm text-brand-muted leading-snug">Funciones organizadas para el uso diario</p>
+          </div>
+
+          <div class="border-b border-[#E5E5E5] pb-6 last:border-b-0">
+            <div class="text-3xl font-black text-brand-primary tracking-tight mb-2">03</div>
+            <h3 class="text-base font-bold text-brand-ink mb-1">Base para crecer</h3>
+            <p class="text-sm text-brand-muted leading-snug">Preparada para nuevas funciones y actualizaciones</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 3. SECTION 01: EL PROBLEMA (WHITE) ==================== -->
+  <section class="w-full bg-white section-py border-b border-[#E5E5E5]">
+    <div class="content-container">
+      <div class="grid grid-cols-12 gap-8 mb-12">
+        <div class="col-span-12 lg:col-span-5">
+          <span class="text-xs font-bold uppercase tracking-widest text-brand-primary block mb-3">01 · EL PROBLEMA</span>
+          <h2 class="text-3xl lg:text-[42px] font-bold leading-tight text-brand-ink mb-6">
+            Que la aplicación facilite las tareas de tus usuarios
+          </h2>
+          <p class="text-base lg:text-lg text-brand-muted leading-relaxed max-w-[50ch]">
+            Una aplicación pierde valor si resulta complicada, tarda demasiado en responder o no resuelve el problema para el que fue creada.
+          </p>
+        </div>
+
+        <div class="col-span-12 lg:col-span-7 space-y-0">
+          <div class="py-6 border-b border-[#E5E5E5] flex items-start gap-6">
+            <span class="text-xl font-bold text-brand-primary w-8 flex-shrink-0">01</span>
+            <p class="text-base lg:text-lg text-brand-ink leading-relaxed">
+              La aplicación es complicada y tus usuarios no encuentran cómo hacer lo que necesitan.
+            </p>
+          </div>
+          <div class="py-6 border-b border-[#E5E5E5] flex items-start gap-6">
+            <span class="text-xl font-bold text-brand-primary w-8 flex-shrink-0">02</span>
+            <p class="text-base lg:text-lg text-brand-ink leading-relaxed">
+              Tarda en responder o falla en el momento en que más se usa.
+            </p>
+          </div>
+          <div class="py-6 border-b border-[#E5E5E5] flex items-start gap-6">
+            <span class="text-xl font-bold text-brand-primary w-8 flex-shrink-0">03</span>
+            <p class="text-base lg:text-lg text-brand-ink leading-relaxed">
+              No resuelve la tarea concreta para la que se creó.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- System tags -->
+      <div class="pt-8 border-t border-[#E5E5E5]">
+        <p class="text-xs font-bold uppercase tracking-wider text-brand-muted">
+          Aplicaciones móviles · iOS y Android · Experiencia de usuario · Rendimiento · Notificaciones · Integraciones
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 4. SECTION 02: QUÉ PUEDES CONTRATAR (#F2F2F2) ==================== -->
+  <section id="soluciones" class="w-full bg-[#F2F2F2] section-py border-b border-[#E5E5E5]">
+    <div class="content-container">
+      <div class="max-w-[750px] mb-16">
+        <span class="text-xs font-bold uppercase tracking-widest text-brand-primary block mb-3">02 · QUÉ PUEDES CONTRATAR</span>
+        <h2 class="text-3xl lg:text-[42px] font-bold leading-tight text-brand-ink mb-4">
+          Dos caminos para llegar a tus usuarios
+        </h2>
+        <p class="text-base lg:text-lg text-brand-muted leading-relaxed">
+          Elegimos entre un desarrollo específico para una plataforma y una solución multiplataforma según las funciones, el rendimiento y los recursos del proyecto.
+        </p>
+      </div>
+
+      <!-- Two Equal Cards Side by Side (NOT 3 COLUMNS) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch mb-12">
+        <!-- Card 01 -->
+        <div class="bg-white p-8 lg:p-12 border border-[#E5E5E5] flex flex-col justify-between">
+          <div>
+            <div class="text-3xl font-black text-brand-primary mb-4">01</div>
+            <h3 class="text-2xl font-bold text-brand-ink mb-3 leading-snug">
+              Aplicaciones específicas para iPhone o Android
+            </h3>
+            <p class="text-sm lg:text-base text-brand-muted leading-relaxed mb-8">
+              Cuando necesitas aprovechar funciones particulares del dispositivo o desarrollar una experiencia enfocada en una plataforma.
+            </p>
+
+            <div class="border-t border-[#E5E5E5] pt-6 mb-6">
+              <span class="text-xs font-bold uppercase tracking-wider text-brand-primary block mb-4">QUÉ RECIBES</span>
+              <ul class="space-y-3">
+                <li class="flex items-start gap-3 text-sm lg:text-[15px] text-brand-ink">
+                  <span class="w-1.5 h-1.5 bg-brand-primary mt-2 flex-shrink-0"></span>
+                  <span>Aplicación adaptada a iOS o Android</span>
+                </li>
+                <li class="flex items-start gap-3 text-sm lg:text-[15px] text-brand-ink">
+                  <span class="w-1.5 h-1.5 bg-brand-primary mt-2 flex-shrink-0"></span>
+                  <span>Integración con cámara, ubicación y notificaciones</span>
+                </li>
+                <li class="flex items-start gap-3 text-sm lg:text-[15px] text-brand-ink">
+                  <span class="w-1.5 h-1.5 bg-brand-primary mt-2 flex-shrink-0"></span>
+                  <span>Pantallas alineadas con la experiencia habitual de la plataforma</span>
+                </li>
+                <li class="flex items-start gap-3 text-sm lg:text-[15px] text-brand-ink">
+                  <span class="w-1.5 h-1.5 bg-brand-primary mt-2 flex-shrink-0"></span>
+                  <span>Pruebas de las funciones y el rendimiento requeridos</span>
+                </li>
+                <li class="flex items-start gap-3 text-sm lg:text-[15px] text-brand-ink">
+                  <span class="w-1.5 h-1.5 bg-brand-primary mt-2 flex-shrink-0"></span>
+                  <span>Proyecto preparado para recibir mantenimiento y actualizaciones</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="pt-6 border-t border-[#E5E5E5] mt-6 bg-[#FAFAFA] p-4">
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-muted block mb-1">BENEFICIO</span>
+            <p class="text-sm font-semibold text-brand-ink leading-snug">
+              Aprovecha las funciones del dispositivo y una experiencia propia de la plataforma.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 02 -->
+        <div class="bg-white p-8 lg:p-12 border border-[#E5E5E5] flex flex-col justify-between">
+          <div>
+            <div class="text-3xl font-black text-brand-primary mb-4">02</div>
+            <h3 class="text-2xl font-bold text-brand-ink mb-3 leading-snug">
+              Una aplicación para iPhone y Android
+            </h3>
+            <p class="text-sm lg:text-base text-brand-muted leading-relaxed mb-8">
+              Llega a usuarios de ambas plataformas con un desarrollo que comparte componentes y reduce la duplicación de trabajo cuando es viable.
+            </p>
+
+            <div class="border-t border-[#E5E5E5] pt-6 mb-6">
+              <span class="text-xs font-bold uppercase tracking-wider text-brand-primary block mb-4">QUÉ RECIBES</span>
+              <ul class="space-y-3">
+                <li class="flex items-start gap-3 text-sm lg:text-[15px] text-brand-ink">
+                  <span class="w-1.5 h-1.5 bg-brand-primary mt-2 flex-shrink-0"></span>
+                  <span>Aplicación disponible para iOS y Android</span>
+                </li>
+                <li class="flex items-start gap-3 text-sm lg:text-[15px] text-brand-ink">
+                  <span class="w-1.5 h-1.5 bg-brand-primary mt-2 flex-shrink-0"></span>
+                  <span>Componentes y lógica compartidos para optimizar el desarrollo</span>
+                </li>
+                <li class="flex items-start gap-3 text-sm lg:text-[15px] text-brand-ink">
+                  <span class="w-1.5 h-1.5 bg-brand-primary mt-2 flex-shrink-0"></span>
+                  <span>Interfaz adaptada a cada plataforma</span>
+                </li>
+                <li class="flex items-start gap-3 text-sm lg:text-[15px] text-brand-ink">
+                  <span class="w-1.5 h-1.5 bg-brand-primary mt-2 flex-shrink-0"></span>
+                  <span>Funciones conectadas con los servicios y sistemas necesarios</span>
+                </li>
+                <li class="flex items-start gap-3 text-sm lg:text-[15px] text-brand-ink">
+                  <span class="w-1.5 h-1.5 bg-brand-primary mt-2 flex-shrink-0"></span>
+                  <span>Base común para mantener y ampliar la aplicación</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="pt-6 border-t border-[#E5E5E5] mt-6 bg-[#FAFAFA] p-4">
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-muted block mb-1">BENEFICIO</span>
+            <p class="text-sm font-semibold text-brand-ink leading-snug">
+              Llega a ambas plataformas con una base común y menos duplicación.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ghost Link below cards -->
+      <div>
+        <a href="/contacto" class="inline-flex items-center gap-2 text-base font-bold text-brand-primary hover:text-brand-deep transition-colors">
+          Hablemos de tu app <span>→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 5. SECTION 03: CÓMO TRABAJAMOS (#F2F2F2) ==================== -->
+  <section class="w-full bg-[#F2F2F2] section-py border-b border-[#E5E5E5]">
+    <div class="content-container">
+      <div class="max-w-[750px] mb-16">
+        <span class="text-xs font-bold uppercase tracking-widest text-brand-primary block mb-3">03 · CÓMO TRABAJAMOS</span>
+        <h2 class="text-3xl lg:text-[42px] font-bold leading-tight text-brand-ink mb-4">
+          De la idea a una aplicación que puedes probar
+        </h2>
+        <p class="text-base lg:text-lg text-brand-muted leading-relaxed">
+          Definimos las funciones, validamos la experiencia y desarrollamos por etapas para que puedas revisar el avance antes del lanzamiento.
+        </p>
+      </div>
+
+      <!-- Static Horizontal Four-Step Stepper -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+        <!-- Step 1 -->
+        <div class="bg-white p-6 lg:p-8 border border-[#E5E5E5] flex flex-col justify-between">
+          <div>
+            <div class="w-7 h-7 bg-brand-primary text-white text-xs font-bold flex items-center justify-center mb-6">
+              01
+            </div>
+            <h3 class="text-xl font-bold text-brand-ink mb-3">Entender</h3>
+            <p class="text-sm text-brand-muted leading-relaxed">
+              Identificamos a los usuarios, las tareas y las necesidades que debe resolver la aplicación.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-[#F2F2F2]">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-brand-secondary">Definición inicial</span>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="bg-white p-6 lg:p-8 border border-[#E5E5E5] flex flex-col justify-between">
+          <div>
+            <div class="w-7 h-7 bg-brand-primary text-white text-xs font-bold flex items-center justify-center mb-6">
+              02
+            </div>
+            <h3 class="text-xl font-bold text-brand-ink mb-3">Diseñar</h3>
+            <p class="text-sm text-brand-muted leading-relaxed">
+              Creamos las pantallas y los recorridos para que puedas validar cómo funcionará.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-[#F2F2F2]">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-brand-secondary">Validación UX/UI</span>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="bg-white p-6 lg:p-8 border border-[#E5E5E5] flex flex-col justify-between">
+          <div>
+            <div class="w-7 h-7 bg-brand-primary text-white text-xs font-bold flex items-center justify-center mb-6">
+              03
+            </div>
+            <h3 class="text-xl font-bold text-brand-ink mb-3">Desarrollar</h3>
+            <p class="text-sm text-brand-muted leading-relaxed">
+              Implementamos las funciones y preparamos versiones de prueba para revisar el resultado.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-[#F2F2F2]">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-brand-secondary">Entregas periódicas</span>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="bg-white p-6 lg:p-8 border border-[#E5E5E5] flex flex-col justify-between">
+          <div>
+            <div class="w-7 h-7 bg-brand-accent text-white text-xs font-bold flex items-center justify-center mb-6">
+              04
+            </div>
+            <h3 class="text-xl font-bold text-brand-ink mb-3">Publicar y evolucionar</h3>
+            <p class="text-sm text-brand-muted leading-relaxed">
+              Preparamos la distribución en las tiendas y definimos las siguientes mejoras de acuerdo con las necesidades del proyecto.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-[#F2F2F2]">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-brand-accent">Lanzamiento</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 6. SECTION 04: ENFOQUE TÉCNICO (WHITE, SECONDARY, LOW EMPHASIS) ==================== --&gt;
+  <section class="w-full bg-white section-py border-b border-[#E5E5E5]">
+    <div class="content-container">
+      <div class="max-w-[750px] mb-12">
+        <span class="text-xs font-bold uppercase tracking-widest text-brand-muted block mb-3">04 · ENFOQUE TÉCNICO</span>
+        <h2 class="text-2xl lg:text-[34px] font-bold leading-tight text-brand-ink mb-3">
+          Cómo desarrollamos tu aplicación
+        </h2>
+        <p class="text-sm lg:text-base text-brand-muted leading-relaxed">
+          Elegimos el enfoque técnico según las funciones que necesitas y las plataformas en las que quieres estar presente.
+        </p>
+      </div>
+
+      <!-- Compact Three-Column Strip -->
+      <div class="grid grid-cols-1 md:grid-cols-3 border-t border-b border-[#E5E5E5] divide-y md:divide-y-0 md:divide-x divide-[#E5E5E5] py-2">
+        <div class="py-8 px-6 lg:px-8">
+          <span class="text-xs font-bold uppercase tracking-wider text-brand-primary block mb-2">Plataformas</span>
+          <p class="text-lg font-semibold text-brand-ink">iOS · Android</p>
+        </div>
+        <div class="py-8 px-6 lg:px-8">
+          <span class="text-xs font-bold uppercase tracking-wider text-brand-primary block mb-2">Funciones del dispositivo</span>
+          <p class="text-lg font-semibold text-brand-ink">Cámara · Ubicación · Notificaciones</p>
+        </div>
+        <div class="py-8 px-6 lg:px-8">
+          <span class="text-xs font-bold uppercase tracking-wider text-brand-primary block mb-2">Enfoque de desarrollo</span>
+          <p class="text-lg font-semibold text-brand-ink">Específico por plataforma · Multiplataforma</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 7. SECTION 05: DUDAS FRECUENTES (#F2F2F2) ==================== -->
+  <section class="bg-[#F2F2F2] py-[120px] border-b border-[#DADADA]">
+    <div class="max-w-[1280px] mx-auto px-6">
+      <div class="flex items-center gap-2 mb-4 text-xs font-bold uppercase tracking-wider text-brand-secondary">
+        <span>05</span>
+        <span>—</span>
+        <span>DUDAS FRECUENTES</span>
+      </div>
+      <h2 class="text-3xl lg:text-[42px] font-bold text-brand-ink leading-[1.15] tracking-tight mb-12">
+        Lo que suele preguntarse antes de empezar
+      </h2>
+      <div class="border-t border-[#DADADA] divide-y divide-[#DADADA] bg-white border-b border-[#DADADA] mb-8">
+        <!-- Row 1 (OPEN) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-lg lg:text-xl font-bold text-brand-ink">
+              ¿Necesito una aplicación diferente para iPhone y Android?
+            </h3>
+            <span class="text-2xl font-bold text-brand-primary flex-shrink-0 leading-none">−</span>
+          </div>
+          <div class="mt-4 pt-4 border-t border-[#DADADA]">
+            <p class="text-base text-brand-muted leading-relaxed max-w-[70ch]">
+              No siempre. Podemos desarrollar una aplicación específica para una plataforma o utilizar un enfoque multiplataforma. Evaluamos las funciones y los requisitos para recomendarte la opción adecuada.
+            </p>
+          </div>
+        </div>
+        <!-- Row 2 (CLOSED) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-lg lg:text-xl font-bold text-brand-ink">
+              ¿Cuánto tarda desarrollar una aplicación?
+            </h3>
+            <span class="text-2xl font-bold text-brand-muted flex-shrink-0 leading-none">+</span>
+          </div>
+        </div>
+        <!-- Row 3 (CLOSED) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-lg lg:text-xl font-bold text-brand-ink">
+              ¿Puedo probarla antes de publicarla?
+            </h3>
+            <span class="text-2xl font-bold text-brand-muted flex-shrink-0 leading-none">+</span>
+          </div>
+        </div>
+        <!-- Row 4 (CLOSED) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-lg lg:text-xl font-bold text-brand-ink">
+              ¿Quién se encarga de publicarla en las tiendas?
+            </h3>
+            <span class="text-2xl font-bold text-brand-muted flex-shrink-0 leading-none">+</span>
+          </div>
+        </div>
+        <!-- Row 5 (CLOSED) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-lg lg:text-xl font-bold text-brand-ink">
+              ¿Qué pasa cuando necesite nuevas funciones?
+            </h3>
+            <span class="text-2xl font-bold text-brand-muted flex-shrink-0 leading-none">+</span>
+          </div>
+        </div>
+        <!-- Row 6 (CLOSED) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-lg lg:text-xl font-bold text-brand-ink">
+              ¿Cuánto cuesta desarrollar una aplicación?
+            </h3>
+            <span class="text-2xl font-bold text-brand-muted flex-shrink-0 leading-none">+</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <a href="/contacto" class="inline-flex items-center gap-1.5 text-sm font-bold text-brand-primary hover:text-brand-deep transition-colors">
+          ¿Te queda otra duda? Escríbenos →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 8. SECTION 06: CIERRE (DEEP BLUE #00346E) ==================== -->
+  <section class="w-full bg-brand-deep text-white section-py">
+    <div class="content-container">
+      <div class="max-w-[800px]">
+        <span class="text-xs font-bold uppercase tracking-widest text-[#FF8547] block mb-4">
+          06 · INICIA TU APLICACIÓN
+        </span>
+        <h2 class="text-3xl sm:text-4xl lg:text-[44px] font-bold leading-tight mb-6 tracking-tight">
+          Lleva tus servicios al celular de tus usuarios
+        </h2>
+        <p class="text-lg lg:text-xl text-[#CBD5E1] leading-relaxed mb-10 max-w-[65ch]">
+          Cuéntanos qué necesitas que hagan tus usuarios desde una aplicación. Evaluaremos las opciones para convertir esa necesidad en un proyecto.
+        </p>
+
+        <div class="flex flex-wrap items-center gap-6">
+          <a href="/contacto" class="bg-brand-accent text-white px-8 py-4 text-base font-bold tracking-wide hover:bg-[#e04600] transition-colors">
+            Cuéntanos tu idea
+          </a>
+          <a href="/servicios" class="text-base font-bold text-white hover:text-[#FF8547] flex items-center gap-1.5 transition-colors">
+            Ver todos los servicios <span>→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 9. SECTION 07: SERVICIOS RELACIONADOS (WHITE) ==================== -->
+  <section class="w-full bg-white section-py border-b border-[#E5E5E5]">
+    <div class="content-container">
+      <div class="mb-12">
+        <span class="text-xs font-bold uppercase tracking-widest text-brand-muted block mb-3">SIGUE EXPLORANDO</span>
+        <h2 class="text-3xl lg:text-[40px] font-bold text-brand-ink tracking-tight">
+          Otros servicios que pueden ayudarte
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Card 1 -->
+        <div class="p-8 border border-[#E5E5E5] flex flex-col justify-between hover:border-brand-primary transition-colors">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-secondary block mb-3">WEB & E-COMMERCE</span>
+            <h3 class="text-xl font-bold text-brand-ink mb-3 leading-snug">
+              Diseño de sitios web y tiendas en línea
+            </h3>
+            <p class="text-sm text-brand-muted leading-relaxed mb-6">
+              Tu sitio web debe conseguir algo más que verse bien
+            </p>
+          </div>
+          <a href="/servicios/web-ecommerce" class="text-sm font-bold text-brand-primary hover:text-brand-deep flex items-center gap-1">
+            Ver servicio <span>→</span>
+          </a>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="p-8 border border-[#E5E5E5] flex flex-col justify-between hover:border-brand-primary transition-colors">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-secondary block mb-3">SOFTWARE A MEDIDA</span>
+            <h3 class="text-xl font-bold text-brand-ink mb-3 leading-snug">
+              Desarrollo a medida
+            </h3>
+            <p class="text-sm text-brand-muted leading-relaxed mb-6">
+              Tu empresa no debería tener que adaptarse a un software que no le funciona
+            </p>
+          </div>
+          <a href="/servicios/desarrollo-a-medida" class="text-sm font-bold text-brand-primary hover:text-brand-deep flex items-center gap-1">
+            Ver servicio <span>→</span>
+          </a>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="p-8 border border-[#E5E5E5] flex flex-col justify-between hover:border-brand-primary transition-colors">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-secondary block mb-3">INTEGRACIONES</span>
+            <h3 class="text-xl font-bold text-brand-ink mb-3 leading-snug">
+              Integración de APIs y Servicios Externos
+            </h3>
+            <p class="text-sm text-brand-muted leading-relaxed mb-6">
+              Deja de copiar datos de un programa a otro
+            </p>
+          </div>
+          <a href="/servicios/integracion-de-apis" class="text-sm font-bold text-brand-primary hover:text-brand-deep flex items-center gap-1">
+            Ver servicio <span>→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 10. FOOTER (STRICT) ==================== -->
+  <footer class="w-full bg-[#F2F2F2] border-t border-[#E5E5E5] py-16">
+    <div class="content-container">
+      <div class="grid grid-cols-12 gap-8 mb-12">
+        <!-- Col 1: Wordmark & Slogan -->
+        <div class="col-span-12 lg:col-span-4 pr-0 lg:pr-8">
+          <a href="/" class="flex items-center gap-3 mb-4" aria-label="GussWare Home">
+            <svg class="w-7 h-7 flex-shrink-0" viewBox="0 0 1333.33 1333.33" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1331.67 0H1.49V328.53H1331.67V0Z" fill="#004A98"/>
+              <path d="M1.49 675.81H321.09V1013.27H658.55V1333.33H1.49V675.81Z" fill="#004A98"/>
+              <path d="M1331.81 1333.28H1011.56V848.18H526.47V528.22H1331.81V1333.28Z" fill="#FF5000"/>
+            </svg>
+            <span class="text-xl font-bold tracking-tight text-brand-ink">GussWare</span>
+          </a>
+          <p class="text-sm font-normal text-brand-muted">
+            Tecnología humana, impacto global
+          </p>
+        </div>
+
+        <!-- Col 2: Column "Servicios" with the six service names -->
+        <div class="col-span-12 sm:col-span-4 lg:col-span-3">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-brand-ink mb-4">Servicios</h4>
+          <ul class="space-y-2.5 text-sm text-brand-muted">
+            <li><a href="/servicios/desarrollo-a-medida" class="hover:text-brand-primary transition-colors">Desarrollo a medida</a></li>
+            <li><a href="/servicios/diseno-web-ecommerce" class="hover:text-brand-primary transition-colors">Diseño de sitios web y e-commerce</a></li>
+            <li><a href="/servicios/aplicaciones-moviles" class="text-brand-primary font-semibold">Aplicaciones móviles</a></li>
+            <li><a href="/servicios/integracion-de-apis" class="hover:text-brand-primary transition-colors">Integración de APIs y Servicios Externos</a></li>
+            <li><a href="/servicios/consultoria-tecnica" class="hover:text-brand-primary transition-colors">Consultoría técnica</a></li>
+            <li><a href="/servicios/devops-soporte" class="hover:text-brand-primary transition-colors">DevOps y Soporte Técnico</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Column "Explorar" -->
+        <div class="col-span-12 sm:col-span-4 lg:col-span-3">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-brand-ink mb-4">Explorar</h4>
+          <ul class="space-y-2.5 text-sm text-brand-muted">
+            <li><a href="/como-trabajamos" class="hover:text-brand-primary transition-colors">Cómo trabajamos</a></li>
+            <li><a href="/proyectos" class="hover:text-brand-primary transition-colors">Proyectos</a></li>
+            <li><a href="/comunidad" class="hover:text-brand-primary transition-colors">Comunidad</a></li>
+            <li><a href="/contacto" class="hover:text-brand-primary transition-colors">Contacto</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Column "Legal" -->
+        <div class="col-span-12 sm:col-span-4 lg:col-span-2">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-brand-ink mb-4">Legal</h4>
+          <ul class="space-y-2.5 text-sm text-brand-muted">
+            <li><a href="/aviso-de-privacidad" class="hover:text-brand-primary transition-colors">Aviso de privacidad</a></li>
+            <li><a href="/terminos-y-condiciones" class="hover:text-brand-primary transition-colors">Términos y condiciones</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Copyright bottom rule -->
+      <div class="pt-8 border-t border-[#E5E5E5] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-brand-muted">
+        <p>© 2026 GussWare</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

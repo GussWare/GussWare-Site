@@ -29,9 +29,19 @@ supports: title, editor, excerpt, thumbnail, revisions, custom-fields, author
 taxonomy: service_category
 rest_base: service-categories
 
-ACF group: group_gw_service_detail
-title: Service Detail
-show_in_rest: true, exposed as `acf` object
+ACF group: group_gw_service_detail (Service Detail)
+  location: post_type = service · show_in_rest: true
+  9 campos de tipo ACF Group, uno por sección de la plantilla.
+  REST devuelve la estructura ANIDADA: acf.hero.intro_title, acf.cierre.cta.title…
+  hero (key field_gw_svc_section_hero, 9 campos)
+  problema (field_gw_svc_section_problema, 5)
+  soluciones (field_gw_svc_section_soluciones, 4)
+  plataformas (field_gw_svc_section_plataformas, 9) — bloque opcional, solo Integración
+  proceso (field_gw_svc_section_proceso, 4)
+  ficha (field_gw_svc_section_ficha, 5) — bloque opcional
+  faq (field_gw_svc_section_faq, 2)
+  cierre (field_gw_svc_section_cierre, 1) — contiene el grupo `cta`
+  relacionados (field_gw_svc_section_relacionados, 3)
 ```
 
 All fields in this group use `translations: ignore`. ES and EN must receive explicit independent payloads. Never rely on automatic sync.
@@ -215,30 +225,49 @@ Preserve editorial meaning when converting Markdown to WP content. Do not put st
 
 Use exact keys. For EN still use `pregunta`, `respuesta`. Never rename keys.
 
-| Section | ACF keys |
-|---|---|
-| Intro | `intro_eyebrow, intro_title, intro_description, intro_eyebrow_suffix` |
-| Hero Stats | `hero_stats[]: {label, value}` ordered |
-| Development | `development_title, development_content, development_tags[]: {tag}` |
-| Solutions | `solutions_eyebrow, solutions_title, solutions_description, solutions[]` |
-| Approach | `approach_title, approach_description, approach[]: {title, description}` |
-| Technologies | `tech_title, tech_description, tech_groups[]: {title, items[]: {name}}` |
-| FAQ | `faq_items[]: {pregunta, respuesta}` |
-| CTA | `cta: {title, description, button_text, button_url}` |
+Los campos están **anidados** en un campo ACF Group por sección: la columna indica la ruta
+completa en el payload `acf`.
 
-Shapes:
+| Section | ACF keys (ruta en `acf`) |
+|---|---|
+| Hero | `hero.intro_eyebrow, hero.intro_title, hero.intro_description, hero.intro_eyebrow_suffix` |
+| Hero Stats | `hero.hero_stats[]: {label, value, description}` ordered |
+| Hero CTA | `hero.hero_cta_label, hero.hero_cta_url, hero.hero_secondary_label, hero.hero_secondary_url` |
+| Development | `problema.development_eyebrow, problema.development_title, problema.development_content, problema.development_situations[]: {number, situation}, problema.development_tags[]: {tag}` |
+| Solutions | `soluciones.solutions_eyebrow, soluciones.solutions_title, soluciones.solutions_description, soluciones.solutions[]` |
+| Plataformas | `plataformas.platforms_enabled, plataformas.platforms_eyebrow, plataformas.platforms_title, plataformas.platforms_description, plataformas.platforms[]: {name, example}, plataformas.platforms_cta_title, plataformas.platforms_cta_text, plataformas.platforms_cta_label, plataformas.platforms_cta_url` |
+| Approach | `proceso.approach_eyebrow, proceso.approach_title, proceso.approach_description, proceso.approach[]: {title, description}` |
+| Technologies | `ficha.tech_enabled, ficha.tech_eyebrow, ficha.tech_title, ficha.tech_description, ficha.tech_groups[]: {title, items[]: {name}}` |
+| FAQ | `faq.faq_eyebrow, faq.faq_items[]: {pregunta, respuesta}` |
+| CTA | `cierre.cta: {eyebrow, title, description, button_text, button_url, secondary_text, secondary_url}` |
+| Relacionados | `relacionados.related_eyebrow, relacionados.related_title, relacionados.related[]: {category, name, description, url}` |
+
+Shapes (cada línea es el valor de UN campo Group de sección):
 
 ```json
-{"hero_stats": [{"label": "...", "value": "..."}]}
-{"development_tags": [{"tag": "..."}]}
-{"solutions": [{"title": "...", "description": "...", "features": [{"feature": "..."}], "link": {"text": "...", "url": "..."}}]}
-{"approach": [{"title": "...", "description": "..."}]}
-{"tech_groups": [{"title": "...", "items": [{"name": "..."}]}]}
-{"faq_items": [{"pregunta": "...", "respuesta": "..."}]}
-{"cta": {"title": "...", "description": "...", "button_text": "...", "button_url": "..."}}
+{"hero": {"intro_eyebrow": "...", "intro_title": "...", "intro_description": "...", "hero_stats": [{"label": "01", "value": "título", "description": "descripción"}]}}
+{"problema": {"development_eyebrow": "...", "development_title": "...", "development_content": "...", "development_situations": [{"number": "01", "situation": "..."}], "development_tags": [{"tag": "..."}]}}
+{"soluciones": {"solutions_eyebrow": "...", "solutions_title": "...", "solutions_description": "...", "solutions": [{"title": "...", "description": "...", "features": [{"feature": "..."}], "benefit": "...", "link": {"text": "...", "url": "..."}}]}}
+{"plataformas": {"platforms_enabled": true, "platforms_eyebrow": "...", "platforms_title": "...", "platforms_description": "...", "platforms": [{"name": "SAP", "example": "..."}]}}
+{"proceso": {"approach_eyebrow": "...", "approach_title": "...", "approach_description": "...", "approach": [{"title": "...", "description": "..."}]}}
+{"ficha": {"tech_enabled": true, "tech_eyebrow": "...", "tech_title": "...", "tech_description": "...", "tech_groups": [{"title": "...", "items": [{"name": "..."}]}]}}
+{"faq": {"faq_eyebrow": "...", "faq_items": [{"pregunta": "...", "respuesta": "..."}]}}
+{"cierre": {"cta": {"eyebrow": "...", "title": "...", "description": "...", "button_text": "...", "button_url": "...", "secondary_text": "...", "secondary_url": "..."}}}
+{"relacionados": {"related_eyebrow": "...", "related_title": "...", "related": [{"category": "SOFTWARE", "name": "...", "description": "...", "url": "/servicios/..."}]}}
 ```
 
-Rules: preserve order; do not invent features, URLs, technologies, categories, translations. If source has no link/URL, leave absent/empty per existing field behavior.
+Reglas de sección:
+
+- Los bloques opcionales se controlan con su interruptor: `platforms_enabled` y `tech_enabled`.
+  Si el servicio no los usa, el interruptor queda en `0` y el resto de campos del bloque, vacíos.
+- `hero_stats[].label` es el número del indicador (`01`, `02`, `03`), `value` el título y
+  `description` la bajada. El número es posicional en el diseño; se escribe explícito.
+- Los eyebrow de sección (`development_eyebrow`, `solutions_eyebrow`, `approach_eyebrow`,
+  `tech_eyebrow`, `faq_eyebrow`, `cta.eyebrow`, `related_eyebrow`) llevan el número de la
+  sección ya calculado, p. ej. `01 — EL PROBLEMA`. Si se oculta un bloque, renumerar los demás.
+- Ojo con el nombre `faq`: el grupo *Home* (`group_6ab1bb51390c5`) tiene un campo `faq`
+  distinto. Para escribir en el del servicio hay que usar la key del campo Group
+  (`field_gw_svc_section_faq`), no el nombre de la sección.
 
 ## Categories
 
@@ -277,8 +306,19 @@ After all 6:
 - [ ] 6 logical services exist (ES + EN each, unless source has single language).
 - [ ] `ES lang=es`, `EN lang=en`.
 - [ ] `ES translations.en=EN_ID`, `EN translations.es=ES_ID`.
-- [ ] `acf` contains expected keys for both languages: `intro_eyebrow, intro_title, intro_description, development_title, development_content, solutions_title, solutions_description, solutions, approach_title, approach_description, approach, tech_title, tech_description, tech_groups, faq_items, cta` plus optional `intro_eyebrow_suffix, hero_stats, development_tags, solutions_eyebrow` when in source.
+- [ ] `acf` contains the 9 section groups with the expected keys, for both languages:
+      `hero.{intro_eyebrow, intro_title, intro_description, hero_stats, hero_cta_label, hero_cta_url, hero_secondary_label, hero_secondary_url}`,
+      `problema.{development_eyebrow, development_title, development_content, development_situations, development_tags}`,
+      `soluciones.{solutions_eyebrow, solutions_title, solutions_description, solutions}`,
+      `proceso.{approach_eyebrow, approach_title, approach_description, approach}`,
+      `ficha.{tech_enabled, tech_eyebrow, tech_title, tech_description, tech_groups}`,
+      `faq.{faq_eyebrow, faq_items}`,
+      `cierre.cta.{eyebrow, title, description, button_text, button_url, secondary_text, secondary_url}`,
+      `relacionados.{related_eyebrow, related_title, related}`,
+      `plataformas.{platforms_enabled, platforms_eyebrow, platforms_title, platforms_description, platforms, platforms_cta_title, platforms_cta_text, platforms_cta_label, platforms_cta_url}`
+      (los de los bloques opcionales pueden ir vacíos si el servicio no los usa).
 - [ ] Same payloads retrievable via Astro-consumed REST: `title, excerpt, content, lang, translations, acf` independently per language.
+- [ ] La página de servicio renderiza el contenido en `/servicios/{slug}` (el sitio consume el shape anidado: `acf.hero.intro_title`, `acf.cierre.cta.title`…).
 
 ## Failure Rules
 
