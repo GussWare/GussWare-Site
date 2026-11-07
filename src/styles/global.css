@@ -1,8 +1,13 @@
 @import 'tailwindcss';
 
-@import './tokens/brand.css';
-@import './tokens/supporting.css';
-@import './tokens/state.css';
+/* ============================================================
+   Paletas versionadas de colores
+   V1: paleta.original (actual)
+   V2: paleta.experimental (consolidada)
+   
+   Para cambiar de versión, modificar las secciones de palette.css
+   ============================================================ */
+@import './palette.css';
 @import './tokens/semantic.css';
 @import './tokens/typography.css';
 @import './tokens/spacing.css';

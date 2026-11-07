@@ -1,0 +1,89 @@
+/* ============================================================
+   Selector de Paletas de Colores Versionadas
+   ============================================================
+   
+   Este archivo permite activar entre dos versiones de paletas:
+   
+   - V1 (original): copia fiel de la paleta actual
+   - V2 (experimental): propuesta de consolidacion de colores
+   
+   Para usar V2, comenta las lineas marcadas con V1 y descomenta
+   las lineas marcadas con V2. Guarda el archivo y reinicia el servidor.
+   ============================================================ */
+
+/* === V1 - Paleta original === */
+:root {
+  --brand-primary: #004a98;
+  --brand-secondary: #2164a6;
+  --brand-accent: #ff5000;
+  --brand-surface: #ffffff;
+  --brand-surface-secondary: #f2f2f2;
+  --brand-highlight: #ffd8d8;
+  --supporting-blue-dark: #00346e;
+  --supporting-blue-container: #00477f;
+  --supporting-blue-fixed: #d3e4ff;
+  --supporting-blue-fixed-dim: #a2c9ff;
+  --supporting-blue-fixed-on: #001b3f;
+  --supporting-blue-fixed-on-variant: #00458f;
+  --supporting-secondary-fixed-on: #001c38;
+  --supporting-secondary-fixed-on-variant: #004881;
+  --supporting-tertiary: #661b00;
+  --supporting-tertiary-container: #8d2800;
+  --supporting-tertiary-on-container: #ffa68a;
+  --supporting-tertiary-fixed: #ffdbd0;
+  --supporting-tertiary-fixed-dim: #ffb59e;
+  --supporting-tertiary-fixed-on: #390b00;
+  --supporting-tertiary-fixed-on-variant: #842500;
+  --supporting-ink: #242126;
+  --supporting-neutral: #d1d1d1;
+  --supporting-background: #f9f9f9;
+  --supporting-on-background: #1a1c1c;
+  --supporting-surface-dim: #dadada;
+  --supporting-outline: #737782;
+  --supporting-outline-variant: #c2c6d3;
+  --supporting-surface-tint: #255dac;
+  --state-error: #ba1a1a;
+  --state-error-on: #ffffff;
+  --state-error-container: #ffdad6;
+  --state-error-on-container: #93000a;
+}
+
+/* === V2 - Paleta experimental (consolidada) === */
+/*Para activar V2, comentar las lineas siguientes y descomentar V2 arriba*/
+/*
+:root {
+  --brand-primary: #004a98;
+  --brand-secondary: #2164a6;
+  --brand-accent: #ff5000;
+  --brand-surface: #ffffff;
+  --brand-surface-secondary: #f2f2f2;
+  --brand-highlight: #ffd8d8;
+  --supporting-blue-dark: #00346e;
+  --supporting-blue-container: #00477f;
+  --supporting-blue-fixed: #d3e4ff;
+  --supporting-blue-fixed-dim: #a2c9ff;
+  --supporting-blue-fixed-on: #001b3f;
+  --supporting-blue-fixed-on-variant: #00458f;
+  --supporting-secondary-fixed-on: #001c38;
+  --supporting-secondary-fixed-on-variant: #004881;
+  --supporting-tertiary: #661b00;
+  --supporting-tertiary-container: #8d2800;
+  --supporting-tertiary-on-container: #ffa68a;
+  --supporting-tertiary-fixed: #ffdbd0;
+  --supporting-tertiary-fixed-dim: #ffb59e;
+  --supporting-tertiary-fixed-on: #390b00;
+  --supporting-tertiary-fixed-on-variant: #842500;
+  --supporting-ink: #1a1c1c;
+  --supporting-neutral: #dadada;
+  --supporting-background: #f2f2f2;
+  --supporting-on-background: #1a1c1c;
+  --supporting-surface-dim: #dadada;
+  --supporting-outline: #737782;
+  --supporting-outline-variant: #c2c6d3;
+  --supporting-surface-tint: #255dac;
+  --state-error: #ba1a1a;
+  --state-error-on: #ffffff;
+  --state-error-container: #ffd8d8;
+  --state-error-on-container: #93000a;
+}
+*/

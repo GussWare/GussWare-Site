@@ -1,0 +1,11 @@
+/* ============================================================
+   V1 - Paleta de estados original (copia exacta)
+   Conservado fielmente: colores de error
+   ============================================================ */
+
+:root {
+  --state-error: #ba1a1a;
+  --state-error-on: #ffffff;
+  --state-error-container: #ffdad6;
+  --state-error-on-container: #93000a;
+}
