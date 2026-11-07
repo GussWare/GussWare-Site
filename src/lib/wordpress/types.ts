@@ -413,6 +413,21 @@ export interface WpHomeAcf {
   final_cta: WpFinalCta;
 }
 
+/**
+ * Configuración global de visibilidad de las secciones de la Landing Page.
+ * Proviene de la Options Page «Configuración del Sitio Web → Landing Page»
+ * (`/gussware/v1/landing-page`), no de `page.acf`.
+ */
+export interface LandingPageVisibility {
+  show_hero: boolean;
+  show_expertise: boolean;
+  show_technology: boolean;
+  show_process: boolean;
+  show_projects: boolean;
+  show_faq: boolean;
+  show_final_cta: boolean;
+}
+
 /** Page portada del Home (mismos campos base que `WpPage`). */
 export interface WpHomePage extends Omit<WpPage, 'acf'> {
   acf: WpHomeAcf;
@@ -714,9 +729,14 @@ export interface WpServiceSummary {
   translations: Record<string, number>;
   /**
    * RGW-272 — Descripción del servicio en el catálogo. El extracto del
-   * CPT puede venir nulo; la lista REST expone `acf` (`show_in_rest`).
+   * CPT puede venir nulo; la lista REST expone `acf` (`show_in_rest`)
+   * con la descripción dentro del grupo `hero` (`hero.intro_description`).
    */
-  acf?: { intro_description?: string | null } | null;
+  acf?: {
+    hero?: { intro_description?: string | null } | null;
+    /** Forma legacy (no presente en el REST actual del CPT). */
+    intro_description?: string | null;
+  } | null;
 }
 
 export interface WpPostMeta {

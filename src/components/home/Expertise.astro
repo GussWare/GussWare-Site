@@ -210,9 +210,11 @@ const fiabilityItems: WpFiabilityItem[] =
             <h3 class="text-gw-text-primary text-headline-md mb-4">
               {item.title}
             </h3>
-            <p class="text-gw-text-secondary text-body-md">
-              {item.description}
-            </p>
+            {item.description && (
+              <p class="text-gw-text-secondary text-body-md">
+                {item.description}
+              </p>
+            )}
           </Tag>
           );
         })}

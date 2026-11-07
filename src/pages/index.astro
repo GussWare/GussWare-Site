@@ -20,6 +20,7 @@ import FinalCta from '../components/home/FinalCta.astro';
 import type { LocaleUrls } from '../lib/routes';
 import { proyectosBaseUrl, serviceDetailUrl } from '../lib/routes';
 import { getFrontPage } from '../lib/wordpress/pages';
+import { getLandingPageVisibility } from '../lib/wordpress/landingPage';
 import { wpFetch } from '../lib/wordpress/client';
 import { wpRoutes } from '../lib/wordpress/routes';
 import {
@@ -38,6 +39,7 @@ import type {
 export const prerender = false;
 
 const page = await getFrontPage('es').catch(() => null);
+const visibility = await getLandingPageVisibility();
 
 const localeUrls: LocaleUrls = {
   es: Astro.url.pathname,
@@ -49,8 +51,11 @@ const description = page
   ? stripHtml(page.excerpt.rendered).slice(0, 160)
   : undefined;
 const hero = page?.acf?.hero ?? null;
+const showHero = visibility.show_hero;
 const expertise = page?.acf?.expertise ?? null;
+const showExpertise = visibility.show_expertise;
 const technology = page?.acf?.technology ?? null;
+const showTechnology = visibility.show_technology;
 
 // RGW-292: ítems de la sección Servicios desde el catálogo CPT
 // `service` (fuente de verdad, locale `es`); sin catálogo, la sección
@@ -66,7 +71,7 @@ try {
       // RGW-272: el extracto del CPT puede venir nulo; se usa la
       // descripción del propio servicio en el catálogo.
       description: stripHtml(
-        item.excerpt?.rendered || item.acf?.intro_description || '',
+        item.excerpt?.rendered || item.acf?.hero?.intro_description || '',
       ),
       // RGW-EP09-07-03: cada card enlaza a su detalle.
       url: serviceDetailUrl('es', item.slug),
@@ -109,8 +114,12 @@ if (homeProject) {
 }
 
 const process = page?.acf?.process ?? null;
+const showProcess = visibility.show_process;
 const finalCta = page?.acf?.final_cta ?? null;
+const showFinalCta = visibility.show_final_cta;
 const faq = page?.acf?.faq ?? null;
+const showFaq = visibility.show_faq;
+const showProjects = visibility.show_projects;
 
 const heroImageId = hero?.image ?? null;
 let heroImage: { src: string; alt: string } | null = null;
@@ -160,36 +169,40 @@ const stepImages = await Promise.all(
 >
   {page && hero ? (
     <>
-      <Hero hero={hero} image={heroImage} />
-      {expertise && (
+      {showHero && <Hero hero={hero} image={heroImage} />}
+      {expertise && showExpertise && (
         <Expertise
           expertise={expertise}
           items={serviceItems}
           id="servicios"
         />
       )}
-      {process && (
+      {process && showProcess && (
         <Process process={process} images={stepImages} id="como-trabajamos" />
       )}
-      {technology && <CommunityModel technology={technology} />}
+      {technology && showTechnology && <CommunityModel technology={technology} />}
       {/* RGW-321: sección Home de Proyectos integrada con el CPT
           `projects` (primer destacado por `display_order`); sin datos,
           conserva la maquetación de referencia. Enlace al listado real
           (`/proyectos`). */}
-      {homeProject ? (
-        <Projects
-          title={homeProjectTitle}
-          description={homeProjectDescription}
-          capabilities={homeProjectCapabilities}
-          counter={homeProjectCounter}
-          linkHref={proyectosBaseUrl('es')}
-          image={homeProjectImage}
-        />
-      ) : (
-        <Projects linkHref={proyectosBaseUrl('es')} />
+      {showProjects && (
+        <>
+          {homeProject ? (
+            <Projects
+              title={homeProjectTitle}
+              description={homeProjectDescription}
+              capabilities={homeProjectCapabilities}
+              counter={homeProjectCounter}
+              linkHref={proyectosBaseUrl('es')}
+              image={homeProjectImage}
+            />
+          ) : (
+            <Projects linkHref={proyectosBaseUrl('es')} />
+          )}
+        </>
       )}
-      {faq && <Faq faq={faq} />}
-      {finalCta && <FinalCta finalCta={finalCta} />}
+      {faq && showFaq && <Faq faq={faq} />}
+      {finalCta && showFinalCta && <FinalCta finalCta={finalCta} />}
     </>
   ) : (
     page && (

@@ -45,6 +45,7 @@ import {
   getFrontPage,
 } from '../lib/wordpress/pages';
 import { getLanguages } from '../lib/wordpress/languages';
+import { getLandingPageVisibility } from '../lib/wordpress/landingPage';
 import { wpFetch } from '../lib/wordpress/client';
 import { wpRoutes } from '../lib/wordpress/routes';
 import { getSocialMedia } from '../lib/wordpress/socialMedia';
@@ -73,10 +74,11 @@ const locale = Astro.currentLocale ?? 'es';
 const rawUri = (Astro.params.uri ?? '').replace(/^\/+|\/+$/g, '');
 const uri = locale === 'es' ? rawUri : rawUri.split('/').slice(1).join('/');
 
-const [page, socialMedia, languages] = await Promise.all([
+const [page, socialMedia, languages, visibility] = await Promise.all([
   uri ? getPageBySlug(uri, locale).catch(() => null) : getFrontPage(locale),
   getSocialMedia(),
   getLanguages().catch(() => null),
+  getLandingPageVisibility(),
 ]);
 
 // RGW-269 — Las dos páginas legales comparten la vista; cada una conserva
@@ -110,10 +112,13 @@ const sectionContent =
     ? (page.acf.section_content ?? null)
     : null;
 const hero = page.acf && 'hero' in page.acf ? (page.acf.hero ?? null) : null;
+const showHero = visibility.show_hero;
 const expertise =
   page.acf && 'expertise' in page.acf ? (page.acf.expertise ?? null) : null;
+const showExpertise = visibility.show_expertise;
 const technology =
   page.acf && 'technology' in page.acf ? (page.acf.technology ?? null) : null;
+const showTechnology = visibility.show_technology;
 const servicesAcf =
   page.acf && 'services' in page.acf ? (page.acf.services ?? null) : null;
 
@@ -173,7 +178,7 @@ if (isHomePage && hero && expertise) {
         // RGW-272: el extracto del CPT puede venir nulo; se usa la
         // descripción del propio servicio en el catálogo.
         description: stripHtml(
-          item.excerpt?.rendered || item.acf?.intro_description || '',
+          item.excerpt?.rendered || item.acf?.hero?.intro_description || '',
         ),
         // RGW-EP09-07-03: cada card enlaza a su detalle.
         url: serviceDetailUrl(locale, item.slug),
@@ -185,9 +190,13 @@ if (isHomePage && hero && expertise) {
 }
 const process =
   page.acf && 'process' in page.acf ? (page.acf.process ?? null) : null;
+const showProcess = visibility.show_process;
 const finalCta =
   page.acf && 'final_cta' in page.acf ? (page.acf.final_cta ?? null) : null;
+const showFinalCta = visibility.show_final_cta;
 const faq = page.acf && 'faq' in page.acf ? (page.acf.faq ?? null) : null;
+const showFaq = visibility.show_faq;
+const showProjects = visibility.show_projects;
 
 // RGW-271: campos del formulario vía GET (solo si la página usa la
 // sección de contacto; `getContactForm` no lanza ante fallos de API).
@@ -305,8 +314,8 @@ if (translatedSlug) {
     />
   ) : hero ? (
     <>
-      <Hero hero={hero} image={heroImage} />
-      {expertise && (
+      {showHero && <Hero hero={hero} image={heroImage} />}
+      {expertise && showExpertise && (
         <Expertise
           expertise={expertise}
           items={homeServiceItems}
@@ -315,7 +324,7 @@ if (translatedSlug) {
           }
         />
       )}
-      {technology && <CommunityModel technology={technology} />}
+      {technology && showTechnology && <CommunityModel technology={technology} />}
       {services && (
         <Services
           services={services}
@@ -324,7 +333,7 @@ if (translatedSlug) {
           }
         />
       )}
-      {process && (
+      {process && showProcess && (
         <Process
           process={process}
           images={stepImages}
@@ -340,9 +349,9 @@ if (translatedSlug) {
       {/* RGW-311: sección Home de Proyectos (maquetación Stitch,
           contenido estático pendiente del CPT; sin integración WP).
           Solo portada: las páginas no portada conservan su flujo. */}
-      {isHomePage && <Projects />}
-      {faq && <Faq faq={faq} />}
-      {finalCta && <FinalCta finalCta={finalCta} />}
+      {showProjects && isHomePage && <Projects />}
+      {faq && showFaq && <Faq faq={faq} />}
+      {finalCta && showFinalCta && <FinalCta finalCta={finalCta} />}
     </>
   ) : sectionContent ? (
     <ContactSection
