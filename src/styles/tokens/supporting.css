@@ -1,5 +1,5 @@
 :root {
-  --supporting-blue-dark: #00346e;
+  --supporting-blue-dark: var(--brand-primary);
   --supporting-blue-container: #00477f;
   --supporting-blue-fixed: #d3e4ff;
   --supporting-blue-fixed-dim: #a2c9ff;
