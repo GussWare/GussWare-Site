@@ -32,8 +32,8 @@ equivalente en el proyecto, que es el destino real.
 | Eyebrow | `12px` / `700` / `uppercase` / `tracking-wider` / `#2164A6` | `text-label-bold uppercase text-brand-secondary` |
 | H2 | `42px` / `700` / `leading-[1.15]` / `tracking-tight` | `text-gw-text-primary text-headline-lg tracking-tight` |
 | Pregunta (H3) | `18→20px` / `700` / `#242126` | `text-gw-text-primary text-body-lg font-bold` |
-| Icono abierto | `−` (menos matemático U+2212) / `24px` / `700` / `#004A98` | `−` en `text-headline-md text-brand-primary` |
-| Icono cerrado | `+` / `24px` / `700` / `#5C6068` | `+` en `text-headline-md text-gw-text-muted` |
+| Icono abierto | `−` (menos matemático U+2212) / `24px` / `700` / `#004A98` | `−` en `text-headline-md text-supporting-blue-dark` |
+| Icono cerrado | `+` / `24px` / `700` / `#5C6068` | `+` en `text-headline-md text-supporting-blue-dark` |
 | Tarjeta de preguntas | `#FFFFFF` → `bg-white` | `bg-gw-surface-primary` |
 | Respuesta | `16px` / `#5C6068` / `leading-relaxed` / máx. `70ch` | `text-gw-text-secondary text-body-md leading-relaxed max-w-[70ch]` |
 | Microcopy | `14px` / `700` / `#004A98` → `#00346E` en hover | `text-label-bold text-brand-primary` |
@@ -83,6 +83,11 @@ Las pantallas de Stitch son maquetas estáticas: el bloque **no tiene JS**. El `
 y los iconos `+` / `−` son indications visuales del estado. En el sitio real (Astro) este
 componente debe ser interactivo de verdad: la primera fila abierta por defecto, el resto
 plegable, con animación de altura.
+
+**RGW-338** — La interacción está homologada con el FAQ del Home (RGW-296): `<button>` + `<div>`
+(con `data-faq`, `data-faq-item`, `data-faq-button`, `data-faq-panel` y `data-faq-icon`) y
+animación de altura vía `grid-template-rows` (0fr → 1fr, 200ms ease-in-out), con
+`prefers-reduced-motion` desactivando la transición.
 
 ---
 
