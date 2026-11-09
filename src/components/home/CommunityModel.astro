@@ -23,9 +23,14 @@ import type {
 
 interface Props {
   technology: WpTechnology;
+  /**
+   * RGW-336 — Identificador de ancla para navegación desde el menú.
+   * Permite enlaces como `/#nuestro-modelo` o `/en/#our-model`.
+   */
+  id?: string;
 }
 
-const { technology } = Astro.props;
+const { technology, id = undefined } = Astro.props;
 
 const points: WpValuePoint[] = technology.value_points ?? [];
 
@@ -54,7 +59,7 @@ const resolveIcon = (name: string): string =>
   KNOWN_ICONS.has(name) ? name : FALLBACK_ICON;
 ---
 
-<Section class="overflow-hidden">
+<Section id={id} class={id ? 'scroll-mt-24 overflow-hidden' : 'overflow-hidden'}>
   <div data-community-model>
     <div class="max-w-3xl mb-20 md:mb-32">
       {technology.eyebrow && (
