@@ -26,15 +26,20 @@ import type { WpFaq } from '../../lib/wordpress/types';
 
 interface Props {
   faq: WpFaq;
+  /**
+   * RGW-337 — Identificador de ancla para navegación desde el menú.
+   * Permite enlaces como `/#preguntas` o `/en/#preguntas`.
+   */
+  id?: string;
 }
 
-const { faq } = Astro.props;
+const { faq, id = undefined } = Astro.props;
 
 const preguntas = faq.preguntas ?? [];
 const pad = (n: number): string => String(n).padStart(2, '0');
 ---
 
-<Section>
+<Section id={id} class={id ? 'scroll-mt-24' : ''}>
   <div data-faq>
     <div class="grid grid-cols-1 items-start gap-12 md:grid-cols-12">
       <div class="md:col-span-4 md:sticky md:top-28 md:self-start">
