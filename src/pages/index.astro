@@ -180,7 +180,9 @@ const stepImages = await Promise.all(
       {process && showProcess && (
         <Process process={process} images={stepImages} id="como-trabajamos" />
       )}
-      {technology && showTechnology && <CommunityModel technology={technology} />}
+      {technology && showTechnology && (
+        <CommunityModel technology={technology} id="nuestro-modelo" />
+      )}
       {/* RGW-321: sección Home de Proyectos integrada con el CPT
           `projects` (primer destacado por `display_order`); sin datos,
           conserva la maquetación de referencia. Enlace al listado real
