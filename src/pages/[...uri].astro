@@ -350,7 +350,7 @@ if (translatedSlug) {
           contenido estático pendiente del CPT; sin integración WP).
           Solo portada: las páginas no portada conservan su flujo. */}
       {showProjects && isHomePage && <Projects />}
-      {faq && showFaq && <Faq faq={faq} />}
+      {faq && showFaq && <Faq faq={faq} id="preguntas" />}
       {finalCta && showFinalCta && <FinalCta finalCta={finalCta} />}
     </>
   ) : sectionContent ? (
