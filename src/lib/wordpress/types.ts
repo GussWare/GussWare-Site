@@ -359,6 +359,12 @@ export interface WpServiceItem {
   description: string;
   /** URL opcional al detalle (RGW-EP09-07-03; ausente en ACF legacy). */
   url?: string;
+  /**
+   * Nombre del icono del catálogo de `Icon.astro` (`acf.hero.icono`).
+   * Ausente o vacío: el componente aplica su fallback por palabra clave
+   * del título.
+   */
+  icon?: string;
 }
 
 export interface WpServices {
@@ -505,6 +511,11 @@ export interface WpServiceHeroAcf {
   /** Acción secundaria del hero (`hero_secondary_*`). */
   hero_secondary_label?: string;
   hero_secondary_url?: string;
+  /**
+   * Nombre del icono del catálogo de `Icon.astro` para el servicio
+   * (p. ej. `web-development`). Vacío: el frontend usa su fallback.
+   */
+  icono?: string;
 }
 
 /** Sección Problema del servicio (campo `Group` `problema`). */
@@ -553,6 +564,45 @@ export interface WpServiceClosingAcf {
   cta: WpServiceCta;
 }
 
+/** Plataforma del bloque de plataformas (`platforms[]`). */
+export interface WpServicePlatform {
+  name: string;
+  /** Ejemplo de uso de la plataforma. */
+  example?: string;
+}
+
+/**
+ * Sección Plataformas del servicio (campo `Group` `plataformas`).
+ * El interruptor `platforms_enabled` decide si el bloque se muestra.
+ */
+export interface WpServicePlatformsAcf {
+  platforms_enabled: boolean;
+  platforms_eyebrow?: string;
+  platforms_title?: string;
+  platforms_description?: string;
+  platforms: WpServicePlatform[];
+  /** Bloque de consulta al final del bloque. */
+  platforms_cta_title?: string;
+  platforms_cta_text?: string;
+  platforms_cta_label?: string;
+  platforms_cta_url?: string;
+}
+
+/** Servicio relacionado del bloque final (`related[]`). */
+export interface WpServiceRelatedItem {
+  category?: string;
+  name: string;
+  description?: string;
+  url: string;
+}
+
+/** Sección Servicios relacionados del servicio (campo `Group` `relacionados`). */
+export interface WpServiceRelatedAcf {
+  related_eyebrow?: string;
+  related_title?: string;
+  related: WpServiceRelatedItem[];
+}
+
 /**
  * Campo `acf` del CPT `service` (grupo `Service Detail`): un campo
  * `Group` de ACF por sección de la plantilla, por lo que REST devuelve
@@ -563,10 +613,12 @@ export interface WpServiceAcf {
   hero: WpServiceHeroAcf;
   problema: WpServiceProblemAcf;
   soluciones: WpServiceSolutionsAcf;
+  plataformas: WpServicePlatformsAcf;
   proceso: WpServiceProcessAcf;
   ficha: WpServiceTechAcf;
   faq: WpServiceFaqAcf;
   cierre: WpServiceClosingAcf;
+  relacionados: WpServiceRelatedAcf;
 }
 
 /** Ítem del CPT `service` (`/wp/v2/services`). */
@@ -733,7 +785,7 @@ export interface WpServiceSummary {
    * con la descripción dentro del grupo `hero` (`hero.intro_description`).
    */
   acf?: {
-    hero?: { intro_description?: string | null } | null;
+    hero?: { intro_description?: string | null; icono?: string | null } | null;
     /** Forma legacy (no presente en el REST actual del CPT). */
     intro_description?: string | null;
   } | null;

@@ -19,7 +19,7 @@ Catálogo verificado del sistema visual existente. Las reglas viven en
 | `FormField`       | `id`, `label`, `type?`, `name?`, `required?`, `placeholder?`, `autocomplete?`, `error?`, `class?` | Label + input underline + error con `aria-describedby` |
 | `Image`           | `src`, `alt`, `ratio?` (4/3\|16/9\|1/1), `fit?` (cover\|contain), `loading?` (lazy\|eager), `class?` | `<img>` nativo; URLs remotas (WordPress) |
 | `Link`            | `href`, `target?`, `variant?` (nav\|body\|accent), `class?` (slot)                | Siempre `<a>`; focus visible con anillo |
-| `Icon`            | `name` (catálogo cerrado), `size` (3/4/5/6/8/10), peso (standard\|emphasis)       | Trazados inline estilo Lucide; color `currentColor` |
+| `Icon`            | `name` (catálogo cerrado), `size` (3/4/5/6/8/10), peso (standard\|emphasis)       | Trazados inline estilo Lucide; color `currentColor`; catálogo en `ui/icon-catalog.ts` (`ICON_PATHS`, `ICON_NAMES`) |
 
 Componentes de layout existentes: `Header`, `Footer`, `DesktopMenu*`,
 `MobileMenu*`, `Seo` (`src/components/layout/`), `Layout`
@@ -29,6 +29,17 @@ de su contexto): `blog/*`, `contact/*`, `home/*`, `legal/*`,
 `projects/*` (`ProjectListView`, `ProjectCard` del listado RGW-312),
 `services/*`; utilidades puntuales: `Logo`, `LanguageSelector`,
 `MenuButton`.
+
+### Componentes de servicio (`src/components/services/`)
+
+| Componente         | Props principales                                                                                                          | Notas                                                              |
+|--------------------|----------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|
+| `ServiceDetail`    | `service` (`WpService`), `image`, `locale`, `indexUrl`, `indexLabel`                                                         | Compone S01–S08; la numeración de secciones es dinámica             |
+| `ServiceHeader`    | `eyebrow`, `eyebrowSuffix`, `title`, `description`, `stats`, `breadcrumbs?`, `primaryCta?`, `secondaryCta?`, `icon?`           | `icon` = `acf.hero.icono`; se valida contra `ICON_NAMES`             |
+| `ServiceApproach`  | `id?`, `number?`, `eyebrow?`, `title`, `description`, `items`                                                                 | Sección «cómo trabajamos»                                           |
+| `ServiceFaq`       | `id?`, `number?`, `eyebrow?`, `items`, `locale`                                                                              | Acordeón con animación                                               |
+| `ServicePlatforms` | `number?`, `eyebrow?`, `title?`, `description?`, `platforms`, `ctaTitle?`, `ctaText?`, `ctaLabel?`, `ctaUrl?`, `locale`        | Bloque ACF `plataformas`; el interruptor lo aplica `ServiceDetail`    |
+| `ServiceRelated`   | `eyebrow?`, `title?`, `items`, `locale`                                                                                       | Bloque ACF `relacionados`; se muestra solo con elementos             |
 
 ## Tokens (`src/styles/tokens/`)
 
