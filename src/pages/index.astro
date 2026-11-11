@@ -75,6 +75,9 @@ try {
       ),
       // RGW-EP09-07-03: cada card enlaza a su detalle.
       url: serviceDetailUrl('es', item.slug),
+      // El icono lo configura WordPress (`acf.hero.icono`); si no hay
+      // valor, el componente aplica su fallback por palabra clave.
+      icon: item.acf?.hero?.icono ?? undefined,
     }));
   }
 } catch {

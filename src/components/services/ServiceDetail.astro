@@ -11,10 +11,14 @@
  * - S01 header (breadcrumb + hero + rail de stats) en `ServiceHeader`.
  * - S02 problema: 5/12 de texto y 7/12 de situaciones numeradas.
  * - S03 soluciones: retícula derivada de la cantidad de tarjetas.
+ * - S03b plataformas en `ServicePlatforms` (bloque opcional del ACF
+ *   `plataformas`, gobernado por `platforms_enabled`).
  * - S04 cómo trabajamos en `ServiceApproach`.
  * - S05 ficha técnica: encabezado 5/7 y grupos en 3 columnas.
  * - S06 FAQ en `ServiceFaq`.
  * - S07 cierre oscuro con eyebrow y acción secundaria de ACF.
+ * - S08 servicios relacionados en `ServiceRelated` (grupo ACF
+ *   `relacionados`); se muestra solo si hay elementos que enlazar.
  */
 import Section from '../ui/Section.astro';
 import Button from '../ui/Button.astro';
@@ -22,6 +26,8 @@ import Icon from '../ui/Icon.astro';
 import ServiceHeader from './ServiceHeader.astro';
 import ServiceApproach from './ServiceApproach.astro';
 import ServiceFaq from './ServiceFaq.astro';
+import ServicePlatforms from './ServicePlatforms.astro';
+import ServiceRelated from './ServiceRelated.astro';
 import { stripHtml } from '../../lib/wordpress/text';
 import { formatSectionEyebrow } from '../../lib/services/section-number';
 import type { WpService } from '../../lib/wordpress/types';
@@ -137,12 +143,28 @@ const heroStats = (acf.hero.hero_stats ?? []).filter(
     hasText(stat.label) || hasText(stat.value) || hasText(stat.description),
 );
 
+// S03b: bloque de plataformas (solo Integración lo habilita). El
+// interruptor `platforms_enabled` decide si la sección se muestra.
+const platforms = acf.plataformas.platforms ?? [];
+const visiblePlatforms = platforms.filter((platform) =>
+  hasText(platform.name),
+);
+const hasPlatforms = Boolean(acf.plataformas.platforms_enabled);
+
+// S08: servicios relacionados (solo si WordPress entrega elementos).
+const related = acf.relacionados.related ?? [];
+const visibleRelated = related.filter(
+  (item) => hasText(item.name) && hasText(item.url),
+);
+const hasRelated = visibleRelated.length > 0;
+
 const cta = acf.cierre.cta;
 const closingPrimary = hasText(cta.button_text) && hasText(cta.button_url);
 const closingSecondary =
   hasText(cta.secondary_text) && hasText(cta.secondary_url);
 
 const hasSolutions = solutions.length > 0;
+const hasPlatformsSection = hasPlatforms && visiblePlatforms.length > 0;
 const hasApproach = approachItems.length > 0;
 const hasTech = Boolean(acf.ficha.tech_enabled) && techGroups.length > 0;
 const hasFaq = faqItems.length > 0;
@@ -155,6 +177,7 @@ const nextSectionNumber = (): string => pad(++visibleSection);
 
 const problemNumber = hasProblem ? nextSectionNumber() : null;
 const solutionsNumber = hasSolutions ? nextSectionNumber() : null;
+const platformsNumber = hasPlatformsSection ? nextSectionNumber() : null;
 const approachNumber = hasApproach ? nextSectionNumber() : null;
 const techNumber = hasTech ? nextSectionNumber() : null;
 const faqNumber = hasFaq ? nextSectionNumber() : null;
@@ -171,6 +194,7 @@ const closingNumber = hasClosing ? nextSectionNumber() : null;
   breadcrumbs={breadcrumbs}
   primaryCta={heroPrimaryCta}
   secondaryCta={heroSecondaryCta}
+  icon={acf.hero.icono ?? null}
 />
 
 {/* S02 · Problema: texto 5/12 + situaciones numeradas 7/12. */}
@@ -313,6 +337,22 @@ const closingNumber = hasClosing ? nextSectionNumber() : null;
   </Section>
 )}
 
+{/* S03b · Plataformas: solo en servicios con el bloque habilitado. */}
+{hasPlatformsSection && (
+  <ServicePlatforms
+    number={platformsNumber ?? undefined}
+    eyebrow={acf.plataformas.platforms_eyebrow}
+    title={acf.plataformas.platforms_title}
+    description={acf.plataformas.platforms_description}
+    platforms={visiblePlatforms}
+    ctaTitle={acf.plataformas.platforms_cta_title}
+    ctaText={acf.plataformas.platforms_cta_text}
+    ctaLabel={acf.plataformas.platforms_cta_label}
+    ctaUrl={acf.plataformas.platforms_cta_url}
+    locale={locale}
+  />
+)}
+
 {/* S04 · Cómo trabajamos: tarjetas numeradas en retícula. */}
 {hasApproach && (
   <ServiceApproach
@@ -421,4 +461,14 @@ const closingNumber = hasClosing ? nextSectionNumber() : null;
       </div>
     </div>
   </Section>
+)}
+
+{/* S08 · Servicios relacionados (cierre de la página). */}
+{hasRelated && (
+  <ServiceRelated
+    eyebrow={acf.relacionados.related_eyebrow}
+    title={acf.relacionados.related_title}
+    items={visibleRelated}
+    locale={locale}
+  />
 )}

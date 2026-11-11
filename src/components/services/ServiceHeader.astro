@@ -23,6 +23,7 @@ import Section from '../ui/Section.astro';
 import Breadcrumbs from '../ui/Breadcrumbs.astro';
 import Button from '../ui/Button.astro';
 import Icon from '../ui/Icon.astro';
+import { ICON_NAMES } from '../ui/icon-catalog';
 
 interface HeroStat {
   label: string;
@@ -44,6 +45,12 @@ interface Props {
   breadcrumbs?: Crumb[];
   primaryCta?: { label: string; href: string } | null;
   secondaryCta?: { label: string; href: string } | null;
+  /**
+   * Nombre del icono del servicio (`acf.hero.icono` de WordPress).
+   * Solo se acepta si pertenece al catálogo de `Icon.astro`; sin icono
+   * válido se conserva el marcador decorativo del hero.
+   */
+  icon?: string | null;
 }
 
 const {
@@ -55,6 +62,7 @@ const {
   breadcrumbs = [],
   primaryCta = null,
   secondaryCta = null,
+  icon = null,
 } = Astro.props;
 
 const hasText = (value?: string | null): value is string =>
@@ -86,6 +94,11 @@ const hasEyebrow = eyebrowText !== null || eyebrowSuffixText !== null;
 const hasActions = primary !== null || secondary !== null;
 const hasStats = visibleStats.length > 0;
 
+// El icono llega de WordPress (`acf.hero.icono`): solo se usa si
+// pertenece al catálogo cerrado de `Icon.astro`.
+const iconName =
+  typeof icon === 'string' && ICON_NAMES.includes(icon) ? icon : null;
+
 // El eyebrow es una etiqueta de acompañamiento: por sí solo no sostiene
 // el hero. El breadcrumb, en cambio, sí es información de navegación.
 const hasHero =
@@ -102,10 +115,16 @@ const hasBody =
         <div class="lg:col-span-8">
           {hasEyebrow && (
             <div class="flex items-center gap-2.5 mb-5">
-              <span
-                aria-hidden="true"
-                class="w-2.5 h-2.5 bg-brand-primary inline-block flex-shrink-0"
-              ></span>
+              {iconName ? (
+                <span class="text-brand-primary flex-shrink-0" data-service-icon>
+                  <Icon name={iconName} size={4} />
+                </span>
+              ) : (
+                <span
+                  aria-hidden="true"
+                  class="w-2.5 h-2.5 bg-brand-primary inline-block flex-shrink-0"
+                ></span>
+              )}
               {eyebrowText && (
                 <span class="text-label-bold uppercase text-brand-primary">
                   {eyebrowText}
