@@ -17,10 +17,9 @@ import Layout from '../layouts/Layout.astro';
 import Button from '../components/ui/Button.astro';
 import { routes } from '../lib/routes';
 
-// Server-rendered (no prerender): las rutas dinámicas (`prerender = false`)
-// solo pueden reescribir (`Astro.rewrite`) a destinos server-rendered;
-// prerenderizar esta página provocaría `ForbiddenRewrite` en esos casos.
-export const prerender = false;
+// Página estática (pre-renderizada): en un sitio estático el servidor
+// web sirve `404.html` ante una URL inexistente, sin render en runtime.
+export const prerender = true;
 
 Astro.response.status = 404;
 ---

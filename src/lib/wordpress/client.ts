@@ -1,17 +1,19 @@
 /**
  * Cliente HTTP de WordPress REST API.
  *
- * La URL base se lee de la variable de entorno `WP_API_URL` (sin hardcodear).
+ * La URL base se lee de la variable de entorno `WORDPRESS_URL` (sin
+ * hardcodear). Cada entorno (local, staging, producción) la define en
+ * su archivo `.env`; no existe una URL de CMS duplicada en el código.
  * Si existen credenciales de aplicación (`POSTMAN_APP_USERNAME` /
  * `POSTMAN_APP_PASSWORD`), se envían como Basic Auth, necesario para
  * endpoints restringidos como `/wp/v2/settings`.
  */
 
 function getWpApiUrl(): string {
-  const baseUrl = import.meta.env.WP_API_URL as string | undefined;
+  const baseUrl = import.meta.env.WORDPRESS_URL as string | undefined;
 
   if (!baseUrl) {
-    throw new Error('Falta la variable de entorno WP_API_URL.');
+    throw new Error('Falta la variable de entorno WORDPRESS_URL.');
   }
 
   return baseUrl.replace(/\/+$/, '');

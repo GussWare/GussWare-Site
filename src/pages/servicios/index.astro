@@ -20,7 +20,7 @@ import {
 } from '../../lib/routes';
 import { stripHtml } from '../../lib/wordpress/text';
 
-export const prerender = false;
+export const prerender = true;
 
 const page = await getFrontPage('es').catch(() => null);
 const header = page?.acf?.services ?? null;

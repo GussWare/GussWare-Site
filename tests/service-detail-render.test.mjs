@@ -23,7 +23,10 @@ const CASES = {
   esConPlataformas: '/servicios/integracion-de-apis-y-servicios-externos',
   esSinPlataformas: '/servicios/diseno-sitios-web-tiendas-en-linea',
   enConRelacionados: '/en/servicios/website-and-online-store-design',
+  // El mismo servicio que `esConPlataformas`, en su traducción EN: el
+  // interruptor `platforms_enabled` está activo en ambos idiomas.
   enConPlataformas: '/en/servicios/api-and-external-service-integration',
+  enSinPlataformas: '/en/servicios/mobile-applications',
 };
 
 async function html(path) {
@@ -132,12 +135,44 @@ describe('Detalle de servicio — interruptor `platforms_enabled`', () => {
     );
   });
 
-  test('no se renderiza la sección en la traducción EN sin plataformas configuradas', async () => {
-    const page = await html(CASES.enConPlataformas);
+  test('tampoco se renderiza en la traducción EN con el interruptor desactivado', async () => {
+    const page = await html(CASES.enSinPlataformas);
     assert.equal(
       section(page, 'plataformas'),
       null,
-      'La sección #plataformas no debe existir si el interruptor está desactivado',
+      'La sección #plataformas no debe existir si platforms_enabled es false en EN',
+    );
+  });
+
+  test('la traducción EN con el interruptor activo renderiza la sección', async () => {
+    const page = await html(CASES.enConPlataformas);
+    assert.ok(
+      section(page, 'plataformas'),
+      'No se encontró la sección #plataformas en la traducción EN',
+    );
+  });
+
+  test('la traducción EN muestra las plataformas recibidas de WordPress', async () => {
+    const page = await html(CASES.enConPlataformas);
+    const block = section(page, 'plataformas');
+    for (const name of ['SAP', 'Zoho', 'Salesforce']) {
+      assert.ok(
+        block.includes(name),
+        `Falta la plataforma "${name}" en el render EN`,
+      );
+    }
+  });
+
+  test('la traducción EN usa el contenido de la traducción, no el de español', async () => {
+    const page = await html(CASES.enConPlataformas);
+    const block = section(page, 'plataformas');
+    assert.ok(
+      block.includes('Which platforms can we connect?'),
+      'Falta el título de plataformas de la traducción EN',
+    );
+    assert.ok(
+      !block.includes('¿Qué plataformas podemos conectar?'),
+      'La traducción EN no debe mostrar el título de plataformas en español',
     );
   });
 });

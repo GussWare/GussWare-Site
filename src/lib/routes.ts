@@ -21,9 +21,11 @@ export interface LocaleUrls {
   en: string;
 }
 
-/** Base del listado del Blog (`/blog`, `/en/blog`) según locale. */
+/**
+ * Base del listado del Blog (`/blog`, `/en/blog`) según locale.
+ */
 export function blogBaseUrl(locale: string): string {
-  return removeBlogTrailingSlash(getRelativeLocaleUrl(locale, 'blog'));
+  return getRelativeLocaleUrl(locale, 'blog');
 }
 
 /** URL de una página del listado con sus parámetros de consulta. */
@@ -54,31 +56,27 @@ export function blogListUrl(
 
 /** URL del detalle de un artículo (`/blog/[slug]`, `/en/blog/[slug]`). */
 export function blogPostUrl(locale: string, slug: string): string {
-  return removeBlogTrailingSlash(getRelativeLocaleUrl(locale, `blog/${slug}`));
+  return getRelativeLocaleUrl(locale, `blog/${slug}`);
 }
 
 /** Base del índice de Servicios (`/servicios`, `/en/servicios`). */
 export function servicesBaseUrl(locale: string): string {
-  return removeBlogTrailingSlash(getRelativeLocaleUrl(locale, 'servicios'));
+  return getRelativeLocaleUrl(locale, 'servicios');
 }
 
 /** URL del detalle de un servicio (`/servicios/[slug]`, `/en/servicios/[slug]`). */
 export function serviceDetailUrl(locale: string, slug: string): string {
-  return removeBlogTrailingSlash(
-    getRelativeLocaleUrl(locale, `servicios/${slug}`),
-  );
+  return getRelativeLocaleUrl(locale, `servicios/${slug}`);
 }
 
 /** Base del índice de Proyectos (`/proyectos`, `/en/proyectos`). */
 export function proyectosBaseUrl(locale: string): string {
-  return removeBlogTrailingSlash(getRelativeLocaleUrl(locale, 'proyectos'));
+  return getRelativeLocaleUrl(locale, 'proyectos');
 }
 
 /** URL del detalle de un proyecto (`/proyectos/[slug]`, `/en/proyectos/[slug]`). */
 export function projectDetailUrl(locale: string, slug: string): string {
-  return removeBlogTrailingSlash(
-    getRelativeLocaleUrl(locale, `proyectos/${slug}`),
-  );
+  return getRelativeLocaleUrl(locale, `proyectos/${slug}`);
 }
 
 export interface ProjectListQuery {
@@ -124,11 +122,9 @@ export function projectListUrl(
   return queryString ? `${base}?${queryString}` : base;
 }
 
-function removeBlogTrailingSlash(url: string): string {
-  return url.length > 1 && url.endsWith('/') ? url.slice(0, -1) : url;
-}
-
-/** Raíz del breadcrumb (`Inicio`/`Home`) según el locale actual. */
+/**
+ * Raíz del breadcrumb (`Inicio`/`Home`) según el locale actual.
+ */
 export interface BreadcrumbRoot {
   label: string;
   href: string;

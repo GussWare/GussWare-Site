@@ -33,6 +33,31 @@ export async function getPageBySlug<T extends WpPage | WpHomePage = WpPage>(
 }
 
 /**
+ * Páginas publicadas de un locale (`lang` de Polylang).
+ *
+ * Fuente única para enumerar en build las rutas estáticas del contenido
+ * institucional y legal. Mismo patrón que `getServices` (CPT `service`):
+ * endpoint nativo con `lang`, filtro por `status === 'publish'` y por el
+ * idioma, sin mapas manuales de IDs. La relación entre traducciones
+ * (`translations`) proviene de WordPress.
+ */
+export async function getPublishedPages(locale: string): Promise<WpPage[]> {
+  try {
+    const data = await wpFetch<WpPage[]>(wpRoutes.pages(locale));
+
+    return Array.isArray(data)
+      ? data.filter(
+          (item) =>
+            item.status === 'publish' && item.lang === locale,
+        )
+      : [];
+  } catch (error) {
+    console.error('Error fetching pages:', error);
+    return [];
+  }
+}
+
+/**
  * Obtiene una Page por ID (p. ej. el ID de una traducción indicada en
  * `translations`). Sin mapas manuales: el ID siempre proviene de
  * WordPress/Polylang.

@@ -1,0 +1,108 @@
+name: CI
+
+# Validación del modelo estático (SSG): lint, build sin runtime de Node
+# y pruebas contra el sitio generado. No despliega nada.
+#
+# Es el CI/CD de Staging: la rama `staging` es la única rama que lo
+# ejecuta.
+#   push a `staging`        → CI y build
+#   pull request → `staging` → CI y build (sin desplegar)
+#   workflow_dispatch        → CI y build manual
+#
+# Entorno: GitHub Environment `staging` (variables `staging.*`).
+# Modo Astro: `staging` → CMS de staging (`WORDPRESS_URL` del
+# Environment; en CI no interviene ningún archivo `.env`).
+on:
+  push:
+    branches: [staging]
+  pull_request:
+    branches: [staging]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build estático y pruebas
+    runs-on: ubuntu-latest
+
+    environment: staging
+
+    env:
+      # Modo de Astro: determina contra qué CMS se compila el sitio.
+      # En CI no se usa ningún archivo `.env` (no están versionados): el
+      # CMS y la URL del sitio llegan desde el GitHub Environment.
+      ASTRO_MODE: staging
+      # Variables del GitHub Environment (`vars.*` y `secrets.*` se
+      # resuelven en el Environment `staging`).
+      WORDPRESS_URL: ${{ vars.WORDPRESS_URL }}
+      SITE_URL: ${{ vars.SITE_URL }}
+      POSTMAN_APP_USERNAME: ${{ secrets.POSTMAN_APP_USERNAME }}
+      POSTMAN_APP_PASSWORD: ${{ secrets.POSTMAN_APP_PASSWORD }}
+      # El build debe fallar si WordPress no entrega el contenido.
+      WP_BUILD_STRICT: 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build estático (${{ env.ASTRO_MODE }})
+        run: npm run build -- --mode ${{ env.ASTRO_MODE }}
+
+      - name: Comprobar que la salida es desplegable sin Node
+        run: |
+          set -euo pipefail
+          test -f dist/index.html
+          test -f dist/404.html
+          test -f dist/500.html
+          test -f dist/robots.txt
+          test -f dist/sitemap-index.xml
+          test -f dist/sitemap-0.xml
+          test -f dist/.htaccess
+          # Salida estática pura: sin entrypoint de servidor.
+          test ! -d dist/server
+          test ! -d dist/client
+          # El sitemap no puede apuntar a localhost.
+          ! grep -q 'localhost' dist/sitemap-0.xml
+
+      - name: Servidor de preview estático
+        run: |
+          nohup npx astro preview --port 4321 > preview.log 2>&1 &
+          for _ in $(seq 1 30); do
+            if curl -sf http://localhost:4321/ > /dev/null; then
+              echo 'Preview listo'
+              exit 0
+            fi
+            sleep 1
+          done
+          echo 'El preview no respondió a tiempo'
+          cat preview.log
+          exit 1
+
+      - name: Pruebas
+        run: npm test
+
+      - name: Detener el preview
+        if: always()
+        run: npx astro preview stop || true
+
+      - name: Subir el artefacto estático
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ env.ASTRO_MODE }}
+          path: dist/
+          if-no-files-found: error

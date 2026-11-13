@@ -12,6 +12,7 @@ import ServiceDetail from '../../components/services/ServiceDetail.astro';
 import {
   getServiceBySlug,
   getServiceImage,
+  getServices,
 } from '../../lib/wordpress/services';
 import { wpFetch } from '../../lib/wordpress/client';
 import { wpRoutes } from '../../lib/wordpress/routes';
@@ -19,7 +20,20 @@ import { routes, servicesBaseUrl, serviceDetailUrl } from '../../lib/routes';
 import { stripHtml } from '../../lib/wordpress/text';
 import type { WpService } from '../../lib/wordpress/types';
 
-export const prerender = false;
+export const prerender = true;
+
+/**
+ * Rutas estáticas: una por servicio publicado en español. El catálogo
+ * viene del CPT `service` (`getServices`), la misma fuente que usa la
+ * página de listado; WordPress/Polylang decide el idioma y el slug.
+ */
+export async function getStaticPaths() {
+  const services = await getServices('es');
+
+  return services.map((service) => ({
+    params: { slug: service.slug },
+  }));
+}
 
 const { slug } = Astro.params;
 const service =

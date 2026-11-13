@@ -234,11 +234,11 @@ export async function getContactForm(
  */
 export function getContactFormSubmitUrl(formId: number | string): string {
   const baseUrl = (
-    import.meta.env.WP_API_URL as string | undefined
+    import.meta.env.WORDPRESS_URL as string | undefined
   )?.replace(/\/+$/, '');
 
   if (!baseUrl) {
-    throw new Error('Falta la variable de entorno WP_API_URL.');
+    throw new Error('Falta la variable de entorno WORDPRESS_URL.');
   }
 
   return `${baseUrl}/wp-json${wpRoutes.contactFormSubmit(formId)}`;

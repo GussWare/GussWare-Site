@@ -73,6 +73,13 @@ export const wpRoutes = {
     `/wp/v2/posts?slug=${encodeURIComponent(slug)}${lang ? `&lang=${encodeURIComponent(lang)}` : ''}`,
   pageBySlug: (slug: string, lang: string) =>
     `/wp/v2/pages?slug=${encodeURIComponent(slug)}&lang=${encodeURIComponent(lang)}`,
+  /**
+   * Páginas publicadas de un locale (`lang` de Polylang). Base para
+   * enumerar en build las rutas estáticas del contenido institucional
+   * y legal; sin paginación porque el alcance actual es pequeño.
+   */
+  pages: (lang: string) =>
+    `/wp/v2/pages?per_page=100&status=publish&lang=${encodeURIComponent(lang)}`,
   page: (pageId: number) => `/wp/v2/pages/${pageId}`,
   services: (lang: string) =>
     `/wp/v2/services?per_page=100&lang=${encodeURIComponent(lang)}`,

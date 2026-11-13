@@ -9,10 +9,12 @@
  *   → `Información legal` (datos generales reutilizables en otras páginas
  *   legales). Se leen con `getLegalInfo()`; si la sección no expone un
  *   valor, la etiqueta se deja intacta y se reporta como dato faltante.
+ * - `SITE_URL` → `SITE_URL` del entorno (`getLegalSiteUrl()`): la URL
+ *   pública del frontend que se publica, no la del CMS.
  */
-import { wpFetch } from './client';
-import { wpRoutes } from './routes';
-import type { LegalInformationResponse, WpSettings } from './types';
+import { wpFetch } from './client.ts';
+import { wpRoutes } from './routes.ts';
+import type { LegalInformationResponse } from './types';
 
 /** Datos legales generales reutilizables (`Información legal`). */
 export interface LegalInfo {
@@ -93,16 +95,20 @@ export async function getLegalInfo(
   }
 }
 
-/** URL pública configurada en WordPress, para los tokens legales del sitio. */
-export async function getLegalSiteUrl(): Promise<string | null> {
-  try {
-    const settings = await wpFetch<Pick<WpSettings, 'url'>>(wpRoutes.settings);
-    const url = settings.url?.trim();
-    return url ? url.replace(/\/+$/, '') : null;
-  } catch (error) {
-    console.error('Error fetching legal site URL:', error);
-    return null;
-  }
+/**
+ * URL pública del frontend para las etiquetas legales (`{{SITE_URL}}`).
+ *
+ * Proviene de `SITE_URL`: la configuración efectiva de Astro/Vite para
+ * el entorno en ejecución o compilación. El sitio público es el
+ * frontend que se publica, no el CMS que entrega el contenido (por eso
+ * no se lee de `/wp/v2/settings`, que devuelve la URL del CMS).
+ *
+ * @param siteUrl Valor a utilizar; por defecto, `SITE_URL` del entorno.
+ */
+export function getLegalSiteUrl(siteUrl?: string | null): string | null {
+  const value = (siteUrl ?? import.meta.env?.SITE_URL)?.trim();
+
+  return value ? value.replace(/\/+$/, '') : null;
 }
 
 /**
@@ -159,7 +165,7 @@ export interface LegalTokenValues {
   legalInfo: LegalInfo | null;
   /** Fecha ya formateada desde el Custom Field de la página (o `null`). */
   updatedLabel: string | null;
-  /** URL de sitio configurada en WordPress (o `null`). */
+  /** URL pública del frontend (`SITE_URL` del entorno, o `null`). */
   siteUrl?: string | null;
 }
 

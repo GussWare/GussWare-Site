@@ -15,7 +15,7 @@ export const prerender = false;
 const locale = Astro.params.locale ?? 'es';
 const data = await getBlogListing({
   locale,
-  baseUrl: import.meta.env.WP_API_URL as string | undefined,
+  baseUrl: import.meta.env.WORDPRESS_URL as string | undefined,
   searchParams: Astro.url.searchParams,
 });
 ---

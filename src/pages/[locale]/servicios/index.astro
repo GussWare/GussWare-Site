@@ -19,7 +19,15 @@ import {
 } from '../../../lib/routes';
 import { stripHtml } from '../../../lib/wordpress/text';
 
-export const prerender = false;
+export const prerender = true;
+
+/**
+ * Rutas estáticas: solo el locale con prefijo de URL. El español lo
+ * sirve `/servicios` (`servicios/index.astro`), sin prefijo.
+ */
+export async function getStaticPaths() {
+  return [{ params: { locale: 'en' } }];
+}
 
 const locale = Astro.params.locale ?? 'es';
 const page = await getFrontPage(locale).catch(() => null);

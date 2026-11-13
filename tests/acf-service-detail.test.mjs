@@ -17,12 +17,12 @@ import { dirname, resolve } from 'node:path';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
-/** Lee `WP_API_URL` del `.env` del proyecto (o del entorno). */
+/** Lee `WORDPRESS_URL` del entorno o del `.env` del proyecto. */
 function wpBaseUrl() {
-  if (process.env.WP_API_URL) return process.env.WP_API_URL.replace(/\/+$/, '');
+  if (process.env.WORDPRESS_URL) return process.env.WORDPRESS_URL.replace(/\/+$/, '');
   const env = readFileSync(resolve(ROOT, '.env'), 'utf-8');
-  const match = env.match(/^WP_API_URL\s*=\s*"?([^"\n]+)"?/m);
-  if (!match) throw new Error('No se encontró WP_API_URL');
+  const match = env.match(/^WORDPRESS_URL\s*=\s*"?([^"\n]+)"?/m);
+  if (!match) throw new Error('No se encontró WORDPRESS_URL');
   return match[1].trim().replace(/\/+$/, '');
 }
 

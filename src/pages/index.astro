@@ -36,7 +36,7 @@ import type {
   WpServiceSummary,
 } from '../lib/wordpress/types';
 
-export const prerender = false;
+export const prerender = true;
 
 const page = await getFrontPage('es').catch(() => null);
 const visibility = await getLandingPageVisibility();

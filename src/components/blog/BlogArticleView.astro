@@ -54,7 +54,7 @@ const {
 } = Astro.props;
 
 const homeCrumb = getBreadcrumbHome(locale);
-const wpApiUrl = import.meta.env.WP_API_URL as string | undefined;
+const wpApiUrl = import.meta.env.WORDPRESS_URL as string | undefined;
 
 const formatDate = (iso: string): string => {
   const date = new Date(iso);

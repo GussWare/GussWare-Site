@@ -14,7 +14,11 @@ pnpm-debug.log*
 
 
 # environment variables
+# Solo se versiona `.env.example` (plantilla sin secretos).
 .env
+.env.local
+.env.development
+.env.staging
 .env.production
 
 # macOS-specific files

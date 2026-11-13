@@ -43,6 +43,7 @@ import {
   getPageById,
   getPageBySlug,
   getFrontPage,
+  getPublishedPages,
 } from '../lib/wordpress/pages';
 import { getLanguages } from '../lib/wordpress/languages';
 import { getLandingPageVisibility } from '../lib/wordpress/landingPage';
@@ -68,11 +69,75 @@ import type {
   WpServiceSummary,
 } from '../lib/wordpress/types';
 
-export const prerender = false;
+export const prerender = true;
+
+/**
+ * Rutas estáticas de la ruta comodín:
+ * - `/en/` (portada inglesa) y `/<slug>/` (contenido institucional y
+ *   legal en español) e `/en/<slug>/` (sus traducciones).
+ *
+ * Las páginas publicadas provienen de WordPress/Polylang
+ * (`getPublishedPages`); la portada de cada idioma se excluye porque
+ * la sirve su propia ruta (`/` y `/en/`).
+ *
+ * Nota: `getStaticPaths` se ejecuta aislada por el compilador de Astro,
+ * así que solo puede usar imports (no constantes del frontmatter).
+ */
+export async function getStaticPaths() {
+  /**
+   * Slugs que ya tienen ruta propia en Astro y no deben generar una
+   * ruta duplicada. En español existen `/servicios`, `/contact`, `/404`,
+   * `/500` y `/navfixturetest`; en inglés solo `/en/servicios` (el
+   * contacto en inglés lo publica WordPress como página traducida).
+   */
+  const reservedEs = new Set([
+    'servicios',
+    'contact',
+    '404',
+    '500',
+    'navfixturetest',
+  ]);
+  const reservedEn = new Set(['servicios']);
+
+  const [pagesEs, pagesEn, frontEs, frontEn] = await Promise.all([
+    getPublishedPages('es'),
+    getPublishedPages('en'),
+    getFrontPage('es'),
+    getFrontPage('en'),
+  ]);
+
+  /** @type {{ params: { uri: string } }[]} */
+  const paths = [{ params: { uri: 'en' } }];
+
+  for (const page of pagesEs) {
+    if (page.id === frontEs?.id || reservedEs.has(page.slug)) {
+      continue;
+    }
+
+    paths.push({ params: { uri: page.slug } });
+  }
+
+  for (const page of pagesEn) {
+    if (page.id === frontEn?.id || reservedEn.has(page.slug)) {
+      continue;
+    }
+
+    paths.push({ params: { uri: `en/${page.slug}` } });
+  }
+
+  return paths;
+}
 
 const locale = Astro.currentLocale ?? 'es';
 const rawUri = (Astro.params.uri ?? '').replace(/^\/+|\/+$/g, '');
 const uri = locale === 'es' ? rawUri : rawUri.split('/').slice(1).join('/');
+
+/**
+ * Ruta actual de la página. En un build estático `Astro.url.pathname`
+ * llega con barra final (`/en/contacto/`), que es la forma canónica
+ * que sirve el sitio y la que emite el sitemap.
+ */
+const currentPath = Astro.url.pathname;
 
 const [page, socialMedia, languages, visibility] = await Promise.all([
   uri ? getPageBySlug(uri, locale).catch(() => null) : getFrontPage(locale),
@@ -100,7 +165,7 @@ if (!page) {
 // `Información legal` y fecha desde el Custom Field de la propia Page.
 // El resto de páginas no toca estas fuentes.
 const legalInfo = isLegalPage ? await getLegalInfo(locale) : null;
-const legalSiteUrl = isTermsPage ? await getLegalSiteUrl() : null;
+const legalSiteUrl = isTermsPage ? getLegalSiteUrl() : null;
 const updatedLabel = isLegalPage
   ? formatLegalDate(getPageUpdateDate(page), locale)
   : null;
@@ -261,8 +326,8 @@ const translatedSlug =
     : null;
 
 const localeUrls: LocaleUrls = {
-  es: Astro.url.pathname,
-  en: Astro.url.pathname,
+  es: currentPath,
+  en: currentPath,
 };
 
 if (uri === '') {
@@ -282,7 +347,7 @@ if (uri === '') {
 // hreflang: solo traducciones existentes (la actual siempre existe;
 // la otra, solo si se resolvió su slug). Sin URLs inventadas.
 const alternateUrls: Record<string, string> = {
-  [locale]: Astro.url.pathname,
+  [locale]: currentPath,
 };
 
 if (translatedSlug) {

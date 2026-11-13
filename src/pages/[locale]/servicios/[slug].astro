@@ -12,6 +12,7 @@ import ServiceDetail from '../../../components/services/ServiceDetail.astro';
 import {
   getServiceBySlug,
   getServiceImage,
+  getServices,
 } from '../../../lib/wordpress/services';
 import { wpFetch } from '../../../lib/wordpress/client';
 import { wpRoutes } from '../../../lib/wordpress/routes';
@@ -19,7 +20,20 @@ import { routes, servicesBaseUrl, serviceDetailUrl } from '../../../lib/routes';
 import { stripHtml } from '../../../lib/wordpress/text';
 import type { WpService } from '../../../lib/wordpress/types';
 
-export const prerender = false;
+export const prerender = true;
+
+/**
+ * Rutas estáticas: una por servicio publicado en inglés. El prefijo
+ * `/en` lo aporta el locale de la ruta (el español lo sirve
+ * `/servicios/[slug]` sin prefijo).
+ */
+export async function getStaticPaths() {
+  const services = await getServices('en');
+
+  return services.map((service) => ({
+    params: { locale: 'en', slug: service.slug },
+  }));
+}
 
 const locale = Astro.params.locale ?? 'es';
 const { slug } = Astro.params;

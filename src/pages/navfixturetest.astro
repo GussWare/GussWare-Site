@@ -5,7 +5,7 @@ import { buildMenuTree, resolveMenuTreeHrefs } from '../lib/wordpress/menu';
 import Header from '../components/layout/Header.astro';
 import '../styles/global.css';
 
-export const prerender = false;
+export const prerender = true;
 
 const base = (o: any) => ({ id: 0, title: 'T', url: '/x', parent: 0, menu_order: 0, target: '', attrTitle: '', classes: [], description: '', rel: '', type: 'custom', object: 'custom', objectId: '0', ...o });
 const items = [

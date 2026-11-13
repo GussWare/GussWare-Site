@@ -205,7 +205,7 @@ function normalizePath(path: string): string {
 
 function siteOrigins(currentOrigin?: string): string[] {
   const origins: string[] = [];
-  const wpApi = import.meta.env?.WP_API_URL as string | undefined;
+  const wpApi = import.meta.env?.WORDPRESS_URL as string | undefined;
 
   if (wpApi) {
     try {

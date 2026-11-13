@@ -20,9 +20,9 @@ import Button from '../components/ui/Button.astro';
 import Container from '../components/ui/Container.astro';
 import { routes } from '../lib/routes';
 
-// Server-rendered (no prerender): el mecanismo nativo de 500 de Astro solo
-// aplica a rutas bajo demanda.
-export const prerender = false;
+// Página estática (pre-renderizada): en un sitio estático no hay render en
+// runtime, por lo que el error lo sirve el servidor web (`500.html`).
+export const prerender = true;
 
 Astro.response.status = 500;
 ---
