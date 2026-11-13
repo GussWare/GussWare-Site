@@ -9,7 +9,7 @@ GussWare Site is a headless WordPress + Astro website.
 * Styling: Tailwind CSS
 * Content source: WordPress REST API
 * Design sources: Stitch / Penpot when explicitly referenced
-* Integration branch: `origin/develop`
+* Integration branch: `origin/staging`
 
 ---
 
@@ -64,12 +64,25 @@ Before performing Git operations involving worktrees, branches, commits, push, p
 Fundamental rules:
 
 * Each independent task must have its own branch and worktree.
-* Never work directly on `develop`.
+* Never work directly on `staging` or `develop`.
 * Task branches originate from `origin/develop`.
 * A task branch must track its corresponding remote task branch.
-* Pull Requests normally target `origin/develop`.
+* Pull Requests normally target `origin/staging`.
 * Never perform destructive Git operations without explicit instruction.
 * Never modify another task's worktree or branch.
+
+### Staging flow
+
+`staging` is the integration branch for the Staging environment, and the
+GitHub Actions workflows key on it:
+
+* Pull Request targeting `staging` → CI (lint, static build and tests);
+  no deployment.
+* Push or merge into `staging` → CI and deployment to Staging (SFTP to
+  the hosting of `staging.gussware.dev`).
+
+`develop` remains the base the task branches originate from; it is not
+the branch that is deployed.
 
 ---
 
