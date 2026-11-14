@@ -84,6 +84,11 @@ function verifySiteUrl() {
  * mensaje accionable en lugar de publicar un sitio estático vacío o
  * parcial sin dejar evidencia.
  *
+ * La verificación incluye la identidad visual del sitio (favicon y
+ * logo del footer), que se obtiene de `/wp/v2/settings`: sin las
+ * credenciales Basic Auth, el build publicaría el sitio sin esos
+ * recursos.
+ *
  * `WP_BUILD_STRICT=false` degrada el fallo a advertencia. Ese modo es
  * exclusivo para builds offline: nunca debe usarse en CI ni en un
  * despliegue real.
@@ -131,6 +136,90 @@ async function verifyWordPressReady() {
   /** @type {string[]} */
   const problems = [];
 
+  /**
+   * Verifica la identidad visual del sitio: el favicon (Ícono del sitio)
+   * y el logo del footer.
+   *
+   * Ambos recursos salen de `/wp/v2/settings` y de sus attachments, un
+   * endpoint restringido que exige las credenciales Basic Auth de la
+   * aplicación (`POSTMAN_APP_USERNAME` / `POSTMAN_APP_PASSWORD`). Sin
+   * ellas el build publicaría el sitio sin favicon y con el texto del
+   * nombre en lugar del logo del footer, sin dejar evidencia: por eso
+   * el problema se reporta aquí en lugar de ignorarse.
+   */
+  const verifySiteIdentity = async () => {
+    /** @type {{ site_icon?: number, site_logo?: number }} */
+    let settings;
+
+    try {
+      settings = /** @type {{ site_icon?: number, site_logo?: number }} */ (
+        await get('/wp/v2/settings')
+      );
+    } catch (error) {
+      problems.push(
+        `no se pudo leer /wp/v2/settings (${
+          error instanceof Error ? error.message : String(error)
+        }): el favicon y el logo del footer se obtienen de ese endpoint, ` +
+          'que exige las credenciales POSTMAN_APP_USERNAME y POSTMAN_APP_PASSWORD',
+      );
+      return;
+    }
+
+    const iconId = Number(settings.site_icon ?? 0);
+    const logoId = Number(settings.site_logo ?? 0);
+
+    if (!iconId) {
+      problems.push(
+        'WordPress no tiene configurado el Ícono del sitio (site_icon)',
+      );
+    }
+
+    if (!logoId) {
+      problems.push(
+        'WordPress no tiene configurado el logo del sitio (site_logo)',
+      );
+    }
+
+    /**
+     * Comprueba que el attachment configurado existe y expone su
+     * `source_url`: la URL que el sitio publica.
+     *
+     * @param {number} mediaId
+     * @param {string} label
+     */
+    const verifyMedia = async (mediaId, label) => {
+      try {
+        const media = /** @type {{ source_url?: string }} */ (
+          await get(`/wp/v2/media/${mediaId}`)
+        );
+
+        if (!media || !media.source_url) {
+          problems.push(`el medio ${mediaId} de ${label} no expone source_url`);
+        }
+      } catch (error) {
+        problems.push(
+          `no se pudo leer /wp/v2/media/${mediaId} de ${label} (${
+            error instanceof Error ? error.message : String(error)
+          })`,
+        );
+      }
+    };
+
+    if (iconId) {
+      await verifyMedia(iconId, 'el Ícono del sitio');
+    }
+
+    if (logoId) {
+      await verifyMedia(logoId, 'el logo del sitio');
+    }
+
+    if (iconId && logoId) {
+      console.log(
+        `[build] Identidad visual verificada en ${wpBase} (favicon: ${iconId}, logo: ${logoId})`,
+      );
+    }
+  };
+
   try {
     const [servicesEs, servicesEn, pages] = await Promise.all([
       get('/wp/v2/services?per_page=1&status=publish&lang=es'),
@@ -162,6 +251,11 @@ async function verifyWordPressReady() {
       })`,
     );
   }
+
+  // La identidad visual (favicon y logo del footer) se verifica siempre:
+  // es la parte del sitio que depende de un endpoint restringido y, sin
+  // credenciales, el build la publicaría incompleta sin avisar.
+  await verifySiteIdentity();
 
   if (problems.length === 0) {
     console.log(
