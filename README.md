@@ -64,6 +64,13 @@ Environment `staging` (rama `staging`), que aporta `WORDPRESS_URL` y
 `SITE_URL` como variables y el resto como secretos.
 Si falta `WORDPRESS_URL`, el build se detiene con un mensaje explícito.
 
+El Environment debe incluir además `POSTMAN_APP_USERNAME` y
+`POSTMAN_APP_PASSWORD` (Basic Auth del CMS): de `/wp/v2/settings` salen
+el favicon (Ícono del sitio) y el logo del header y del footer. Sin esas
+credenciales el endpoint responde 401 y el sitio se publicaría sin
+favicon ni logo del footer; con `WP_BUILD_STRICT=true` (valor por
+defecto) el build se detiene con un mensaje explícito.
+
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
