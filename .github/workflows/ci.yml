@@ -79,6 +79,48 @@ jobs:
           # El sitemap no puede apuntar a localhost.
           ! grep -q 'localhost' dist/sitemap-0.xml
 
+      - name: Comprobar el favicon y el logo del footer (desde WordPress)
+        run: |
+          set -euo pipefail
+          node -e '
+            const fs = require("node:fs");
+            const html = fs.readFileSync("dist/index.html", "utf8");
+
+            const icon = html.match(/<link rel="icon"[^>]*href="([^"]+)"/);
+
+            if (!icon) {
+              console.error("El HTML generado no incluye el favicon de WordPress");
+              process.exit(1);
+            }
+
+            if (!/^https?:\/\//.test(icon[1])) {
+              console.error("El favicon no se resuelve desde WordPress: " + icon[1]);
+              process.exit(1);
+            }
+
+            const footerStart = html.indexOf("<footer");
+
+            if (footerStart === -1) {
+              console.error("El HTML generado no incluye el footer");
+              process.exit(1);
+            }
+
+            const logo = html.slice(footerStart).match(/<img[^>]*src="([^"]+)"/);
+
+            if (!logo) {
+              console.error("El footer generado no incluye el logo de WordPress");
+              process.exit(1);
+            }
+
+            if (!/^https?:\/\//.test(logo[1])) {
+              console.error("El logo del footer no se resuelve desde WordPress: " + logo[1]);
+              process.exit(1);
+            }
+
+            console.log("Favicon: " + icon[1]);
+            console.log("Logo del footer: " + logo[1]);
+          '
+
       - name: Servidor de preview estático
         run: |
           nohup npx astro preview --port 4321 > preview.log 2>&1 &
