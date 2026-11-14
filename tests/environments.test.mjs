@@ -298,6 +298,60 @@ describe('Entornos — variable centralizada', () => {
   });
 });
 
+describe('Entornos — identidad visual del sitio', () => {
+  test('el build verifica el favicon y el logo del footer en WordPress', () => {
+    const config = readFileSync(resolve(ROOT, 'astro.config.mjs'), 'utf-8');
+
+    assert.ok(
+      config.includes('/wp/v2/settings'),
+      'astro.config.mjs debe leer /wp/v2/settings',
+    );
+    assert.ok(
+      config.includes('site_icon'),
+      'astro.config.mjs debe verificar el Ícono del sitio (favicon)',
+    );
+    assert.ok(
+      config.includes('site_logo'),
+      'astro.config.mjs debe verificar el logo del sitio (footer)',
+    );
+  });
+
+  test('el build explica qué credenciales exige /wp/v2/settings', () => {
+    const config = readFileSync(resolve(ROOT, 'astro.config.mjs'), 'utf-8');
+
+    assert.ok(
+      config.includes('POSTMAN_APP_USERNAME') &&
+        config.includes('POSTMAN_APP_PASSWORD'),
+      'astro.config.mjs debe mencionar las credenciales Basic Auth del CMS',
+    );
+  });
+
+  test('el favicon y el logo del footer se obtienen de WordPress', () => {
+    const favicon = readFileSync(
+      resolve(ROOT, 'src/lib/wordpress/favicon.ts'),
+      'utf-8',
+    );
+    const logo = readFileSync(
+      resolve(ROOT, 'src/lib/wordpress/logo.ts'),
+      'utf-8',
+    );
+
+    for (const [nombre, archivo] of [
+      ['favicon.ts', favicon],
+      ['logo.ts', logo],
+    ]) {
+      assert.ok(
+        archivo.includes('wpRoutes.settings'),
+        `${nombre} debe leer los ajustes del sitio de WordPress`,
+      );
+      assert.ok(
+        archivo.includes('wpRoutes.media('),
+        `${nombre} debe resolver el attachment en WordPress`,
+      );
+    }
+  });
+});
+
 describe('Entornos — scripts de package.json', () => {
   const pkg = JSON.parse(readFileSync(resolve(ROOT, 'package.json'), 'utf-8'));
 
@@ -375,6 +429,34 @@ describe('Entornos — GitHub Actions', () => {
     assert.ok(
       workflows.ci.includes('--mode ${{ env.ASTRO_MODE }}'),
       'ci.yml debe compilar con el modo de Astro',
+    );
+  });
+
+  test('cada workflow entrega las credenciales Basic Auth del CMS', () => {
+    for (const [nombre, contenido] of Object.entries(workflows)) {
+      assert.ok(
+        contenido.includes(
+          'POSTMAN_APP_USERNAME: ${{ secrets.POSTMAN_APP_USERNAME }}',
+        ),
+        `${nombre}.yml debe leer POSTMAN_APP_USERNAME de secrets.*`,
+      );
+      assert.ok(
+        contenido.includes(
+          'POSTMAN_APP_PASSWORD: ${{ secrets.POSTMAN_APP_PASSWORD }}',
+        ),
+        `${nombre}.yml debe leer POSTMAN_APP_PASSWORD de secrets.*`,
+      );
+    }
+  });
+
+  test('CI comprueba el favicon y el logo del footer en la salida', () => {
+    assert.ok(
+      workflows.ci.includes('<link rel="icon"'),
+      'ci.yml debe verificar el favicon en el HTML generado',
+    );
+    assert.ok(
+      workflows.ci.includes('El footer generado no incluye el logo'),
+      'ci.yml debe verificar el logo del footer en el HTML generado',
     );
   });
 
