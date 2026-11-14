@@ -1,0 +1,24 @@
+---
+/**
+ * RGW-98 — Container global reutilizable.
+ *
+ * Controla ancho máximo, centrado horizontal y padding horizontal
+ * responsive con tokens existentes:
+ * - `max-w-[var(--container-max)]` → 1280px (`layout.css`);
+ * - `px-4` → 16px y `md:px-6` → 24px gutter (`spacing.css`).
+ *
+ * Misma estructura que ya usan `Header` y `Footer` (sin modificarlos).
+ */
+interface Props {
+  /** Clases adicionales (no sustituyen la base). */
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div
+  class={`mx-auto w-full max-w-[var(--container-max)] px-4 md:px-6 ${className}`}
+>
+  <slot />
+</div>

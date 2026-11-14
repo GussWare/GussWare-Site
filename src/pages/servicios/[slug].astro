@@ -1,0 +1,83 @@
+---
+/**
+ * RGW-EP09-06-01 — Detalle de servicio ES (`/servicios/[slug]`).
+ *
+ * Ruta fina: resuelve el servicio (`getServiceBySlug`, `lang=es`) y lo
+ * renderiza con `ServiceDetail` (compartido con `[locale]`, sin duplicar
+ * lógica). Sin servicio, reescribe a `/404`
+ * (render nativo de la 404 con HTTP 404, sin redirect).
+ */
+import Layout from '../../layouts/Layout.astro';
+import ServiceDetail from '../../components/services/ServiceDetail.astro';
+import {
+  getServiceBySlug,
+  getServiceImage,
+  getServices,
+} from '../../lib/wordpress/services';
+import { wpFetch } from '../../lib/wordpress/client';
+import { wpRoutes } from '../../lib/wordpress/routes';
+import { routes, servicesBaseUrl, serviceDetailUrl } from '../../lib/routes';
+import { stripHtml } from '../../lib/wordpress/text';
+import type { WpService } from '../../lib/wordpress/types';
+
+export const prerender = true;
+
+/**
+ * Rutas estáticas: una por servicio publicado en español. El catálogo
+ * viene del CPT `service` (`getServices`), la misma fuente que usa la
+ * página de listado; WordPress/Polylang decide el idioma y el slug.
+ */
+export async function getStaticPaths() {
+  const services = await getServices('es');
+
+  return services.map((service) => ({
+    params: { slug: service.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const service =
+  typeof slug === 'string'
+    ? await getServiceBySlug(slug, 'es').catch(() => null)
+    : null;
+
+if (!service) {
+  Astro.response.status = 404;
+  return Astro.rewrite(routes.notFound);
+}
+
+const image = await getServiceImage(service);
+
+let enSlug = service.slug;
+const enId = service.translations?.en;
+
+if (typeof enId === 'number' && enId !== service.id) {
+  const translated = await wpFetch<WpService>(wpRoutes.service(enId)).catch(
+    () => null,
+  );
+
+  if (translated?.slug) {
+    enSlug = translated.slug;
+  }
+}
+
+const localeUrls = {
+  es: serviceDetailUrl('es', service.slug),
+  en: serviceDetailUrl('en', enSlug),
+};
+---
+
+<Layout
+  title={`${stripHtml(service.title.rendered)} — GussWare`}
+  description={stripHtml(service.excerpt?.rendered ?? '').slice(0, 160) || undefined}
+  localeUrls={localeUrls}
+  lang={service.lang}
+>
+  <ServiceDetail
+    service={service}
+    image={image}
+    locale="es"
+    indexUrl={servicesBaseUrl('es')}
+    indexLabel="Servicios"
+  />
+</Layout>

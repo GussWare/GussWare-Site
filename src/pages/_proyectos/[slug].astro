@@ -1,0 +1,44 @@
+---
+/**
+ * RGW-323 — Detalle de proyecto ES (`/proyectos/[slug]`).
+ *
+ * Ruta fina: resuelve el proyecto desde el CPT Proyectos
+ * (`getProjectDetail`, por slug e idioma, sin fallback entre idiomas)
+ * y lo renderiza con `ProjectDetail` (compartido con `[locale]`, sin
+ * duplicar lógica). Sin proyecto, no publicado o slug inexistente,
+ * reescribe a `/404` (render nativo de la 404 con HTTP 404, sin
+ * redirect).
+ */
+import Layout from '../../layouts/Layout.astro';
+import ProjectDetail from '../../components/projects/ProjectDetail.astro';
+import { getProjectDetail } from '../../lib/wordpress/projects';
+import { routes } from '../../lib/routes';
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+const result =
+  typeof slug === 'string'
+    ? await getProjectDetail(slug, 'es', Astro.url.pathname).catch(() => null)
+    : null;
+
+if (!result) {
+  Astro.response.status = 404;
+  return Astro.rewrite(routes.notFound);
+}
+
+const { detail: project, localeUrls } = result;
+const seoDescription =
+  project.detailDescription ??
+  project.descriptionBlocks.flatMap((block) => block.paragraphs)[0] ??
+  '';
+---
+
+<Layout
+  title={`${project.title} — GussWare`}
+  description={seoDescription.slice(0, 160) || undefined}
+  localeUrls={localeUrls}
+  lang="es"
+>
+  <ProjectDetail project={project} locale="es" indexLabel="Proyectos" />
+</Layout>

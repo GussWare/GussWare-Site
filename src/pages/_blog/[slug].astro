@@ -1,0 +1,36 @@
+---
+/**
+ * Detalle de artículo en español (`/blog/[slug]`).
+ *
+ * Ruta fina: resuelve el artículo (`getBlogArticle`, con `lang`) y lo
+ * renderiza con `BlogArticleView` (compartida con `/en/blog/[slug]`,
+ * sin duplicar lógica). Sin artículo, reescribe a `/404`
+ * (render nativo de la 404 con HTTP 404, sin redirect).
+ */
+import Layout from '../../layouts/Layout.astro';
+import BlogArticleView from '../../components/blog/BlogArticleView.astro';
+import { getBlogArticle } from '../../lib/wordpress/post';
+import { routes } from '../../lib/routes';
+
+export const prerender = false;
+
+const locale = Astro.currentLocale ?? 'es';
+const { slug } = Astro.params;
+const data =
+  typeof slug === 'string'
+    ? await getBlogArticle(slug, locale, Astro.url.pathname).catch(() => null)
+    : null;
+
+if (!data) {
+  Astro.response.status = 404;
+  return Astro.rewrite(routes.notFound);
+}
+---
+
+<Layout
+  title={`${data.title} — GussWare`}
+  description={data.description}
+  localeUrls={data.localeUrls}
+>
+  <BlogArticleView locale={locale} {...data} />
+</Layout>

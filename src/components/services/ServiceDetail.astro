@@ -1,0 +1,474 @@
+---
+/**
+ * Template único del detalle de servicios (Stitch `Servicio Detalle`).
+ *
+ * Renderiza exclusivamente desde el CPT `service` (prop `service`);
+ * sin literales de contenido ni lógica por slug. Las etiquetas de UI
+ * (`QUÉ RECIBES`, `BENEFICIO`) se resuelven por locale, como el resto
+ * de etiquetas del template.
+ *
+ * Composición de la referencia:
+ * - S01 header (breadcrumb + hero + rail de stats) en `ServiceHeader`.
+ * - S02 problema: 5/12 de texto y 7/12 de situaciones numeradas.
+ * - S03 soluciones: retícula derivada de la cantidad de tarjetas.
+ * - S03b plataformas en `ServicePlatforms` (bloque opcional del ACF
+ *   `plataformas`, gobernado por `platforms_enabled`).
+ * - S04 cómo trabajamos en `ServiceApproach`.
+ * - S05 ficha técnica: encabezado 5/7 y grupos en 3 columnas.
+ * - S06 FAQ en `ServiceFaq`.
+ * - S07 cierre oscuro con eyebrow y acción secundaria de ACF.
+ * - S08 servicios relacionados en `ServiceRelated` (grupo ACF
+ *   `relacionados`); se muestra solo si hay elementos que enlazar.
+ */
+import Section from '../ui/Section.astro';
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+import ServiceHeader from './ServiceHeader.astro';
+import ServiceApproach from './ServiceApproach.astro';
+import ServiceFaq from './ServiceFaq.astro';
+import ServicePlatforms from './ServicePlatforms.astro';
+import ServiceRelated from './ServiceRelated.astro';
+import { stripHtml } from '../../lib/wordpress/text';
+import { formatSectionEyebrow } from '../../lib/services/section-number';
+import type { WpService } from '../../lib/wordpress/types';
+
+interface Props {
+  service: WpService;
+  image: { src: string; alt: string } | null;
+  locale: string;
+  indexUrl: string;
+  indexLabel: string;
+}
+
+const { service, locale, indexUrl, indexLabel } = Astro.props;
+
+const acf = service.acf;
+const pad = (n: number): string => String(n).padStart(2, '0');
+
+const capabilitiesLabel = locale === 'en' ? 'WHAT YOU GET' : 'QUÉ RECIBES';
+const benefitLabel = locale === 'en' ? 'BENEFIT' : 'BENEFICIO';
+const techEyebrow = locale === 'en' ? 'TECHNICAL DETAILS' : 'FICHA TÉCNICA';
+
+const breadcrumbs = [
+  { label: indexLabel, href: indexUrl },
+  { label: stripHtml(service.title.rendered) },
+];
+
+const hasText = (value?: string | null): value is string =>
+  typeof value === 'string' && value.trim().length > 0;
+
+// Párrafos editoriales desde el textarea (saltos de línea del contenido).
+const developmentParagraphs = (acf.problema.development_content ?? '')
+  .split(/\r?\n\r?\n|\r\n|\n/)
+  .map((paragraph) => paragraph.trim())
+  .filter((paragraph) => paragraph.length > 0);
+
+const problemSituations = (acf.problema.development_situations ?? []).filter(
+  (situation) => hasText(situation.situation),
+);
+const problemTags = (acf.problema.development_tags ?? []).filter((tag) =>
+  hasText(tag.tag),
+);
+
+// S02: el titular y algo de cuerpo (párrafos o situaciones) son el
+// mínimo para que la sección aporte información.
+const hasProblem =
+  hasText(acf.problema.development_title) &&
+  (developmentParagraphs.length > 0 || problemSituations.length > 0);
+
+// S03: solo tarjetas con contenido propio (sin contar el número).
+const solutions = (acf.soluciones.solutions ?? [])
+  .map((solution) => ({
+    ...solution,
+    features: (solution.features ?? []).filter((feature) =>
+      hasText(feature.feature),
+    ),
+  }))
+  .filter(
+    (solution) =>
+      hasText(solution.title) ||
+      hasText(solution.description) ||
+      solution.features.length > 0 ||
+      hasText(solution.benefit),
+  );
+
+// Retícula según la cantidad que entregue WordPress (1..N).
+const solutionCols =
+  solutions.length === 1
+    ? 'mx-auto max-w-3xl'
+    : solutions.length === 2
+      ? 'md:grid-cols-2'
+      : solutions.length === 3
+        ? 'sm:grid-cols-2 lg:grid-cols-3'
+        : solutions.length === 4
+          ? 'sm:grid-cols-2 xl:grid-cols-4'
+          : 'sm:grid-cols-2 lg:grid-cols-3';
+
+const approachItems = (acf.proceso.approach ?? []).filter(
+  (item) => hasText(item.title) || hasText(item.description),
+);
+
+// S05: grupos con al menos una tecnología; el interruptor sigue
+// mandando (Integración lo desactiva).
+const techGroups = (acf.ficha.tech_groups ?? [])
+  .map((group) => ({
+    ...group,
+    items: (group.items ?? []).filter((tech) => hasText(tech.name)),
+  }))
+  .filter((group) => group.items.length > 0);
+
+// S06: una pregunta sin respuesta no se considera información suficiente.
+const faqItems = (acf.faq.faq_items ?? []).filter(
+  (item) => hasText(item.pregunta) && hasText(item.respuesta),
+);
+
+const heroPrimaryCta =
+  hasText(acf.hero.hero_cta_label) && hasText(acf.hero.hero_cta_url)
+    ? {
+        label: acf.hero.hero_cta_label,
+        href: acf.hero.hero_cta_url,
+      }
+    : null;
+
+const heroSecondaryCta =
+  hasText(acf.hero.hero_secondary_label) && hasText(acf.hero.hero_secondary_url)
+    ? {
+        label: acf.hero.hero_secondary_label,
+        href: acf.hero.hero_secondary_url,
+      }
+    : null;
+
+const heroStats = (acf.hero.hero_stats ?? []).filter(
+  (stat) =>
+    hasText(stat.label) || hasText(stat.value) || hasText(stat.description),
+);
+
+// S03b: bloque de plataformas (solo Integración lo habilita). El
+// interruptor `platforms_enabled` decide si la sección se muestra.
+const platforms = acf.plataformas.platforms ?? [];
+const visiblePlatforms = platforms.filter((platform) =>
+  hasText(platform.name),
+);
+const hasPlatforms = Boolean(acf.plataformas.platforms_enabled);
+
+// S08: servicios relacionados (solo si WordPress entrega elementos).
+const related = acf.relacionados.related ?? [];
+const visibleRelated = related.filter(
+  (item) => hasText(item.name) && hasText(item.url),
+);
+const hasRelated = visibleRelated.length > 0;
+
+const cta = acf.cierre.cta;
+const closingPrimary = hasText(cta.button_text) && hasText(cta.button_url);
+const closingSecondary =
+  hasText(cta.secondary_text) && hasText(cta.secondary_url);
+
+const hasSolutions = solutions.length > 0;
+const hasPlatformsSection = hasPlatforms && visiblePlatforms.length > 0;
+const hasApproach = approachItems.length > 0;
+const hasTech = Boolean(acf.ficha.tech_enabled) && techGroups.length > 0;
+const hasFaq = faqItems.length > 0;
+const hasClosing = hasText(cta.title) || hasText(cta.description);
+
+// Numeración consecutiva en el orden visual: solo cuenta lo que se
+// renderiza. El hero no lleva número (mantiene el formato actual).
+let visibleSection = 0;
+const nextSectionNumber = (): string => pad(++visibleSection);
+
+const problemNumber = hasProblem ? nextSectionNumber() : null;
+const solutionsNumber = hasSolutions ? nextSectionNumber() : null;
+const platformsNumber = hasPlatformsSection ? nextSectionNumber() : null;
+const approachNumber = hasApproach ? nextSectionNumber() : null;
+const techNumber = hasTech ? nextSectionNumber() : null;
+const faqNumber = hasFaq ? nextSectionNumber() : null;
+const closingNumber = hasClosing ? nextSectionNumber() : null;
+---
+
+{/* S01 · Header del detalle (componente específico, NO Hero). */}
+<ServiceHeader
+  eyebrow={acf.hero.intro_eyebrow}
+  eyebrowSuffix={acf.hero.intro_eyebrow_suffix ?? ''}
+  title={acf.hero.intro_title}
+  description={acf.hero.intro_description}
+  stats={heroStats}
+  breadcrumbs={breadcrumbs}
+  primaryCta={heroPrimaryCta}
+  secondaryCta={heroSecondaryCta}
+  icon={acf.hero.icono ?? null}
+/>
+
+{/* S02 · Problema: texto 5/12 + situaciones numeradas 7/12. */}
+{hasProblem && (
+  <Section class="bg-gw-surface-primary border-b border-gw-border-subtle">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+      <div class="lg:col-span-5">
+        <p class="text-label-bold uppercase text-brand-primary mb-3">
+          {formatSectionEyebrow(
+            problemNumber,
+            acf.problema.development_eyebrow,
+          )}
+        </p>
+        <h2 class="text-gw-text-primary text-headline-lg font-bold leading-tight mb-6">
+          {acf.problema.development_title}
+        </h2>
+        {developmentParagraphs.length > 0 && (
+          <div class="space-y-4 text-gw-text-secondary text-body-md leading-relaxed">
+            {developmentParagraphs.map((paragraph) => (
+              <p>{paragraph}</p>
+            ))}
+          </div>
+        )}
+      </div>
+      <div class="lg:col-span-7">
+        {problemSituations.length > 0 && (
+          <div class="divide-y divide-gw-border-subtle border-t border-b border-gw-border-subtle">
+            {problemSituations.map((situation) => (
+              <div class="py-6 grid grid-cols-12 gap-4 items-baseline">
+                <span class="col-span-2 font-mono font-bold text-brand-primary text-headline-md">
+                  {situation.number}
+                </span>
+                <p class="col-span-10 text-gw-text-primary text-body-md font-medium leading-snug">
+                  {situation.situation}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+        {problemTags.length > 0 && (
+          <div class="pt-6">
+            <p class="text-label-bold uppercase text-gw-text-muted">
+              {problemTags.map((item) => item.tag).join(' · ')}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  </Section>
+)}
+
+{/* S03 · Soluciones: tarjetas con número, capacidades y beneficio. */}
+{hasSolutions && (
+  <Section
+    id="soluciones"
+    class="bg-gw-surface-secondary border-b border-gw-border-subtle"
+  >
+    <div class="max-w-3xl mb-12">
+      <p class="text-label-bold uppercase text-brand-primary mb-3">
+        {formatSectionEyebrow(
+          solutionsNumber,
+          acf.soluciones.solutions_eyebrow,
+        )}
+      </p>
+      {hasText(acf.soluciones.solutions_title) && (
+        <h2 class="text-gw-text-primary text-headline-lg font-bold leading-tight mb-5">
+          {acf.soluciones.solutions_title}
+        </h2>
+      )}
+      {hasText(acf.soluciones.solutions_description) && (
+        <p class="text-gw-text-secondary text-body-md leading-relaxed">
+          {acf.soluciones.solutions_description}
+        </p>
+      )}
+    </div>
+    <div class:list={['grid grid-cols-1 gap-8 items-stretch', solutionCols]}>
+      {solutions.map((solution, index) => (
+        <article class="bg-gw-surface-primary border border-gw-border-subtle p-6 md:p-8 flex flex-col justify-between">
+          <div>
+            <span class="font-mono font-bold text-brand-primary text-headline-md block mb-4">
+              {pad(index + 1)}
+            </span>
+            {hasText(solution.title) && (
+              <h3 class="text-gw-text-primary text-headline-md tracking-tight font-bold mb-3">
+                {solution.title}
+              </h3>
+            )}
+            {hasText(solution.description) && (
+              <p class="text-gw-text-secondary text-body-md leading-relaxed mb-6">
+                {solution.description}
+              </p>
+            )}
+            {solution.features.length > 0 && (
+              <div class="border-t border-gw-border-subtle pt-6 mb-6">
+                <p class="text-label-bold uppercase text-brand-primary mb-4">
+                  {capabilitiesLabel}
+                </p>
+                <ul class="space-y-3 text-gw-text-primary text-body-md">
+                  {solution.features.map((feature) => (
+                    <li class="flex items-start gap-2">
+                      <span
+                        aria-hidden="true"
+                        class="text-brand-primary font-bold select-none"
+                      >
+                        —
+                      </span>
+                      <span>{feature.feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+          <div>
+            {hasText(solution.benefit) && (
+              <div class="border-t border-gw-border-subtle pt-6">
+                <p class="text-label-bold uppercase text-gw-text-muted mb-1">
+                  {benefitLabel}
+                </p>
+                <p class="text-gw-text-primary text-body-md font-semibold">
+                  {solution.benefit}
+                </p>
+              </div>
+            )}
+            {hasText(solution.link?.text) && (
+              <div class="border-t border-gw-border-subtle pt-6 mt-6">
+                <a
+                  href={solution.link?.url || undefined}
+                  class="inline-flex items-center gap-2 text-label-bold uppercase text-brand-primary transition-colors hover:text-brand-secondary"
+                >
+                  <span>{solution.link?.text}</span>
+                  <Icon name="arrow-right" size={4} />
+                </a>
+              </div>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </Section>
+)}
+
+{/* S03b · Plataformas: solo en servicios con el bloque habilitado. */}
+{hasPlatformsSection && (
+  <ServicePlatforms
+    number={platformsNumber ?? undefined}
+    eyebrow={acf.plataformas.platforms_eyebrow}
+    title={acf.plataformas.platforms_title}
+    description={acf.plataformas.platforms_description}
+    platforms={visiblePlatforms}
+    ctaTitle={acf.plataformas.platforms_cta_title}
+    ctaText={acf.plataformas.platforms_cta_text}
+    ctaLabel={acf.plataformas.platforms_cta_label}
+    ctaUrl={acf.plataformas.platforms_cta_url}
+    locale={locale}
+  />
+)}
+
+{/* S04 · Cómo trabajamos: tarjetas numeradas en retícula. */}
+{hasApproach && (
+  <ServiceApproach
+    id="metodologia"
+    number={approachNumber ?? undefined}
+    eyebrow={acf.proceso.approach_eyebrow}
+    title={acf.proceso.approach_title}
+    description={acf.proceso.approach_description}
+    items={approachItems}
+  />
+)}
+
+{/* S05 · Ficha técnica: encabezado 5/7 y grupos en 3 columnas. */}
+{hasTech && (
+  <Section
+    id="tecnologias"
+    class="bg-gw-surface-primary border-b border-gw-border-subtle"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start mb-12">
+      <div class="lg:col-span-5">
+        <p class="text-label-bold uppercase text-brand-primary mb-3">
+          {formatSectionEyebrow(
+            techNumber,
+            hasText(acf.ficha.tech_eyebrow)
+              ? acf.ficha.tech_eyebrow
+              : techEyebrow,
+          )}
+        </p>
+        {hasText(acf.ficha.tech_title) && (
+          <h2 class="text-gw-text-primary text-headline-lg font-bold leading-tight">
+            {acf.ficha.tech_title}
+          </h2>
+        )}
+      </div>
+      <div class="lg:col-span-7 lg:pt-8">
+        {hasText(acf.ficha.tech_description) && (
+          <p class="text-gw-text-secondary text-body-md leading-relaxed">
+            {acf.ficha.tech_description}
+          </p>
+        )}
+      </div>
+    </div>
+    <div class="pt-8 border-t border-gw-border-subtle grid grid-cols-1 md:grid-cols-3 gap-8">
+      {techGroups.map((group) => (
+        <div class="border-l-0 md:border-l-2 border-brand-primary pl-0 md:pl-6">
+          {hasText(group.title) && (
+            <p class="text-label-bold uppercase text-brand-primary mb-2">
+              {group.title}
+            </p>
+          )}
+          <p class="text-gw-text-primary text-body-md font-semibold leading-relaxed">
+            {group.items.map((tech) => tech.name).join(' · ')}
+          </p>
+        </div>
+      ))}
+    </div>
+  </Section>
+)}
+
+{/* S06 · FAQ del servicio (contenido dinámico). */}
+{hasFaq && (
+  <ServiceFaq
+    id="faq"
+    number={faqNumber ?? undefined}
+    eyebrow={acf.faq.faq_eyebrow}
+    items={faqItems}
+    locale={locale}
+  />
+)}
+
+{/* S07 · Cierre sobre superficie oscura. */}
+{hasClosing && (
+  <Section id="contacto" class="bg-supporting-blue-dark">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+      <div class="lg:col-span-8">
+        <p class="text-label-bold uppercase text-brand-accent mb-4">
+          {formatSectionEyebrow(closingNumber, cta.eyebrow)}
+        </p>
+        {hasText(cta.title) && (
+          <h2 class="text-brand-surface text-headline-lg font-bold leading-tight mb-6">
+            {cta.title}
+          </h2>
+        )}
+        {hasText(cta.description) && (
+          <p class="text-supporting-blue-fixed text-body-lg leading-relaxed max-w-2xl mb-10">
+            {cta.description}
+          </p>
+        )}
+        {(closingPrimary || closingSecondary) && (
+          <div class="flex flex-wrap items-center gap-6">
+            {closingPrimary && (
+              <Button href={cta.button_url}>{cta.button_text}</Button>
+            )}
+            {closingSecondary && (
+              <Button
+                variant="outline-light"
+                href={cta.secondary_url}
+                class="gap-3"
+              >
+                {cta.secondary_text}
+                <Icon name="arrow-right" size={4} />
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  </Section>
+)}
+
+{/* S08 · Servicios relacionados (cierre de la página). */}
+{hasRelated && (
+  <ServiceRelated
+    eyebrow={acf.relacionados.related_eyebrow}
+    title={acf.relacionados.related_title}
+    items={visibleRelated}
+    locale={locale}
+  />
+)}

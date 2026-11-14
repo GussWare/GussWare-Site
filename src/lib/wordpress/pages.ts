@@ -1,0 +1,135 @@
+import { wpFetch } from './client';
+import { wpRoutes } from './routes';
+import { getLanguages } from './languages';
+import type { WpHomePage, WpPage, WpSettings } from './types';
+
+/**
+ * RGW-55 — Resuelve una Page de WordPress por slug e idioma.
+ *
+ * Utiliza el endpoint nativo `/wp/v2/pages` con los parámetros
+ * `slug` + `lang` de Polylang como fuente de verdad: sin mapas
+ * manuales de IDs, la relación entre traducciones (`translations`)
+ * proviene de WordPress. No aplica fallback entre idiomas.
+ */
+export async function getPageBySlug<T extends WpPage | WpHomePage = WpPage>(
+  slug: string,
+  lang: string,
+): Promise<T | null> {
+  try {
+    const data = await wpFetch<T[]>(wpRoutes.pageBySlug(slug, lang));
+    const page = Array.isArray(data)
+      ? data.find(
+          (item) =>
+            item.slug === slug &&
+            item.status === 'publish' &&
+            item.lang === lang,
+        )
+      : undefined;
+    return page ?? null;
+  } catch (error) {
+    console.error('Error fetching page by slug:', error);
+    return null;
+  }
+}
+
+/**
+ * Páginas publicadas de un locale (`lang` de Polylang).
+ *
+ * Fuente única para enumerar en build las rutas estáticas del contenido
+ * institucional y legal. Mismo patrón que `getServices` (CPT `service`):
+ * endpoint nativo con `lang`, filtro por `status === 'publish'` y por el
+ * idioma, sin mapas manuales de IDs. La relación entre traducciones
+ * (`translations`) proviene de WordPress.
+ */
+export async function getPublishedPages(locale: string): Promise<WpPage[]> {
+  try {
+    const data = await wpFetch<WpPage[]>(wpRoutes.pages(locale));
+
+    return Array.isArray(data)
+      ? data.filter(
+          (item) =>
+            item.status === 'publish' && item.lang === locale,
+        )
+      : [];
+  } catch (error) {
+    console.error('Error fetching pages:', error);
+    return [];
+  }
+}
+
+/**
+ * Obtiene una Page por ID (p. ej. el ID de una traducción indicada en
+ * `translations`). Sin mapas manuales: el ID siempre proviene de
+ * WordPress/Polylang.
+ */
+export async function getPageById<T extends WpPage | WpHomePage = WpPage>(
+  id: number,
+): Promise<T | null> {
+  try {
+    const data = await wpFetch<T>(wpRoutes.page(id));
+    return data && data.status === 'publish' ? data : null;
+  } catch (error) {
+    console.error('Error fetching page by ID:', error);
+    return null;
+  }
+}
+
+/**
+ * ID de la Page configurada como portada para un locale, según
+ * WordPress/Polylang: designación por idioma (`page_on_front` de
+ * `/pll/v1/languages`) o portada global (`show_on_front`/`page_on_front`
+ * de `/wp/v2/settings`). `null` si no hay designación válida.
+ */
+async function getFrontPageId(locale: string): Promise<number | null> {
+  const languages = await getLanguages().catch(() => null);
+  const entry = languages?.find((item) => item.slug === locale);
+
+  if (
+    entry &&
+    Number.isInteger(entry.page_on_front) &&
+    entry.page_on_front > 0
+  ) {
+    return entry.page_on_front;
+  }
+
+  try {
+    const settings = await wpFetch<WpSettings>(wpRoutes.settings);
+
+    if (
+      settings?.show_on_front === 'page' &&
+      Number.isInteger(settings.page_on_front) &&
+      settings.page_on_front > 0
+    ) {
+      return settings.page_on_front;
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
+
+/**
+ * Resuelve la Page configurada como portada para un locale.
+ *
+ * Utiliza el ID designado por WordPress/Polylang (vía `getPageById`,
+ * verificando que el idioma coincida) y, solo como respaldo cuando no
+ * hay designación válida, los slugs `inicio` (es) / `home` (en).
+ * Sin IDs hardcodeados ni lógica específica por página.
+ */
+export async function getFrontPage(locale: string): Promise<WpHomePage | null> {
+  const frontPageId = await getFrontPageId(locale).catch(() => null);
+
+  if (frontPageId) {
+    const page = await getPageById<WpHomePage>(frontPageId);
+
+    if (page && page.lang === locale) {
+      return page;
+    }
+  }
+
+  // Respaldo: slugs de portada por locale (la designación de WordPress
+  // es siempre la fuente primaria).
+  const slug = locale === 'en' ? 'home' : 'inicio';
+  return getPageBySlug<WpHomePage>(slug, locale);
+}

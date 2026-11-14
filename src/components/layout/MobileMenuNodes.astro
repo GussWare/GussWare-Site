@@ -1,0 +1,18 @@
+---
+/**
+ * RGW-273 — Nodos del panel móvil (recursivo con `MobileMenuNode`:
+ * N niveles sin límite impuesto por Astro).
+ */
+import MobileMenuNode from './MobileMenuNode.astro';
+import type { ResolvedMenuTreeItem } from '../../lib/wordpress/menu';
+
+interface Props {
+  nodes: ResolvedMenuTreeItem[];
+  /** Profundidad (0 = raíz del panel; ≥1 = dentro de un subpanel). */
+  depth?: number;
+}
+
+const { nodes, depth = 0 } = Astro.props;
+---
+
+{nodes.map((node) => <MobileMenuNode node={node} depth={depth} />)}

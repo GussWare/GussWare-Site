@@ -1,0 +1,118 @@
+name: Deploy staging
+
+# Despliegue del sitio estático de `staging.gussware.dev` por SFTP.
+#
+# Entorno: GitHub Environment `staging` → variables `staging.*`.
+# Modo Astro: `staging` → CMS de staging (variable `WORDPRESS_URL` del
+# Environment; en CI no interviene ningún archivo `.env`).
+#
+# La rama `staging` es la única que despliega: un push directo a ella
+# despliega, y un pull request mergeado a ella dispara el despliegue
+# mediante ese push. Un pull request abierto o actualizado no despliega
+# (este workflow no escucha eventos `pull_request`).
+#
+# SECRETOS Y VARIABLES PENDIENTES (Settings → Environments → staging):
+#   vars.WORDPRESS_URL             https://staging-cms.gussware.dev
+#   vars.SITE_URL                  https://staging.gussware.dev
+#   vars.HOSTINGER_SFTP_HOST       host del hosting
+#   vars.HOSTINGER_SFTP_PORT       puerto SFTP (21 o 22)
+#   vars.HOSTINGER_SFTP_DIR        ruta remota de la raíz web
+#                                  (p. ej. /public_html)
+#   secrets.HOSTINGER_SFTP_USER    usuario SFTP
+#   secrets.HOSTINGER_SSH_PRIVATE_KEY  clave privada de la cuenta SFTP
+#   secrets.HOSTINGER_SSH_KNOWN_HOSTS   fingerprint del host
+#                                  (`ssh-keyscan -p <puerto> <host>`)
+#   secrets.POSTMAN_APP_USERNAME   Basic Auth del CMS
+#   secrets.POSTMAN_APP_PASSWORD   Basic Auth del CMS
+on:
+  push:
+    branches: [staging]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Publicar en staging
+    runs-on: ubuntu-latest
+
+    environment: staging
+
+    env:
+      WORDPRESS_URL: ${{ vars.WORDPRESS_URL }}
+      SITE_URL: ${{ vars.SITE_URL }}
+      POSTMAN_APP_USERNAME: ${{ secrets.POSTMAN_APP_USERNAME }}
+      POSTMAN_APP_PASSWORD: ${{ secrets.POSTMAN_APP_PASSWORD }}
+      WP_BUILD_STRICT: 'true'
+      SSH_PRIVATE_KEY: ${{ secrets.HOSTINGER_SSH_PRIVATE_KEY }}
+      SSH_KNOWN_HOSTS: ${{ secrets.HOSTINGER_SSH_KNOWN_HOSTS }}
+      SFTP_USER: ${{ secrets.HOSTINGER_SFTP_USER }}
+      SFTP_HOST: ${{ vars.HOSTINGER_SFTP_HOST }}
+      SFTP_PORT: ${{ vars.HOSTINGER_SFTP_PORT }}
+      SFTP_DIR: ${{ vars.HOSTINGER_SFTP_DIR }}
+
+    steps:
+      - name: Comprobar la configuración
+        run: |
+          set -euo pipefail
+          for value in WORDPRESS_URL SITE_URL SSH_PRIVATE_KEY SSH_KNOWN_HOSTS \
+                       SFTP_USER SFTP_HOST SFTP_PORT SFTP_DIR; do
+            if [ -z "${!value}" ]; then
+              echo "Falta la configuración del Environment staging: $value"
+              exit 1
+            fi
+          done
+          echo "WORDPRESS_URL=${WORDPRESS_URL}"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Build estático (staging)
+        run: npm run build -- --mode staging
+
+      - name: Comprobar la salida
+        run: |
+          set -euo pipefail
+          test -f dist/index.html
+          test -f dist/404.html
+          test -f dist/.htaccess
+          test ! -d dist/server
+          test ! -d dist/client
+
+      - name: Publicar por SFTP
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_deploy
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/id_deploy
+          # Sin `--delete`: no se elimina contenido remoto. Las páginas
+          # retiradas del CMS permanecen en el hosting hasta que se
+          # autorice una limpieza explícita.
+          rsync -az --checksum \
+            -e "ssh -p ${SFTP_PORT} -i ~/.ssh/id_deploy -o StrictHostKeyChecking=yes" \
+            dist/ "${SFTP_USER}@${SFTP_HOST}:${SFTP_DIR}/"
+
+      - name: Verificar el sitio publicado
+        run: |
+          set -euo pipefail
+          for path in / /en/ /servicios/ /contact/ /robots.txt /sitemap-index.xml; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "${SITE_URL}${path}")
+            echo "${path} -> ${code}"
+            test "$code" = "200"
+          done
+          # Una URL inexistente debe devolver 404 con la página de error.
+          code=$(curl -s -o /dev/null -w '%{http_code}' "${SITE_URL}/ruta-inexistente-de-prueba/")
+          echo "/ruta-inexistente-de-prueba/ -> ${code}"
+          test "$code" = "404"

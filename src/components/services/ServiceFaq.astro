@@ -1,0 +1,196 @@
+---
+/**
+ * FAQ del detalle de servicios (Stitch `Servicio Detalle`, S05).
+ *
+ * Sección sobre superficie secundaria con un panel blanco de filas
+ * `p-6 lg:p-8`: pregunta `body-lg` en negrita, icono `−`/`+` en
+ * `headline-md` y respuesta `body-md` separada por un borde superior.
+ * El primer ítem abre por defecto, como en la referencia.
+ *
+ * RGW-338 — Interacción y animación homologadas con el FAQ del Home
+ * (RGW-296): `<button>` + `<div>` con transición de altura vía
+ * `grid-template-rows` (0fr → 1fr). Contenido desde `faq_items[]`;
+ * `faq_eyebrow` llega de WordPress y, si está vacío, se usa la etiqueta
+ * de UI por locale (mismo criterio que el resto de etiquetas del
+ * template).
+ */
+import Section from '../ui/Section.astro';
+import { formatSectionEyebrow } from '../../lib/services/section-number';
+
+interface FaqItem {
+  pregunta: string;
+  respuesta: string;
+}
+
+interface Props {
+  id?: string;
+  /** Número de sección calculado por la plantilla (`01`, `02`…). */
+  number?: string;
+  eyebrow?: string;
+  items: FaqItem[];
+  locale: string;
+}
+
+const {
+  id = undefined,
+  number = undefined,
+  eyebrow = undefined,
+  items,
+  locale,
+} = Astro.props;
+
+const faqEyebrow = formatSectionEyebrow(
+  number,
+  eyebrow && eyebrow.trim() !== ''
+    ? eyebrow
+    : locale === 'en'
+      ? 'WE ANSWER YOUR QUESTIONS'
+      : 'RESOLVEMOS TUS DUDAS',
+);
+const faqTitle =
+  locale === 'en' ? 'FREQUENTLY ASKED QUESTIONS' : 'PREGUNTAS FRECUENTES';
+---
+
+{items.length > 0 && (
+  <Section
+    id={id}
+    class="bg-gw-surface-secondary border-b border-gw-border-subtle"
+  >
+    <div class="mb-12">
+      <p class="text-label-bold uppercase text-brand-secondary mb-4">
+        {faqEyebrow}
+      </p>
+      <h2 class="text-gw-text-primary text-headline-lg font-bold leading-tight tracking-tight">
+        {faqTitle}
+      </h2>
+    </div>
+    <div
+      data-faq
+      class="border-t border-b border-gw-border-subtle bg-gw-surface-primary"
+    >
+      {items.map((item, index) => (
+        <div data-faq-item class="p-6 lg:p-8">
+          <h3 class="text-gw-text-primary text-body-lg font-bold">
+            <button
+              type="button"
+              data-faq-button
+              id={`faq-button-${index}`}
+              aria-expanded={index === 0 ? 'true' : 'false'}
+              aria-controls={`faq-panel-${index}`}
+              class="group flex w-full items-center justify-between gap-4 text-left select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+            >
+              <span>{item.pregunta}</span>
+              <span
+                data-faq-icon
+                aria-hidden="true"
+                class="text-supporting-blue-dark text-headline-md flex-shrink-0 leading-none select-none font-bold"
+              >
+                {index === 0 ? '−' : '+'}
+              </span>
+            </button>
+          </h3>
+          <div
+            data-faq-panel
+            id={`faq-panel-${index}`}
+            role="region"
+            aria-labelledby={`faq-button-${index}`}
+            hidden={index !== 0}
+            class={`faq-panel${index === 0 ? ' is-open' : ''}`}
+          >
+            <div class="faq-content">
+              <div class="mt-4 pt-4 border-t border-gw-border-subtle">
+                <p class="text-gw-text-secondary text-body-md leading-relaxed max-w-3xl">
+                  {item.respuesta}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </Section>
+)}
+
+<style>
+  /*
+   * RGW-338 — Animación del acordeón, homologada con el FAQ del Home
+   * (RGW-296): transición de altura vía grid-template-rows (0fr → 1fr);
+   * duración y easing alineados con la receta de transición del sistema
+   * (200ms). El atributo `hidden` sigue mandando (`display: none`) para
+   * conservar el estado inicial y el comportamiento sin JavaScript.
+   */
+  .faq-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 200ms ease-in-out;
+  }
+
+  .faq-panel[hidden] {
+    display: none;
+  }
+
+  .faq-panel.is-open {
+    grid-template-rows: 1fr;
+  }
+
+  .faq-content {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq-panel {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const root = document.querySelector('[data-faq]');
+
+  if (root instanceof HTMLElement) {
+    root.querySelectorAll('[data-faq-button]').forEach((button) => {
+      if (!(button instanceof HTMLButtonElement)) return;
+
+      const panelId = button.getAttribute('aria-controls');
+      const panel = panelId ? root.querySelector(`#${panelId}`) : null;
+
+      button.addEventListener('click', () => {
+        const next =
+          button.getAttribute('aria-expanded') !== 'true';
+        button.setAttribute('aria-expanded', String(next));
+
+        if (panel instanceof HTMLElement) {
+          if (next) {
+            panel.hidden = false;
+            // Reflow forzado: el navegador registra el estado colapsado
+            // (0fr) antes de abrir; si no, la transición de altura no corre
+            // desde `display: none`.
+            void panel.offsetHeight;
+            panel.classList.add('is-open');
+          } else {
+            panel.classList.remove('is-open');
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+              panel.hidden = true;
+            } else {
+              panel.addEventListener(
+                'transitionend',
+                () => {
+                  if (!panel.classList.contains('is-open')) {
+                    panel.hidden = true;
+                  }
+                },
+                { once: true },
+              );
+            }
+          }
+        }
+
+        const icon = button.querySelector('[data-faq-icon]');
+        if (icon instanceof HTMLElement) {
+          icon.textContent = next ? '−' : '+';
+        }
+      });
+    });
+  }
+</script>

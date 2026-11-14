@@ -1,0 +1,224 @@
+---
+/**
+ * Portada ES (`/`): renderiza la Page configurada como portada en
+ * WordPress (`getFrontPage('es')`, con respaldo `inicio`) mediante el
+ * render genérico (título + contenido). Sin contenido, conserva la
+ * estructura mínima anterior. La contraparte EN es la raíz `/en/`
+ * (convención i18n, sin conocimiento de la página concreta).
+ */
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import Layout from '../layouts/Layout.astro';
+import Container from '../components/ui/Container.astro';
+import EditorialWrapper from '../components/ui/EditorialWrapper.astro';
+import Hero from '../components/home/Hero.astro';
+import Expertise from '../components/home/Expertise.astro';
+import CommunityModel from '../components/home/CommunityModel.astro';
+import Process from '../components/home/Process.astro';
+import Projects from '../components/home/Projects.astro';
+import Faq from '../components/home/Faq.astro';
+import FinalCta from '../components/home/FinalCta.astro';
+import type { LocaleUrls } from '../lib/routes';
+import { proyectosBaseUrl, serviceDetailUrl } from '../lib/routes';
+import { getFrontPage } from '../lib/wordpress/pages';
+import { getLandingPageVisibility } from '../lib/wordpress/landingPage';
+import { wpFetch } from '../lib/wordpress/client';
+import { wpRoutes } from '../lib/wordpress/routes';
+import {
+  buildTechnologyMap,
+  getFeaturedProjects,
+  getProjectImage,
+  getTechnologies,
+} from '../lib/wordpress/projects';
+import { stripHtml } from '../lib/wordpress/text';
+import type {
+  WpMedia,
+  WpServiceItem,
+  WpServiceSummary,
+} from '../lib/wordpress/types';
+
+export const prerender = true;
+
+const page = await getFrontPage('es').catch(() => null);
+const visibility = await getLandingPageVisibility();
+
+const localeUrls: LocaleUrls = {
+  es: Astro.url.pathname,
+  en: getRelativeLocaleUrl('en', '/'),
+};
+
+const title = page ? stripHtml(page.title.rendered) : 'GussWare';
+const description = page
+  ? stripHtml(page.excerpt.rendered).slice(0, 160)
+  : undefined;
+const hero = page?.acf?.hero ?? null;
+const showHero = visibility.show_hero;
+const expertise = page?.acf?.expertise ?? null;
+const showExpertise = visibility.show_expertise;
+const technology = page?.acf?.technology ?? null;
+const showTechnology = visibility.show_technology;
+
+// RGW-292: ítems de la sección Servicios desde el catálogo CPT
+// `service` (fuente de verdad, locale `es`); sin catálogo, la sección
+// usa los ítems ACF (fallback en el componente).
+let serviceItems: WpServiceItem[] = [];
+
+try {
+  const list = await wpFetch<WpServiceSummary[]>(wpRoutes.services('es'));
+
+  if (Array.isArray(list)) {
+    serviceItems = list.map((item) => ({
+      title: stripHtml(item.title.rendered),
+      // RGW-272: el extracto del CPT puede venir nulo; se usa la
+      // descripción del propio servicio en el catálogo.
+      description: stripHtml(
+        item.excerpt?.rendered || item.acf?.hero?.intro_description || '',
+      ),
+      // RGW-EP09-07-03: cada card enlaza a su detalle.
+      url: serviceDetailUrl('es', item.slug),
+      // El icono lo configura WordPress (`acf.hero.icono`); si no hay
+      // valor, el componente aplica su fallback por palabra clave.
+      icon: item.acf?.hero?.icono ?? undefined,
+    }));
+  }
+} catch {
+  // Sin catálogo: la sección se renderiza con ítems ACF.
+}
+
+// RGW-321: proyecto destacado del Home desde el CPT `projects`
+// (fuente de verdad, locale `es`, solo publicados con `is_featured`,
+// ordenados por `display_order`). Sin destacados o ante un fallo, la
+// sección conserva su contenido de referencia sin romper el Home.
+const featuredProjects = await getFeaturedProjects('es');
+const homeProject = featuredProjects[0] ?? null;
+
+let homeProjectTitle = '';
+let homeProjectDescription = '';
+let homeProjectCapabilities: string[] = [];
+let homeProjectImage: { src: string; alt: string } | null = null;
+let homeProjectCounter = '';
+
+if (homeProject) {
+  homeProjectTitle = stripHtml(homeProject.title.rendered);
+  homeProjectDescription = stripHtml(
+    homeProject.acf?.short_description ||
+      homeProject.excerpt?.rendered ||
+      '',
+  );
+  const [resolvedImage, technologies] = await Promise.all([
+    getProjectImage(homeProject),
+    getTechnologies(),
+  ]);
+  homeProjectImage = resolvedImage;
+  const technologyMap = buildTechnologyMap(technologies);
+  homeProjectCapabilities = (homeProject.technologies ?? [])
+    .map((id) => technologyMap[id])
+    .filter((name): name is string => Boolean(name));
+  homeProjectCounter = `${String(1).padStart(2, '0')} / ${String(featuredProjects.length).padStart(2, '0')}`;
+}
+
+const process = page?.acf?.process ?? null;
+const showProcess = visibility.show_process;
+const finalCta = page?.acf?.final_cta ?? null;
+const showFinalCta = visibility.show_final_cta;
+const faq = page?.acf?.faq ?? null;
+const showFaq = visibility.show_faq;
+const showProjects = visibility.show_projects;
+
+const heroImageId = hero?.image ?? null;
+let heroImage: { src: string; alt: string } | null = null;
+
+if (heroImageId) {
+  try {
+    const media = await wpFetch<WpMedia>(wpRoutes.media(heroImageId));
+
+    if (media?.source_url) {
+      heroImage = {
+        src: media.source_url,
+        alt:
+          media.alt_text ||
+          media.title?.rendered ||
+          stripHtml(page?.title?.rendered ?? ''),
+      };
+    }
+  } catch {
+    // Sin imagen: el Hero se renderiza sin bloque visual.
+  }
+}
+
+const stepImages = await Promise.all(
+  (process?.steps ?? []).map(async (step) => {
+    if (!step.image) return null;
+    try {
+      const media = await wpFetch<WpMedia>(wpRoutes.media(step.image));
+
+      if (media?.source_url) {
+        return {
+          src: media.source_url,
+          alt: media.alt_text || step.title,
+        };
+      }
+    } catch {
+      // Sin imagen: el paso se renderiza con bloque neutro.
+    }
+    return null;
+  }),
+);
+---
+
+<Layout
+  title={page ? `${title} — GussWare` : 'GussWare — Design System'}
+  description={description}
+  localeUrls={localeUrls}
+>
+  {page && hero ? (
+    <>
+      {showHero && <Hero hero={hero} image={heroImage} />}
+      {expertise && showExpertise && (
+        <Expertise
+          expertise={expertise}
+          items={serviceItems}
+          id="servicios"
+        />
+      )}
+      {process && showProcess && (
+        <Process process={process} images={stepImages} id="como-trabajamos" />
+      )}
+      {technology && showTechnology && (
+        <CommunityModel technology={technology} id="nuestro-modelo" />
+      )}
+      {/* RGW-321: sección Home de Proyectos integrada con el CPT
+          `projects` (primer destacado por `display_order`); sin datos,
+          conserva la maquetación de referencia. Enlace al listado real
+          (`/proyectos`). */}
+      {showProjects && (
+        <>
+          {homeProject ? (
+            <Projects
+              title={homeProjectTitle}
+              description={homeProjectDescription}
+              capabilities={homeProjectCapabilities}
+              counter={homeProjectCounter}
+              linkHref={proyectosBaseUrl('es')}
+              image={homeProjectImage}
+            />
+          ) : (
+            <Projects linkHref={proyectosBaseUrl('es')} />
+          )}
+        </>
+      )}
+      {faq && showFaq && <Faq faq={faq} id="preguntas" />}
+      {finalCta && showFinalCta && <FinalCta finalCta={finalCta} />}
+    </>
+  ) : (
+    page && (
+      <Container>
+        <EditorialWrapper>
+          <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6">
+            {title}
+          </h1>
+          <div set:html={page.content.rendered} />
+        </EditorialWrapper>
+      </Container>
+    )
+  )}
+</Layout>

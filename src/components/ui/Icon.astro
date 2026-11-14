@@ -1,0 +1,110 @@
+---
+/**
+ * RGW-107 — Icon global reutilizable.
+ *
+ * El proyecto no dispone de Lucide ni de otra biblioteca compatible y las
+ * reglas prohíben agregar dependencias, por lo que el componente resuelve
+ * los iconos necesarios para Button/Link con trazados inline estilo Lucide
+ * (viewBox 24, `stroke="currentColor"`, extremos redondeados):
+ * - `arrow-right` (acciones y enlaces internos);
+ * - `arrow-outward` (enlaces externos, patrón del Footer);
+ * - `chevron-right` (separador de `Breadcrumbs`, patrón de Stitch);
+ * - `facebook`, `x`, `tiktok` (redes sociales de Contacto; glyphs de marca
+ *   con `fill="currentColor"`, sin stroke);
+ * - `search` (buscador del Blog, patrón de Stitch);
+ * - `clock` (tiempo de lectura del destacado, patrón de Stitch);
+ * - `calendar` (fecha del artículo, patrón de Stitch);
+ * - `web-development` (navegador/ventana, card Web de Expertise Stitch
+ *   `GussWare Home-V0.1.0`, `data-icon="web"`);
+ * - `mobile-development` (smartphone, card Mobile de Expertise Stitch,
+ *   `data-icon="smartphone"`);
+ * - `custom-software` (terminal `>_` en ventana, card Custom de
+ *   Expertise Stitch, `data-icon="terminal"`);
+ * - `api-integration` (chevrones en cruz + rombo, card APIs de
+ *   Expertise Stitch, `data-icon="api"`);
+ * - `devops-infrastructure` (nube, card DevOps de Expertise Stitch,
+ *   `data-icon="cloud"`);
+ * - `consulting` (bombilla, card Consulting de Expertise Stitch,
+ *   `data-icon="lightbulb"`);
+ * - `verified-talent` (sello con check, mini Trust Stitch
+ *   `data-icon="verified"`);
+ * - `domain-expertise` (edificio, mini Trust Stitch `data-icon="domain"`);
+ * - `secure-design` (escudo con check, mini Trust Stitch
+ *   `data-icon="security"`);
+ * - `scalable-solutions` (flecha ascendente, mini Trust Stitch
+ *   `data-icon="trending_up"`);
+ * - `settings` (engranaje, gráfico modular del Final CTA Stitch
+ *   `GussWare Home-V0.1.0`, `data-icon="precision_manufacturing"`);
+ * - `building` (edificio, nodo Client del diagrama Community Model);
+ * - `network` (nodos conectados, nodo Core del diagrama);
+ * - `code` (chevrones `</>`, nodo Developer del diagrama);
+ * - `pen-tool` (pluma, nodo Designer del diagrama);
+ * - `database` (cilindro, nodo Backend del diagrama);
+ * - `rocket` (cohete, nodo Solution del diagrama);
+ * - `arrow-down` (flecha abajo, conectores mobile del diagrama);
+ * - `arrow-left` (flecha atrás, botón Previous del stepper Process);
+ * - `flexible-teams` (personas, bento Community Model Stitch
+ *   `data-icon="groups"`);
+ * - `specialized-skills` (medalla, bento Stitch
+ *   `data-icon="workspace_premium"`);
+ * - `direct-collaboration` (apretón de manos, bento Stitch
+ *   `data-icon="handshake"`);
+ * - `agile-structure` (velocímetro, bento Stitch `data-icon="speed"`).
+ * Los nombres de Expertise son estables (kebab-case, describen la
+ * capacidad) y no dependen del SVG original.
+ * No se agregan más iconos que estos.
+ *
+ * Tamaños del sistema (`size-3/4/5/6/8/10`, clases literales para que
+ * Tailwind las genere) y pesos (`standard` 1.5px, `emphasis` 2px).
+ * El color se hereda del texto (`currentColor`, como en Stitch).
+ *
+ * RGW-304 — Este es el único mecanismo de iconos para el marcado del
+ * proyecto. Excepciones documentadas: `MenuButton.astro` (hamburguesa,
+ * fuera de catálogo) y los data-URIs del CSS global de `LegalView`
+ * (contenido WP inyectado con `set:html`, fuera del alcance de Astro).
+ *
+ * Los trazados viven en `ui/icon-catalog.ts` (`ICON_PATHS`), junto con
+ * `ICON_NAMES`: es la fuente única que permite a otros componentes
+ * validar un nombre de icono (por ejemplo, `acf.hero.icono` del detalle
+ * de servicio) sin duplicar el catálogo.
+ */
+import { ICON_PATHS } from './icon-catalog';
+
+interface Props {
+  name: string;
+  size?: 3 | 4 | 5 | 6 | 8 | 10;
+  weight?: 'standard' | 'emphasis';
+  class?: string;
+}
+
+const {
+  name,
+  size = 4,
+  weight = 'standard',
+  class: className = '',
+} = Astro.props;
+
+const sizes: Record<NonNullable<Props['size']>, string> = {
+  3: 'size-3',
+  4: 'size-4',
+  5: 'size-5',
+  6: 'size-6',
+  8: 'size-8',
+  10: 'size-10',
+};
+
+
+---
+
+<svg
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width={weight === 'emphasis' ? 2 : 1.5}
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class={`${sizes[size]} ${className}`}
+  aria-hidden="true"
+>
+  <Fragment set:html={ICON_PATHS[name]} />
+</svg>

@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="es-MX" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GussWare - DevOps y Soporte Técnico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Source Sans 3"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              primary: '#004A98',
+              deep: '#00346E',
+              secondary: '#2164A6',
+              accent: '#FF5000',
+              ink: '#242126',
+              muted: '#5C6068',
+              surface: '#FFFFFF',
+              surfaceAlt: '#F2F2F2',
+              highlight: '#FFD8D8',
+            }
+          },
+          maxWidth: {
+            container: '1280px',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      color: #242126;
+      background-color: #FFFFFF;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    * {
+      border-radius: 0px !important;
+    }
+    .line-clamp-custom {
+      max-width: 70ch;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-white text-brand-ink selection:bg-brand-highlight selection:text-brand-ink">
+
+  <!-- ==========================================
+       1. GLOBAL HEADER / NAVIGATION
+       ========================================== -->
+  <header class="sticky top-0 z-50 w-full bg-white border-b border-[#dadada]">
+    <div class="max-w-container mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
+      <!-- Brand Logo / Wordmark -->
+      <a href="/" class="flex items-center gap-3 group focus:outline-none focus:ring-1 focus:ring-brand-primary" aria-label="GussWare Home">
+        <div class="w-8 h-8 flex-shrink-0">
+          <svg viewBox="0 0 1333.33 1333.33" class="w-full h-full block">
+            <g>
+              <path d="M 9987.74,10000 H 11.1797 V 7535.99 H 9987.74 V 10000" fill="#004a98" transform="matrix(0.13333333,0,0,-0.13333333,0,1333.3333)" />
+              <path d="M 11.1797,4931.37 H 2408.24 V 2400.4 H 4939.2 V 0 H 11.1797 v 4931.37" fill="#004a98" transform="matrix(0.13333333,0,0,-0.13333333,0,1333.3333)" />
+              <path d="M 9988.82,0.410156 H 7586.94 V 3638.56 H 3948.78 V 6038.3 H 9988.82 V 0.410156" fill="#ff5000" transform="matrix(0.13333333,0,0,-0.13333333,0,1333.3333)" />
+            </g>
+          </svg>
+        </div>
+        <span class="text-2xl font-bold tracking-tight text-[#242126] uppercase">GussWare</span>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex items-center space-x-10 text-[17px] font-medium text-brand-ink" aria-label="Navegación principal">
+        <a href="/services" class="text-brand-primary border-b-2 border-brand-primary pb-0.5 font-semibold">Servicios</a>
+        <a href="/how-we-work" class="text-brand-muted hover:text-brand-primary transition-colors">Cómo trabajamos</a>
+        <a href="/projects" class="text-brand-muted hover:text-brand-primary transition-colors">Proyectos</a>
+        <a href="/community" class="text-brand-muted hover:text-brand-primary transition-colors">Comunidad</a>
+      </nav>
+
+      <!-- Primary Action CTA -->
+      <div class="flex items-center">
+        <a href="/contact" class="inline-flex items-center justify-center px-6 py-3 bg-brand-accent text-white text-[15px] font-bold tracking-wide hover:bg-[#e04600] active:scale-[0.99] transition-all">
+          Hablemos
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       2. HERO SECTION
+       ========================================== -->
+  <section class="bg-white pt-10 pb-24 border-b border-[#dadada]">
+    <div class="max-w-container mx-auto px-6 lg:px-12">
+      <!-- Breadcrumb -->
+      <nav class="mb-8" aria-label="Ruta de navegación">
+        <ol class="flex items-center space-x-2 text-[14px] text-brand-muted font-normal">
+          <li><a href="/" class="hover:text-brand-primary transition-colors">Inicio</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li><a href="/services" class="hover:text-brand-primary transition-colors">Servicios</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li class="text-brand-ink font-medium" aria-current="page">DevOps y Soporte Técnico</li>
+        </ol>
+      </nav>
+
+      <!-- Eyebrow -->
+      <div class="flex items-center gap-3 mb-6">
+        <span class="w-3 h-3 bg-brand-accent inline-block"></span>
+        <span class="text-[13px] tracking-[0.2em] uppercase font-bold text-brand-primary">DEVOPS Y SOPORTE TÉCNICO</span>
+      </div>
+
+      <!-- Hero Grid Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+        <!-- Left: Main Title, Lead, and CTAs (Col 1-7) -->
+        <div class="lg:col-span-7">
+          <h1 class="text-[44px] md:text-[56px] lg:text-[64px] font-extrabold text-brand-ink leading-[1.08] tracking-tight mb-8">
+            Actualiza tus sistemas sin convertir cada cambio en un riesgo
+          </h1>
+          <p class="text-[18px] md:text-[19px] text-brand-muted leading-relaxed mb-10 line-clamp-custom font-normal">
+            Una actualización mal aplicada o un servidor sin supervisión puede interrumpir tu operación. Automatizamos tareas, organizamos las publicaciones y damos seguimiento a la infraestructura para que puedas administrar tus sistemas con mayor control.
+          </p>
+          
+          <div class="flex flex-wrap items-center gap-6 pt-2">
+            <a href="/contact" class="inline-flex items-center justify-center px-8 py-4 bg-brand-accent text-white text-[16px] font-bold tracking-wide hover:bg-[#e04600] active:scale-[0.99] transition-all">
+              Hablemos de tu operación
+            </a>
+            <a href="#soluciones" class="inline-flex items-center text-[16px] font-bold text-brand-primary hover:text-brand-deep transition-colors group">
+              <span>Ver soluciones</span>
+              <span class="ml-2 group-hover:translate-y-0.5 transition-transform">↓</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Three Stacked Metric Cards (Col 8-12) -->
+        <div class="lg:col-span-5 flex flex-col divide-y divide-[#dadada] border-t lg:border-t-0 lg:border-l border-[#dadada] lg:pl-10">
+          <!-- Stack Item 01 -->
+          <div class="py-6 first:pt-0">
+            <span class="block text-[32px] font-extrabold text-brand-primary leading-none mb-2">01</span>
+            <h3 class="text-[19px] font-bold text-brand-ink mb-1.5">Cambios controlados</h3>
+            <p class="text-[15px] text-brand-muted leading-relaxed">Publicaciones con validaciones y reversión cuando sea posible</p>
+          </div>
+          <!-- Stack Item 02 -->
+          <div class="py-6">
+            <span class="block text-[32px] font-extrabold text-brand-primary leading-none mb-2">02</span>
+            <h3 class="text-[19px] font-bold text-brand-ink mb-1.5">Menos tareas manuales</h3>
+            <p class="text-[15px] text-brand-muted leading-relaxed">Procesos técnicos automatizados</p>
+          </div>
+          <!-- Stack Item 03 -->
+          <div class="py-6 last:pb-0">
+            <span class="block text-[32px] font-extrabold text-brand-primary leading-none mb-2">03</span>
+            <h3 class="text-[19px] font-bold text-brand-ink mb-1.5">Problemas visibles</h3>
+            <p class="text-[15px] text-brand-muted leading-relaxed">Alertas para detectar fallas a tiempo</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       3. SECTION 01: EL PROBLEMA (White)
+       ========================================== -->
+  <section class="bg-white py-[120px] border-b border-[#dadada]">
+    <div class="max-w-container mx-auto px-6 lg:px-12">
+      <!-- Section Number / Eyebrow -->
+      <div class="flex items-center gap-2 mb-4">
+        <span class="text-[13px] font-bold text-brand-primary uppercase tracking-[0.2em]">01 — EL PROBLEMA</span>
+      </div>
+
+      <!-- Problem Header (Asymmetric Grid) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 mb-16 items-start">
+        <div class="lg:col-span-7">
+          <h2 class="text-[36px] md:text-[42px] font-bold text-brand-ink leading-tight">
+            Evita que un problema técnico se convierta en un problema para tu negocio
+          </h2>
+        </div>
+        <div class="lg:col-span-5 lg:pt-2">
+          <p class="text-[17px] text-brand-muted leading-relaxed line-clamp-custom">
+            Los sistemas pueden presentar fallas por actualizaciones, falta de recursos, errores de configuración o copias de seguridad que no funcionan como se esperaba.
+          </p>
+        </div>
+      </div>
+
+      <!-- Three Numbered Issue Rows -->
+      <div class="border-t border-[#dadada] divide-y divide-[#dadada] mb-12">
+        <div class="py-7 grid grid-cols-1 md:grid-cols-12 gap-4 items-baseline">
+          <span class="md:col-span-2 text-[28px] font-bold text-brand-primary leading-none">01</span>
+          <p class="md:col-span-10 text-[18px] font-semibold text-brand-ink leading-relaxed">
+            Una actualización mal aplicada interrumpe la operación.
+          </p>
+        </div>
+        <div class="py-7 grid grid-cols-1 md:grid-cols-12 gap-4 items-baseline">
+          <span class="md:col-span-2 text-[28px] font-bold text-brand-primary leading-none">02</span>
+          <p class="md:col-span-10 text-[18px] font-semibold text-brand-ink leading-relaxed">
+            Nadie revisa los recursos, la configuración o las copias de seguridad hasta que algo falla.
+          </p>
+        </div>
+        <div class="py-7 grid grid-cols-1 md:grid-cols-12 gap-4 items-baseline">
+          <span class="md:col-span-2 text-[28px] font-bold text-brand-primary leading-none">03</span>
+          <p class="md:col-span-10 text-[18px] font-semibold text-brand-ink leading-relaxed">
+            Cuando hay una incidencia, no existe un proceso claro para atenderla.
+          </p>
+        </div>
+      </div>
+
+      <!-- Architectural Tags Footnote -->
+      <div class="pt-4 border-t border-[#dadada]">
+        <p class="text-[13px] font-semibold tracking-wider text-brand-muted uppercase">
+          Infraestructura · Despliegues · Copias de seguridad · Monitorización · Incidencias · Mantenimiento técnico
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       4. SECTION 02: QUÉ PUEDES CONTRATAR (#F2F2F2)
+       ========================================== -->
+  <section id="soluciones" class="bg-brand-surfaceAlt py-[120px] border-b border-[#dadada]">
+    <div class="max-w-container mx-auto px-6 lg:px-12">
+      <!-- Section Number / Eyebrow -->
+      <div class="flex items-center gap-2 mb-4">
+        <span class="text-[13px] font-bold text-brand-primary uppercase tracking-[0.2em]">02 — QUÉ PUEDES CONTRATAR</span>
+      </div>
+
+      <!-- Section Title & Description -->
+      <div class="max-w-3xl mb-16">
+        <h2 class="text-[36px] md:text-[42px] font-bold text-brand-ink leading-tight mb-4">
+          Controla las publicaciones, la infraestructura y las incidencias
+        </h2>
+        <p class="text-[18px] text-brand-muted leading-relaxed line-clamp-custom">
+          Organizamos los procesos necesarios para actualizar tus sistemas, mantener su infraestructura y detectar problemas antes de que se conviertan en interrupciones mayores.
+        </p>
+      </div>
+
+      <!-- Three Equal Square Cards (White, 1px border) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 items-stretch">
+        <!-- Card 01 -->
+        <div class="bg-white border border-[#dadada] p-8 flex flex-col justify-between">
+          <div>
+            <span class="text-[36px] font-bold text-brand-primary block leading-none mb-4">01</span>
+            <h3 class="text-[22px] font-bold text-brand-ink mb-3 leading-snug">Publicaciones controladas</h3>
+            <p class="text-[15px] text-brand-muted leading-relaxed mb-6">
+              Deja atrás las actualizaciones manuales y los cambios difíciles de revertir. Organizamos el proceso para publicar de forma consistente y reducir el riesgo de errores.
+            </p>
+            <div class="border-t border-[#dadada] my-5"></div>
+            <div class="mb-6">
+              <span class="text-[12px] font-bold tracking-[0.15em] uppercase text-brand-primary block mb-3">QUÉ RECIBES</span>
+              <ul class="space-y-2.5 text-[14px] text-brand-ink font-normal">
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-accent font-bold mt-0.5">•</span>
+                  <span>Proceso automatizado para publicar nuevas versiones</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-accent font-bold mt-0.5">•</span>
+                  <span>Pruebas antes de aplicar cambios en producción</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-accent font-bold mt-0.5">•</span>
+                  <span>Procedimiento de reversión cuando la arquitectura lo permita</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-accent font-bold mt-0.5">•</span>
+                  <span>Entornos separados para desarrollo, pruebas y producción</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-accent font-bold mt-0.5">•</span>
+                  <span>Registro de las versiones publicadas y sus resultados</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="pt-5 border-t border-[#dadada] bg-[#fafafa] -mx-8 -mb-8 p-6">
+            <p class="text-[13px] text-brand-muted leading-normal">
+              <strong class="text-brand-ink font-semibold">Beneficio:</strong> Cambios más previsibles y menos riesgo de interrupción.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 02 -->
+        <div class="bg-white border border-[#dadada] p-8 flex flex-col justify-between">
+          <div>
+            <span class="text-[36px] font-bold text-brand-primary block leading-none mb-4">02</span>
+            <h3 class="text-[22px] font-bold text-brand-ink mb-3 leading-snug">Infraestructura y copias de seguridad</h3>
+            <p class="text-[15px] text-brand-muted leading-relaxed mb-6">
+              Administra tus servidores y recursos técnicos con una configuración acorde con las necesidades de tus aplicaciones.
+            </p>
+            <div class="border-t border-[#dadada] my-5"></div>
+            <div class="mb-6">
+              <span class="text-[12px] font-bold tracking-[0.15em] uppercase text-brand-primary block mb-3">QUÉ RECIBES</span>
+              <ul class="space-y-2.5 text-[14px] text-brand-ink font-normal">
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-accent font-bold mt-0.5">•</span>
+                  <span>Configuración y administración de servidores o infraestructura en la nube</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-accent font-bold mt-0.5">•</span>
+                  <span>Revisión del consumo de recursos y la capacidad</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-accent font-bold mt-0.5">•</span>
+                  <span>Copias de seguridad automáticas con pruebas de restauración</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-accent font-bold mt-0.5">•</span>
+                  <span>Actualizaciones de seguridad y mantenimiento técnico</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-accent font-bold mt-0.5">•</span>
+                  <span>Procedimientos documentados para la recuperación ante fallas</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="pt-5 border-t border-[#dadada] bg-[#fafafa] -mx-8 -mb-8 p-6">
+            <p class="text-[13px] text-brand-muted leading-normal">
+              <strong class="text-brand-ink font-semibold">Beneficio:</strong> Una base operativa más ordenada y recuperable.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 03 -->
+        <div class="bg-white border border-[#dadada] p-8 flex flex-col justify-between">
+          <div>
+            <span class="text-[36px] font-bold text-brand-primary block leading-none mb-4">03</span>
+            <h3 class="text-[22px] font-bold text-brand-ink mb-3 leading-snug">Supervisión y soporte técnico</h3>
+            <p class="text-[15px] text-brand-muted leading-relaxed mb-6">
+              Identifica problemas de funcionamiento y cuenta con un proceso definido para atender las incidencias de tus sistemas.
+            </p>
+            <div class="border-t border-[#dadada] my-5"></div>
+            <div class="mb-6">
+              <span class="text-[12px] font-bold tracking-[0.15em] uppercase text-brand-primary block mb-3">QUÉ RECIBES</span>
+              <ul class="space-y-2.5 text-[14px] text-brand-ink font-normal">
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-accent font-bold mt-0.5">•</span>
+                  <span>Alertas ante fallas o comportamientos fuera de los parámetros establecidos</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-accent font-bold mt-0.5">•</span>
+                  <span>Supervisión de los servicios y recursos configurados</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-accent font-bold mt-0.5">•</span>
+                  <span>Atención de incidencias con horarios y tiempos de respuesta acordados</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-accent font-bold mt-0.5">•</span>
+                  <span>Revisiones preventivas de la infraestructura</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-brand-accent font-bold mt-0.5">•</span>
+                  <span>Reportes de problemas, acciones realizadas y recomendaciones</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="pt-5 border-t border-[#dadada] bg-[#fafafa] -mx-8 -mb-8 p-6">
+            <p class="text-[13px] text-brand-muted leading-normal">
+              <strong class="text-brand-ink font-semibold">Beneficio:</strong> Problemas detectados a tiempo y un proceso claro para atenderlos.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ghost Link Below Cards -->
+      <div class="pt-4">
+        <a href="/contact" class="inline-flex items-center text-[16px] font-bold text-brand-primary hover:text-brand-deep transition-colors group">
+          <span>Hablemos de tu operación</span>
+          <span class="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       5. SECTION 03: CÓMO TRABAJAMOS (#F2F2F2)
+       ========================================== -->
+  <section class="bg-brand-surfaceAlt py-[120px] border-b border-[#dadada]">
+    <div class="max-w-container mx-auto px-6 lg:px-12">
+      <!-- Section Number / Eyebrow -->
+      <div class="flex items-center gap-2 mb-4">
+        <span class="text-[13px] font-bold text-brand-primary uppercase tracking-[0.2em]">03 — CÓMO TRABAJAMOS</span>
+      </div>
+
+      <!-- Section Title & Description -->
+      <div class="max-w-3xl mb-16">
+        <h2 class="text-[36px] md:text-[42px] font-bold text-brand-ink leading-tight mb-4">
+          Una operación técnica más controlada
+        </h2>
+        <p class="text-[18px] text-brand-muted leading-relaxed line-clamp-custom">
+          Revisamos el estado de tus sistemas, priorizamos los riesgos y establecemos los procesos necesarios para mantenerlos y actualizarlos.
+        </p>
+      </div>
+
+      <!-- Static Horizontal 4-Step Stepper -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
+        <!-- Step 1 -->
+        <div class="bg-white border border-[#dadada] p-6 relative">
+          <div class="w-8 h-8 bg-brand-primary text-white text-[13px] font-bold flex items-center justify-center mb-4">
+            01
+          </div>
+          <h3 class="text-[18px] font-bold text-brand-ink mb-2">Revisar</h3>
+          <p class="text-[14px] text-brand-muted leading-relaxed">
+            Analizamos la infraestructura, los procesos de publicación y las necesidades de operación.
+          </p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="bg-white border border-[#dadada] p-6 relative">
+          <div class="w-8 h-8 bg-[#dadada] text-brand-ink text-[13px] font-bold flex items-center justify-center mb-4">
+            02
+          </div>
+          <h3 class="text-[18px] font-bold text-brand-ink mb-2">Automatizar</h3>
+          <p class="text-[14px] text-brand-muted leading-relaxed">
+            Identificamos tareas repetitivas que pueden ejecutarse con menos intervención manual.
+          </p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="bg-white border border-[#dadada] p-6 relative">
+          <div class="w-8 h-8 bg-[#dadada] text-brand-ink text-[13px] font-bold flex items-center justify-center mb-4">
+            03
+          </div>
+          <h3 class="text-[18px] font-bold text-brand-ink mb-2">Implementar</h3>
+          <p class="text-[14px] text-brand-muted leading-relaxed">
+            Configuramos los procesos, las copias de seguridad y las herramientas de supervisión acordadas.
+          </p>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="bg-white border border-[#dadada] p-6 relative">
+          <div class="w-8 h-8 bg-brand-accent text-white text-[13px] font-bold flex items-center justify-center mb-4">
+            04
+          </div>
+          <h3 class="text-[18px] font-bold text-brand-ink mb-2">Supervisar</h3>
+          <p class="text-[14px] text-brand-muted leading-relaxed">
+            Revisamos los indicadores definidos y atendemos las incidencias conforme al servicio establecido.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       6. SECTION 04: QUÉ CUBRIMOS (White, secondary, low emphasis)
+       ========================================== -->
+  <section class="bg-white py-[120px] border-b border-[#dadada]">
+    <div class="max-w-container mx-auto px-6 lg:px-12">
+      <!-- Section Number / Eyebrow -->
+      <div class="flex items-center gap-2 mb-4">
+        <span class="text-[13px] font-bold text-brand-primary uppercase tracking-[0.2em]">04 — QUÉ CUBRIMOS</span>
+      </div>
+
+      <!-- Section Title & Description -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 mb-12 items-start">
+        <div class="lg:col-span-6">
+          <h2 class="text-[32px] md:text-[38px] font-bold text-brand-ink leading-tight">
+            Qué utilizamos para operar tus sistemas
+          </h2>
+        </div>
+        <div class="lg:col-span-6 lg:pt-2">
+          <p class="text-[17px] text-brand-muted leading-relaxed">
+            Seleccionamos las herramientas de automatización, administración y supervisión según la infraestructura existente.
+          </p>
+        </div>
+      </div>
+
+      <!-- Compact 3-Column Strip (Low emphasis, quiet, structured) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#dadada] border-y border-[#dadada] py-8">
+        <!-- Col 1 -->
+        <div class="py-4 md:py-0 md:pr-8">
+          <h4 class="text-[16px] font-bold text-brand-ink uppercase tracking-wider mb-2">Publicación</h4>
+          <p class="text-[15px] text-brand-muted leading-relaxed">
+            Despliegues automatizados · Control de versiones · Entornos de prueba
+          </p>
+        </div>
+
+        <!-- Col 2 -->
+        <div class="py-4 md:py-0 md:px-8">
+          <h4 class="text-[16px] font-bold text-brand-ink uppercase tracking-wider mb-2">Infraestructura</h4>
+          <p class="text-[15px] text-brand-muted leading-relaxed">
+            Servidores · Nube · Copias de seguridad · Administración de recursos
+          </p>
+        </div>
+
+        <!-- Col 3 -->
+        <div class="py-4 md:py-0 md:pl-8">
+          <h4 class="text-[16px] font-bold text-brand-ink uppercase tracking-wider mb-2">Supervisión</h4>
+          <p class="text-[15px] text-brand-muted leading-relaxed">
+            Monitorización · Alertas · Registros · Recuperación ante fallas
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       7. SECTION 05: DUDAS FRECUENTES (#F2F2F2, strict)
+       ========================================== -->
+  <section class="bg-[#F2F2F2] py-[120px] border-b border-[#DADADA]">
+    <div class="max-w-[1280px] mx-auto px-6">
+      <div class="flex items-center gap-2 mb-4 text-xs font-bold uppercase tracking-wider text-brand-secondary">
+        <span>05</span>
+        <span>—</span>
+        <span>DUDAS FRECUENTES</span>
+      </div>
+      <h2 class="text-3xl lg:text-[42px] font-bold text-brand-ink leading-[1.15] tracking-tight mb-12">
+        Lo que suele preguntarse antes de empezar
+      </h2>
+      <div class="border-t border-[#DADADA] divide-y divide-[#DADADA] bg-white border-b border-[#DADADA] mb-8">
+        <!-- Row 1 (OPEN) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-lg lg:text-xl font-bold text-brand-ink">
+              ¿Qué incluye el servicio?
+            </h3>
+            <span class="text-2xl font-bold text-brand-primary flex-shrink-0 leading-none">−</span>
+          </div>
+          <div class="mt-4 pt-4 border-t border-[#DADADA]">
+            <p class="text-base text-brand-muted leading-relaxed max-w-[70ch]">
+              Podemos cubrir publicaciones, infraestructura, copias de seguridad, supervisión y atención de incidencias. Definimos las actividades, los sistemas incluidos y la cobertura antes de comenzar.
+            </p>
+          </div>
+        </div>
+        <!-- Row 2 (CLOSED) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-lg lg:text-xl font-bold text-brand-ink">
+              ¿Necesito cambiar mis servidores actuales?
+            </h3>
+            <span class="text-2xl font-bold text-brand-muted flex-shrink-0 leading-none">+</span>
+          </div>
+        </div>
+        <!-- Row 3 (CLOSED) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-lg lg:text-xl font-bold text-brand-ink">
+              ¿El soporte incluye atención a los usuarios de mi empresa?
+            </h3>
+            <span class="text-2xl font-bold text-brand-muted flex-shrink-0 leading-none">+</span>
+          </div>
+        </div>
+        <!-- Row 4 (CLOSED) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-lg lg:text-xl font-bold text-brand-ink">
+              ¿Cómo sabré qué está pasando con mis sistemas?
+            </h3>
+            <span class="text-2xl font-bold text-brand-muted flex-shrink-0 leading-none">+</span>
+          </div>
+        </div>
+        <!-- Row 5 (CLOSED) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-lg lg:text-xl font-bold text-brand-ink">
+              ¿Atienden fallas fuera del horario laboral?
+            </h3>
+            <span class="text-2xl font-bold text-brand-muted flex-shrink-0 leading-none">+</span>
+          </div>
+        </div>
+        <!-- Row 6 (CLOSED) -->
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center justify-between gap-4 cursor-pointer">
+            <h3 class="text-lg lg:text-xl font-bold text-brand-ink">
+              ¿Cuánto cuesta el servicio?
+            </h3>
+            <span class="text-2xl font-bold text-brand-muted flex-shrink-0 leading-none">+</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <a href="/contact" class="inline-flex items-center gap-1.5 text-sm font-bold text-brand-primary hover:text-brand-deep transition-colors">
+          ¿Te queda otra duda? Escríbenos →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       8. SECTION 06: CIERRE (Deep Blue #00346E)
+       ========================================== -->
+  <section class="bg-brand-deep py-[120px] text-white">
+    <div class="max-w-container mx-auto px-6 lg:px-12">
+      <!-- Section Number / Eyebrow -->
+      <div class="flex items-center gap-2 mb-4">
+        <span class="text-[13px] font-bold text-[#dadada] uppercase tracking-[0.2em]">06 — INICIA TU PROYECTO</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <!-- Left: Text & Action (Col 1-8) -->
+        <div class="lg:col-span-8">
+          <h2 class="text-[38px] md:text-[46px] font-bold leading-tight mb-6">
+            Deja de resolver las fallas sobre la marcha
+          </h2>
+          <p class="text-[18px] text-[#e0e5eb] leading-relaxed mb-10 max-w-2xl font-normal">
+            Cuéntanos qué sistemas utilizas, cómo los administras y qué problemas te preocupan. Identificaremos las prioridades para mejorar su operación.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-6">
+            <a href="/contact" class="inline-flex items-center justify-center px-8 py-4 bg-brand-accent text-white text-[16px] font-bold tracking-wide hover:bg-[#e04600] active:scale-[0.99] transition-all">
+              Revisemos tus sistemas
+            </a>
+            <a href="/services" class="inline-flex items-center text-[16px] font-bold text-white hover:text-[#dadada] transition-colors group">
+              <span>Ver todos los servicios</span>
+              <span class="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Constructivist Geometric Architectural Graphic -->
+        <div class="lg:col-span-4 hidden lg:flex justify-end">
+          <div class="w-64 h-64 border border-[#2164A6] relative p-6 flex flex-col justify-between">
+            <div class="w-12 h-1.5 bg-brand-accent"></div>
+            <div class="space-y-3">
+              <div class="w-full h-px bg-[#2164A6]"></div>
+              <div class="w-3/4 h-px bg-[#2164A6]"></div>
+            </div>
+            <div class="flex items-center justify-between text-[11px] font-mono tracking-widest text-[#a8c5e6] uppercase">
+              <span>Gussware</span>
+              <span>Ops-Core</span>
+            </div>
+            <div class="absolute -bottom-2 -right-2 w-6 h-6 border-r-2 border-b-2 border-brand-accent"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       9. SECTION 07: SERVICIOS RELACIONADOS (White)
+       ========================================== -->
+  <section class="bg-white py-[120px] border-b border-[#dadada]">
+    <div class="max-w-container mx-auto px-6 lg:px-12">
+      <!-- Label / Eyebrow -->
+      <span class="text-[13px] font-bold tracking-[0.2em] text-brand-primary uppercase block mb-3">
+        SIGUE EXPLORANDO
+      </span>
+
+      <!-- Heading -->
+      <h2 class="text-[36px] md:text-[40px] font-bold text-brand-ink leading-tight mb-12">
+        Otros servicios que pueden ayudarte
+      </h2>
+
+      <!-- Three Related Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Card 1 -->
+        <div class="border border-[#dadada] p-8 flex flex-col justify-between hover:border-brand-primary transition-colors">
+          <div>
+            <span class="text-[12px] font-bold tracking-[0.15em] text-brand-muted uppercase block mb-3">SISTEMAS</span>
+            <h3 class="text-[20px] font-bold text-brand-ink mb-3 leading-snug">
+              Integración de APIs y Servicios Externos
+            </h3>
+            <p class="text-[15px] text-brand-muted leading-relaxed mb-6">
+              Deja de copiar datos de un programa a otro
+            </p>
+          </div>
+          <div>
+            <a href="/services/apis" class="inline-flex items-center text-[15px] font-bold text-brand-primary hover:text-brand-deep transition-colors group">
+              <span>Ver servicio</span>
+              <span class="ml-1.5 group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="border border-[#dadada] p-8 flex flex-col justify-between hover:border-brand-primary transition-colors">
+          <div>
+            <span class="text-[12px] font-bold tracking-[0.15em] text-brand-muted uppercase block mb-3">SOFTWARE</span>
+            <h3 class="text-[20px] font-bold text-brand-ink mb-3 leading-snug">
+              Desarrollo a medida
+            </h3>
+            <p class="text-[15px] text-brand-muted leading-relaxed mb-6">
+              Tu empresa no debería tener que adaptarse a un software que no le funciona
+            </p>
+          </div>
+          <div>
+            <a href="/services/custom-software" class="inline-flex items-center text-[15px] font-bold text-brand-primary hover:text-brand-deep transition-colors group">
+              <span>Ver servicio</span>
+              <span class="ml-1.5 group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="border border-[#dadada] p-8 flex flex-col justify-between hover:border-brand-primary transition-colors">
+          <div>
+            <span class="text-[12px] font-bold tracking-[0.15em] text-brand-muted uppercase block mb-3">ESTRATEGIA</span>
+            <h3 class="text-[20px] font-bold text-brand-ink mb-3 leading-snug">
+              Consultoría técnica
+            </h3>
+            <p class="text-[15px] text-brand-muted leading-relaxed mb-6">
+              Decide cómo construir tu proyecto antes de invertir en construirlo
+            </p>
+          </div>
+          <div>
+            <a href="/services/consulting" class="inline-flex items-center text-[15px] font-bold text-brand-primary hover:text-brand-deep transition-colors group">
+              <span>Ver servicio</span>
+              <span class="ml-1.5 group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       10. FOOTER (Strict)
+       ========================================== -->
+  <footer class="bg-brand-surfaceAlt border-t border-[#dadada] pt-16 pb-12">
+    <div class="max-w-container mx-auto px-6 lg:px-12">
+      <!-- Top Grid: Brand & 3 Columns -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-16 border-b border-[#dadada]">
+        <!-- Brand / Identity (Col 1-5) -->
+        <div class="md:col-span-5">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-6 h-6 flex-shrink-0">
+              <svg viewBox="0 0 1333.33 1333.33" class="w-full h-full block">
+                <g>
+                  <path d="M 9987.74,10000 H 11.1797 V 7535.99 H 9987.74 V 10000" fill="#004a98" transform="matrix(0.13333333,0,0,-0.13333333,0,1333.3333)" />
+                  <path d="M 11.1797,4931.37 H 2408.24 V 2400.4 H 4939.2 V 0 H 11.1797 v 4931.37" fill="#004a98" transform="matrix(0.13333333,0,0,-0.13333333,0,1333.3333)" />
+                  <path d="M 9988.82,0.410156 H 7586.94 V 3638.56 H 3948.78 V 6038.3 H 9988.82 V 0.410156" fill="#ff5000" transform="matrix(0.13333333,0,0,-0.13333333,0,1333.3333)" />
+                </g>
+              </svg>
+            </div>
+            <span class="text-xl font-bold tracking-tight text-[#242126] uppercase">GussWare</span>
+          </div>
+          <p class="text-[15px] text-brand-muted font-normal max-w-sm leading-relaxed">
+            Tecnología humana, impacto global
+          </p>
+        </div>
+
+        <!-- Col 1: Servicios (Col 6-8) -->
+        <div class="md:col-span-3">
+          <h4 class="text-[13px] font-bold text-brand-ink uppercase tracking-wider mb-4">Servicios</h4>
+          <ul class="space-y-2.5 text-[14px] text-brand-muted">
+            <li><a href="/services/web" class="hover:text-brand-primary transition-colors">Diseño de sitios web y tiendas en línea</a></li>
+            <li><a href="/services/mobile" class="hover:text-brand-primary transition-colors">Aplicaciones móviles</a></li>
+            <li><a href="/services/apis" class="hover:text-brand-primary transition-colors">Integración de APIs y Servicios Externos</a></li>
+            <li><a href="/services/custom-software" class="hover:text-brand-primary transition-colors">Desarrollo a medida</a></li>
+            <li><a href="/services/consulting" class="hover:text-brand-primary transition-colors">Consultoría técnica</a></li>
+            <li><a href="/services/devops" class="text-brand-primary font-semibold">DevOps y Soporte Técnico</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 2: Explorar (Col 9-10) -->
+        <div class="md:col-span-2">
+          <h4 class="text-[13px] font-bold text-brand-ink uppercase tracking-wider mb-4">Explorar</h4>
+          <ul class="space-y-2.5 text-[14px] text-brand-muted">
+            <li><a href="/how-we-work" class="hover:text-brand-primary transition-colors">Cómo trabajamos</a></li>
+            <li><a href="/projects" class="hover:text-brand-primary transition-colors">Proyectos</a></li>
+            <li><a href="/community" class="hover:text-brand-primary transition-colors">Comunidad</a></li>
+            <li><a href="/contact" class="hover:text-brand-primary transition-colors">Contacto</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Legal (Col 11-12) -->
+        <div class="md:col-span-2">
+          <h4 class="text-[13px] font-bold text-brand-ink uppercase tracking-wider mb-4">Legal</h4>
+          <ul class="space-y-2.5 text-[14px] text-brand-muted">
+            <li><a href="/politica-de-privacidad" class="hover:text-brand-primary transition-colors">Aviso de privacidad</a></li>
+            <li><a href="/terminos-y-condiciones" class="hover:text-brand-primary transition-colors">Términos y condiciones</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom Bar: Copyright Only -->
+      <div class="pt-8 flex flex-col md:flex-row items-center justify-between text-[13px] text-brand-muted">
+        <div>
+          © 2026 GussWare
+        </div>
+        <div class="mt-2 md:mt-0 text-[12px] font-mono tracking-wider uppercase text-gray-400">
+          Constructivist Architecture & Modular Engineering
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

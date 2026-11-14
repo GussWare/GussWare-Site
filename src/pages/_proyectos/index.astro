@@ -1,0 +1,37 @@
+---
+/**
+ * RGW-322 — Índice de proyectos ES (`/proyectos`).
+ *
+ * Ruta fina: obtiene el listado normalizado (`getProjectListing`, con
+ * `searchParams` de la URL para búsqueda, filtros, orden y paginación)
+ * y lo renderiza con `ProjectListView` (compartida con `[locale]`, sin
+ * duplicar lógica). Datos reales del CPT Proyectos, solo publicados en
+ * `es`; sin resultados o ante error, la vista muestra el estado
+ * correspondiente.
+ */
+import Layout from '../../layouts/Layout.astro';
+import ProjectListView from '../../components/projects/ProjectListView.astro';
+import { getProjectListing } from '../../lib/wordpress/projects';
+import { proyectosBaseUrl } from '../../lib/routes';
+
+export const prerender = false;
+
+const data = await getProjectListing({
+  locale: 'es',
+  searchParams: Astro.url.searchParams,
+});
+
+const localeUrls = {
+  es: proyectosBaseUrl('es'),
+  en: proyectosBaseUrl('en'),
+};
+---
+
+<Layout
+  title="Proyectos — GussWare"
+  description="Explora las soluciones tecnológicas, plataformas empresariales y productos digitales que nuestra comunidad de especialistas freelance ha diseñado y desarrollado para clientes en diversos sectores."
+  localeUrls={localeUrls}
+  lang="es"
+>
+  <ProjectListView locale="es" {...data} />
+</Layout>

@@ -1,0 +1,477 @@
+---
+/**
+ * RGW-54 — Ruta comodín multi-idioma.
+ * RGW-55 — Resolución de traducciones vía WordPress + Polylang.
+ * RGW-57 — Páginas de contenido: el editorial proviene de
+ * `page.acf.section_content` y se renderiza con la UI existente de
+ * Contacto (sin rediseño); las Pages sin `section_content` conservan
+ * el render genérico.
+ *
+ * Captura las URLs que no corresponden a páginas Astro existentes
+ * (p. ej. `/contacto/`, `/en/`, `/en/contact/`) sin duplicar páginas
+ * por idioma: las rutas existentes (`/`, `/contact`, `/blog`,
+ * `/blog/[slug]`) tienen prioridad y conservan su comportamiento.
+ *
+ * Distingue `locale` (vía `Astro.currentLocale`, según la
+ * configuración `i18n` de Astro) y `uri` (ruta sin el prefijo de
+ * idioma), y resuelve la Page correspondiente con
+ * `getPageBySlug(uri, locale)` contra `/wp/v2/pages` (parámetros
+ * `slug` + `lang` de Polylang, sin mapas manuales ni fallback entre
+ * idiomas). Sin contenido para `{ locale, uri }`, reescribe a `/404`
+ * (render nativo de la 404 con HTTP 404, sin redirect),
+ * igual que los slugs inexistentes de `/blog/[slug]`.
+ */
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import Layout from '../layouts/Layout.astro';
+import Container from '../components/ui/Container.astro';
+import ContactSection from '../components/contact/ContactSection.astro';
+import EditorialWrapper from '../components/ui/EditorialWrapper.astro';
+import Hero from '../components/home/Hero.astro';
+import Expertise from '../components/home/Expertise.astro';
+import CommunityModel from '../components/home/CommunityModel.astro';
+import Services from '../components/home/Services.astro';
+import Process from '../components/home/Process.astro';
+import Projects from '../components/home/Projects.astro';
+import Faq from '../components/home/Faq.astro';
+import FinalCta from '../components/home/FinalCta.astro';
+import LegalView from '../components/legal/LegalView.astro';
+import ContactForm from '../components/contact/ContactForm.astro';
+import { routes } from '../lib/routes';
+import { serviceDetailUrl } from '../lib/routes';
+import type { LocaleUrls } from '../lib/routes';
+import {
+  getPageById,
+  getPageBySlug,
+  getFrontPage,
+  getPublishedPages,
+} from '../lib/wordpress/pages';
+import { getLanguages } from '../lib/wordpress/languages';
+import { getLandingPageVisibility } from '../lib/wordpress/landingPage';
+import { wpFetch } from '../lib/wordpress/client';
+import { wpRoutes } from '../lib/wordpress/routes';
+import { getSocialMedia } from '../lib/wordpress/socialMedia';
+import {
+  formatLegalDate,
+  getLegalInfo,
+  getLegalSiteUrl,
+  getPageUpdateDate,
+} from '../lib/wordpress/legal';
+import { stripHtml } from '../lib/wordpress/text';
+// RGW-271: configuración del formulario vía GET (Pavel Silinskii CF).
+import {
+  CONTACT_FORM_ID,
+  getContactForm,
+  getContactFormSubmitUrl,
+} from '../lib/contact/forms';
+import type {
+  WpMedia,
+  WpServiceItem,
+  WpServiceSummary,
+} from '../lib/wordpress/types';
+
+export const prerender = true;
+
+/**
+ * Rutas estáticas de la ruta comodín:
+ * - `/en/` (portada inglesa) y `/<slug>/` (contenido institucional y
+ *   legal en español) e `/en/<slug>/` (sus traducciones).
+ *
+ * Las páginas publicadas provienen de WordPress/Polylang
+ * (`getPublishedPages`); la portada de cada idioma se excluye porque
+ * la sirve su propia ruta (`/` y `/en/`).
+ *
+ * Nota: `getStaticPaths` se ejecuta aislada por el compilador de Astro,
+ * así que solo puede usar imports (no constantes del frontmatter).
+ */
+export async function getStaticPaths() {
+  /**
+   * Slugs que ya tienen ruta propia en Astro y no deben generar una
+   * ruta duplicada. En español existen `/servicios`, `/contact`, `/404`,
+   * `/500` y `/navfixturetest`; en inglés solo `/en/servicios` (el
+   * contacto en inglés lo publica WordPress como página traducida).
+   */
+  const reservedEs = new Set([
+    'servicios',
+    'contact',
+    '404',
+    '500',
+    'navfixturetest',
+  ]);
+  const reservedEn = new Set(['servicios']);
+
+  const [pagesEs, pagesEn, frontEs, frontEn] = await Promise.all([
+    getPublishedPages('es'),
+    getPublishedPages('en'),
+    getFrontPage('es'),
+    getFrontPage('en'),
+  ]);
+
+  /** @type {{ params: { uri: string } }[]} */
+  const paths = [{ params: { uri: 'en' } }];
+
+  for (const page of pagesEs) {
+    if (page.id === frontEs?.id || reservedEs.has(page.slug)) {
+      continue;
+    }
+
+    paths.push({ params: { uri: page.slug } });
+  }
+
+  for (const page of pagesEn) {
+    if (page.id === frontEn?.id || reservedEn.has(page.slug)) {
+      continue;
+    }
+
+    paths.push({ params: { uri: `en/${page.slug}` } });
+  }
+
+  return paths;
+}
+
+const locale = Astro.currentLocale ?? 'es';
+const rawUri = (Astro.params.uri ?? '').replace(/^\/+|\/+$/g, '');
+const uri = locale === 'es' ? rawUri : rawUri.split('/').slice(1).join('/');
+
+/**
+ * Ruta actual de la página. En un build estático `Astro.url.pathname`
+ * llega con barra final (`/en/contacto/`), que es la forma canónica
+ * que sirve el sitio y la que emite el sitemap.
+ */
+const currentPath = Astro.url.pathname;
+
+const [page, socialMedia, languages, visibility] = await Promise.all([
+  uri ? getPageBySlug(uri, locale).catch(() => null) : getFrontPage(locale),
+  getSocialMedia(),
+  getLanguages().catch(() => null),
+  getLandingPageVisibility(),
+]);
+
+// RGW-269 — Las dos páginas legales comparten la vista; cada una conserva
+// su slug y el mismo origen WordPress/Polylang.
+const isPrivacyPage =
+  (locale === 'es' && uri === 'politica-de-privacidad') ||
+  (locale === 'en' && uri === 'privacy-policy');
+const isTermsPage =
+  (locale === 'es' && uri === 'terminos-y-condiciones') ||
+  (locale === 'en' && uri === 'terms-and-conditions');
+const isLegalPage = isPrivacyPage || isTermsPage;
+
+if (!page) {
+  Astro.response.status = 404;
+  return Astro.rewrite(routes.notFound);
+}
+
+// RGW-268 — Solo la página legal resuelve datos legales: generales desde
+// `Información legal` y fecha desde el Custom Field de la propia Page.
+// El resto de páginas no toca estas fuentes.
+const legalInfo = isLegalPage ? await getLegalInfo(locale) : null;
+const legalSiteUrl = isTermsPage ? getLegalSiteUrl() : null;
+const updatedLabel = isLegalPage
+  ? formatLegalDate(getPageUpdateDate(page), locale)
+  : null;
+
+const title = stripHtml(page.title.rendered);
+const description = stripHtml(page.excerpt.rendered).slice(0, 160);
+const sectionContent =
+  page.acf && 'section_content' in page.acf
+    ? (page.acf.section_content ?? null)
+    : null;
+const hero = page.acf && 'hero' in page.acf ? (page.acf.hero ?? null) : null;
+const showHero = visibility.show_hero;
+const expertise =
+  page.acf && 'expertise' in page.acf ? (page.acf.expertise ?? null) : null;
+const showExpertise = visibility.show_expertise;
+const technology =
+  page.acf && 'technology' in page.acf ? (page.acf.technology ?? null) : null;
+const showTechnology = visibility.show_technology;
+const servicesAcf =
+  page.acf && 'services' in page.acf ? (page.acf.services ?? null) : null;
+
+// RGW-272: portada en cualquier idioma (`uri === ''` resuelve el front
+// page; `/` lo sirve `index.astro`, `/en/` llega aquí).
+const isHomePage = uri === '';
+
+// RGW-290: la sección "Cómo te ayudamos" (`Services`) se eliminó del
+// Home; en portada no se obtienen ítems del catálogo CPT ni se
+// renderiza la sección. Las páginas no portada conservan su
+// comportamiento existente.
+let serviceItems: WpServiceItem[] = [];
+
+if (!isHomePage && hero && servicesAcf) {
+  try {
+    const list = await wpFetch<WpServiceSummary[]>(wpRoutes.services(locale));
+
+    if (Array.isArray(list)) {
+      serviceItems = list.map((item) => ({
+        title: stripHtml(item.title.rendered),
+        // RGW-272: el extracto del CPT puede venir nulo; se usa la
+        // descripción del propio servicio en el catálogo.
+        description: stripHtml(
+          item.excerpt?.rendered || item.acf?.intro_description || '',
+        ),
+        // RGW-EP09-07-03: cada fila enlaza a su detalle.
+        url: serviceDetailUrl(locale, item.slug),
+      }));
+    }
+  } catch {
+    // Sin catálogo: la sección se renderiza sin ítems.
+  }
+}
+
+const services =
+  !isHomePage && (servicesAcf || serviceItems.length > 0)
+    ? {
+        ...(servicesAcf ?? { eyebrow: '', title: '', description: '' }),
+        items: serviceItems,
+      }
+    : null;
+
+// RGW-292: ítems de la sección Servicios de la portada desde el
+// catálogo CPT `service` (fuente de verdad, locale en curso). Solo
+// portada; las páginas no portada usan ítems ACF. Sin catálogo (p. ej.
+// EN, aún sin servicios traducidos) la sección usa los ítems ACF
+// (fallback en el componente, con i18n existente).
+let homeServiceItems: WpServiceItem[] = [];
+
+if (isHomePage && hero && expertise) {
+  try {
+    const list = await wpFetch<WpServiceSummary[]>(wpRoutes.services(locale));
+
+    if (Array.isArray(list)) {
+      homeServiceItems = list.map((item) => ({
+        title: stripHtml(item.title.rendered),
+        // RGW-272: el extracto del CPT puede venir nulo; se usa la
+        // descripción del propio servicio en el catálogo.
+        description: stripHtml(
+          item.excerpt?.rendered || item.acf?.hero?.intro_description || '',
+        ),
+        // RGW-EP09-07-03: cada card enlaza a su detalle.
+        url: serviceDetailUrl(locale, item.slug),
+        // El icono lo configura WordPress (`acf.hero.icono`); si no hay
+        // valor, el componente aplica su fallback por palabra clave.
+        icon: item.acf?.hero?.icono ?? undefined,
+      }));
+    }
+  } catch {
+    // Sin catálogo: la sección se renderiza con ítems ACF.
+  }
+}
+const process =
+  page.acf && 'process' in page.acf ? (page.acf.process ?? null) : null;
+const showProcess = visibility.show_process;
+const finalCta =
+  page.acf && 'final_cta' in page.acf ? (page.acf.final_cta ?? null) : null;
+const showFinalCta = visibility.show_final_cta;
+const faq = page.acf && 'faq' in page.acf ? (page.acf.faq ?? null) : null;
+const showFaq = visibility.show_faq;
+const showProjects = visibility.show_projects;
+
+// RGW-271: campos del formulario vía GET (solo si la página usa la
+// sección de contacto; `getContactForm` no lanza ante fallos de API).
+const contactForm = sectionContent ? await getContactForm() : null;
+const contactFormSubmitUrl = contactForm
+  ? getContactFormSubmitUrl(
+      contactForm.id !== 'fallback' ? contactForm.id : CONTACT_FORM_ID,
+    )
+  : null;
+
+const heroImageId = hero?.image ?? null;
+let heroImage: { src: string; alt: string } | null = null;
+
+if (heroImageId) {
+  try {
+    const media = await wpFetch<WpMedia>(wpRoutes.media(heroImageId));
+
+    if (media?.source_url) {
+      heroImage = {
+        src: media.source_url,
+        alt:
+          media.alt_text ||
+          media.title?.rendered ||
+          stripHtml(page?.title?.rendered ?? ''),
+      };
+    }
+  } catch {
+    // Sin imagen: el Hero se renderiza sin bloque visual.
+  }
+}
+
+const stepImages = await Promise.all(
+  (process?.steps ?? []).map(async (step) => {
+    if (!step.image) return null;
+    try {
+      const media = await wpFetch<WpMedia>(wpRoutes.media(step.image));
+
+      if (media?.source_url) {
+        return {
+          src: media.source_url,
+          alt: media.alt_text || step.title,
+        };
+      }
+    } catch {
+      // Sin imagen: el paso se renderiza con bloque neutro.
+    }
+    return null;
+  }),
+);
+
+// URLs del selector de idioma: la del locale actual es la URL en curso;
+// la del otro locale usa el slug de la traducción (`translations` de
+// Polylang) cuando existe, o la ruta equivalente genérica en su defecto.
+const otherLocale = locale === 'es' ? 'en' : 'es';
+const translationId = page.translations?.[otherLocale];
+const translatedSlug =
+  typeof translationId === 'number'
+    ? ((await getPageById(translationId).catch(() => null))?.slug ?? null)
+    : null;
+
+const localeUrls: LocaleUrls = {
+  es: currentPath,
+  en: currentPath,
+};
+
+if (uri === '') {
+  // URL raíz: la contraparte es la raíz del otro locale (sin slugs).
+  localeUrls.es = getRelativeLocaleUrl('es', '/');
+  localeUrls.en = getRelativeLocaleUrl('en', '/');
+} else if (locale === 'es') {
+  localeUrls.en = translatedSlug
+    ? getRelativeLocaleUrl('en', translatedSlug)
+    : getRelativeLocaleUrl('en', uri);
+} else {
+  localeUrls.es = translatedSlug
+    ? getRelativeLocaleUrl('es', translatedSlug)
+    : getRelativeLocaleUrl('es', uri);
+}
+
+// hreflang: solo traducciones existentes (la actual siempre existe;
+// la otra, solo si se resolvió su slug). Sin URLs inventadas.
+const alternateUrls: Record<string, string> = {
+  [locale]: currentPath,
+};
+
+if (translatedSlug) {
+  alternateUrls[otherLocale] =
+    locale === 'es'
+      ? getRelativeLocaleUrl('en', translatedSlug)
+      : getRelativeLocaleUrl('es', translatedSlug);
+}
+---
+
+<Layout
+  title={`${title} — GussWare`}
+  description={description}
+  localeUrls={localeUrls}
+  lang={page.lang}
+  seo={{
+    lang: page.lang,
+    yoast: page.yoast_head_json,
+    alternateUrls,
+    languages: languages ?? undefined,
+  }}
+>
+  {isLegalPage ? (
+    <LegalView
+      title={title}
+      content={page.content.rendered}
+      legalInfo={legalInfo}
+      updatedLabel={updatedLabel}
+      siteUrl={legalSiteUrl}
+      locale={locale}
+      variant={isTermsPage ? 'terms' : 'privacy'}
+    />
+  ) : hero ? (
+    <>
+      {showHero && <Hero hero={hero} image={heroImage} />}
+      {expertise && showExpertise && (
+        <Expertise
+          expertise={expertise}
+          items={homeServiceItems}
+          id={
+            isHomePage ? (locale === 'en' ? 'services' : 'servicios') : undefined
+          }
+        />
+      )}
+      {technology && showTechnology && (
+        <CommunityModel
+          technology={technology}
+          id={
+            isHomePage
+              ? locale === 'en'
+                ? 'our-model'
+                : 'nuestro-modelo'
+              : undefined
+          }
+        />
+      )}
+      {services && (
+        <Services
+          services={services}
+          id={
+            isHomePage ? (locale === 'en' ? 'services' : 'servicios') : undefined
+          }
+        />
+      )}
+      {process && showProcess && (
+        <Process
+          process={process}
+          images={stepImages}
+          id={
+            isHomePage
+              ? locale === 'en'
+                ? 'our-process'
+                : 'como-trabajamos'
+              : undefined
+          }
+        />
+      )}
+      {/* RGW-311: sección Home de Proyectos (maquetación Stitch,
+          contenido estático pendiente del CPT; sin integración WP).
+          Solo portada: las páginas no portada conservan su flujo. */}
+      {showProjects && isHomePage && <Projects />}
+      {faq && showFaq && (
+        <Faq
+          faq={faq}
+          id={
+            isHomePage
+              ? locale === 'en'
+                ? 'questions'
+                : 'preguntas'
+              : undefined
+          }
+        />
+      )}
+      {finalCta && showFinalCta && <FinalCta finalCta={finalCta} />}
+    </>
+  ) : sectionContent ? (
+    <ContactSection
+      eyebrow={sectionContent.eyebrow ?? undefined}
+      title={sectionContent.title ?? undefined}
+      description={sectionContent.description ?? undefined}
+      socialText={sectionContent.social_media_text ?? undefined}
+      socialMedia={(socialMedia ?? []).map((social) => ({
+        name: social.name,
+        url: social.url,
+        icon: social.icon,
+      }))}
+    >
+      {/* RGW-271: campos dinámicos desde la API (mismo diseño). */}
+      {contactForm && contactFormSubmitUrl && (
+        <ContactForm
+          fields={contactForm.fields}
+          submitUrl={contactFormSubmitUrl}
+        />
+      )}
+    </ContactSection>
+  ) : (
+    <Container>
+      <EditorialWrapper>
+        <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6">
+          {title}
+        </h1>
+        <div set:html={page.content.rendered} />
+      </EditorialWrapper>
+    </Container>
+  )}
+</Layout>
+{/* RGW-271: la validación vive en `ContactForm` (sin POST todavía). */}

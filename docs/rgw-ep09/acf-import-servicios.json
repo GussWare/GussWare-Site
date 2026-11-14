@@ -1,0 +1,462 @@
+[
+    {
+        "key": "post_type_service",
+        "title": "Servicios",
+        "menu_order": 0,
+        "active": true,
+        "post_type": "service",
+        "labels": {
+            "name": "Servicios",
+            "singular_name": "Servicio"
+        },
+        "description": "",
+        "public": true,
+        "hierarchical": false,
+        "show_ui": true,
+        "show_in_menu": true,
+        "show_in_rest": true,
+        "rest_base": "services",
+        "menu_position": 21,
+        "menu_icon": "dashicons-admin-tools",
+        "supports": [
+            "title",
+            "editor",
+            "excerpt",
+            "thumbnail",
+            "revisions",
+            "custom-fields",
+            "author"
+        ],
+        "taxonomies": [
+            "service_category"
+        ],
+        "has_archive": false,
+        "rewrite": {
+            "permalink_rewrite": "custom_permalink",
+            "slug": "servicios"
+        },
+        "delete_with_user": true
+    },
+    {
+        "key": "taxonomy_service_category",
+        "title": "Categorías de servicio",
+        "menu_order": 0,
+        "active": true,
+        "taxonomy": "service_category",
+        "object_type": [
+            "service"
+        ],
+        "labels": {
+            "name": "Categorías de servicio",
+            "singular_name": "Categoría de servicio"
+        },
+        "description": "",
+        "public": true,
+        "hierarchical": true,
+        "show_ui": true,
+        "show_in_menu": true,
+        "show_in_rest": true,
+        "rest_base": "service-categories",
+        "rewrite": {
+            "permalink_rewrite": "custom_permalink",
+            "slug": "categoria-servicio"
+        }
+    },
+    {
+        "key": "group_gw_service_detail",
+        "title": "Service Detail",
+        "fields": [
+            {
+                "key": "field_gw_svc_intro_eyebrow",
+                "label": "Intro Eyebrow",
+                "name": "intro_eyebrow",
+                "type": "text",
+                "required": 1,
+                "translations": "ignore"
+            },
+            {
+                "key": "field_gw_svc_intro_title",
+                "label": "Intro Title",
+                "name": "intro_title",
+                "type": "text",
+                "required": 1,
+                "translations": "ignore"
+            },
+            {
+                "key": "field_gw_svc_intro_description",
+                "label": "Intro Description",
+                "name": "intro_description",
+                "type": "textarea",
+                "required": 1,
+                "translations": "ignore"
+            },
+            {
+                "key": "field_gw_svc_intro_eyebrow_suffix",
+                "label": "Intro Eyebrow Suffix",
+                "name": "intro_eyebrow_suffix",
+                "type": "text",
+                "required": 0,
+                "translations": "ignore"
+            },
+            {
+                "key": "field_gw_svc_hero_stats",
+                "label": "Hero Stats",
+                "name": "hero_stats",
+                "type": "repeater",
+                "required": 0,
+                "min": 0,
+                "layout": "table",
+                "button_label": "Añadir stat",
+                "translations": "ignore",
+                "sub_fields": [
+                    {
+                        "key": "field_gw_svc_hero_stat_label",
+                        "label": "Label",
+                        "name": "label",
+                        "type": "text",
+                        "required": 1,
+                        "translations": "ignore"
+                    },
+                    {
+                        "key": "field_gw_svc_hero_stat_value",
+                        "label": "Value",
+                        "name": "value",
+                        "type": "text",
+                        "required": 1,
+                        "translations": "ignore"
+                    }
+                ]
+            },
+            {
+                "key": "field_gw_svc_dev_title",
+                "label": "Development Title",
+                "name": "development_title",
+                "type": "text",
+                "required": 1,
+                "translations": "ignore"
+            },
+            {
+                "key": "field_gw_svc_dev_content",
+                "label": "Development Content",
+                "name": "development_content",
+                "type": "textarea",
+                "required": 1,
+                "translations": "ignore"
+            },
+            {
+                "key": "field_gw_svc_dev_tags",
+                "label": "Development Tags",
+                "name": "development_tags",
+                "type": "repeater",
+                "required": 0,
+                "min": 0,
+                "layout": "table",
+                "button_label": "Añadir tag",
+                "translations": "ignore",
+                "sub_fields": [
+                    {
+                        "key": "field_gw_svc_dev_tag_text",
+                        "label": "Tag",
+                        "name": "tag",
+                        "type": "text",
+                        "required": 1,
+                        "translations": "ignore"
+                    }
+                ]
+            },
+            {
+                "key": "field_gw_svc_sol_eyebrow",
+                "label": "Solutions Eyebrow",
+                "name": "solutions_eyebrow",
+                "type": "text",
+                "required": 0,
+                "translations": "ignore"
+            },
+            {
+                "key": "field_gw_svc_sol_title",
+                "label": "Solutions Title",
+                "name": "solutions_title",
+                "type": "text",
+                "required": 1,
+                "translations": "ignore"
+            },
+            {
+                "key": "field_gw_svc_sol_description",
+                "label": "Solutions Description",
+                "name": "solutions_description",
+                "type": "textarea",
+                "required": 1,
+                "translations": "ignore"
+            },
+            {
+                "key": "field_gw_svc_solutions",
+                "label": "Solutions",
+                "name": "solutions",
+                "type": "repeater",
+                "required": 1,
+                "min": 1,
+                "layout": "block",
+                "button_label": "Añadir solución",
+                "translations": "ignore",
+                "sub_fields": [
+                    {
+                        "key": "field_gw_svc_sol_item_title",
+                        "label": "Title",
+                        "name": "title",
+                        "type": "text",
+                        "required": 1,
+                        "translations": "ignore"
+                    },
+                    {
+                        "key": "field_gw_svc_sol_item_description",
+                        "label": "Description",
+                        "name": "description",
+                        "type": "textarea",
+                        "required": 1,
+                        "translations": "ignore"
+                    },
+                    {
+                        "key": "field_gw_svc_sol_item_features",
+                        "label": "Features",
+                        "name": "features",
+                        "type": "repeater",
+                        "required": 0,
+                        "min": 0,
+                        "layout": "table",
+                        "button_label": "Añadir feature",
+                        "translations": "ignore",
+                        "sub_fields": [
+                            {
+                                "key": "field_gw_svc_sol_feature_text",
+                                "label": "Feature",
+                                "name": "feature",
+                                "type": "text",
+                                "required": 1,
+                                "translations": "ignore"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_gw_svc_sol_item_link",
+                        "label": "Link",
+                        "name": "link",
+                        "type": "group",
+                        "required": 0,
+                        "layout": "row",
+                        "translations": "ignore",
+                        "sub_fields": [
+                            {
+                                "key": "field_gw_svc_sol_link_text",
+                                "label": "Text",
+                                "name": "text",
+                                "type": "text",
+                                "required": 0,
+                                "translations": "ignore"
+                            },
+                            {
+                                "key": "field_gw_svc_sol_link_url",
+                                "label": "URL",
+                                "name": "url",
+                                "type": "url",
+                                "required": 0,
+                                "translations": "ignore"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_gw_svc_app_title",
+                "label": "Approach Title",
+                "name": "approach_title",
+                "type": "text",
+                "required": 1,
+                "translations": "ignore"
+            },
+            {
+                "key": "field_gw_svc_app_description",
+                "label": "Approach Description",
+                "name": "approach_description",
+                "type": "textarea",
+                "required": 1,
+                "translations": "ignore"
+            },
+            {
+                "key": "field_gw_svc_approach",
+                "label": "Approach Items",
+                "name": "approach",
+                "type": "repeater",
+                "required": 1,
+                "min": 1,
+                "layout": "block",
+                "button_label": "Añadir elemento",
+                "translations": "ignore",
+                "sub_fields": [
+                    {
+                        "key": "field_gw_svc_app_item_title",
+                        "label": "Title",
+                        "name": "title",
+                        "type": "text",
+                        "required": 1,
+                        "translations": "ignore"
+                    },
+                    {
+                        "key": "field_gw_svc_app_item_description",
+                        "label": "Description",
+                        "name": "description",
+                        "type": "textarea",
+                        "required": 1,
+                        "translations": "ignore"
+                    }
+                ]
+            },
+            {
+                "key": "field_gw_svc_tech_title",
+                "label": "Technologies Title",
+                "name": "tech_title",
+                "type": "text",
+                "required": 1,
+                "translations": "ignore"
+            },
+            {
+                "key": "field_gw_svc_tech_description",
+                "label": "Technologies Description",
+                "name": "tech_description",
+                "type": "textarea",
+                "required": 1,
+                "translations": "ignore"
+            },
+            {
+                "key": "field_gw_svc_tech_groups",
+                "label": "Technology Groups",
+                "name": "tech_groups",
+                "type": "repeater",
+                "required": 1,
+                "min": 1,
+                "layout": "block",
+                "button_label": "Añadir grupo",
+                "translations": "ignore",
+                "sub_fields": [
+                    {
+                        "key": "field_gw_svc_tech_group_title",
+                        "label": "Title",
+                        "name": "title",
+                        "type": "text",
+                        "required": 1,
+                        "translations": "ignore"
+                    },
+                    {
+                        "key": "field_gw_svc_tech_group_items",
+                        "label": "Items",
+                        "name": "items",
+                        "type": "repeater",
+                        "required": 1,
+                        "min": 1,
+                        "layout": "table",
+                        "button_label": "Añadir tecnología",
+                        "translations": "ignore",
+                        "sub_fields": [
+                            {
+                                "key": "field_gw_svc_tech_item_name",
+                                "label": "Name",
+                                "name": "name",
+                                "type": "text",
+                                "required": 1,
+                                "translations": "ignore"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_gw_svc_faq",
+                "label": "FAQ Items",
+                "name": "faq_items",
+                "type": "repeater",
+                "required": 0,
+                "min": 0,
+                "layout": "block",
+                "button_label": "Añadir pregunta",
+                "translations": "ignore",
+                "sub_fields": [
+                    {
+                        "key": "field_gw_svc_faq_q",
+                        "label": "Pregunta",
+                        "name": "pregunta",
+                        "type": "text",
+                        "required": 1,
+                        "translations": "ignore"
+                    },
+                    {
+                        "key": "field_gw_svc_faq_a",
+                        "label": "Respuesta",
+                        "name": "respuesta",
+                        "type": "textarea",
+                        "required": 1,
+                        "translations": "ignore"
+                    }
+                ]
+            },
+            {
+                "key": "field_gw_svc_cta",
+                "label": "CTA",
+                "name": "cta",
+                "type": "group",
+                "required": 1,
+                "layout": "block",
+                "translations": "ignore",
+                "sub_fields": [
+                    {
+                        "key": "field_gw_svc_cta_title",
+                        "label": "Title",
+                        "name": "title",
+                        "type": "text",
+                        "required": 1,
+                        "translations": "ignore"
+                    },
+                    {
+                        "key": "field_gw_svc_cta_description",
+                        "label": "Description",
+                        "name": "description",
+                        "type": "textarea",
+                        "required": 1,
+                        "translations": "ignore"
+                    },
+                    {
+                        "key": "field_gw_svc_cta_button_text",
+                        "label": "Button Text",
+                        "name": "button_text",
+                        "type": "text",
+                        "required": 1,
+                        "translations": "ignore"
+                    },
+                    {
+                        "key": "field_gw_svc_cta_button_url",
+                        "label": "Button URL",
+                        "name": "button_url",
+                        "type": "text",
+                        "required": 0,
+                        "translations": "ignore"
+                    }
+                ]
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "service"
+                }
+            ]
+        ],
+        "show_in_rest": 1,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "menu_order": 0,
+        "active": true,
+        "description": ""
+    }
+]

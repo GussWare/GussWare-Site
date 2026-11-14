@@ -1,0 +1,142 @@
+/**
+ * Rutas internas/publicadas por Astro (fuente única).
+ *
+ * Centraliza las URLs públicas del sitio para no hardcodearlas en
+ * páginas y componentes. Las rutas de la API de WordPress viven en
+ * `src/lib/wordpress/routes.ts` (`wpRoutes`) y no pertenecen aquí.
+ */
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
+export const routes = {
+  home: '/',
+  blog: '/blog',
+  contact: '/contact',
+  notFound: '/404',
+  blogPost: (slug: string) => `/blog/${encodeURIComponent(slug)}`,
+} as const;
+
+/** URLs de una misma página en cada locale (para el selector de idioma). */
+export interface LocaleUrls {
+  es: string;
+  en: string;
+}
+
+/**
+ * Base del listado del Blog (`/blog`, `/en/blog`) según locale.
+ */
+export function blogBaseUrl(locale: string): string {
+  return getRelativeLocaleUrl(locale, 'blog');
+}
+
+/** URL de una página del listado con sus parámetros de consulta. */
+export function blogListUrl(
+  locale: string,
+  page: number,
+  search: string,
+  catId: number,
+): string {
+  const params = new URLSearchParams();
+
+  if (search) {
+    params.set('search', search);
+  }
+
+  if (catId) {
+    params.set('category', String(catId));
+  }
+
+  if (page > 1) {
+    params.set('page', String(page));
+  }
+
+  const base = blogBaseUrl(locale);
+  const query = params.toString();
+  return query ? `${base}?${query}` : base;
+}
+
+/** URL del detalle de un artículo (`/blog/[slug]`, `/en/blog/[slug]`). */
+export function blogPostUrl(locale: string, slug: string): string {
+  return getRelativeLocaleUrl(locale, `blog/${slug}`);
+}
+
+/** Base del índice de Servicios (`/servicios`, `/en/servicios`). */
+export function servicesBaseUrl(locale: string): string {
+  return getRelativeLocaleUrl(locale, 'servicios');
+}
+
+/** URL del detalle de un servicio (`/servicios/[slug]`, `/en/servicios/[slug]`). */
+export function serviceDetailUrl(locale: string, slug: string): string {
+  return getRelativeLocaleUrl(locale, `servicios/${slug}`);
+}
+
+/** Base del índice de Proyectos (`/proyectos`, `/en/proyectos`). */
+export function proyectosBaseUrl(locale: string): string {
+  return getRelativeLocaleUrl(locale, 'proyectos');
+}
+
+/** URL del detalle de un proyecto (`/proyectos/[slug]`, `/en/proyectos/[slug]`). */
+export function projectDetailUrl(locale: string, slug: string): string {
+  return getRelativeLocaleUrl(locale, `proyectos/${slug}`);
+}
+
+export interface ProjectListQuery {
+  page?: number;
+  search?: string;
+  technology?: number;
+  type?: number;
+  sort?: string;
+}
+
+/**
+ * RGW-322 — URL del listado de Proyectos con sus parámetros de consulta
+ * (patrón de `blogListUrl`). Solo incluye parámetros activos.
+ */
+export function projectListUrl(
+  locale: string,
+  query: ProjectListQuery = {},
+): string {
+  const params = new URLSearchParams();
+
+  if (query.search) {
+    params.set('search', query.search);
+  }
+
+  if (query.technology) {
+    params.set('technology', String(query.technology));
+  }
+
+  if (query.type) {
+    params.set('type', String(query.type));
+  }
+
+  if (query.sort && query.sort !== 'recent') {
+    params.set('sort', query.sort);
+  }
+
+  if (query.page && query.page > 1) {
+    params.set('page', String(query.page));
+  }
+
+  const base = proyectosBaseUrl(locale);
+  const queryString = params.toString();
+  return queryString ? `${base}?${queryString}` : base;
+}
+
+/**
+ * Raíz del breadcrumb (`Inicio`/`Home`) según el locale actual.
+ */
+export interface BreadcrumbRoot {
+  label: string;
+  href: string;
+}
+
+/**
+ * Raíz localizada para breadcrumbs: texto (`Inicio`/`Home`) y URL
+ * (`/`/`/en/`) según `Astro.currentLocale`. Única lógica de
+ * localización de la raíz; el resto de niveles proviene del contenido.
+ */
+export function getBreadcrumbHome(locale: string): BreadcrumbRoot {
+  return locale === 'en'
+    ? { label: 'Home', href: getRelativeLocaleUrl('en', '/') }
+    : { label: 'Inicio', href: routes.home };
+}

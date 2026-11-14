@@ -1,0 +1,5493 @@
+{
+ "integracion": {
+  "config": {
+   "title": "GussWare — Integración de APIs y Servicios Externos",
+   "colors": {
+    "primary": "#004A98",
+    "deep": "#00346E",
+    "secondary": "#2164A6",
+    "accent": "#FF5000",
+    "ink": "#242126",
+    "muted": "#5C6068",
+    "surface": "#FFFFFF",
+    "alt": "#F2F2F2",
+    "highlight": "#FFD8D8"
+   },
+   "fontFamily": [
+    "\"Source Sans 3\"",
+    "sans-serif"
+   ]
+  },
+  "sections": [
+   {
+    "n": 1,
+    "class": "bg-white py-[120px] border-b border-[#E2E4E8]",
+    "grids": [
+     "grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start"
+    ],
+    "items": [
+     {
+      "tag": "li",
+      "text": "Inicio",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "li",
+      "text": "/",
+      "href": null,
+      "class": "text-[#A0A4AB]"
+     },
+     {
+      "tag": "li",
+      "text": "Servicios",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "li",
+      "text": "/",
+      "href": null,
+      "class": "text-[#A0A4AB]"
+     },
+     {
+      "tag": "li",
+      "text": "Integración de APIs y Servicios Externos",
+      "href": null,
+      "class": "text-brand-ink font-semibold"
+     },
+     {
+      "tag": "h1",
+      "text": "Deja de copiar datos de un programa a otro",
+      "href": null,
+      "class": "text-4xl sm:text-5xl lg:text-[64px] font-bold text-brand-ink leading-[1.08] tracking-tight mb-8"
+     },
+     {
+      "tag": "p",
+      "text": "Si tu equipo registra un pedido en una herramienta, vuelve a capturarlo en otra y después verifica que todo coincida, hay trabajo que se puede automatizar. Conectamos tus sistemas para que intercambien información con reglas claras y puedas dedicar menos tiempo a tareas repetitivas.",
+      "href": null,
+      "class": "text-lg lg:text-[19px] leading-[1.6] text-brand-muted mb-10 prose-custom"
+     },
+     {
+      "tag": "a",
+      "text": "Cuéntanos tu caso",
+      "href": "/contact",
+      "class": "inline-flex items-center justify-center bg-brand-accent text-white font-bold text-base px-8 py-4 tracking-wide hover:bg-[#e04600] transition-colors"
+     },
+     {
+      "tag": "a",
+      "text": "Ver soluciones ↓",
+      "href": "#soluciones",
+      "class": "inline-flex items-center gap-2 text-base font-bold text-brand-primary hover:text-brand-deep transition-colors py-2"
+     }
+    ]
+   },
+   {
+    "n": 2,
+    "class": "bg-white py-[120px] border-b border-[#E2E4E8]",
+    "grids": [
+     "grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16",
+     "py-6 grid grid-cols-12 gap-4 items-baseline"
+    ],
+    "items": [
+     {
+      "tag": "h2",
+      "text": "Tus programas, trabajando en equipo",
+      "href": null,
+      "class": "text-3xl lg:text-[42px] font-bold text-brand-ink leading-tight mb-6"
+     },
+     {
+      "tag": "p",
+      "text": "Cuando las herramientas de tu negocio están desconectadas, los pedidos, clientes, productos y facturas pueden terminar duplicados o desactualizados.",
+      "href": null,
+      "class": "text-base lg:text-[17px] text-brand-muted leading-relaxed prose-custom"
+     },
+     {
+      "tag": "span",
+      "text": "01",
+      "href": null,
+      "class": "col-span-2 text-xl font-mono font-bold text-brand-primary"
+     },
+     {
+      "tag": "p",
+      "text": "Los pedidos, clientes, productos o facturas se duplican entre herramientas.",
+      "href": null,
+      "class": "col-span-10 text-base lg:text-[17px] text-brand-ink font-medium leading-snug"
+     },
+     {
+      "tag": "span",
+      "text": "02",
+      "href": null,
+      "class": "col-span-2 text-xl font-mono font-bold text-brand-primary"
+     },
+     {
+      "tag": "p",
+      "text": "Tu equipo vuelve a capturar la misma información en otro programa.",
+      "href": null,
+      "class": "col-span-10 text-base lg:text-[17px] text-brand-ink font-medium leading-snug"
+     },
+     {
+      "tag": "span",
+      "text": "03",
+      "href": null,
+      "class": "col-span-2 text-xl font-mono font-bold text-brand-primary"
+     },
+     {
+      "tag": "p",
+      "text": "Cuando algo falla, no queda claro qué se envió, cuándo ni a dónde.",
+      "href": null,
+      "class": "col-span-10 text-base lg:text-[17px] text-brand-ink font-medium leading-snug"
+     }
+    ]
+   },
+   {
+    "n": 3,
+    "class": "bg-brand-alt py-[120px] border-b border-[#E2E4E8]",
+    "grids": [
+     "grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch mb-12"
+    ],
+    "items": [
+     {
+      "tag": "h2",
+      "text": "Conecta tus herramientas y automatiza el intercambio de información",
+      "href": null,
+      "class": "text-3xl lg:text-[42px] font-bold text-brand-ink leading-tight mb-5"
+     },
+     {
+      "tag": "p",
+      "text": "Creamos conexiones entre las aplicaciones que ya utilizas para reducir capturas repetidas, coordinar procesos y mantener los datos actualizados.",
+      "href": null,
+      "class": "text-base lg:text-[18px] text-brand-muted leading-relaxed prose-custom"
+     },
+     {
+      "tag": "h3",
+      "text": "Conectar tus programas entre sí",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-ink mb-3 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Haz que la información registrada en una herramienta pueda utilizarse en otra sin depender de transferencias manuales.",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed mb-6"
+     },
+     {
+      "tag": "li",
+      "text": "— Conexión entre tienda, facturación, CRM o inventario",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "— Transferencia automática de los datos definidos",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "— Validación de la información antes de procesarla",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "— Registro de operaciones para consultar qué se envió y cuándo",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "— Reintentos y alertas para atender transferencias fallidas",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "span",
+      "text": "Beneficio",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-muted block mb-1"
+     },
+     {
+      "tag": "p",
+      "text": "Menos capturas manuales y datos más consistentes.",
+      "href": null,
+      "class": "text-[15px] font-semibold text-brand-ink"
+     },
+     {
+      "tag": "h3",
+      "text": "Automatizar tareas entre sistemas",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-ink mb-3 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Define qué debe suceder cuando ocurre un evento para que tus herramientas ejecuten acciones sin intervención manual en cada paso.",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed mb-6"
+     },
+     {
+      "tag": "li",
+      "text": "— Generación o actualización de registros a partir de eventos",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "— Automatización de tareas como notificaciones y cambios de estado",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "— Reglas para determinar cuándo debe ejecutarse una acción",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "— Avisos cuando una operación requiere atención",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "— Historial de resultados para identificar errores y dar seguimiento",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "span",
+      "text": "Beneficio",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-muted block mb-1"
+     },
+     {
+      "tag": "p",
+      "text": "Menos pasos manuales y respuestas más rápidas.",
+      "href": null,
+      "class": "text-[15px] font-semibold text-brand-ink"
+     },
+     {
+      "tag": "h3",
+      "text": "Mantener la información sincronizada",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-ink mb-3 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Coordina los datos que utilizan diferentes áreas para reducir diferencias entre registros y evitar trabajar con información desactualizada.",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed mb-6"
+     },
+     {
+      "tag": "li",
+      "text": "— Sincronización de clientes, productos, precios u otros registros",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "— Reglas para definir qué sistema actualiza cada dato",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "— Validaciones para reducir duplicados e inconsistencias",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "— Actualización programada o basada en eventos",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "— Registro de errores y procedimientos para corregirlos",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "span",
+      "text": "Beneficio",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-muted block mb-1"
+     },
+     {
+      "tag": "p",
+      "text": "Un solo dato actualizado para todas las áreas.",
+      "href": null,
+      "class": "text-[15px] font-semibold text-brand-ink"
+     },
+     {
+      "tag": "a",
+      "text": "Hablemos de tu caso →",
+      "href": "/contact",
+      "class": "inline-flex items-center gap-2 text-base font-bold text-brand-primary hover:text-brand-deep transition-colors"
+     }
+    ]
+   },
+   {
+    "n": 4,
+    "class": "bg-white py-[120px] border-b border-[#E2E4E8]",
+    "grids": [
+     "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12"
+    ],
+    "items": [
+     {
+      "tag": "h2",
+      "text": "¿Qué plataformas podemos conectar?",
+      "href": null,
+      "class": "text-3xl lg:text-[42px] font-bold text-brand-ink leading-tight mb-5"
+     },
+     {
+      "tag": "p",
+      "text": "Estos son ejemplos de plataformas sobre las que puedes consultar una integración. No implican que todas las conexiones estén implementadas, probadas o disponibles de inmediato: revisamos tu caso y las condiciones de acceso de cada sistema.",
+      "href": null,
+      "class": "text-base lg:text-[17px] text-brand-muted leading-relaxed prose-custom"
+     },
+     {
+      "tag": "h3",
+      "text": "SAP",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-ink mb-4 tracking-tight"
+     },
+     {
+      "tag": "span",
+      "text": "EJEMPLO DE USO",
+      "href": null,
+      "class": "text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-1"
+     },
+     {
+      "tag": "p",
+      "text": "Sincronizar inventario o pedidos con un sistema empresarial.",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-snug"
+     },
+     {
+      "tag": "h3",
+      "text": "Zoho",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-ink mb-4 tracking-tight"
+     },
+     {
+      "tag": "span",
+      "text": "EJEMPLO DE USO",
+      "href": null,
+      "class": "text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-1"
+     },
+     {
+      "tag": "p",
+      "text": "Compartir clientes y oportunidades con tu sistema de facturación.",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-snug"
+     },
+     {
+      "tag": "h3",
+      "text": "Salesforce",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-ink mb-4 tracking-tight"
+     },
+     {
+      "tag": "span",
+      "text": "EJEMPLO DE USO",
+      "href": null,
+      "class": "text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-1"
+     },
+     {
+      "tag": "p",
+      "text": "Mantener actualizados clientes y oportunidades comerciales.",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-snug"
+     },
+     {
+      "tag": "h3",
+      "text": "Shopify",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-ink mb-4 tracking-tight"
+     },
+     {
+      "tag": "span",
+      "text": "EJEMPLO DE USO",
+      "href": null,
+      "class": "text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-1"
+     },
+     {
+      "tag": "p",
+      "text": "Enviar pedidos y niveles de inventario entre la tienda y tu operación.",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-snug"
+     },
+     {
+      "tag": "h3",
+      "text": "Microsoft 365",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-ink mb-4 tracking-tight"
+     },
+     {
+      "tag": "span",
+      "text": "EJEMPLO DE USO",
+      "href": null,
+      "class": "text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-1"
+     },
+     {
+      "tag": "p",
+      "text": "Conectar solicitudes, archivos o flujos de trabajo con tu CRM.",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-snug"
+     },
+     {
+      "tag": "h3",
+      "text": "WooCommerce",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-ink mb-4 tracking-tight"
+     },
+     {
+      "tag": "span",
+      "text": "EJEMPLO DE USO",
+      "href": null,
+      "class": "text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-1"
+     },
+     {
+      "tag": "p",
+      "text": "Sincronizar productos, pedidos y existencias de la tienda en línea.",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-snug"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Tienes otra plataforma en mente?",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "¿No sabes si podemos conectar el sistema que utilizas? Cuéntanos cuál es y qué necesitas hacer. Revisaremos tu caso y te orientaremos sobre las posibilidades de integración.",
+      "href": null,
+      "class": "text-base text-brand-muted leading-relaxed mb-6 max-w-3xl prose-custom"
+     },
+     {
+      "tag": "a",
+      "text": "Consultar mi integración →",
+      "href": "/contact",
+      "class": "inline-flex items-center gap-2 text-base font-bold text-brand-primary hover:text-brand-deep transition-colors"
+     }
+    ]
+   },
+   {
+    "n": 5,
+    "class": "bg-brand-alt py-[120px] border-b border-[#E2E4E8]",
+    "grids": [
+     "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-8 relative z-10"
+    ],
+    "items": [
+     {
+      "tag": "h2",
+      "text": "Conexiones diseñadas para manejar los datos correctamente",
+      "href": null,
+      "class": "text-3xl lg:text-[42px] font-bold text-brand-ink leading-tight mb-5"
+     },
+     {
+      "tag": "p",
+      "text": "Antes de conectar los sistemas definimos qué información se mueve, cómo debe transformarse y qué hacer cuando ocurre un error.",
+      "href": null,
+      "class": "text-base lg:text-[18px] text-brand-muted leading-relaxed prose-custom"
+     },
+     {
+      "tag": "h3",
+      "text": "Analizar",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Identificamos las herramientas, los datos y las tareas que hoy se realizan manualmente.",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "h3",
+      "text": "Diseñar",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Definimos el flujo de información, las reglas de validación y el tratamiento de errores.",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "h3",
+      "text": "Conectar",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Implementamos la integración y probamos los escenarios de operación acordados.",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "h3",
+      "text": "Supervisar",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Configuramos registros y mecanismos de seguimiento para detectar fallas y facilitar su diagnóstico.",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed"
+     }
+    ]
+   },
+   {
+    "n": 6,
+    "class": "bg-[#F2F2F2] py-[120px] border-b border-[#DADADA]",
+    "grids": [],
+    "items": [
+     {
+      "tag": "span",
+      "text": "05",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "—",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "DUDAS FRECUENTES",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "h2",
+      "text": "Lo que suele preguntarse antes de conectar sistemas",
+      "href": null,
+      "class": "text-3xl lg:text-[42px] font-bold text-brand-ink leading-[1.15] tracking-tight mb-12"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Qué sistemas puedo conectar?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "−",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-primary flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "p",
+      "text": "Podemos evaluar tiendas en línea, facturación, CRM, inventarios, hojas de cálculo y otras aplicaciones. La viabilidad depende de los accesos y mecanismos de integración que ofrezca cada sistema.",
+      "href": null,
+      "class": "text-base text-brand-muted leading-relaxed max-w-[70ch]"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Se pueden conectar programas antiguos?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Qué pasa si falla una transferencia de información?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Qué ocurre si uno de los sistemas cambia?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Puedo saber qué información se transfirió?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Cuánto cuesta conectar mis sistemas?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "a",
+      "text": "¿Te queda otra duda? Escríbenos →",
+      "href": "/contact",
+      "class": "inline-flex items-center gap-1.5 text-sm font-bold text-brand-primary hover:text-brand-deep transition-colors"
+     }
+    ]
+   },
+   {
+    "n": 7,
+    "class": "bg-brand-deep text-white py-[120px] relative overflow-hidden",
+    "grids": [
+     "grid grid-cols-1 lg:grid-cols-12 gap-12 items-center"
+    ],
+    "items": [
+     {
+      "tag": "h2",
+      "text": "Deja que tus sistemas hagan el trabajo repetitivo",
+      "href": null,
+      "class": "text-3xl sm:text-4xl lg:text-[44px] font-bold leading-tight mb-6"
+     },
+     {
+      "tag": "p",
+      "text": "Cuéntanos qué programas utilizas y qué información tienes que pasar de uno a otro. Revisaremos cómo automatizar ese proceso.",
+      "href": null,
+      "class": "text-lg text-[#D5E1F0] leading-relaxed mb-10 max-w-2xl prose-custom"
+     },
+     {
+      "tag": "a",
+      "text": "Conectemos tus sistemas",
+      "href": "/contact",
+      "class": "inline-flex items-center justify-center bg-brand-accent text-white font-bold text-base px-8 py-4 tracking-wide hover:bg-[#e04600] transition-colors"
+     },
+     {
+      "tag": "a",
+      "text": "Ver todos los servicios →",
+      "href": "/servicios",
+      "class": "inline-flex items-center gap-2 text-base font-bold text-white hover:text-[#D5E1F0] transition-colors py-2"
+     },
+     {
+      "tag": "span",
+      "text": "GUSSWARE · CORE",
+      "href": null,
+      "class": "font-mono text-xs uppercase tracking-widest text-[#9BB4D4]"
+     }
+    ]
+   },
+   {
+    "n": 8,
+    "class": "bg-white py-[120px] border-b border-[#E2E4E8]",
+    "grids": [
+     "grid grid-cols-1 md:grid-cols-3 gap-8"
+    ],
+    "items": [
+     {
+      "tag": "h2",
+      "text": "Otros servicios que pueden ayudarte",
+      "href": null,
+      "class": "text-3xl lg:text-[40px] font-bold text-brand-ink leading-tight"
+     },
+     {
+      "tag": "span",
+      "text": "SOFTWARE A MEDIDA",
+      "href": null,
+      "class": "text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-3"
+     },
+     {
+      "tag": "h3",
+      "text": "Desarrollo a medida",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-ink mb-4 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Tu empresa no debería tener que adaptarse a un software que no le funciona.",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed mb-8"
+     },
+     {
+      "tag": "a",
+      "text": "Ver servicio →",
+      "href": "/servicios/desarrollo-a-medida",
+      "class": "inline-flex items-center gap-2 text-[15px] font-bold text-brand-primary hover:text-brand-deep transition-colors"
+     },
+     {
+      "tag": "span",
+      "text": "WEB & E-COMMERCE",
+      "href": null,
+      "class": "text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-3"
+     },
+     {
+      "tag": "h3",
+      "text": "Diseño de sitios web y tiendas en línea",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-ink mb-4 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Tu sitio web debe conseguir algo más que verse bien.",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed mb-8"
+     },
+     {
+      "tag": "a",
+      "text": "Ver servicio →",
+      "href": "/servicios/web-ecommerce",
+      "class": "inline-flex items-center gap-2 text-[15px] font-bold text-brand-primary hover:text-brand-deep transition-colors"
+     },
+     {
+      "tag": "span",
+      "text": "INFRAESTRUCTURA",
+      "href": null,
+      "class": "text-[11px] font-bold uppercase tracking-wider text-brand-primary block mb-3"
+     },
+     {
+      "tag": "h3",
+      "text": "DevOps y Soporte Técnico",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-ink mb-4 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Actualiza tus sistemas sin convertir cada cambio en un riesgo.",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed mb-8"
+     },
+     {
+      "tag": "a",
+      "text": "Ver servicio →",
+      "href": "/servicios/devops",
+      "class": "inline-flex items-center gap-2 text-[15px] font-bold text-brand-primary hover:text-brand-deep transition-colors"
+     }
+    ]
+   }
+  ],
+  "header": {
+   "present": true,
+   "links": [
+    [
+     "GussWare",
+     "/"
+    ],
+    [
+     "Servicios",
+     "/servicios"
+    ],
+    [
+     "Cómo trabajamos",
+     "/como-trabajamos"
+    ],
+    [
+     "Proyectos",
+     "/proyectos"
+    ],
+    [
+     "Comunidad",
+     "/comunidad"
+    ],
+    [
+     "Hablemos",
+     "/contact"
+    ]
+   ]
+  },
+  "footer": {
+   "present": true,
+   "links": [
+    [
+     "Desarrollo a medida",
+     "/servicios/desarrollo-a-medida"
+    ],
+    [
+     "Diseño de sitios web y tiendas en línea",
+     "/servicios/web-ecommerce"
+    ],
+    [
+     "Aplicaciones móviles",
+     "/servicios/aplicaciones-moviles"
+    ],
+    [
+     "Integración de APIs y Servicios Externos",
+     "/servicios/integracion-apis"
+    ],
+    [
+     "Consultoría técnica",
+     "/servicios/consultoria-tecnica"
+    ],
+    [
+     "DevOps y Soporte Técnico",
+     "/servicios/devops"
+    ],
+    [
+     "Cómo trabajamos",
+     "/como-trabajamos"
+    ],
+    [
+     "Proyectos",
+     "/proyectos"
+    ],
+    [
+     "Comunidad",
+     "/comunidad"
+    ],
+    [
+     "Contacto",
+     "/contact"
+    ],
+    [
+     "Aviso de privacidad",
+     "/aviso-de-privacidad"
+    ],
+    [
+     "Términos y condiciones",
+     "/terminos-y-condiciones"
+    ]
+   ]
+  }
+ },
+ "web": {
+  "config": {
+   "title": "GussWare - Diseño de sitios web y tiendas en línea",
+   "colors": {
+    "primary": "#004A98",
+    "deep": "#00346E",
+    "secondary": "#2164A6",
+    "accent": "#FF5000",
+    "ink": "#242126",
+    "muted": "#5C6068",
+    "surface": "#FFFFFF",
+    "alt": "#F2F2F2",
+    "highlight": "#FFD8D8"
+   },
+   "maxWidth": {
+    "container": "1280px"
+   },
+   "fontFamily": [
+    "\"Source Sans 3\"",
+    "sans-serif"
+   ]
+  },
+  "sections": [
+   {
+    "n": 1,
+    "class": "bg-brand-surface pt-8 pb-24 border-b border-[#dadada]",
+    "grids": [
+     "grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start"
+    ],
+    "items": [
+     {
+      "tag": "li",
+      "text": "Inicio",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "li",
+      "text": "/",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "li",
+      "text": "Servicios",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "li",
+      "text": "/",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "li",
+      "text": "Diseño de sitios web y tiendas en línea",
+      "href": null,
+      "class": "text-brand-ink font-medium"
+     },
+     {
+      "tag": "span",
+      "text": "DISEÑO Y DESARROLLO WEB",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-wider text-brand-primary uppercase"
+     },
+     {
+      "tag": "h1",
+      "text": "Tu sitio web debe conseguir algo más que verse bien",
+      "href": null,
+      "class": "text-[44px] md:text-[56px] lg:text-[64px] font-black leading-[1.06] tracking-tight text-brand-ink mb-6"
+     },
+     {
+      "tag": "p",
+      "text": "Una página confusa puede hacer que un cliente se vaya antes de conocer tus servicios. Diseñamos sitios y tiendas que explican lo que ofreces, facilitan el contacto o la compra y ofrecen una experiencia clara desde el celular hasta la computadora.",
+      "href": null,
+      "class": "text-[18px] md:text-[20px] leading-relaxed text-brand-muted max-w-[620px] mb-8 font-normal"
+     },
+     {
+      "tag": "a",
+      "text": "Cuéntanos tu proyecto",
+      "href": "/contacto",
+      "class": "inline-flex items-center justify-center bg-brand-accent hover:bg-[#e04600] text-white px-8 py-4 text-[16px] font-bold tracking-tight transition-colors"
+     },
+     {
+      "tag": "a",
+      "text": "Ver soluciones ↓",
+      "href": "#soluciones",
+      "class": "inline-flex items-center gap-2 text-[16px] font-bold text-brand-primary hover:text-brand-deep transition-colors py-2"
+     },
+     {
+      "tag": "span",
+      "text": "01",
+      "href": null,
+      "class": "text-[32px] font-black tracking-tight text-brand-primary"
+     },
+     {
+      "tag": "h3",
+      "text": "Más oportunidades",
+      "href": null,
+      "class": "text-[18px] font-bold text-brand-ink tracking-tight"
+     },
+     {
+      "tag": "p",
+      "text": "Tus visitantes entienden qué ofreces",
+      "href": null,
+      "class": "text-[15px] leading-relaxed text-brand-muted pl-12 font-normal"
+     },
+     {
+      "tag": "span",
+      "text": "02",
+      "href": null,
+      "class": "text-[32px] font-black tracking-tight text-brand-primary"
+     },
+     {
+      "tag": "h3",
+      "text": "Compra sin complicaciones",
+      "href": null,
+      "class": "text-[18px] font-bold text-brand-ink tracking-tight"
+     },
+     {
+      "tag": "p",
+      "text": "Menos obstáculos para contactar o pagar",
+      "href": null,
+      "class": "text-[15px] leading-relaxed text-brand-muted pl-12 font-normal"
+     },
+     {
+      "tag": "span",
+      "text": "03",
+      "href": null,
+      "class": "text-[32px] font-black tracking-tight text-brand-primary"
+     },
+     {
+      "tag": "h3",
+      "text": "Listo para evolucionar",
+      "href": null,
+      "class": "text-[18px] font-bold text-brand-ink tracking-tight"
+     },
+     {
+      "tag": "p",
+      "text": "Agrega contenido y funciones conforme crezcas",
+      "href": null,
+      "class": "text-[15px] leading-relaxed text-brand-muted pl-12 font-normal"
+     }
+    ]
+   },
+   {
+    "n": 2,
+    "class": "bg-brand-surface py-[120px] border-b border-[#dadada]",
+    "grids": [
+     "grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16 items-start",
+     "py-6 grid grid-cols-1 md:grid-cols-12 gap-4 items-baseline"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "01 — EL PROBLEMA",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-wider text-brand-primary uppercase"
+     },
+     {
+      "tag": "h2",
+      "text": "Que tus visitantes encuentren lo que necesitan y sepan qué hacer",
+      "href": null,
+      "class": "text-[36px] md:text-[42px] font-black leading-[1.12] tracking-tight text-brand-ink"
+     },
+     {
+      "tag": "p",
+      "text": "Si una persona entra a tu sitio y no entiende qué vendes, cómo funciona tu servicio o dónde comprar, es probable que busque otra opción.",
+      "href": null,
+      "class": "text-[18px] leading-relaxed text-brand-muted max-w-[680px]"
+     },
+     {
+      "tag": "span",
+      "text": "01",
+      "href": null,
+      "class": "text-[24px] font-black text-brand-primary"
+     },
+     {
+      "tag": "p",
+      "text": "Tu visitante no entiende qué ofreces ni por qué elegirte.",
+      "href": null,
+      "class": "text-[18px] font-semibold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "02",
+      "href": null,
+      "class": "text-[24px] font-black text-brand-primary"
+     },
+     {
+      "tag": "p",
+      "text": "No encuentra cómo contactarte, cotizar o comprar.",
+      "href": null,
+      "class": "text-[18px] font-semibold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "03",
+      "href": null,
+      "class": "text-[24px] font-black text-brand-primary"
+     },
+     {
+      "tag": "p",
+      "text": "El sitio no se ve bien en el celular o es difícil de actualizar.",
+      "href": null,
+      "class": "text-[18px] font-semibold text-brand-ink"
+     },
+     {
+      "tag": "p",
+      "text": "Diseño web · Desarrollo web · Tiendas en línea · Experiencia de usuario · Diseño adaptable · Plataformas digitales",
+      "href": null,
+      "class": "text-[13px] tracking-wide text-brand-muted uppercase font-semibold"
+     }
+    ]
+   },
+   {
+    "n": 3,
+    "class": "bg-brand-alt py-[120px] border-b border-[#dadada]",
+    "grids": [
+     "grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "02 — QUÉ PUEDES CONTRATAR",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-wider text-brand-primary uppercase"
+     },
+     {
+      "tag": "h2",
+      "text": "Una solución digital para cada objetivo",
+      "href": null,
+      "class": "text-[36px] md:text-[44px] font-black leading-[1.12] tracking-tight text-brand-ink mb-4"
+     },
+     {
+      "tag": "p",
+      "text": "Desde presentar tu negocio hasta vender por internet o digitalizar procesos, desarrollamos la solución que necesitas para atender mejor a tus clientes.",
+      "href": null,
+      "class": "text-[18px] leading-relaxed text-brand-muted max-w-[760px]"
+     },
+     {
+      "tag": "span",
+      "text": "01",
+      "href": null,
+      "class": "text-[28px] font-black text-brand-primary block mb-2"
+     },
+     {
+      "tag": "h3",
+      "text": "Sitios web que presentan tu negocio",
+      "href": null,
+      "class": "text-[22px] font-bold text-brand-ink leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Haz que tus visitantes entiendan qué haces, por qué elegirte y cómo ponerse en contacto contigo.",
+      "href": null,
+      "class": "text-[16px] leading-relaxed text-brand-muted mb-6"
+     },
+     {
+      "tag": "span",
+      "text": "QUÉ RECIBES",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-wider text-brand-primary uppercase block mb-4"
+     },
+     {
+      "tag": "li",
+      "text": "• Diseño personalizado alineado con la identidad de tu marca",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "li",
+      "text": "• Secciones y contenidos organizados para facilitar la consulta",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "li",
+      "text": "• Diseño adaptable a celulares, tabletas y computadoras",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "li",
+      "text": "• Estructura y metadatos preparados para que los buscadores entiendan el sitio",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "li",
+      "text": "• Panel de administración para actualizar textos e imágenes",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "p",
+      "text": "Beneficio: Una presencia clara que genera confianza y contactos.",
+      "href": null,
+      "class": "text-[14px] font-semibold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "02",
+      "href": null,
+      "class": "text-[28px] font-black text-brand-primary block mb-2"
+     },
+     {
+      "tag": "h3",
+      "text": "Tiendas en línea que facilitan la compra",
+      "href": null,
+      "class": "text-[22px] font-bold text-brand-ink leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Permite que tus clientes consulten productos, elijan lo que necesitan y realicen sus pedidos desde tu tienda.",
+      "href": null,
+      "class": "text-[16px] leading-relaxed text-brand-muted mb-6"
+     },
+     {
+      "tag": "span",
+      "text": "QUÉ RECIBES",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-wider text-brand-primary uppercase block mb-4"
+     },
+     {
+      "tag": "li",
+      "text": "• Catálogo de productos con categorías y búsqueda",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "li",
+      "text": "• Carrito y proceso de compra organizado en pasos claros",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "li",
+      "text": "• Integración de métodos de pago y opciones de envío",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "li",
+      "text": "• Experiencia de compra adaptada a celulares",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "li",
+      "text": "• Panel para administrar productos, precios y pedidos",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "p",
+      "text": "Beneficio: Menos fricción para comprar y más control de tu operación.",
+      "href": null,
+      "class": "text-[14px] font-semibold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "03",
+      "href": null,
+      "class": "text-[28px] font-black text-brand-primary block mb-2"
+     },
+     {
+      "tag": "h3",
+      "text": "Plataformas digitales para tu operación",
+      "href": null,
+      "class": "text-[22px] font-bold text-brand-ink leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Cuando necesitas más que una página, desarrollamos plataformas para administrar información, atender clientes o resolver procesos específicos.",
+      "href": null,
+      "class": "text-[16px] leading-relaxed text-brand-muted mb-6"
+     },
+     {
+      "tag": "span",
+      "text": "QUÉ RECIBES",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-wider text-brand-primary uppercase block mb-4"
+     },
+     {
+      "tag": "li",
+      "text": "• Funciones adaptadas a los procesos de tu negocio",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "li",
+      "text": "• Usuarios y permisos para organizar el acceso",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "li",
+      "text": "• Integración con las herramientas que utilizas",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "li",
+      "text": "• Paneles para consultar y administrar información",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "li",
+      "text": "• Estructura preparada para incorporar nuevas funciones",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "p",
+      "text": "Beneficio: Una herramienta propia para operar, no solo para presentar.",
+      "href": null,
+      "class": "text-[14px] font-semibold text-brand-ink"
+     },
+     {
+      "tag": "a",
+      "text": "Hablemos de tu proyecto →",
+      "href": "/contacto",
+      "class": "inline-flex items-center gap-2 text-[16px] font-bold text-brand-primary hover:text-brand-deep transition-colors"
+     }
+    ]
+   },
+   {
+    "n": 4,
+    "class": "bg-brand-alt py-[120px] border-b border-[#dadada]",
+    "grids": [
+     "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "03 — CÓMO TRABAJAMOS",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-wider text-brand-primary uppercase"
+     },
+     {
+      "tag": "h2",
+      "text": "Del diseño a un sitio que cumple su propósito",
+      "href": null,
+      "class": "text-[36px] md:text-[44px] font-black leading-[1.12] tracking-tight text-brand-ink mb-4"
+     },
+     {
+      "tag": "p",
+      "text": "Trabajamos por etapas para validar la propuesta, desarrollar las funciones y revisar el resultado antes de publicarlo.",
+      "href": null,
+      "class": "text-[18px] leading-relaxed text-brand-muted max-w-[760px]"
+     },
+     {
+      "tag": "span",
+      "text": "01",
+      "href": null,
+      "class": "w-9 h-9 bg-brand-primary text-white font-black text-[14px] flex items-center justify-center"
+     },
+     {
+      "tag": "span",
+      "text": "ETAPA",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-widest text-brand-muted uppercase"
+     },
+     {
+      "tag": "h3",
+      "text": "Entender",
+      "href": null,
+      "class": "text-[20px] font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Definimos qué quieres conseguir, quién visitará el sitio y qué necesita encontrar.",
+      "href": null,
+      "class": "text-[15px] leading-relaxed text-brand-muted"
+     },
+     {
+      "tag": "span",
+      "text": "02",
+      "href": null,
+      "class": "w-9 h-9 bg-brand-surface border border-brand-primary text-brand-primary font-black text-[14px] flex items-center justify-center"
+     },
+     {
+      "tag": "span",
+      "text": "ETAPA",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-widest text-brand-muted uppercase"
+     },
+     {
+      "tag": "h3",
+      "text": "Diseñar",
+      "href": null,
+      "class": "text-[20px] font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Organizamos los contenidos y las pantallas, y revisamos contigo la propuesta visual.",
+      "href": null,
+      "class": "text-[15px] leading-relaxed text-brand-muted"
+     },
+     {
+      "tag": "span",
+      "text": "03",
+      "href": null,
+      "class": "w-9 h-9 bg-brand-surface border border-[#dadada] text-brand-muted font-black text-[14px] flex items-center justify-center"
+     },
+     {
+      "tag": "span",
+      "text": "ETAPA",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-widest text-brand-muted uppercase"
+     },
+     {
+      "tag": "h3",
+      "text": "Desarrollar",
+      "href": null,
+      "class": "text-[20px] font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Construimos el sitio, probamos sus funciones y verificamos su adaptación a diferentes dispositivos.",
+      "href": null,
+      "class": "text-[15px] leading-relaxed text-brand-muted"
+     },
+     {
+      "tag": "span",
+      "text": "04",
+      "href": null,
+      "class": "w-9 h-9 bg-brand-surface border border-[#dadada] text-brand-muted font-black text-[14px] flex items-center justify-center"
+     },
+     {
+      "tag": "span",
+      "text": "ETAPA",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-widest text-brand-muted uppercase"
+     },
+     {
+      "tag": "h3",
+      "text": "Publicar y mejorar",
+      "href": null,
+      "class": "text-[20px] font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Preparamos el lanzamiento y definimos oportunidades de mejora a partir de las necesidades del negocio.",
+      "href": null,
+      "class": "text-[15px] leading-relaxed text-brand-muted"
+     }
+    ]
+   },
+   {
+    "n": 5,
+    "class": "bg-brand-surface py-[90px] border-b border-[#dadada]",
+    "grids": [
+     "grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 items-baseline",
+     "pt-8 border-t border-[#dadada] grid grid-cols-1 md:grid-cols-3 gap-8"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "04 — FICHA DEL PROYECTO",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-wider text-brand-muted uppercase"
+     },
+     {
+      "tag": "h2",
+      "text": "Qué incluye la solución web",
+      "href": null,
+      "class": "text-[28px] md:text-[34px] font-bold leading-tight tracking-tight text-brand-ink"
+     },
+     {
+      "tag": "p",
+      "text": "Seleccionamos las herramientas según el tipo de sitio, las funciones necesarias y la forma en que administrarás los contenidos.",
+      "href": null,
+      "class": "text-[16px] leading-relaxed text-brand-muted"
+     },
+     {
+      "tag": "span",
+      "text": "TIPO DE SOLUCIÓN",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-wider text-brand-primary uppercase block mb-2"
+     },
+     {
+      "tag": "p",
+      "text": "Sitios web · Tiendas en línea · Plataformas a medida",
+      "href": null,
+      "class": "text-[15px] text-brand-ink font-semibold leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "EXPERIENCIA DE USO",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-wider text-brand-primary uppercase block mb-2"
+     },
+     {
+      "tag": "p",
+      "text": "Diseño personalizado · Adaptación a celulares · Navegación clara",
+      "href": null,
+      "class": "text-[15px] text-brand-ink font-semibold leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "BASE TÉCNICA",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-wider text-brand-primary uppercase block mb-2"
+     },
+     {
+      "tag": "p",
+      "text": "Gestión de contenidos · Integraciones · Rendimiento y mantenimiento",
+      "href": null,
+      "class": "text-[15px] text-brand-ink font-semibold leading-relaxed"
+     }
+    ]
+   },
+   {
+    "n": 6,
+    "class": "bg-[#F2F2F2] py-[120px] border-b border-[#DADADA]",
+    "grids": [],
+    "items": [
+     {
+      "tag": "span",
+      "text": "05",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "—",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "DUDAS FRECUENTES",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "h2",
+      "text": "Lo que suele preguntarse antes de empezar",
+      "href": null,
+      "class": "text-3xl lg:text-[42px] font-bold text-brand-ink leading-[1.15] tracking-tight mb-12"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Cuánto tarda el desarrollo de mi sitio web?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "−",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-primary flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "p",
+      "text": "Depende del tamaño, los contenidos y las funciones. Antes de iniciar definimos las etapas y los tiempos estimados con base en los requerimientos del proyecto.",
+      "href": null,
+      "class": "text-base text-brand-muted leading-relaxed max-w-[70ch]"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Podré actualizar el sitio sin ayuda técnica?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Mi sitio aparecerá en Google?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Podré agregar funciones después?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Pueden conectar el sitio con mi sistema de facturación o inventario?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Cuánto cuesta desarrollar un sitio web o una tienda?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "a",
+      "text": "¿Te queda otra duda? Escríbenos →",
+      "href": "/contacto",
+      "class": "inline-flex items-center gap-1.5 text-sm font-bold text-brand-primary hover:text-brand-deep transition-colors"
+     }
+    ]
+   },
+   {
+    "n": 7,
+    "class": "bg-brand-deep text-white py-[120px]",
+    "grids": [
+     "grid grid-cols-1 lg:grid-cols-12 gap-12 items-center"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "06 — INICIA TU PROYECTO",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-wider text-[#FFD8D8] uppercase"
+     },
+     {
+      "tag": "h2",
+      "text": "Convierte tu presencia digital en una herramienta para tu negocio",
+      "href": null,
+      "class": "text-[36px] md:text-[46px] font-black leading-[1.12] tracking-tight mb-6"
+     },
+     {
+      "tag": "p",
+      "text": "Cuéntanos qué vendes, qué servicios ofreces y qué quieres que tus visitantes hagan en tu sitio. Definiremos contigo la mejor forma de llevarlo a internet.",
+      "href": null,
+      "class": "text-[18px] md:text-[20px] leading-relaxed text-[#c7d8ee] max-w-[680px] mb-8 font-normal"
+     },
+     {
+      "tag": "a",
+      "text": "Diseñemos tu sitio web",
+      "href": "/contacto",
+      "class": "inline-flex items-center justify-center bg-brand-accent hover:bg-[#e04600] text-white px-8 py-4 text-[16px] font-bold tracking-tight transition-colors"
+     },
+     {
+      "tag": "a",
+      "text": "Ver todos los servicios →",
+      "href": "/servicios",
+      "class": "inline-flex items-center gap-2 text-[16px] font-bold text-white hover:text-[#c7d8ee] transition-colors py-2"
+     }
+    ]
+   },
+   {
+    "n": 8,
+    "class": "bg-brand-surface py-[120px] border-b border-[#dadada]",
+    "grids": [
+     "grid grid-cols-1 md:grid-cols-3 gap-8"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "SIGUE EXPLORANDO",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-wider text-brand-primary uppercase block mb-3"
+     },
+     {
+      "tag": "h2",
+      "text": "Otros servicios que pueden ayudarte",
+      "href": null,
+      "class": "text-[36px] md:text-[42px] font-black leading-tight tracking-tight text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "MÓVIL",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-wider text-brand-muted uppercase block mb-3"
+     },
+     {
+      "tag": "h3",
+      "text": "Aplicaciones móviles",
+      "href": null,
+      "class": "text-[22px] font-bold text-brand-ink mb-3 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Una aplicación que resuelve una necesidad desde el celular",
+      "href": null,
+      "class": "text-[16px] leading-relaxed text-brand-muted mb-8"
+     },
+     {
+      "tag": "a",
+      "text": "Ver servicio →",
+      "href": "/servicios/aplicaciones-moviles",
+      "class": "inline-flex items-center gap-2 text-[15px] font-bold text-brand-primary hover:text-brand-deep transition-colors"
+     },
+     {
+      "tag": "span",
+      "text": "SOFTWARE",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-wider text-brand-muted uppercase block mb-3"
+     },
+     {
+      "tag": "h3",
+      "text": "Desarrollo a medida",
+      "href": null,
+      "class": "text-[22px] font-bold text-brand-ink mb-3 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Tu empresa no debería tener que adaptarse a un software que no le funciona",
+      "href": null,
+      "class": "text-[16px] leading-relaxed text-brand-muted mb-8"
+     },
+     {
+      "tag": "a",
+      "text": "Ver servicio →",
+      "href": "/servicios/desarrollo-a-medida",
+      "class": "inline-flex items-center gap-2 text-[15px] font-bold text-brand-primary hover:text-brand-deep transition-colors"
+     },
+     {
+      "tag": "span",
+      "text": "SISTEMAS",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-wider text-brand-muted uppercase block mb-3"
+     },
+     {
+      "tag": "h3",
+      "text": "Integración de APIs y Servicios Externos",
+      "href": null,
+      "class": "text-[22px] font-bold text-brand-ink mb-3 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Deja de copiar datos de un programa a otro",
+      "href": null,
+      "class": "text-[16px] leading-relaxed text-brand-muted mb-8"
+     },
+     {
+      "tag": "a",
+      "text": "Ver servicio →",
+      "href": "/servicios/integracion-de-apis",
+      "class": "inline-flex items-center gap-2 text-[15px] font-bold text-brand-primary hover:text-brand-deep transition-colors"
+     }
+    ]
+   }
+  ],
+  "header": {
+   "present": true,
+   "links": [
+    [
+     "GussWare",
+     "/"
+    ],
+    [
+     "Servicios",
+     "/servicios"
+    ],
+    [
+     "Cómo trabajamos",
+     "/como-trabajamos"
+    ],
+    [
+     "Proyectos",
+     "/proyectos"
+    ],
+    [
+     "Comunidad",
+     "/comunidad"
+    ],
+    [
+     "Hablemos",
+     "/contacto"
+    ]
+   ]
+  },
+  "footer": {
+   "present": true,
+   "links": [
+    [
+     "Diseño de sitios web y tiendas en línea",
+     "/servicios/desarrollo-web"
+    ],
+    [
+     "Aplicaciones móviles",
+     "/servicios/aplicaciones-moviles"
+    ],
+    [
+     "Integración de APIs y Servicios Externos",
+     "/servicios/integracion-de-apis"
+    ],
+    [
+     "Desarrollo a medida",
+     "/servicios/desarrollo-a-medida"
+    ],
+    [
+     "Consultoría técnica",
+     "/servicios/consultoria-tecnica"
+    ],
+    [
+     "DevOps e infraestructura",
+     "/servicios/devops-infraestructura"
+    ],
+    [
+     "Cómo trabajamos",
+     "/como-trabajamos"
+    ],
+    [
+     "Proyectos",
+     "/proyectos"
+    ],
+    [
+     "Comunidad",
+     "/comunidad"
+    ],
+    [
+     "Contacto",
+     "/contacto"
+    ],
+    [
+     "Aviso de privacidad",
+     "/aviso-de-privacidad"
+    ],
+    [
+     "Términos y condiciones",
+     "/terminos-y-condiciones"
+    ]
+   ]
+  }
+ },
+ "moviles": {
+  "config": {
+   "title": "GussWare - Aplicaciones móviles (Detalle de Servicio)",
+   "colors": {
+    "primary": "#004A98",
+    "deep": "#00346E",
+    "secondary": "#2164A6",
+    "accent": "#FF5000",
+    "ink": "#242126",
+    "muted": "#5C6068",
+    "surface": "#FFFFFF",
+    "surfaceAlt": "#F2F2F2"
+   },
+   "fontFamily": [
+    "\"Source Sans 3\"",
+    "sans-serif"
+   ]
+  },
+  "sections": [
+   {
+    "n": 1,
+    "class": "w-full bg-white pt-10 pb-20 border-b border-[#E5E5E5]",
+    "grids": [
+     "grid grid-cols-12 gap-8 items-start"
+    ],
+    "items": [
+     {
+      "tag": "a",
+      "text": "Inicio",
+      "href": "/",
+      "class": "hover:text-brand-primary"
+     },
+     {
+      "tag": "span",
+      "text": "/",
+      "href": null,
+      "class": "mx-2"
+     },
+     {
+      "tag": "a",
+      "text": "Servicios",
+      "href": "/servicios",
+      "class": "hover:text-brand-primary"
+     },
+     {
+      "tag": "span",
+      "text": "/",
+      "href": null,
+      "class": "mx-2"
+     },
+     {
+      "tag": "span",
+      "text": "Aplicaciones móviles",
+      "href": null,
+      "class": "text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "DESARROLLO DE APLICACIONES MÓVILES",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-widest text-brand-primary"
+     },
+     {
+      "tag": "h1",
+      "text": "Una aplicación que resuelve una necesidad desde el celular",
+      "href": null,
+      "class": "text-4xl sm:text-5xl lg:text-[64px] font-bold leading-[1.08] tracking-tight text-brand-ink mb-6"
+     },
+     {
+      "tag": "p",
+      "text": "Si tus clientes o colaboradores necesitan consultar información, realizar operaciones o acceder a tus servicios desde cualquier lugar, desarrollamos una aplicación pensada para esas tareas. Definimos contigo qué debe hacer y cómo llevarla a iPhone y Android.",
+      "href": null,
+      "class": "text-lg lg:text-xl text-brand-muted leading-relaxed max-w-[65ch] mb-10"
+     },
+     {
+      "tag": "a",
+      "text": "Hablemos de tu app",
+      "href": "/contacto",
+      "class": "bg-brand-accent text-white px-8 py-4 text-base font-bold tracking-wide hover:bg-[#e04600] transition-colors"
+     },
+     {
+      "tag": "a",
+      "text": "Ver soluciones ↓",
+      "href": "#soluciones",
+      "class": "text-base font-bold text-brand-primary hover:text-brand-deep flex items-center gap-1.5 transition-colors"
+     },
+     {
+      "tag": "h3",
+      "text": "La plataforma adecuada",
+      "href": null,
+      "class": "text-base font-bold text-brand-ink mb-1"
+     },
+     {
+      "tag": "p",
+      "text": "iOS, Android o ambas según lo que necesitas",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-snug"
+     },
+     {
+      "tag": "h3",
+      "text": "Tareas más sencillas",
+      "href": null,
+      "class": "text-base font-bold text-brand-ink mb-1"
+     },
+     {
+      "tag": "p",
+      "text": "Funciones organizadas para el uso diario",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-snug"
+     },
+     {
+      "tag": "h3",
+      "text": "Base para crecer",
+      "href": null,
+      "class": "text-base font-bold text-brand-ink mb-1"
+     },
+     {
+      "tag": "p",
+      "text": "Preparada para nuevas funciones y actualizaciones",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-snug"
+     }
+    ]
+   },
+   {
+    "n": 2,
+    "class": "w-full bg-white section-py border-b border-[#E5E5E5]",
+    "grids": [
+     "grid grid-cols-12 gap-8 mb-12"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "01 · EL PROBLEMA",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-widest text-brand-primary block mb-3"
+     },
+     {
+      "tag": "h2",
+      "text": "Que la aplicación facilite las tareas de tus usuarios",
+      "href": null,
+      "class": "text-3xl lg:text-[42px] font-bold leading-tight text-brand-ink mb-6"
+     },
+     {
+      "tag": "p",
+      "text": "Una aplicación pierde valor si resulta complicada, tarda demasiado en responder o no resuelve el problema para el que fue creada.",
+      "href": null,
+      "class": "text-base lg:text-lg text-brand-muted leading-relaxed max-w-[50ch]"
+     },
+     {
+      "tag": "span",
+      "text": "01",
+      "href": null,
+      "class": "text-xl font-bold text-brand-primary w-8 flex-shrink-0"
+     },
+     {
+      "tag": "p",
+      "text": "La aplicación es complicada y tus usuarios no encuentran cómo hacer lo que necesitan.",
+      "href": null,
+      "class": "text-base lg:text-lg text-brand-ink leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "02",
+      "href": null,
+      "class": "text-xl font-bold text-brand-primary w-8 flex-shrink-0"
+     },
+     {
+      "tag": "p",
+      "text": "Tarda en responder o falla en el momento en que más se usa.",
+      "href": null,
+      "class": "text-base lg:text-lg text-brand-ink leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "03",
+      "href": null,
+      "class": "text-xl font-bold text-brand-primary w-8 flex-shrink-0"
+     },
+     {
+      "tag": "p",
+      "text": "No resuelve la tarea concreta para la que se creó.",
+      "href": null,
+      "class": "text-base lg:text-lg text-brand-ink leading-relaxed"
+     },
+     {
+      "tag": "p",
+      "text": "Aplicaciones móviles · iOS y Android · Experiencia de usuario · Rendimiento · Notificaciones · Integraciones",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-muted"
+     }
+    ]
+   },
+   {
+    "n": 3,
+    "class": "w-full bg-[#F2F2F2] section-py border-b border-[#E5E5E5]",
+    "grids": [
+     "grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch mb-12"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "02 · QUÉ PUEDES CONTRATAR",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-widest text-brand-primary block mb-3"
+     },
+     {
+      "tag": "h2",
+      "text": "Dos caminos para llegar a tus usuarios",
+      "href": null,
+      "class": "text-3xl lg:text-[42px] font-bold leading-tight text-brand-ink mb-4"
+     },
+     {
+      "tag": "p",
+      "text": "Elegimos entre un desarrollo específico para una plataforma y una solución multiplataforma según las funciones, el rendimiento y los recursos del proyecto.",
+      "href": null,
+      "class": "text-base lg:text-lg text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "h3",
+      "text": "Aplicaciones específicas para iPhone o Android",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-ink mb-3 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Cuando necesitas aprovechar funciones particulares del dispositivo o desarrollar una experiencia enfocada en una plataforma.",
+      "href": null,
+      "class": "text-sm lg:text-base text-brand-muted leading-relaxed mb-8"
+     },
+     {
+      "tag": "span",
+      "text": "QUÉ RECIBES",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-primary block mb-4"
+     },
+     {
+      "tag": "li",
+      "text": "Aplicación adaptada a iOS o Android",
+      "href": null,
+      "class": "flex items-start gap-3 text-sm lg:text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "li",
+      "text": "Integración con cámara, ubicación y notificaciones",
+      "href": null,
+      "class": "flex items-start gap-3 text-sm lg:text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "li",
+      "text": "Pantallas alineadas con la experiencia habitual de la plataforma",
+      "href": null,
+      "class": "flex items-start gap-3 text-sm lg:text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "li",
+      "text": "Pruebas de las funciones y el rendimiento requeridos",
+      "href": null,
+      "class": "flex items-start gap-3 text-sm lg:text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "li",
+      "text": "Proyecto preparado para recibir mantenimiento y actualizaciones",
+      "href": null,
+      "class": "flex items-start gap-3 text-sm lg:text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "BENEFICIO",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-muted block mb-1"
+     },
+     {
+      "tag": "p",
+      "text": "Aprovecha las funciones del dispositivo y una experiencia propia de la plataforma.",
+      "href": null,
+      "class": "text-sm font-semibold text-brand-ink leading-snug"
+     },
+     {
+      "tag": "h3",
+      "text": "Una aplicación para iPhone y Android",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-ink mb-3 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Llega a usuarios de ambas plataformas con un desarrollo que comparte componentes y reduce la duplicación de trabajo cuando es viable.",
+      "href": null,
+      "class": "text-sm lg:text-base text-brand-muted leading-relaxed mb-8"
+     },
+     {
+      "tag": "span",
+      "text": "QUÉ RECIBES",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-primary block mb-4"
+     },
+     {
+      "tag": "li",
+      "text": "Aplicación disponible para iOS y Android",
+      "href": null,
+      "class": "flex items-start gap-3 text-sm lg:text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "li",
+      "text": "Componentes y lógica compartidos para optimizar el desarrollo",
+      "href": null,
+      "class": "flex items-start gap-3 text-sm lg:text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "li",
+      "text": "Interfaz adaptada a cada plataforma",
+      "href": null,
+      "class": "flex items-start gap-3 text-sm lg:text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "li",
+      "text": "Funciones conectadas con los servicios y sistemas necesarios",
+      "href": null,
+      "class": "flex items-start gap-3 text-sm lg:text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "li",
+      "text": "Base común para mantener y ampliar la aplicación",
+      "href": null,
+      "class": "flex items-start gap-3 text-sm lg:text-[15px] text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "BENEFICIO",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-muted block mb-1"
+     },
+     {
+      "tag": "p",
+      "text": "Llega a ambas plataformas con una base común y menos duplicación.",
+      "href": null,
+      "class": "text-sm font-semibold text-brand-ink leading-snug"
+     },
+     {
+      "tag": "a",
+      "text": "Hablemos de tu app →",
+      "href": "/contacto",
+      "class": "inline-flex items-center gap-2 text-base font-bold text-brand-primary hover:text-brand-deep transition-colors"
+     }
+    ]
+   },
+   {
+    "n": 4,
+    "class": "w-full bg-[#F2F2F2] section-py border-b border-[#E5E5E5]",
+    "grids": [
+     "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "03 · CÓMO TRABAJAMOS",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-widest text-brand-primary block mb-3"
+     },
+     {
+      "tag": "h2",
+      "text": "De la idea a una aplicación que puedes probar",
+      "href": null,
+      "class": "text-3xl lg:text-[42px] font-bold leading-tight text-brand-ink mb-4"
+     },
+     {
+      "tag": "p",
+      "text": "Definimos las funciones, validamos la experiencia y desarrollamos por etapas para que puedas revisar el avance antes del lanzamiento.",
+      "href": null,
+      "class": "text-base lg:text-lg text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "h3",
+      "text": "Entender",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Identificamos a los usuarios, las tareas y las necesidades que debe resolver la aplicación.",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "Definición inicial",
+      "href": null,
+      "class": "text-[11px] font-bold uppercase tracking-wider text-brand-secondary"
+     },
+     {
+      "tag": "h3",
+      "text": "Diseñar",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Creamos las pantallas y los recorridos para que puedas validar cómo funcionará.",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "Validación UX/UI",
+      "href": null,
+      "class": "text-[11px] font-bold uppercase tracking-wider text-brand-secondary"
+     },
+     {
+      "tag": "h3",
+      "text": "Desarrollar",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Implementamos las funciones y preparamos versiones de prueba para revisar el resultado.",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "Entregas periódicas",
+      "href": null,
+      "class": "text-[11px] font-bold uppercase tracking-wider text-brand-secondary"
+     },
+     {
+      "tag": "h3",
+      "text": "Publicar y evolucionar",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Preparamos la distribución en las tiendas y definimos las siguientes mejoras de acuerdo con las necesidades del proyecto.",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "Lanzamiento",
+      "href": null,
+      "class": "text-[11px] font-bold uppercase tracking-wider text-brand-accent"
+     }
+    ]
+   },
+   {
+    "n": 5,
+    "class": "w-full bg-white section-py border-b border-[#E5E5E5]",
+    "grids": [
+     "grid grid-cols-1 md:grid-cols-3 border-t border-b border-[#E5E5E5] divide-y md:divide-y-0 md:divide-x divide-[#E5E5E5] py-2"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "04 · ENFOQUE TÉCNICO",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-widest text-brand-muted block mb-3"
+     },
+     {
+      "tag": "h2",
+      "text": "Cómo desarrollamos tu aplicación",
+      "href": null,
+      "class": "text-2xl lg:text-[34px] font-bold leading-tight text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Elegimos el enfoque técnico según las funciones que necesitas y las plataformas en las que quieres estar presente.",
+      "href": null,
+      "class": "text-sm lg:text-base text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "Plataformas",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-primary block mb-2"
+     },
+     {
+      "tag": "p",
+      "text": "iOS · Android",
+      "href": null,
+      "class": "text-lg font-semibold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "Funciones del dispositivo",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-primary block mb-2"
+     },
+     {
+      "tag": "p",
+      "text": "Cámara · Ubicación · Notificaciones",
+      "href": null,
+      "class": "text-lg font-semibold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "Enfoque de desarrollo",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-primary block mb-2"
+     },
+     {
+      "tag": "p",
+      "text": "Específico por plataforma · Multiplataforma",
+      "href": null,
+      "class": "text-lg font-semibold text-brand-ink"
+     }
+    ]
+   },
+   {
+    "n": 6,
+    "class": "bg-[#F2F2F2] py-[120px] border-b border-[#DADADA]",
+    "grids": [],
+    "items": [
+     {
+      "tag": "span",
+      "text": "05",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "—",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "DUDAS FRECUENTES",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "h2",
+      "text": "Lo que suele preguntarse antes de empezar",
+      "href": null,
+      "class": "text-3xl lg:text-[42px] font-bold text-brand-ink leading-[1.15] tracking-tight mb-12"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Necesito una aplicación diferente para iPhone y Android?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "−",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-primary flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "p",
+      "text": "No siempre. Podemos desarrollar una aplicación específica para una plataforma o utilizar un enfoque multiplataforma. Evaluamos las funciones y los requisitos para recomendarte la opción adecuada.",
+      "href": null,
+      "class": "text-base text-brand-muted leading-relaxed max-w-[70ch]"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Cuánto tarda desarrollar una aplicación?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Puedo probarla antes de publicarla?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Quién se encarga de publicarla en las tiendas?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Qué pasa cuando necesite nuevas funciones?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Cuánto cuesta desarrollar una aplicación?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "a",
+      "text": "¿Te queda otra duda? Escríbenos →",
+      "href": "/contacto",
+      "class": "inline-flex items-center gap-1.5 text-sm font-bold text-brand-primary hover:text-brand-deep transition-colors"
+     }
+    ]
+   },
+   {
+    "n": 7,
+    "class": "w-full bg-brand-deep text-white section-py",
+    "grids": [],
+    "items": [
+     {
+      "tag": "span",
+      "text": "06 · INICIA TU APLICACIÓN",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-widest text-[#FF8547] block mb-4"
+     },
+     {
+      "tag": "h2",
+      "text": "Lleva tus servicios al celular de tus usuarios",
+      "href": null,
+      "class": "text-3xl sm:text-4xl lg:text-[44px] font-bold leading-tight mb-6 tracking-tight"
+     },
+     {
+      "tag": "p",
+      "text": "Cuéntanos qué necesitas que hagan tus usuarios desde una aplicación. Evaluaremos las opciones para convertir esa necesidad en un proyecto.",
+      "href": null,
+      "class": "text-lg lg:text-xl text-[#CBD5E1] leading-relaxed mb-10 max-w-[65ch]"
+     },
+     {
+      "tag": "a",
+      "text": "Cuéntanos tu idea",
+      "href": "/contacto",
+      "class": "bg-brand-accent text-white px-8 py-4 text-base font-bold tracking-wide hover:bg-[#e04600] transition-colors"
+     },
+     {
+      "tag": "a",
+      "text": "Ver todos los servicios →",
+      "href": "/servicios",
+      "class": "text-base font-bold text-white hover:text-[#FF8547] flex items-center gap-1.5 transition-colors"
+     }
+    ]
+   },
+   {
+    "n": 8,
+    "class": "w-full bg-white section-py border-b border-[#E5E5E5]",
+    "grids": [
+     "grid grid-cols-1 md:grid-cols-3 gap-8"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "SIGUE EXPLORANDO",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-widest text-brand-muted block mb-3"
+     },
+     {
+      "tag": "h2",
+      "text": "Otros servicios que pueden ayudarte",
+      "href": null,
+      "class": "text-3xl lg:text-[40px] font-bold text-brand-ink tracking-tight"
+     },
+     {
+      "tag": "span",
+      "text": "WEB & E-COMMERCE",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-secondary block mb-3"
+     },
+     {
+      "tag": "h3",
+      "text": "Diseño de sitios web y tiendas en línea",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Tu sitio web debe conseguir algo más que verse bien",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed mb-6"
+     },
+     {
+      "tag": "a",
+      "text": "Ver servicio →",
+      "href": "/servicios/web-ecommerce",
+      "class": "text-sm font-bold text-brand-primary hover:text-brand-deep flex items-center gap-1"
+     },
+     {
+      "tag": "span",
+      "text": "SOFTWARE A MEDIDA",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-secondary block mb-3"
+     },
+     {
+      "tag": "h3",
+      "text": "Desarrollo a medida",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Tu empresa no debería tener que adaptarse a un software que no le funciona",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed mb-6"
+     },
+     {
+      "tag": "a",
+      "text": "Ver servicio →",
+      "href": "/servicios/desarrollo-a-medida",
+      "class": "text-sm font-bold text-brand-primary hover:text-brand-deep flex items-center gap-1"
+     },
+     {
+      "tag": "span",
+      "text": "INTEGRACIONES",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-secondary block mb-3"
+     },
+     {
+      "tag": "h3",
+      "text": "Integración de APIs y Servicios Externos",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Deja de copiar datos de un programa a otro",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed mb-6"
+     },
+     {
+      "tag": "a",
+      "text": "Ver servicio →",
+      "href": "/servicios/integracion-de-apis",
+      "class": "text-sm font-bold text-brand-primary hover:text-brand-deep flex items-center gap-1"
+     }
+    ]
+   }
+  ],
+  "header": {
+   "present": true,
+   "links": [
+    [
+     "GussWare",
+     "/"
+    ],
+    [
+     "Servicios",
+     "/servicios"
+    ],
+    [
+     "Cómo trabajamos",
+     "/como-trabajamos"
+    ],
+    [
+     "Proyectos",
+     "/proyectos"
+    ],
+    [
+     "Comunidad",
+     "/comunidad"
+    ],
+    [
+     "Hablemos",
+     "/contacto"
+    ]
+   ]
+  },
+  "footer": {
+   "present": true,
+   "links": [
+    [
+     "GussWare",
+     "/"
+    ],
+    [
+     "Desarrollo a medida",
+     "/servicios/desarrollo-a-medida"
+    ],
+    [
+     "Diseño de sitios web y e-commerce",
+     "/servicios/diseno-web-ecommerce"
+    ],
+    [
+     "Aplicaciones móviles",
+     "/servicios/aplicaciones-moviles"
+    ],
+    [
+     "Integración de APIs y Servicios Externos",
+     "/servicios/integracion-de-apis"
+    ],
+    [
+     "Consultoría técnica",
+     "/servicios/consultoria-tecnica"
+    ],
+    [
+     "DevOps y Soporte Técnico",
+     "/servicios/devops-soporte"
+    ],
+    [
+     "Cómo trabajamos",
+     "/como-trabajamos"
+    ],
+    [
+     "Proyectos",
+     "/proyectos"
+    ],
+    [
+     "Comunidad",
+     "/comunidad"
+    ],
+    [
+     "Contacto",
+     "/contacto"
+    ],
+    [
+     "Aviso de privacidad",
+     "/aviso-de-privacidad"
+    ],
+    [
+     "Términos y condiciones",
+     "/terminos-y-condiciones"
+    ]
+   ]
+  }
+ },
+ "medida": {
+  "config": {
+   "title": "GussWare - Servicio: Desarrollo a medida",
+   "colors": {
+    "primary": "#004A98",
+    "deep": "#00346E",
+    "secondary": "#2164A6",
+    "accent": "#FF5000",
+    "ink": "#242126",
+    "muted": "#5C6068",
+    "surface": "#FFFFFF",
+    "surfaceAlt": "#F2F2F2",
+    "highlight": "#FFD8D8",
+    "line": "#DADADA",
+    "borderDark": "#1E4B82"
+   },
+   "maxWidth": {
+    "container": "1280px"
+   },
+   "fontFamily": [
+    "\"Source Sans 3\"",
+    "sans-serif"
+   ]
+  },
+  "sections": [
+   {
+    "n": 1,
+    "class": "bg-white border-b border-brand-line pt-12 pb-24 lg:pt-16 lg:pb-28",
+    "grids": [
+     "grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start"
+    ],
+    "items": [
+     {
+      "tag": "a",
+      "text": "Inicio",
+      "href": "/",
+      "class": "hover:text-brand-ink transition-colors"
+     },
+     {
+      "tag": "span",
+      "text": "/",
+      "href": null,
+      "class": "text-brand-line"
+     },
+     {
+      "tag": "a",
+      "text": "Servicios",
+      "href": "#servicios",
+      "class": "hover:text-brand-ink transition-colors"
+     },
+     {
+      "tag": "span",
+      "text": "/",
+      "href": null,
+      "class": "text-brand-line"
+     },
+     {
+      "tag": "span",
+      "text": "Desarrollo a medida",
+      "href": null,
+      "class": "text-brand-ink font-semibold"
+     },
+     {
+      "tag": "span",
+      "text": "DESARROLLO DE SOFTWARE",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-accent"
+     },
+     {
+      "tag": "h1",
+      "text": "Tu empresa no debería tener que adaptarse a un software que no le funciona",
+      "href": null,
+      "class": "text-4xl sm:text-5xl lg:text-[64px] font-bold text-brand-ink leading-[1.08] tracking-tight mb-7"
+     },
+     {
+      "tag": "p",
+      "text": "Si tus procesos dependen de hojas de cálculo, capturas repetidas o herramientas que no se comunican, podemos desarrollar una solución a la medida. Primero revisamos si realmente necesitas software nuevo; si una herramienta existente resuelve el problema, también te lo diremos.",
+      "href": null,
+      "class": "text-lg lg:text-[19px] leading-relaxed text-brand-muted max-w-[68ch] mb-10"
+     },
+     {
+      "tag": "a",
+      "text": "Hablemos de tu proceso",
+      "href": "#cierre",
+      "class": "inline-flex items-center justify-center bg-brand-accent text-white text-base font-bold px-7 py-3.5 hover:bg-[#e04600] transition-colors focus:outline-none focus:ring-2 focus:ring-brand-accent"
+     },
+     {
+      "tag": "a",
+      "text": "Ver soluciones ↓",
+      "href": "#soluciones",
+      "class": "inline-flex items-center gap-2 text-base font-bold text-brand-primary hover:text-brand-deep transition-colors group"
+     },
+     {
+      "tag": "span",
+      "text": "01",
+      "href": null,
+      "class": "text-4xl lg:text-5xl font-extrabold text-brand-primary tracking-tight block mb-2"
+     },
+     {
+      "tag": "h2",
+      "text": "Menos trabajo manual",
+      "href": null,
+      "class": "text-lg font-bold text-brand-ink leading-snug mb-1.5"
+     },
+     {
+      "tag": "p",
+      "text": "Procesos adaptados a tu operación",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "02",
+      "href": null,
+      "class": "text-4xl lg:text-5xl font-extrabold text-brand-primary tracking-tight block mb-2"
+     },
+     {
+      "tag": "h2",
+      "text": "Información centralizada",
+      "href": null,
+      "class": "text-lg font-bold text-brand-ink leading-snug mb-1.5"
+     },
+     {
+      "tag": "p",
+      "text": "Menos datos dispersos entre herramientas",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "03",
+      "href": null,
+      "class": "text-4xl lg:text-5xl font-extrabold text-brand-primary tracking-tight block mb-2"
+     },
+     {
+      "tag": "h2",
+      "text": "Control de tu operación",
+      "href": null,
+      "class": "text-lg font-bold text-brand-ink leading-snug mb-1.5"
+     },
+     {
+      "tag": "p",
+      "text": "Funciones diseñadas para tu equipo",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed"
+     }
+    ]
+   },
+   {
+    "n": 2,
+    "class": "bg-white py-[120px] border-b border-brand-line",
+    "grids": [
+     "grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 mb-16 items-start",
+     "py-8 grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 items-baseline group hover:bg-[#fafafa] transition-colors px-2"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "01",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "—",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "EL PROBLEMA",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "h2",
+      "text": "Resuelve con software lo que hoy frena a tu equipo",
+      "href": null,
+      "class": "text-3xl lg:text-[42px] font-bold text-brand-ink leading-[1.15] tracking-tight"
+     },
+     {
+      "tag": "p",
+      "text": "Cuando una herramienta no se adapta a tus procesos, tu equipo termina usando soluciones improvisadas, capturando la misma información varias veces o buscando datos en distintos lugares.",
+      "href": null,
+      "class": "text-base lg:text-[17px] text-brand-muted leading-relaxed max-w-[60ch]"
+     },
+     {
+      "tag": "span",
+      "text": "01",
+      "href": null,
+      "class": "text-3xl font-extrabold text-brand-primary tracking-tight"
+     },
+     {
+      "tag": "p",
+      "text": "Tu equipo usa hojas de cálculo, correos o registros separados para operar.",
+      "href": null,
+      "class": "text-lg lg:text-xl font-semibold text-brand-ink leading-snug"
+     },
+     {
+      "tag": "span",
+      "text": "02",
+      "href": null,
+      "class": "text-3xl font-extrabold text-brand-primary tracking-tight"
+     },
+     {
+      "tag": "p",
+      "text": "La misma información se captura varias veces en distintas herramientas.",
+      "href": null,
+      "class": "text-lg lg:text-xl font-semibold text-brand-ink leading-snug"
+     },
+     {
+      "tag": "span",
+      "text": "03",
+      "href": null,
+      "class": "text-3xl font-extrabold text-brand-primary tracking-tight"
+     },
+     {
+      "tag": "p",
+      "text": "Para dar seguimiento, hay que buscar datos en varios lugares.",
+      "href": null,
+      "class": "text-lg lg:text-xl font-semibold text-brand-ink leading-snug"
+     },
+     {
+      "tag": "span",
+      "text": "Software a medida",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "·",
+      "href": null,
+      "class": "text-brand-line"
+     },
+     {
+      "tag": "span",
+      "text": "Sistemas internos",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "·",
+      "href": null,
+      "class": "text-brand-line"
+     },
+     {
+      "tag": "span",
+      "text": "Aplicaciones de gestión",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "·",
+      "href": null,
+      "class": "text-brand-line"
+     },
+     {
+      "tag": "span",
+      "text": "Automatización",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "·",
+      "href": null,
+      "class": "text-brand-line"
+     },
+     {
+      "tag": "span",
+      "text": "Integraciones",
+      "href": null,
+      "class": ""
+     }
+    ]
+   },
+   {
+    "n": 3,
+    "class": "bg-brand-surfaceAlt py-[120px] border-b border-brand-line",
+    "grids": [
+     "grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12 items-stretch"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "02",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "—",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "QUÉ PUEDES CONTRATAR",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "h2",
+      "text": "Software para resolver problemas concretos de tu empresa",
+      "href": null,
+      "class": "text-3xl lg:text-[42px] font-bold text-brand-ink leading-[1.15] tracking-tight mb-4"
+     },
+     {
+      "tag": "p",
+      "text": "Desarrollamos herramientas para organizar la operación, atender mejor a tus clientes y coordinar procesos que requieren funciones específicas.",
+      "href": null,
+      "class": "text-base lg:text-[17px] text-brand-muted leading-relaxed max-w-[68ch]"
+     },
+     {
+      "tag": "span",
+      "text": "01",
+      "href": null,
+      "class": "text-3xl font-extrabold text-brand-primary tracking-tight block mb-4"
+     },
+     {
+      "tag": "h3",
+      "text": "Sistemas internos para tu operación",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-ink leading-tight mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Centraliza procesos que hoy administras con hojas de cálculo, correos o registros separados.",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed mb-6"
+     },
+     {
+      "tag": "p",
+      "text": "QUÉ RECIBES",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-secondary mb-4"
+     },
+     {
+      "tag": "li",
+      "text": "Módulos para pedidos, inventario, incidencias u otros procesos",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-sm text-brand-ink leading-snug"
+     },
+     {
+      "tag": "li",
+      "text": "Información organizada en un solo sistema",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-sm text-brand-ink leading-snug"
+     },
+     {
+      "tag": "li",
+      "text": "Automatización de tareas repetitivas",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-sm text-brand-ink leading-snug"
+     },
+     {
+      "tag": "li",
+      "text": "Usuarios y permisos según las responsabilidades del equipo",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-sm text-brand-ink leading-snug"
+     },
+     {
+      "tag": "li",
+      "text": "Avisos y recordatorios para dar seguimiento a las actividades",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-sm text-brand-ink leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Beneficio: Menos trabajo manual y una operación más ordenada.",
+      "href": null,
+      "class": "text-xs text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "02",
+      "href": null,
+      "class": "text-3xl font-extrabold text-brand-primary tracking-tight block mb-4"
+     },
+     {
+      "tag": "h3",
+      "text": "Portales y aplicaciones para clientes",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-ink leading-tight mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Permite que tus clientes consulten información y realicen operaciones sin depender de llamadas o correos para cada solicitud.",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed mb-6"
+     },
+     {
+      "tag": "p",
+      "text": "QUÉ RECIBES",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-secondary mb-4"
+     },
+     {
+      "tag": "li",
+      "text": "Acceso a pedidos, documentos y datos autorizados",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-sm text-brand-ink leading-snug"
+     },
+     {
+      "tag": "li",
+      "text": "Formularios para registrar solicitudes y darles seguimiento",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-sm text-brand-ink leading-snug"
+     },
+     {
+      "tag": "li",
+      "text": "Consulta del estado de trámites u operaciones",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-sm text-brand-ink leading-snug"
+     },
+     {
+      "tag": "li",
+      "text": "Interfaz con la identidad de tu empresa",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-sm text-brand-ink leading-snug"
+     },
+     {
+      "tag": "li",
+      "text": "Acceso desde celulares y computadoras",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-sm text-brand-ink leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Beneficio: Menos solicitudes repetidas y mejor atención.",
+      "href": null,
+      "class": "text-xs text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "03",
+      "href": null,
+      "class": "text-3xl font-extrabold text-brand-primary tracking-tight block mb-4"
+     },
+     {
+      "tag": "h3",
+      "text": "Soluciones para procesos complejos",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-ink leading-tight mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Conecta áreas, información y reglas de negocio en una solución diseñada para la forma en que trabaja tu empresa.",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed mb-6"
+     },
+     {
+      "tag": "p",
+      "text": "QUÉ RECIBES",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-secondary mb-4"
+     },
+     {
+      "tag": "li",
+      "text": "Procesos que involucran varias áreas o responsables",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-sm text-brand-ink leading-snug"
+     },
+     {
+      "tag": "li",
+      "text": "Integración con sistemas existentes",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-sm text-brand-ink leading-snug"
+     },
+     {
+      "tag": "li",
+      "text": "Reglas de negocio adaptadas a tu operación",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-sm text-brand-ink leading-snug"
+     },
+     {
+      "tag": "li",
+      "text": "Paneles para consultar información y dar seguimiento",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-sm text-brand-ink leading-snug"
+     },
+     {
+      "tag": "li",
+      "text": "Estructura documentada para facilitar futuras ampliaciones",
+      "href": null,
+      "class": "flex items-start gap-2.5 text-sm text-brand-ink leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Beneficio: Áreas coordinadas y reglas claras para operar.",
+      "href": null,
+      "class": "text-xs text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "a",
+      "text": "Hablemos de tu proceso →",
+      "href": "#cierre",
+      "class": "inline-flex items-center gap-2 text-base font-bold text-brand-primary hover:text-brand-deep transition-colors group"
+     }
+    ]
+   },
+   {
+    "n": 4,
+    "class": "bg-brand-surfaceAlt py-[120px] border-b border-brand-line",
+    "grids": [
+     "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "03",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "—",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "CÓMO TRABAJAMOS",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "h2",
+      "text": "Primero entendemos tu operación; después construimos",
+      "href": null,
+      "class": "text-3xl lg:text-[42px] font-bold text-brand-ink leading-[1.15] tracking-tight mb-4"
+     },
+     {
+      "tag": "p",
+      "text": "Desarrollamos a partir de tus procesos reales, validando las funciones prioritarias y revisando los avances contigo.",
+      "href": null,
+      "class": "text-base lg:text-[17px] text-brand-muted leading-relaxed max-w-[68ch]"
+     },
+     {
+      "tag": "span",
+      "text": "01 ETAPA",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider px-2 py-0.5 bg-brand-primary text-white"
+     },
+     {
+      "tag": "h3",
+      "text": "Entender",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Identificamos dónde se pierde tiempo, qué información necesitas y qué tareas conviene simplificar.",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "02 ETAPA",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider px-2 py-0.5 bg-brand-primary text-white"
+     },
+     {
+      "tag": "h3",
+      "text": "Diseñar",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Definimos los procesos, las funciones y la estructura del sistema.",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "03 ETAPA",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider px-2 py-0.5 bg-brand-primary text-white"
+     },
+     {
+      "tag": "h3",
+      "text": "Desarrollar",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Construimos por etapas para revisar las funciones y ajustar lo necesario.",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "04 ETAPA",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider px-2 py-0.5 bg-brand-accent text-white"
+     },
+     {
+      "tag": "h3",
+      "text": "Evolucionar",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Planificamos mejoras conforme cambien tus procesos y prioridades.",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed"
+     }
+    ]
+   },
+   {
+    "n": 5,
+    "class": "bg-white py-[120px] border-b border-brand-line",
+    "grids": [
+     "grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 mb-12 items-start",
+     "border-t border-b border-brand-line py-8 grid grid-cols-1 md:grid-cols-3 gap-8"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "04",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "—",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "CAPACIDADES DEL SISTEMA",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "h2",
+      "text": "Qué puede resolver el software",
+      "href": null,
+      "class": "text-2xl lg:text-3xl font-bold text-brand-ink leading-tight tracking-tight"
+     },
+     {
+      "tag": "p",
+      "text": "Seleccionamos las herramientas técnicas según los procesos, la información y las condiciones de operación de tu empresa.",
+      "href": null,
+      "class": "text-sm lg:text-base text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "p",
+      "text": "TIPO DE SOLUCIÓN",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-ink mb-2"
+     },
+     {
+      "tag": "p",
+      "text": "Sistemas internos · Portales de clientes · Aplicaciones de gestión",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "p",
+      "text": "FUNCIONES",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-ink mb-2"
+     },
+     {
+      "tag": "p",
+      "text": "Automatización · Gestión de información · Control de permisos",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "p",
+      "text": "INTEGRACIÓN Y MANTENIMIENTO",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-ink mb-2"
+     },
+     {
+      "tag": "p",
+      "text": "Conexión con otros sistemas · Documentación técnica · Ampliación por etapas",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed"
+     }
+    ]
+   },
+   {
+    "n": 6,
+    "class": "bg-[#F2F2F2] py-[120px] border-b border-[#DADADA]",
+    "grids": [],
+    "items": [
+     {
+      "tag": "span",
+      "text": "05",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "—",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "DUDAS FRECUENTES",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "h2",
+      "text": "Lo que suele preguntarse antes de empezar",
+      "href": null,
+      "class": "text-3xl lg:text-[42px] font-bold text-brand-ink leading-[1.15] tracking-tight mb-12"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Cómo sé si necesito software a medida?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "−",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-primary flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "p",
+      "text": "Revisamos tu proceso y las herramientas que ya existen. Si una solución disponible cubre tus necesidades, te la recomendaremos; si tus procesos requieren funciones específicas, evaluaremos el desarrollo a medida.",
+      "href": null,
+      "class": "text-base text-brand-muted leading-relaxed max-w-[70ch]"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Cuánto tiempo necesito dedicar al proyecto?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿El software será mío?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Qué pasa si mi empresa cambia sus procesos?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Se puede conectar con mis herramientas actuales?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Cuánto cuesta desarrollar software a medida?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "a",
+      "text": "¿Te queda otra duda? Escríbenos →",
+      "href": "#cierre",
+      "class": "inline-flex items-center gap-1.5 text-sm font-bold text-brand-primary hover:text-brand-deep transition-colors"
+     }
+    ]
+   },
+   {
+    "n": 7,
+    "class": "bg-brand-deep text-white py-[120px] relative overflow-hidden",
+    "grids": [
+     "grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "06 — INICIA TU PROYECTO",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "h2",
+      "text": "Deja de adaptar tu operación a herramientas que se quedan cortas",
+      "href": null,
+      "class": "text-3xl sm:text-4xl lg:text-[44px] font-bold text-white leading-[1.12] tracking-tight mb-6"
+     },
+     {
+      "tag": "p",
+      "text": "Cuéntanos qué procesos quieres resolver y cómo trabaja tu equipo. Te ayudaremos a determinar si necesitas una solución a medida o si existe una alternativa más conveniente.",
+      "href": null,
+      "class": "text-base lg:text-lg text-[#dadada] leading-relaxed max-w-[64ch] mb-10"
+     },
+     {
+      "tag": "a",
+      "text": "Cuéntanos qué necesitas resolver",
+      "href": "/contacto",
+      "class": "inline-flex items-center justify-center bg-brand-accent text-white text-base font-bold px-8 py-4 hover:bg-[#e04600] transition-colors focus:outline-none focus:ring-2 focus:ring-white"
+     },
+     {
+      "tag": "a",
+      "text": "Ver todos los servicios →",
+      "href": "#servicios",
+      "class": "inline-flex items-center gap-2 text-base font-semibold text-white hover:text-brand-highlight transition-colors group"
+     },
+     {
+      "tag": "span",
+      "text": "GUSSWARE",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "·",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "CORE",
+      "href": null,
+      "class": ""
+     }
+    ]
+   },
+   {
+    "n": 8,
+    "class": "bg-white py-[120px] border-b border-brand-line",
+    "grids": [
+     "grid grid-cols-1 md:grid-cols-3 gap-8"
+    ],
+    "items": [
+     {
+      "tag": "p",
+      "text": "SIGUE EXPLORANDO",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-secondary mb-3"
+     },
+     {
+      "tag": "h2",
+      "text": "Otros servicios que pueden ayudarte",
+      "href": null,
+      "class": "text-3xl lg:text-[40px] font-bold text-brand-ink leading-tight tracking-tight mb-14"
+     },
+     {
+      "tag": "p",
+      "text": "CONSULTORÍA",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-muted mb-4"
+     },
+     {
+      "tag": "h3",
+      "text": "Consultoría técnica",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Decide cómo construir tu proyecto antes de invertir en construirlo",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed mb-8"
+     },
+     {
+      "tag": "a",
+      "text": "Ver servicio →",
+      "href": "/servicios/consultoria-tecnica",
+      "class": "inline-flex items-center gap-1.5 text-sm font-bold text-brand-primary hover:text-brand-deep transition-colors group"
+     },
+     {
+      "tag": "p",
+      "text": "WEB Y E-COMMERCE",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-muted mb-4"
+     },
+     {
+      "tag": "h3",
+      "text": "Diseño de sitios web y tiendas en línea",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Tu sitio web debe conseguir algo más que verse bien",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed mb-8"
+     },
+     {
+      "tag": "a",
+      "text": "Ver servicio →",
+      "href": "/servicios/diseno-web",
+      "class": "inline-flex items-center gap-1.5 text-sm font-bold text-brand-primary hover:text-brand-deep transition-colors group"
+     },
+     {
+      "tag": "p",
+      "text": "SISTEMAS",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-muted mb-4"
+     },
+     {
+      "tag": "h3",
+      "text": "Integración de APIs y Servicios Externos",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Deja de copiar datos de un programa a otro",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed mb-8"
+     },
+     {
+      "tag": "a",
+      "text": "Ver servicio →",
+      "href": "/servicios/integracion-apis",
+      "class": "inline-flex items-center gap-1.5 text-sm font-bold text-brand-primary hover:text-brand-deep transition-colors group"
+     }
+    ]
+   }
+  ],
+  "header": {
+   "present": true,
+   "links": [
+    [
+     "GussWare",
+     "/"
+    ],
+    [
+     "Servicios",
+     "#soluciones"
+    ],
+    [
+     "Cómo trabajamos",
+     "#como-trabajamos"
+    ],
+    [
+     "Proyectos",
+     "#proyectos"
+    ],
+    [
+     "Comunidad",
+     "#comunidad"
+    ],
+    [
+     "Hablemos",
+     "#cierre"
+    ]
+   ]
+  },
+  "footer": {
+   "present": true,
+   "links": [
+    [
+     "Diseño de sitios web y tiendas en línea",
+     "/servicios/diseno-web"
+    ],
+    [
+     "Aplicaciones móviles",
+     "/servicios/aplicaciones-moviles"
+    ],
+    [
+     "Integración de APIs y Servicios Externos",
+     "/servicios/integracion-apis"
+    ],
+    [
+     "Desarrollo a medida",
+     "/servicios/desarrollo-a-medida"
+    ],
+    [
+     "Consultoría técnica",
+     "/servicios/consultoria-tecnica"
+    ],
+    [
+     "DevOps e infraestructura",
+     "/servicios/devops-soporte"
+    ],
+    [
+     "Cómo trabajamos",
+     "/como-trabajamos"
+    ],
+    [
+     "Proyectos",
+     "/proyectos"
+    ],
+    [
+     "Comunidad",
+     "/comunidad"
+    ],
+    [
+     "Contacto",
+     "/contacto"
+    ],
+    [
+     "Aviso de privacidad",
+     "/aviso-de-privacidad"
+    ],
+    [
+     "Términos y condiciones",
+     "/terminos-y-condiciones"
+    ]
+   ]
+  }
+ },
+ "devops": {
+  "config": {
+   "title": "GussWare - DevOps y Soporte Técnico",
+   "colors": {
+    "primary": "#004A98",
+    "deep": "#00346E",
+    "secondary": "#2164A6",
+    "accent": "#FF5000",
+    "ink": "#242126",
+    "muted": "#5C6068",
+    "surface": "#FFFFFF",
+    "surfaceAlt": "#F2F2F2",
+    "highlight": "#FFD8D8"
+   },
+   "maxWidth": {
+    "container": "1280px"
+   },
+   "fontFamily": [
+    "\"Source Sans 3\"",
+    "sans-serif"
+   ]
+  },
+  "sections": [
+   {
+    "n": 1,
+    "class": "bg-white pt-10 pb-24 border-b border-[#dadada]",
+    "grids": [
+     "grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start"
+    ],
+    "items": [
+     {
+      "tag": "li",
+      "text": "Inicio",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "li",
+      "text": "/",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "li",
+      "text": "Servicios",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "li",
+      "text": "/",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "li",
+      "text": "DevOps y Soporte Técnico",
+      "href": null,
+      "class": "text-brand-ink font-medium"
+     },
+     {
+      "tag": "span",
+      "text": "DEVOPS Y SOPORTE TÉCNICO",
+      "href": null,
+      "class": "text-[13px] tracking-[0.2em] uppercase font-bold text-brand-primary"
+     },
+     {
+      "tag": "h1",
+      "text": "Actualiza tus sistemas sin convertir cada cambio en un riesgo",
+      "href": null,
+      "class": "text-[44px] md:text-[56px] lg:text-[64px] font-extrabold text-brand-ink leading-[1.08] tracking-tight mb-8"
+     },
+     {
+      "tag": "p",
+      "text": "Una actualización mal aplicada o un servidor sin supervisión puede interrumpir tu operación. Automatizamos tareas, organizamos las publicaciones y damos seguimiento a la infraestructura para que puedas administrar tus sistemas con mayor control.",
+      "href": null,
+      "class": "text-[18px] md:text-[19px] text-brand-muted leading-relaxed mb-10 line-clamp-custom font-normal"
+     },
+     {
+      "tag": "a",
+      "text": "Hablemos de tu operación",
+      "href": "/contact",
+      "class": "inline-flex items-center justify-center px-8 py-4 bg-brand-accent text-white text-[16px] font-bold tracking-wide hover:bg-[#e04600] active:scale-[0.99] transition-all"
+     },
+     {
+      "tag": "a",
+      "text": "Ver soluciones ↓",
+      "href": "#soluciones",
+      "class": "inline-flex items-center text-[16px] font-bold text-brand-primary hover:text-brand-deep transition-colors group"
+     },
+     {
+      "tag": "span",
+      "text": "01",
+      "href": null,
+      "class": "block text-[32px] font-extrabold text-brand-primary leading-none mb-2"
+     },
+     {
+      "tag": "h3",
+      "text": "Cambios controlados",
+      "href": null,
+      "class": "text-[19px] font-bold text-brand-ink mb-1.5"
+     },
+     {
+      "tag": "p",
+      "text": "Publicaciones con validaciones y reversión cuando sea posible",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "02",
+      "href": null,
+      "class": "block text-[32px] font-extrabold text-brand-primary leading-none mb-2"
+     },
+     {
+      "tag": "h3",
+      "text": "Menos tareas manuales",
+      "href": null,
+      "class": "text-[19px] font-bold text-brand-ink mb-1.5"
+     },
+     {
+      "tag": "p",
+      "text": "Procesos técnicos automatizados",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "03",
+      "href": null,
+      "class": "block text-[32px] font-extrabold text-brand-primary leading-none mb-2"
+     },
+     {
+      "tag": "h3",
+      "text": "Problemas visibles",
+      "href": null,
+      "class": "text-[19px] font-bold text-brand-ink mb-1.5"
+     },
+     {
+      "tag": "p",
+      "text": "Alertas para detectar fallas a tiempo",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed"
+     }
+    ]
+   },
+   {
+    "n": 2,
+    "class": "bg-white py-[120px] border-b border-[#dadada]",
+    "grids": [
+     "grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 mb-16 items-start",
+     "py-7 grid grid-cols-1 md:grid-cols-12 gap-4 items-baseline"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "01 — EL PROBLEMA",
+      "href": null,
+      "class": "text-[13px] font-bold text-brand-primary uppercase tracking-[0.2em]"
+     },
+     {
+      "tag": "h2",
+      "text": "Evita que un problema técnico se convierta en un problema para tu negocio",
+      "href": null,
+      "class": "text-[36px] md:text-[42px] font-bold text-brand-ink leading-tight"
+     },
+     {
+      "tag": "p",
+      "text": "Los sistemas pueden presentar fallas por actualizaciones, falta de recursos, errores de configuración o copias de seguridad que no funcionan como se esperaba.",
+      "href": null,
+      "class": "text-[17px] text-brand-muted leading-relaxed line-clamp-custom"
+     },
+     {
+      "tag": "span",
+      "text": "01",
+      "href": null,
+      "class": "md:col-span-2 text-[28px] font-bold text-brand-primary leading-none"
+     },
+     {
+      "tag": "p",
+      "text": "Una actualización mal aplicada interrumpe la operación.",
+      "href": null,
+      "class": "md:col-span-10 text-[18px] font-semibold text-brand-ink leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "02",
+      "href": null,
+      "class": "md:col-span-2 text-[28px] font-bold text-brand-primary leading-none"
+     },
+     {
+      "tag": "p",
+      "text": "Nadie revisa los recursos, la configuración o las copias de seguridad hasta que algo falla.",
+      "href": null,
+      "class": "md:col-span-10 text-[18px] font-semibold text-brand-ink leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "03",
+      "href": null,
+      "class": "md:col-span-2 text-[28px] font-bold text-brand-primary leading-none"
+     },
+     {
+      "tag": "p",
+      "text": "Cuando hay una incidencia, no existe un proceso claro para atenderla.",
+      "href": null,
+      "class": "md:col-span-10 text-[18px] font-semibold text-brand-ink leading-relaxed"
+     },
+     {
+      "tag": "p",
+      "text": "Infraestructura · Despliegues · Copias de seguridad · Monitorización · Incidencias · Mantenimiento técnico",
+      "href": null,
+      "class": "text-[13px] font-semibold tracking-wider text-brand-muted uppercase"
+     }
+    ]
+   },
+   {
+    "n": 3,
+    "class": "bg-brand-surfaceAlt py-[120px] border-b border-[#dadada]",
+    "grids": [
+     "grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 items-stretch"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "02 — QUÉ PUEDES CONTRATAR",
+      "href": null,
+      "class": "text-[13px] font-bold text-brand-primary uppercase tracking-[0.2em]"
+     },
+     {
+      "tag": "h2",
+      "text": "Controla las publicaciones, la infraestructura y las incidencias",
+      "href": null,
+      "class": "text-[36px] md:text-[42px] font-bold text-brand-ink leading-tight mb-4"
+     },
+     {
+      "tag": "p",
+      "text": "Organizamos los procesos necesarios para actualizar tus sistemas, mantener su infraestructura y detectar problemas antes de que se conviertan en interrupciones mayores.",
+      "href": null,
+      "class": "text-[18px] text-brand-muted leading-relaxed line-clamp-custom"
+     },
+     {
+      "tag": "span",
+      "text": "01",
+      "href": null,
+      "class": "text-[36px] font-bold text-brand-primary block leading-none mb-4"
+     },
+     {
+      "tag": "h3",
+      "text": "Publicaciones controladas",
+      "href": null,
+      "class": "text-[22px] font-bold text-brand-ink mb-3 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Deja atrás las actualizaciones manuales y los cambios difíciles de revertir. Organizamos el proceso para publicar de forma consistente y reducir el riesgo de errores.",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed mb-6"
+     },
+     {
+      "tag": "span",
+      "text": "QUÉ RECIBES",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-[0.15em] uppercase text-brand-primary block mb-3"
+     },
+     {
+      "tag": "li",
+      "text": "• Proceso automatizado para publicar nuevas versiones",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "• Pruebas antes de aplicar cambios en producción",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "• Procedimiento de reversión cuando la arquitectura lo permita",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "• Entornos separados para desarrollo, pruebas y producción",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "• Registro de las versiones publicadas y sus resultados",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "p",
+      "text": "Beneficio: Cambios más previsibles y menos riesgo de interrupción.",
+      "href": null,
+      "class": "text-[13px] text-brand-muted leading-normal"
+     },
+     {
+      "tag": "span",
+      "text": "02",
+      "href": null,
+      "class": "text-[36px] font-bold text-brand-primary block leading-none mb-4"
+     },
+     {
+      "tag": "h3",
+      "text": "Infraestructura y copias de seguridad",
+      "href": null,
+      "class": "text-[22px] font-bold text-brand-ink mb-3 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Administra tus servidores y recursos técnicos con una configuración acorde con las necesidades de tus aplicaciones.",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed mb-6"
+     },
+     {
+      "tag": "span",
+      "text": "QUÉ RECIBES",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-[0.15em] uppercase text-brand-primary block mb-3"
+     },
+     {
+      "tag": "li",
+      "text": "• Configuración y administración de servidores o infraestructura en la nube",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "• Revisión del consumo de recursos y la capacidad",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "• Copias de seguridad automáticas con pruebas de restauración",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "• Actualizaciones de seguridad y mantenimiento técnico",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "• Procedimientos documentados para la recuperación ante fallas",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "p",
+      "text": "Beneficio: Una base operativa más ordenada y recuperable.",
+      "href": null,
+      "class": "text-[13px] text-brand-muted leading-normal"
+     },
+     {
+      "tag": "span",
+      "text": "03",
+      "href": null,
+      "class": "text-[36px] font-bold text-brand-primary block leading-none mb-4"
+     },
+     {
+      "tag": "h3",
+      "text": "Supervisión y soporte técnico",
+      "href": null,
+      "class": "text-[22px] font-bold text-brand-ink mb-3 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Identifica problemas de funcionamiento y cuenta con un proceso definido para atender las incidencias de tus sistemas.",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed mb-6"
+     },
+     {
+      "tag": "span",
+      "text": "QUÉ RECIBES",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-[0.15em] uppercase text-brand-primary block mb-3"
+     },
+     {
+      "tag": "li",
+      "text": "• Alertas ante fallas o comportamientos fuera de los parámetros establecidos",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "• Supervisión de los servicios y recursos configurados",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "• Atención de incidencias con horarios y tiempos de respuesta acordados",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "• Revisiones preventivas de la infraestructura",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "li",
+      "text": "• Reportes de problemas, acciones realizadas y recomendaciones",
+      "href": null,
+      "class": "flex items-start gap-2.5"
+     },
+     {
+      "tag": "p",
+      "text": "Beneficio: Problemas detectados a tiempo y un proceso claro para atenderlos.",
+      "href": null,
+      "class": "text-[13px] text-brand-muted leading-normal"
+     },
+     {
+      "tag": "a",
+      "text": "Hablemos de tu operación →",
+      "href": "/contact",
+      "class": "inline-flex items-center text-[16px] font-bold text-brand-primary hover:text-brand-deep transition-colors group"
+     }
+    ]
+   },
+   {
+    "n": 4,
+    "class": "bg-brand-surfaceAlt py-[120px] border-b border-[#dadada]",
+    "grids": [
+     "grid grid-cols-1 md:grid-cols-4 gap-6 relative"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "03 — CÓMO TRABAJAMOS",
+      "href": null,
+      "class": "text-[13px] font-bold text-brand-primary uppercase tracking-[0.2em]"
+     },
+     {
+      "tag": "h2",
+      "text": "Una operación técnica más controlada",
+      "href": null,
+      "class": "text-[36px] md:text-[42px] font-bold text-brand-ink leading-tight mb-4"
+     },
+     {
+      "tag": "p",
+      "text": "Revisamos el estado de tus sistemas, priorizamos los riesgos y establecemos los procesos necesarios para mantenerlos y actualizarlos.",
+      "href": null,
+      "class": "text-[18px] text-brand-muted leading-relaxed line-clamp-custom"
+     },
+     {
+      "tag": "h3",
+      "text": "Revisar",
+      "href": null,
+      "class": "text-[18px] font-bold text-brand-ink mb-2"
+     },
+     {
+      "tag": "p",
+      "text": "Analizamos la infraestructura, los procesos de publicación y las necesidades de operación.",
+      "href": null,
+      "class": "text-[14px] text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "h3",
+      "text": "Automatizar",
+      "href": null,
+      "class": "text-[18px] font-bold text-brand-ink mb-2"
+     },
+     {
+      "tag": "p",
+      "text": "Identificamos tareas repetitivas que pueden ejecutarse con menos intervención manual.",
+      "href": null,
+      "class": "text-[14px] text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "h3",
+      "text": "Implementar",
+      "href": null,
+      "class": "text-[18px] font-bold text-brand-ink mb-2"
+     },
+     {
+      "tag": "p",
+      "text": "Configuramos los procesos, las copias de seguridad y las herramientas de supervisión acordadas.",
+      "href": null,
+      "class": "text-[14px] text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "h3",
+      "text": "Supervisar",
+      "href": null,
+      "class": "text-[18px] font-bold text-brand-ink mb-2"
+     },
+     {
+      "tag": "p",
+      "text": "Revisamos los indicadores definidos y atendemos las incidencias conforme al servicio establecido.",
+      "href": null,
+      "class": "text-[14px] text-brand-muted leading-relaxed"
+     }
+    ]
+   },
+   {
+    "n": 5,
+    "class": "bg-white py-[120px] border-b border-[#dadada]",
+    "grids": [
+     "grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 mb-12 items-start",
+     "grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#dadada] border-y border-[#dadada] py-8"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "04 — QUÉ CUBRIMOS",
+      "href": null,
+      "class": "text-[13px] font-bold text-brand-primary uppercase tracking-[0.2em]"
+     },
+     {
+      "tag": "h2",
+      "text": "Qué utilizamos para operar tus sistemas",
+      "href": null,
+      "class": "text-[32px] md:text-[38px] font-bold text-brand-ink leading-tight"
+     },
+     {
+      "tag": "p",
+      "text": "Seleccionamos las herramientas de automatización, administración y supervisión según la infraestructura existente.",
+      "href": null,
+      "class": "text-[17px] text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "h4",
+      "text": "Publicación",
+      "href": null,
+      "class": "text-[16px] font-bold text-brand-ink uppercase tracking-wider mb-2"
+     },
+     {
+      "tag": "p",
+      "text": "Despliegues automatizados · Control de versiones · Entornos de prueba",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "h4",
+      "text": "Infraestructura",
+      "href": null,
+      "class": "text-[16px] font-bold text-brand-ink uppercase tracking-wider mb-2"
+     },
+     {
+      "tag": "p",
+      "text": "Servidores · Nube · Copias de seguridad · Administración de recursos",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "h4",
+      "text": "Supervisión",
+      "href": null,
+      "class": "text-[16px] font-bold text-brand-ink uppercase tracking-wider mb-2"
+     },
+     {
+      "tag": "p",
+      "text": "Monitorización · Alertas · Registros · Recuperación ante fallas",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed"
+     }
+    ]
+   },
+   {
+    "n": 6,
+    "class": "bg-[#F2F2F2] py-[120px] border-b border-[#DADADA]",
+    "grids": [],
+    "items": [
+     {
+      "tag": "span",
+      "text": "05",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "—",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "DUDAS FRECUENTES",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "h2",
+      "text": "Lo que suele preguntarse antes de empezar",
+      "href": null,
+      "class": "text-3xl lg:text-[42px] font-bold text-brand-ink leading-[1.15] tracking-tight mb-12"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Qué incluye el servicio?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "−",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-primary flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "p",
+      "text": "Podemos cubrir publicaciones, infraestructura, copias de seguridad, supervisión y atención de incidencias. Definimos las actividades, los sistemas incluidos y la cobertura antes de comenzar.",
+      "href": null,
+      "class": "text-base text-brand-muted leading-relaxed max-w-[70ch]"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Necesito cambiar mis servidores actuales?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿El soporte incluye atención a los usuarios de mi empresa?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Cómo sabré qué está pasando con mis sistemas?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Atienden fallas fuera del horario laboral?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Cuánto cuesta el servicio?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "a",
+      "text": "¿Te queda otra duda? Escríbenos →",
+      "href": "/contact",
+      "class": "inline-flex items-center gap-1.5 text-sm font-bold text-brand-primary hover:text-brand-deep transition-colors"
+     }
+    ]
+   },
+   {
+    "n": 7,
+    "class": "bg-brand-deep py-[120px] text-white",
+    "grids": [
+     "grid grid-cols-1 lg:grid-cols-12 gap-12 items-center"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "06 — INICIA TU PROYECTO",
+      "href": null,
+      "class": "text-[13px] font-bold text-[#dadada] uppercase tracking-[0.2em]"
+     },
+     {
+      "tag": "h2",
+      "text": "Deja de resolver las fallas sobre la marcha",
+      "href": null,
+      "class": "text-[38px] md:text-[46px] font-bold leading-tight mb-6"
+     },
+     {
+      "tag": "p",
+      "text": "Cuéntanos qué sistemas utilizas, cómo los administras y qué problemas te preocupan. Identificaremos las prioridades para mejorar su operación.",
+      "href": null,
+      "class": "text-[18px] text-[#e0e5eb] leading-relaxed mb-10 max-w-2xl font-normal"
+     },
+     {
+      "tag": "a",
+      "text": "Revisemos tus sistemas",
+      "href": "/contact",
+      "class": "inline-flex items-center justify-center px-8 py-4 bg-brand-accent text-white text-[16px] font-bold tracking-wide hover:bg-[#e04600] active:scale-[0.99] transition-all"
+     },
+     {
+      "tag": "a",
+      "text": "Ver todos los servicios →",
+      "href": "/services",
+      "class": "inline-flex items-center text-[16px] font-bold text-white hover:text-[#dadada] transition-colors group"
+     },
+     {
+      "tag": "span",
+      "text": "Gussware",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "Ops-Core",
+      "href": null,
+      "class": ""
+     }
+    ]
+   },
+   {
+    "n": 8,
+    "class": "bg-white py-[120px] border-b border-[#dadada]",
+    "grids": [
+     "grid grid-cols-1 md:grid-cols-3 gap-8"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "SIGUE EXPLORANDO",
+      "href": null,
+      "class": "text-[13px] font-bold tracking-[0.2em] text-brand-primary uppercase block mb-3"
+     },
+     {
+      "tag": "h2",
+      "text": "Otros servicios que pueden ayudarte",
+      "href": null,
+      "class": "text-[36px] md:text-[40px] font-bold text-brand-ink leading-tight mb-12"
+     },
+     {
+      "tag": "span",
+      "text": "SISTEMAS",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-[0.15em] text-brand-muted uppercase block mb-3"
+     },
+     {
+      "tag": "h3",
+      "text": "Integración de APIs y Servicios Externos",
+      "href": null,
+      "class": "text-[20px] font-bold text-brand-ink mb-3 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Deja de copiar datos de un programa a otro",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed mb-6"
+     },
+     {
+      "tag": "a",
+      "text": "Ver servicio →",
+      "href": "/services/apis",
+      "class": "inline-flex items-center text-[15px] font-bold text-brand-primary hover:text-brand-deep transition-colors group"
+     },
+     {
+      "tag": "span",
+      "text": "SOFTWARE",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-[0.15em] text-brand-muted uppercase block mb-3"
+     },
+     {
+      "tag": "h3",
+      "text": "Desarrollo a medida",
+      "href": null,
+      "class": "text-[20px] font-bold text-brand-ink mb-3 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Tu empresa no debería tener que adaptarse a un software que no le funciona",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed mb-6"
+     },
+     {
+      "tag": "a",
+      "text": "Ver servicio →",
+      "href": "/services/custom-software",
+      "class": "inline-flex items-center text-[15px] font-bold text-brand-primary hover:text-brand-deep transition-colors group"
+     },
+     {
+      "tag": "span",
+      "text": "ESTRATEGIA",
+      "href": null,
+      "class": "text-[12px] font-bold tracking-[0.15em] text-brand-muted uppercase block mb-3"
+     },
+     {
+      "tag": "h3",
+      "text": "Consultoría técnica",
+      "href": null,
+      "class": "text-[20px] font-bold text-brand-ink mb-3 leading-snug"
+     },
+     {
+      "tag": "p",
+      "text": "Decide cómo construir tu proyecto antes de invertir en construirlo",
+      "href": null,
+      "class": "text-[15px] text-brand-muted leading-relaxed mb-6"
+     },
+     {
+      "tag": "a",
+      "text": "Ver servicio →",
+      "href": "/services/consulting",
+      "class": "inline-flex items-center text-[15px] font-bold text-brand-primary hover:text-brand-deep transition-colors group"
+     }
+    ]
+   }
+  ],
+  "header": {
+   "present": true,
+   "links": [
+    [
+     "GussWare",
+     "/"
+    ],
+    [
+     "Servicios",
+     "/services"
+    ],
+    [
+     "Cómo trabajamos",
+     "/how-we-work"
+    ],
+    [
+     "Proyectos",
+     "/projects"
+    ],
+    [
+     "Comunidad",
+     "/community"
+    ],
+    [
+     "Hablemos",
+     "/contact"
+    ]
+   ]
+  },
+  "footer": {
+   "present": true,
+   "links": [
+    [
+     "Diseño de sitios web y tiendas en línea",
+     "/services/web"
+    ],
+    [
+     "Aplicaciones móviles",
+     "/services/mobile"
+    ],
+    [
+     "Integración de APIs y Servicios Externos",
+     "/services/apis"
+    ],
+    [
+     "Desarrollo a medida",
+     "/services/custom-software"
+    ],
+    [
+     "Consultoría técnica",
+     "/services/consulting"
+    ],
+    [
+     "DevOps y Soporte Técnico",
+     "/services/devops"
+    ],
+    [
+     "Cómo trabajamos",
+     "/how-we-work"
+    ],
+    [
+     "Proyectos",
+     "/projects"
+    ],
+    [
+     "Comunidad",
+     "/community"
+    ],
+    [
+     "Contacto",
+     "/contact"
+    ],
+    [
+     "Aviso de privacidad",
+     "/politica-de-privacidad"
+    ],
+    [
+     "Términos y condiciones",
+     "/terminos-y-condiciones"
+    ]
+   ]
+  }
+ },
+ "consultoria": {
+  "config": {
+   "title": "GussWare - Servicio: Consultoría técnica",
+   "colors": {
+    "primary": "#004A98",
+    "deep": "#00346E",
+    "secondary": "#2164A6",
+    "accent": "#FF5000",
+    "ink": "#242126",
+    "muted": "#5C6068",
+    "surface": "#FFFFFF",
+    "surfaceAlt": "#F2F2F2",
+    "highlight": "#FFD8D8",
+    "line": "#E2E5E9"
+   },
+   "fontFamily": [
+    "\"Source Sans 3\"",
+    "sans-serif"
+   ]
+  },
+  "sections": [
+   {
+    "n": 1,
+    "class": "bg-white pt-10 pb-24 border-b border-brand-line",
+    "grids": [
+     "grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start"
+    ],
+    "items": [
+     {
+      "tag": "a",
+      "text": "Inicio",
+      "href": "/",
+      "class": "hover:text-brand-ink transition-colors"
+     },
+     {
+      "tag": "span",
+      "text": "/",
+      "href": null,
+      "class": "mx-2 text-slate-300"
+     },
+     {
+      "tag": "a",
+      "text": "Servicios",
+      "href": "/services",
+      "class": "hover:text-brand-ink transition-colors"
+     },
+     {
+      "tag": "span",
+      "text": "/",
+      "href": null,
+      "class": "mx-2 text-slate-300"
+     },
+     {
+      "tag": "span",
+      "text": "Consultoría técnica",
+      "href": null,
+      "class": "text-brand-primary font-bold"
+     },
+     {
+      "tag": "span",
+      "text": "CONSULTORÍA TÉCNICA — ESTRATEGIA Y ARQUITECTURA",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-muted"
+     },
+     {
+      "tag": "h1",
+      "text": "Decide cómo construir tu proyecto antes de invertir en construirlo",
+      "href": null,
+      "class": "text-4xl sm:text-5xl lg:text-[64px] leading-[1.08] font-bold text-brand-ink tracking-tight mb-8"
+     },
+     {
+      "tag": "p",
+      "text": "No necesitas conocer todas las tecnologías para iniciar un proyecto. Te ayudamos a definir qué necesitas, elegir las herramientas adecuadas y establecer prioridades. Al terminar, tendrás una ruta técnica documentada que podrás utilizar con tu equipo de desarrollo.",
+      "href": null,
+      "class": "text-lg md:text-[19px] leading-relaxed text-brand-muted mb-10 max-w-[64ch]"
+     },
+     {
+      "tag": "a",
+      "text": "Hablemos de tu idea",
+      "href": "/contact",
+      "class": "inline-flex items-center justify-center bg-brand-accent text-white font-bold text-base px-8 h-13 py-3.5 hover:bg-[#e04700] transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-accent"
+     },
+     {
+      "tag": "a",
+      "text": "Ver soluciones ↓",
+      "href": "#soluciones",
+      "class": "inline-flex items-center font-bold text-brand-primary text-base hover:text-brand-deep transition-colors group"
+     },
+     {
+      "tag": "span",
+      "text": "01",
+      "href": null,
+      "class": "block text-4xl lg:text-[40px] font-bold text-brand-primary leading-none mb-2"
+     },
+     {
+      "tag": "h2",
+      "text": "Menos improvisación",
+      "href": null,
+      "class": "text-lg font-bold text-brand-ink mb-1"
+     },
+     {
+      "tag": "p",
+      "text": "Decisiones tomadas antes de programar",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "02",
+      "href": null,
+      "class": "block text-4xl lg:text-[40px] font-bold text-brand-primary leading-none mb-2"
+     },
+     {
+      "tag": "h2",
+      "text": "Inversión mejor dirigida",
+      "href": null,
+      "class": "text-lg font-bold text-brand-ink mb-1"
+     },
+     {
+      "tag": "p",
+      "text": "Prioridades alineadas con tus objetivos",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "03",
+      "href": null,
+      "class": "block text-4xl lg:text-[40px] font-bold text-brand-primary leading-none mb-2"
+     },
+     {
+      "tag": "h2",
+      "text": "Un plan ejecutable",
+      "href": null,
+      "class": "text-lg font-bold text-brand-ink mb-1"
+     },
+     {
+      "tag": "p",
+      "text": "Tu equipo sabe qué construir y por qué",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed"
+     }
+    ]
+   },
+   {
+    "n": 2,
+    "class": "bg-white py-[120px] border-b border-brand-line",
+    "grids": [
+     "grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 mb-16",
+     "grid grid-cols-1 md:grid-cols-12 gap-4 py-8 border-b border-brand-line items-baseline"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "01 — EL PROBLEMA",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-primary"
+     },
+     {
+      "tag": "h2",
+      "text": "Evita decisiones que después cuestan tiempo y dinero",
+      "href": null,
+      "class": "text-3xl lg:text-[42px] leading-tight font-bold text-brand-ink"
+     },
+     {
+      "tag": "p",
+      "text": "Empezar a desarrollar sin tener claro qué se necesita puede llevar a elegir herramientas inadecuadas, construir funciones que nadie utiliza o tener que rehacer partes del sistema.",
+      "href": null,
+      "class": "text-base lg:text-[17px] text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "01",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-primary"
+     },
+     {
+      "tag": "p",
+      "text": "No sabes qué construir primero ni qué herramientas elegir.",
+      "href": null,
+      "class": "text-lg font-medium text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "02",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-primary"
+     },
+     {
+      "tag": "p",
+      "text": "Eliges tecnología sin comparar alternativas y después cuesta cambiarla.",
+      "href": null,
+      "class": "text-lg font-medium text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "03",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-primary"
+     },
+     {
+      "tag": "p",
+      "text": "Ya tienes un sistema y no sabes si conviene mejorarlo, cambiarlo o conservarlo.",
+      "href": null,
+      "class": "text-lg font-medium text-brand-ink"
+     },
+     {
+      "tag": "p",
+      "text": "Estrategia técnica · Arquitectura · Elección de tecnología · Planificación · Documentación · Asesoría técnica",
+      "href": null,
+      "class": "text-xs uppercase tracking-widest text-brand-muted font-semibold"
+     }
+    ]
+   },
+   {
+    "n": 3,
+    "class": "bg-brand-surfaceAlt py-[120px] border-b border-brand-line",
+    "grids": [
+     "grid grid-cols-1 md:grid-cols-2 gap-8 mb-12"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "02 — QUÉ PUEDES CONTRATAR",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-primary"
+     },
+     {
+      "tag": "h2",
+      "text": "De una idea a un plan que puedes ejecutar",
+      "href": null,
+      "class": "text-3xl lg:text-[42px] leading-tight font-bold text-brand-ink mb-4"
+     },
+     {
+      "tag": "p",
+      "text": "Definimos la estructura técnica de tu proyecto y te ayudamos a elegir cómo llevarlo a cabo, desde la primera decisión hasta la planificación del desarrollo.",
+      "href": null,
+      "class": "text-base lg:text-[17px] text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "01",
+      "href": null,
+      "class": "block text-4xl font-bold text-brand-primary mb-6"
+     },
+     {
+      "tag": "h3",
+      "text": "Arquitectura y estructura del sistema",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-ink mb-4"
+     },
+     {
+      "tag": "p",
+      "text": "Definimos cómo se organiza tu sistema antes de construirlo, para que cada componente tenga una función clara y las partes trabajen en conjunto.",
+      "href": null,
+      "class": "text-[16px] text-brand-muted leading-relaxed mb-8"
+     },
+     {
+      "tag": "span",
+      "text": "QUÉ RECIBES",
+      "href": null,
+      "class": "block text-xs font-bold uppercase tracking-wider text-brand-ink mb-4"
+     },
+     {
+      "tag": "li",
+      "text": "Documento de arquitectura explicado en términos claros",
+      "href": null,
+      "class": "flex items-start gap-3"
+     },
+     {
+      "tag": "li",
+      "text": "Mapa de componentes y sus relaciones",
+      "href": null,
+      "class": "flex items-start gap-3"
+     },
+     {
+      "tag": "li",
+      "text": "Decisiones técnicas justificadas y alternativas evaluadas",
+      "href": null,
+      "class": "flex items-start gap-3"
+     },
+     {
+      "tag": "li",
+      "text": "Recomendaciones para ampliar el sistema sin rediseñarlo por completo",
+      "href": null,
+      "class": "flex items-start gap-3"
+     },
+     {
+      "tag": "span",
+      "text": "Beneficio",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-muted block mb-1"
+     },
+     {
+      "tag": "p",
+      "text": "Una estructura clara antes de escribir la primera línea.",
+      "href": null,
+      "class": "text-sm font-semibold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "02",
+      "href": null,
+      "class": "block text-4xl font-bold text-brand-primary mb-6"
+     },
+     {
+      "tag": "h3",
+      "text": "Elección de tecnología y plan de trabajo",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-ink mb-4"
+     },
+     {
+      "tag": "p",
+      "text": "Comparamos las opciones disponibles y definimos una ruta de desarrollo que considere tus objetivos, presupuesto y equipo.",
+      "href": null,
+      "class": "text-[16px] text-brand-muted leading-relaxed mb-8"
+     },
+     {
+      "tag": "span",
+      "text": "QUÉ RECIBES",
+      "href": null,
+      "class": "block text-xs font-bold uppercase tracking-wider text-brand-ink mb-4"
+     },
+     {
+      "tag": "li",
+      "text": "Comparativa de tecnologías con ventajas y desventajas",
+      "href": null,
+      "class": "flex items-start gap-3"
+     },
+     {
+      "tag": "li",
+      "text": "Recomendación de herramientas con argumentos claros",
+      "href": null,
+      "class": "flex items-start gap-3"
+     },
+     {
+      "tag": "li",
+      "text": "Plan por etapas con resultados esperados",
+      "href": null,
+      "class": "flex items-start gap-3"
+     },
+     {
+      "tag": "li",
+      "text": "Estimación de esfuerzo para organizar tiempo y presupuesto",
+      "href": null,
+      "class": "flex items-start gap-3"
+     },
+     {
+      "tag": "li",
+      "text": "Esquema de trabajo y seguimiento del proyecto",
+      "href": null,
+      "class": "flex items-start gap-3"
+     },
+     {
+      "tag": "span",
+      "text": "Beneficio",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-muted block mb-1"
+     },
+     {
+      "tag": "p",
+      "text": "Decisiones justificadas y un plan que tu equipo puede ejecutar.",
+      "href": null,
+      "class": "text-sm font-semibold text-brand-ink"
+     },
+     {
+      "tag": "a",
+      "text": "Hablemos de tu proyecto →",
+      "href": "/contact",
+      "class": "inline-flex items-center text-brand-primary font-bold text-base hover:text-brand-deep transition-colors"
+     }
+    ]
+   },
+   {
+    "n": 4,
+    "class": "bg-brand-surfaceAlt py-[120px] border-b border-brand-line",
+    "grids": [
+     "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "03 — CÓMO TRABAJAMOS",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-primary"
+     },
+     {
+      "tag": "h2",
+      "text": "De la incertidumbre a las decisiones claras",
+      "href": null,
+      "class": "text-3xl lg:text-[42px] leading-tight font-bold text-brand-ink mb-4"
+     },
+     {
+      "tag": "p",
+      "text": "Primero entendemos el problema; después evaluamos las alternativas y documentamos una ruta de trabajo que puedas poner en marcha.",
+      "href": null,
+      "class": "text-base lg:text-[17px] text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "01 ETAPA",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-widest text-brand-primary"
+     },
+     {
+      "tag": "h3",
+      "text": "Entender",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Revisamos tus objetivos, necesidades, recursos y sistemas existentes.",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "02 ETAPA",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-widest text-brand-primary"
+     },
+     {
+      "tag": "h3",
+      "text": "Definir",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Proponemos la estructura y las tecnologías, explicando las razones de cada decisión.",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "03 ETAPA",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-widest text-brand-primary"
+     },
+     {
+      "tag": "h3",
+      "text": "Planificar",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Organizamos el desarrollo por etapas, con prioridades, entregables y estimaciones.",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "span",
+      "text": "04 ETAPA",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-widest text-brand-primary"
+     },
+     {
+      "tag": "h3",
+      "text": "Documentar",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Dejamos las decisiones por escrito para que tu equipo pueda consultarlas y ejecutarlas.",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed"
+     }
+    ]
+   },
+   {
+    "n": 5,
+    "class": "bg-white py-[96px] border-b border-brand-line",
+    "grids": [
+     "grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-brand-line pt-8"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "04 — MARCO DE TRABAJO",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-muted"
+     },
+     {
+      "tag": "h2",
+      "text": "Cómo organizamos el proyecto",
+      "href": null,
+      "class": "text-2xl lg:text-3xl font-bold text-brand-ink mb-3"
+     },
+     {
+      "tag": "p",
+      "text": "Elegimos las herramientas técnicas y la forma de trabajo según la complejidad del proyecto y las necesidades del equipo.",
+      "href": null,
+      "class": "text-sm md:text-base text-brand-muted leading-relaxed"
+     },
+     {
+      "tag": "h4",
+      "text": "Organización del trabajo",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-ink"
+     },
+     {
+      "tag": "p",
+      "text": "Scrum (trabajo por ciclos) · Kanban (tablero de tareas)",
+      "href": null,
+      "class": "text-sm text-brand-muted"
+     },
+     {
+      "tag": "h4",
+      "text": "Diseño técnico",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-ink"
+     },
+     {
+      "tag": "p",
+      "text": "Arquitectura de software · Componentes del sistema · Tecnologías",
+      "href": null,
+      "class": "text-sm text-brand-muted"
+     },
+     {
+      "tag": "h4",
+      "text": "Planificación",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-brand-ink"
+     },
+     {
+      "tag": "p",
+      "text": "Prioridades · Documentación técnica · Estimación",
+      "href": null,
+      "class": "text-sm text-brand-muted"
+     }
+    ]
+   },
+   {
+    "n": 6,
+    "class": "bg-[#F2F2F2] py-[120px] border-b border-[#DADADA]",
+    "grids": [],
+    "items": [
+     {
+      "tag": "span",
+      "text": "05",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "—",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "span",
+      "text": "DUDAS FRECUENTES",
+      "href": null,
+      "class": ""
+     },
+     {
+      "tag": "h2",
+      "text": "Lo que suele preguntarse antes de empezar",
+      "href": null,
+      "class": "text-3xl lg:text-[42px] font-bold text-brand-ink leading-[1.15] tracking-tight mb-12"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Qué recibo al terminar la consultoría?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "−",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-primary flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "p",
+      "text": "Una propuesta técnica documentada con la estructura recomendada, las tecnologías evaluadas, las decisiones principales y un plan de trabajo para orientar el desarrollo.",
+      "href": null,
+      "class": "text-base text-brand-muted leading-relaxed max-w-[70ch]"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Puedo contratarla si solo tengo una idea?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Pueden trabajar con mi equipo de desarrollo?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Tengo que contratar el desarrollo con GussWare?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Cuánto cuesta una consultoría técnica?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "h3",
+      "text": "¿Qué pasa si ya tengo un sistema y necesito mejorarlo?",
+      "href": null,
+      "class": "text-lg lg:text-xl font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "+",
+      "href": null,
+      "class": "text-2xl font-bold text-brand-muted flex-shrink-0 leading-none"
+     },
+     {
+      "tag": "a",
+      "text": "¿Te queda otra duda? Escríbenos →",
+      "href": "/contact",
+      "class": "inline-flex items-center gap-1.5 text-sm font-bold text-brand-primary hover:text-brand-deep transition-colors"
+     }
+    ]
+   },
+   {
+    "n": 7,
+    "class": "bg-brand-deep text-white py-[120px] border-b border-brand-line relative overflow-hidden",
+    "grids": [
+     "grid grid-cols-1 lg:grid-cols-12 gap-12 items-center"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "06 — INICIA TU PROYECTO",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-wider text-slate-300"
+     },
+     {
+      "tag": "h2",
+      "text": "Antes de programar, define el camino correcto",
+      "href": null,
+      "class": "text-3xl sm:text-4xl lg:text-[44px] leading-tight font-bold mb-6 tracking-tight"
+     },
+     {
+      "tag": "p",
+      "text": "Cuéntanos qué quieres construir o qué problema necesitas resolver. Te ayudamos a convertirlo en un plan técnico claro.",
+      "href": null,
+      "class": "text-lg text-slate-200 max-w-[58ch] leading-relaxed mb-10"
+     },
+     {
+      "tag": "a",
+      "text": "Cuéntanos tu proyecto",
+      "href": "/contact",
+      "class": "inline-flex items-center justify-center bg-brand-accent text-white font-bold text-base px-8 h-13 py-3.5 hover:bg-[#e04700] transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-accent"
+     },
+     {
+      "tag": "a",
+      "text": "Ver todos los servicios →",
+      "href": "/services",
+      "class": "inline-flex items-center text-white font-bold text-base hover:text-brand-highlight transition-colors group"
+     },
+     {
+      "tag": "span",
+      "text": "GUSSWARE · CORE",
+      "href": null,
+      "class": "text-[10px] tracking-widest uppercase text-white/50 font-bold block"
+     },
+     {
+      "tag": "span",
+      "text": "ESTRATEGIA TÉCNICA",
+      "href": null,
+      "class": "text-xs text-white/80 font-mono"
+     }
+    ]
+   },
+   {
+    "n": 8,
+    "class": "bg-white py-[120px] border-b border-brand-line",
+    "grids": [
+     "grid grid-cols-1 md:grid-cols-3 gap-8"
+    ],
+    "items": [
+     {
+      "tag": "span",
+      "text": "SIGUE EXPLORANDO",
+      "href": null,
+      "class": "text-xs font-bold uppercase tracking-widest text-brand-muted block mb-3"
+     },
+     {
+      "tag": "h2",
+      "text": "Otros servicios que pueden ayudarte",
+      "href": null,
+      "class": "text-3xl lg:text-[40px] font-bold text-brand-ink"
+     },
+     {
+      "tag": "span",
+      "text": "SOFTWARE",
+      "href": null,
+      "class": "text-[11px] font-bold uppercase tracking-wider text-brand-muted block mb-3"
+     },
+     {
+      "tag": "h3",
+      "text": "Desarrollo a medida",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3 group-hover:text-brand-primary transition-colors"
+     },
+     {
+      "tag": "p",
+      "text": "Tu empresa no debería tener que adaptarse a un software que no le funciona.",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed mb-8"
+     },
+     {
+      "tag": "a",
+      "text": "Ver servicio →",
+      "href": "/services/custom-software",
+      "class": "inline-flex items-center text-sm font-bold text-brand-primary hover:text-brand-deep transition-colors"
+     },
+     {
+      "tag": "span",
+      "text": "WEB & E-COMMERCE",
+      "href": null,
+      "class": "text-[11px] font-bold uppercase tracking-wider text-brand-muted block mb-3"
+     },
+     {
+      "tag": "h3",
+      "text": "Diseño de sitios web y tiendas en línea",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3 group-hover:text-brand-primary transition-colors"
+     },
+     {
+      "tag": "p",
+      "text": "Tu sitio web debe conseguir algo más que verse bien.",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed mb-8"
+     },
+     {
+      "tag": "a",
+      "text": "Ver servicio →",
+      "href": "/services/web-development",
+      "class": "inline-flex items-center text-sm font-bold text-brand-primary hover:text-brand-deep transition-colors"
+     },
+     {
+      "tag": "span",
+      "text": "INFRAESTRUCTURA",
+      "href": null,
+      "class": "text-[11px] font-bold uppercase tracking-wider text-brand-muted block mb-3"
+     },
+     {
+      "tag": "h3",
+      "text": "DevOps y Soporte Técnico",
+      "href": null,
+      "class": "text-xl font-bold text-brand-ink mb-3 group-hover:text-brand-primary transition-colors"
+     },
+     {
+      "tag": "p",
+      "text": "Actualiza tus sistemas sin convertir cada cambio en un riesgo.",
+      "href": null,
+      "class": "text-sm text-brand-muted leading-relaxed mb-8"
+     },
+     {
+      "tag": "a",
+      "text": "Ver servicio →",
+      "href": "/services/devops",
+      "class": "inline-flex items-center text-sm font-bold text-brand-primary hover:text-brand-deep transition-colors"
+     }
+    ]
+   }
+  ],
+  "header": {
+   "present": true,
+   "links": [
+    [
+     "GussWare",
+     "/"
+    ],
+    [
+     "Servicios",
+     "/services"
+    ],
+    [
+     "Cómo trabajamos",
+     "/how-we-work"
+    ],
+    [
+     "Proyectos",
+     "/projects"
+    ],
+    [
+     "Comunidad",
+     "/community"
+    ],
+    [
+     "Hablemos",
+     "/contact"
+    ]
+   ]
+  },
+  "footer": {
+   "present": true,
+   "links": [
+    [
+     "GussWare",
+     "/"
+    ],
+    [
+     "Diseño de sitios web y tiendas en línea",
+     "/services/web-development"
+    ],
+    [
+     "Aplicaciones móviles",
+     "/services/mobile-apps"
+    ],
+    [
+     "Integración de APIs y Servicios Externos",
+     "/services/apis-integrations"
+    ],
+    [
+     "Desarrollo a medida",
+     "/services/custom-software"
+    ],
+    [
+     "Consultoría técnica",
+     "/services/consulting"
+    ],
+    [
+     "DevOps e Infraestructura",
+     "/services/devops"
+    ],
+    [
+     "Cómo trabajamos",
+     "/how-we-work"
+    ],
+    [
+     "Proyectos",
+     "/projects"
+    ],
+    [
+     "Comunidad",
+     "/community"
+    ],
+    [
+     "Contacto",
+     "/contact"
+    ],
+    [
+     "Aviso de privacidad",
+     "/aviso-de-privacidad"
+    ],
+    [
+     "Términos y condiciones",
+     "/terminos-y-condiciones"
+    ]
+   ]
+  }
+ }
+}

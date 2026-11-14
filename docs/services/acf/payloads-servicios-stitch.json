@@ -1,0 +1,1597 @@
+{
+ "web": {
+  "_source": "html_web.html",
+  "hero": {
+   "intro_eyebrow": "DISEÑO Y DESARROLLO WEB",
+   "intro_title": "Tu sitio web debe conseguir algo más que verse bien",
+   "intro_description": "Una página confusa puede hacer que un cliente se vaya antes de conocer tus servicios. Diseñamos sitios y tiendas que explican lo que ofreces, facilitan el contacto o la compra y ofrecen una experiencia clara desde el celular hasta la computadora.",
+   "hero_stats": [
+    {
+     "label": "01",
+     "value": "Más oportunidades",
+     "description": "Tus visitantes entienden qué ofreces"
+    },
+    {
+     "label": "02",
+     "value": "Compra sin complicaciones",
+     "description": "Menos obstáculos para contactar o pagar"
+    },
+    {
+     "label": "03",
+     "value": "Listo para evolucionar",
+     "description": "Agrega contenido y funciones conforme crezcas"
+    }
+   ],
+   "hero_cta_label": "Cuéntanos tu proyecto",
+   "hero_cta_url": "/contact",
+   "hero_secondary_label": "Ver soluciones",
+   "hero_secondary_url": "#soluciones"
+  },
+  "problema": {
+   "development_eyebrow": "01 — EL PROBLEMA",
+   "development_title": "Que tus visitantes encuentren lo que necesitan y sepan qué hacer",
+   "development_content": "Si una persona entra a tu sitio y no entiende qué vendes, cómo funciona tu servicio o dónde comprar, es probable que busque otra opción. Por eso organizamos los contenidos y las funciones a partir de lo que tus visitantes necesitan hacer. Diseñamos la experiencia, desarrollamos el sitio y cuidamos aspectos como la adaptación a celulares, el rendimiento y la facilidad de administración.",
+   "development_situations": [
+    {
+     "number": "01",
+     "situation": "Tu visitante no entiende qué ofreces ni por qué elegirte."
+    },
+    {
+     "number": "02",
+     "situation": "No encuentra cómo contactarte, cotizar o comprar."
+    },
+    {
+     "number": "03",
+     "situation": "El sitio no se ve bien en el celular o es difícil de actualizar."
+    }
+   ],
+   "development_tags": [
+    {
+     "tag": "Diseño web"
+    },
+    {
+     "tag": "Desarrollo web"
+    },
+    {
+     "tag": "Tiendas en línea"
+    },
+    {
+     "tag": "Experiencia de usuario"
+    },
+    {
+     "tag": "Diseño adaptable"
+    },
+    {
+     "tag": "Plataformas digitales"
+    }
+   ]
+  },
+  "soluciones": {
+   "solutions_eyebrow": "02 — NUESTRAS SOLUCIONES",
+   "solutions_title": "Una solución digital para cada objetivo",
+   "solutions_description": "Desde presentar tu negocio hasta vender por internet o digitalizar procesos, desarrollamos la solución que necesitas para atender mejor a tus clientes.",
+   "solutions": [
+    {
+     "title": "Sitios web que presentan tu negocio",
+     "description": "Haz que tus visitantes entiendan qué haces, por qué elegirte y cómo ponerse en contacto contigo.",
+     "features": [
+      {
+       "feature": "Diseño personalizado alineado con la identidad de tu marca"
+      },
+      {
+       "feature": "Secciones y contenidos organizados para facilitar la consulta"
+      },
+      {
+       "feature": "Diseño adaptable a celulares, tabletas y computadoras"
+      },
+      {
+       "feature": "Estructura y metadatos preparados para que los buscadores entiendan el sitio"
+      },
+      {
+       "feature": "Panel de administración para actualizar textos e imágenes"
+      }
+     ],
+     "benefit": "Una presencia clara que genera confianza y contactos."
+    },
+    {
+     "title": "Tiendas en línea que facilitan la compra",
+     "description": "Permite que tus clientes consulten productos, elijan lo que necesitan y realicen sus pedidos desde tu tienda.",
+     "features": [
+      {
+       "feature": "Catálogo de productos con categorías y búsqueda"
+      },
+      {
+       "feature": "Carrito y proceso de compra organizado en pasos claros"
+      },
+      {
+       "feature": "Integración de métodos de pago y opciones de envío"
+      },
+      {
+       "feature": "Experiencia de compra adaptada a celulares"
+      },
+      {
+       "feature": "Panel para administrar productos, precios y pedidos"
+      }
+     ],
+     "benefit": "Menos fricción para comprar y más control de tu operación."
+    },
+    {
+     "title": "Plataformas digitales para tu operación",
+     "description": "Cuando necesitas más que una página, desarrollamos plataformas para administrar información, atender clientes o resolver procesos específicos.",
+     "features": [
+      {
+       "feature": "Funciones adaptadas a los procesos de tu negocio"
+      },
+      {
+       "feature": "Usuarios y permisos para organizar el acceso"
+      },
+      {
+       "feature": "Integración con las herramientas que utilizas"
+      },
+      {
+       "feature": "Paneles para consultar y administrar información"
+      },
+      {
+       "feature": "Estructura preparada para incorporar nuevas funciones"
+      }
+     ],
+     "benefit": "Una herramienta propia para operar, no solo para presentar."
+    }
+   ]
+  },
+  "proceso": {
+   "approach_eyebrow": "03 — CÓMO TRABAJAMOS",
+   "approach_title": "Del diseño a un sitio que cumple su propósito",
+   "approach_description": "Trabajamos por etapas para validar la propuesta, desarrollar las funciones y revisar el resultado antes de publicarlo.",
+   "approach": [
+    {
+     "title": "Entender",
+     "description": "Definimos qué quieres conseguir, quién visitará el sitio y qué necesita encontrar."
+    },
+    {
+     "title": "Diseñar",
+     "description": "Organizamos los contenidos y las pantallas, y revisamos contigo la propuesta visual."
+    },
+    {
+     "title": "Desarrollar",
+     "description": "Construimos el sitio, probamos sus funciones y verificamos su adaptación a diferentes dispositivos."
+    },
+    {
+     "title": "Publicar y mejorar",
+     "description": "Preparamos el lanzamiento y definimos oportunidades de mejora a partir de las necesidades del negocio."
+    }
+   ]
+  },
+  "ficha": {
+   "tech_enabled": 1,
+   "tech_eyebrow": "04 — FICHA TÉCNICA",
+   "tech_title": "Qué incluye la solución web",
+   "tech_description": "Seleccionamos las herramientas según el tipo de sitio, las funciones necesarias y la forma en que administrarás los contenidos.",
+   "tech_groups": [
+    {
+     "title": "TIPO DE SOLUCIÓN",
+     "items": [
+      {
+       "name": "Sitios web"
+      },
+      {
+       "name": "Tiendas en línea"
+      },
+      {
+       "name": "Plataformas a medida"
+      }
+     ]
+    },
+    {
+     "title": "EXPERIENCIA DE USO",
+     "items": [
+      {
+       "name": "Diseño personalizado"
+      },
+      {
+       "name": "Adaptación a celulares"
+      },
+      {
+       "name": "Navegación clara"
+      }
+     ]
+    },
+    {
+     "title": "BASE TÉCNICA",
+     "items": [
+      {
+       "name": "Gestión de contenidos"
+      },
+      {
+       "name": "Integraciones"
+      },
+      {
+       "name": "Rendimiento y mantenimiento"
+      }
+     ]
+    }
+   ]
+  },
+  "faq": {
+   "faq_eyebrow": "05 — DUDAS FRECUENTES",
+   "faq_items": [
+    {
+     "pregunta": "¿Cuánto tarda el desarrollo de mi sitio web?",
+     "respuesta": "Depende del tamaño, los contenidos y las funciones. Antes de iniciar definimos las etapas y los tiempos estimados con base en los requerimientos del proyecto."
+    },
+    {
+     "pregunta": "¿Podré actualizar el sitio sin ayuda técnica?",
+     "respuesta": "Sí, podemos incluir un panel para que administres textos, imágenes, productos y otros contenidos sin modificar el código."
+    },
+    {
+     "pregunta": "¿Mi sitio aparecerá en Google?",
+     "respuesta": "Podemos preparar la estructura técnica del sitio y configurar elementos básicos de SEO para que los buscadores puedan encontrar y entender su contenido. La posición en los resultados depende de distintos factores y no se puede garantizar."
+    },
+    {
+     "pregunta": "¿Podré agregar funciones después?",
+     "respuesta": "Sí. Podemos planificar nuevas funciones conforme cambien tus necesidades, evaluando su costo y compatibilidad con la solución existente."
+    },
+    {
+     "pregunta": "¿Pueden conectar el sitio con mi sistema de facturación o inventario?",
+     "respuesta": "Sí, si las herramientas ofrecen mecanismos compatibles. Revisamos los sistemas involucrados para definir cómo intercambiar la información."
+    },
+    {
+     "pregunta": "¿Cuánto cuesta desarrollar un sitio web o una tienda?",
+     "respuesta": "Depende del diseño, la cantidad de contenidos, las funciones y las integraciones. Revisamos el alcance y te presentamos una propuesta económica antes de comenzar."
+    }
+   ]
+  },
+  "cierre": {
+   "cta": {
+    "eyebrow": "06 — INICIA TU PROYECTO",
+    "title": "Convierte tu presencia digital en una herramienta para tu negocio",
+    "description": "Cuéntanos qué vendes, qué servicios ofreces y qué quieres que tus visitantes hagan en tu sitio. Definiremos contigo la mejor forma de llevarlo a internet.",
+    "button_text": "Diseñemos tu sitio web",
+    "button_url": "/contact",
+    "secondary_text": "Ver todos los servicios",
+    "secondary_url": "/servicios"
+   }
+  },
+  "relacionados": {
+   "related_eyebrow": "SIGUE EXPLORANDO",
+   "related_title": "Otros servicios que pueden ayudarte",
+   "related": [
+    {
+     "category": "MÓVIL",
+     "name": "Aplicaciones móviles",
+     "description": "Una aplicación que resuelve una necesidad desde el celular",
+     "url": "/servicios/aplicaciones-moviles"
+    },
+    {
+     "category": "SOFTWARE",
+     "name": "Desarrollo a medida",
+     "description": "Tu empresa no debería tener que adaptarse a un software que no le funciona",
+     "url": "/servicios/desarrollo-a-medida"
+    },
+    {
+     "category": "SISTEMAS",
+     "name": "Integración de APIs y Servicios Externos",
+     "description": "Deja de copiar datos de un programa a otro",
+     "url": "/servicios/integracion-de-apis-y-servicios-externos"
+    }
+   ]
+  }
+ },
+ "moviles": {
+  "_source": "html_moviles.html",
+  "hero": {
+   "intro_eyebrow": "DESARROLLO DE APLICACIONES MÓVILES",
+   "intro_title": "Una aplicación que resuelve una necesidad desde el celular",
+   "intro_description": "Si tus clientes o colaboradores necesitan consultar información, realizar operaciones o acceder a tus servicios desde cualquier lugar, desarrollamos una aplicación pensada para esas tareas. Definimos contigo qué debe hacer y cómo llevarla a iPhone y Android.",
+   "hero_stats": [
+    {
+     "label": "01",
+     "value": "La plataforma adecuada",
+     "description": "iOS, Android o ambas según lo que necesitas"
+    },
+    {
+     "label": "02",
+     "value": "Tareas más sencillas",
+     "description": "Funciones organizadas para el uso diario"
+    },
+    {
+     "label": "03",
+     "value": "Base para crecer",
+     "description": "Preparada para nuevas funciones y actualizaciones"
+    }
+   ],
+   "hero_cta_label": "Hablemos de tu app",
+   "hero_cta_url": "/contact",
+   "hero_secondary_label": "Ver soluciones",
+   "hero_secondary_url": "#soluciones"
+  },
+  "problema": {
+   "development_eyebrow": "01 — EL PROBLEMA",
+   "development_title": "Que la aplicación facilite las tareas de tus usuarios",
+   "development_content": "Una aplicación pierde valor si resulta complicada, tarda demasiado en responder o no resuelve el problema para el que fue creada. Por eso comenzamos por las tareas que necesitan realizar tus usuarios y las condiciones en que utilizarán la aplicación. A partir de ahí definimos las pantallas, las funciones y la tecnología, considerando el presupuesto, el rendimiento y el mantenimiento.",
+   "development_situations": [
+    {
+     "number": "01",
+     "situation": "La aplicación es complicada y tus usuarios no encuentran cómo hacer lo que necesitan."
+    },
+    {
+     "number": "02",
+     "situation": "Tarda en responder o falla en el momento en que más se usa."
+    },
+    {
+     "number": "03",
+     "situation": "No resuelve la tarea concreta para la que se creó."
+    }
+   ],
+   "development_tags": [
+    {
+     "tag": "Aplicaciones móviles"
+    },
+    {
+     "tag": "iOS y Android"
+    },
+    {
+     "tag": "Experiencia de usuario"
+    },
+    {
+     "tag": "Rendimiento"
+    },
+    {
+     "tag": "Notificaciones"
+    },
+    {
+     "tag": "Integraciones"
+    }
+   ]
+  },
+  "soluciones": {
+   "solutions_eyebrow": "02 — NUESTRAS SOLUCIONES",
+   "solutions_title": "Dos caminos para llegar a tus usuarios",
+   "solutions_description": "Elegimos entre un desarrollo específico para una plataforma y una solución multiplataforma según las funciones, el rendimiento y los recursos del proyecto.",
+   "solutions": [
+    {
+     "title": "Aplicaciones específicas para iPhone o Android",
+     "description": "Cuando necesitas aprovechar funciones particulares del dispositivo o desarrollar una experiencia enfocada en una plataforma.",
+     "features": [
+      {
+       "feature": "Aplicación adaptada a iOS o Android"
+      },
+      {
+       "feature": "Integración con cámara, ubicación y notificaciones"
+      },
+      {
+       "feature": "Pantallas alineadas con la experiencia habitual de la plataforma"
+      },
+      {
+       "feature": "Pruebas de las funciones y el rendimiento requeridos"
+      },
+      {
+       "feature": "Proyecto preparado para recibir mantenimiento y actualizaciones"
+      }
+     ],
+     "benefit": "Aprovecha las funciones del dispositivo y una experiencia propia de la plataforma."
+    },
+    {
+     "title": "Una aplicación para iPhone y Android",
+     "description": "Llega a usuarios de ambas plataformas con un desarrollo que comparte componentes y reduce la duplicación de trabajo cuando es viable.",
+     "features": [
+      {
+       "feature": "Aplicación disponible para iOS y Android"
+      },
+      {
+       "feature": "Componentes y lógica compartidos para optimizar el desarrollo"
+      },
+      {
+       "feature": "Interfaz adaptada a cada plataforma"
+      },
+      {
+       "feature": "Funciones conectadas con los servicios y sistemas necesarios"
+      },
+      {
+       "feature": "Base común para mantener y ampliar la aplicación"
+      }
+     ],
+     "benefit": "Llega a ambas plataformas con una base común y menos duplicación."
+    }
+   ]
+  },
+  "proceso": {
+   "approach_eyebrow": "03 — CÓMO TRABAJAMOS",
+   "approach_title": "De la idea a una aplicación que puedes probar",
+   "approach_description": "Definimos las funciones, validamos la experiencia y desarrollamos por etapas para que puedas revisar el avance antes del lanzamiento.",
+   "approach": [
+    {
+     "title": "Entender",
+     "description": "Identificamos a los usuarios, las tareas y las necesidades que debe resolver la aplicación."
+    },
+    {
+     "title": "Diseñar",
+     "description": "Creamos las pantallas y los recorridos para que puedas validar cómo funcionará."
+    },
+    {
+     "title": "Desarrollar",
+     "description": "Implementamos las funciones y preparamos versiones de prueba para revisar el resultado."
+    },
+    {
+     "title": "Publicar y evolucionar",
+     "description": "Preparamos la distribución en las tiendas y definimos las siguientes mejoras de acuerdo con las necesidades del proyecto."
+    }
+   ]
+  },
+  "ficha": {
+   "tech_enabled": 1,
+   "tech_eyebrow": "04 — FICHA TÉCNICA",
+   "tech_title": "Cómo desarrollamos tu aplicación",
+   "tech_description": "Elegimos el enfoque técnico según las funciones que necesitas y las plataformas en las que quieres estar presente.",
+   "tech_groups": [
+    {
+     "title": "PLATAFORMAS",
+     "items": [
+      {
+       "name": "iOS"
+      },
+      {
+       "name": "Android"
+      }
+     ]
+    },
+    {
+     "title": "FUNCIONES DEL DISPOSITIVO",
+     "items": [
+      {
+       "name": "Cámara"
+      },
+      {
+       "name": "Ubicación"
+      },
+      {
+       "name": "Notificaciones"
+      }
+     ]
+    },
+    {
+     "title": "ENFOQUE DE DESARROLLO",
+     "items": [
+      {
+       "name": "Específico por plataforma"
+      },
+      {
+       "name": "Multiplataforma"
+      }
+     ]
+    }
+   ]
+  },
+  "faq": {
+   "faq_eyebrow": "05 — DUDAS FRECUENTES",
+   "faq_items": [
+    {
+     "pregunta": "¿Necesito una aplicación diferente para iPhone y Android?",
+     "respuesta": "No siempre. Podemos desarrollar una aplicación específica para una plataforma o utilizar un enfoque multiplataforma. Evaluamos las funciones y los requisitos para recomendarte la opción adecuada."
+    },
+    {
+     "pregunta": "¿Cuánto tarda desarrollar una aplicación?",
+     "respuesta": "Depende de las funciones, el diseño y las integraciones. Definimos etapas y tiempos estimados después de establecer el alcance."
+    },
+    {
+     "pregunta": "¿Puedo probarla antes de publicarla?",
+     "respuesta": "Sí. Preparamos versiones de prueba para que revises las funciones y nos compartas tus comentarios antes del lanzamiento."
+    },
+    {
+     "pregunta": "¿Quién se encarga de publicarla en las tiendas?",
+     "respuesta": "Podemos preparar el proceso de publicación y gestionar los pasos acordados. Las cuentas, los permisos y los requisitos de cada tienda deben definirse desde el inicio."
+    },
+    {
+     "pregunta": "¿Qué pasa cuando necesite nuevas funciones?",
+     "respuesta": "Podemos planificar mejoras y actualizaciones. El mantenimiento posterior y la atención a cambios de las plataformas se acuerdan como parte del servicio correspondiente."
+    },
+    {
+     "pregunta": "¿Cuánto cuesta desarrollar una aplicación?",
+     "respuesta": "Depende de las plataformas, las funciones y las integraciones. Revisamos tus necesidades y te presentamos una propuesta económica antes de iniciar."
+    }
+   ]
+  },
+  "cierre": {
+   "cta": {
+    "eyebrow": "06 — INICIA TU APLICACIÓN",
+    "title": "Lleva tus servicios al celular de tus usuarios",
+    "description": "Cuéntanos qué necesitas que hagan tus usuarios desde una aplicación. Evaluaremos las opciones para convertir esa necesidad en un proyecto.",
+    "button_text": "Cuéntanos tu idea",
+    "button_url": "/contact",
+    "secondary_text": "Ver todos los servicios",
+    "secondary_url": "/servicios"
+   }
+  },
+  "relacionados": {
+   "related_eyebrow": "SIGUE EXPLORANDO",
+   "related_title": "Otros servicios que pueden ayudarte",
+   "related": [
+    {
+     "category": "WEB",
+     "name": "Diseño de sitios web y tiendas en línea",
+     "description": "Tu sitio web debe conseguir algo más que verse bien",
+     "url": "/servicios/diseno-sitios-web-tiendas-en-linea"
+    },
+    {
+     "category": "SOFTWARE",
+     "name": "Desarrollo a medida",
+     "description": "Tu empresa no debería tener que adaptarse a un software que no le funciona",
+     "url": "/servicios/desarrollo-a-medida"
+    },
+    {
+     "category": "SISTEMAS",
+     "name": "Integración de APIs y Servicios Externos",
+     "description": "Deja de copiar datos de un programa a otro",
+     "url": "/servicios/integracion-de-apis-y-servicios-externos"
+    }
+   ]
+  }
+ },
+ "integracion": {
+  "_source": "html_integracion.html",
+  "hero": {
+   "intro_eyebrow": "INTEGRACIÓN DE SISTEMAS",
+   "intro_title": "Deja de copiar datos de un programa a otro",
+   "intro_description": "Si tu equipo registra un pedido en una herramienta, vuelve a capturarlo en otra y después verifica que todo coincida, hay trabajo que se puede automatizar. Conectamos tus sistemas para que intercambien información con reglas claras y puedas dedicar menos tiempo a tareas repetitivas.",
+   "hero_stats": [
+    {
+     "label": "01",
+     "value": "Menos captura manual",
+     "description": "Un dato puede actualizar varios sistemas"
+    },
+    {
+     "label": "02",
+     "value": "Información coordinada",
+     "description": "Reglas claras para compartir datos"
+    },
+    {
+     "label": "03",
+     "value": "Errores detectables",
+     "description": "Registro de operaciones y fallas"
+    }
+   ],
+   "hero_cta_label": "Cuéntanos tu caso",
+   "hero_cta_url": "/contact",
+   "hero_secondary_label": "Ver soluciones",
+   "hero_secondary_url": "#soluciones"
+  },
+  "problema": {
+   "development_eyebrow": "01 — EL PROBLEMA",
+   "development_title": "Tus programas, trabajando en equipo",
+   "development_content": "Cuando las herramientas de tu negocio están desconectadas, los pedidos, clientes, productos y facturas pueden terminar duplicados o desactualizados. Cada transferencia manual consume tiempo y abre la posibilidad de errores. Desarrollamos integraciones para que los sistemas compartan información de forma automática, con reglas para validar los datos, registrar las operaciones y detectar problemas cuando el intercambio no se completa.",
+   "development_situations": [
+    {
+     "number": "01",
+     "situation": "Los pedidos, clientes, productos o facturas se duplican entre herramientas."
+    },
+    {
+     "number": "02",
+     "situation": "Tu equipo vuelve a capturar la misma información en otro programa."
+    },
+    {
+     "number": "03",
+     "situation": "Cuando algo falla, no queda claro qué se envió, cuándo ni a dónde."
+    }
+   ],
+   "development_tags": [
+    {
+     "tag": "Integración de sistemas"
+    },
+    {
+     "tag": "Sincronización de datos"
+    },
+    {
+     "tag": "Automatización"
+    },
+    {
+     "tag": "Servicios externos"
+    }
+   ]
+  },
+  "soluciones": {
+   "solutions_eyebrow": "02 — NUESTRAS SOLUCIONES",
+   "solutions_title": "Conecta tus herramientas y automatiza el intercambio de información",
+   "solutions_description": "Creamos conexiones entre las aplicaciones que ya utilizas para reducir capturas repetidas, coordinar procesos y mantener los datos actualizados.",
+   "solutions": [
+    {
+     "title": "Conectar tus programas entre sí",
+     "description": "Haz que la información registrada en una herramienta pueda utilizarse en otra sin depender de transferencias manuales.",
+     "features": [
+      {
+       "feature": "Conexión entre tienda, facturación, CRM o inventario"
+      },
+      {
+       "feature": "Transferencia automática de los datos definidos"
+      },
+      {
+       "feature": "Validación de la información antes de procesarla"
+      },
+      {
+       "feature": "Registro de operaciones para consultar qué se envió y cuándo"
+      },
+      {
+       "feature": "Reintentos y alertas para atender transferencias fallidas"
+      }
+     ],
+     "benefit": "Menos capturas manuales y datos más consistentes."
+    },
+    {
+     "title": "Automatizar tareas entre sistemas",
+     "description": "Define qué debe suceder cuando ocurre un evento para que tus herramientas ejecuten acciones sin intervención manual en cada paso.",
+     "features": [
+      {
+       "feature": "Generación o actualización de registros a partir de eventos"
+      },
+      {
+       "feature": "Automatización de tareas como notificaciones y cambios de estado"
+      },
+      {
+       "feature": "Reglas para determinar cuándo debe ejecutarse una acción"
+      },
+      {
+       "feature": "Avisos cuando una operación requiere atención"
+      },
+      {
+       "feature": "Historial de resultados para identificar errores y dar seguimiento"
+      }
+     ],
+     "benefit": "Menos pasos manuales y respuestas más rápidas."
+    },
+    {
+     "title": "Mantener la información sincronizada",
+     "description": "Coordina los datos que utilizan diferentes áreas para reducir diferencias entre registros y evitar trabajar con información desactualizada.",
+     "features": [
+      {
+       "feature": "Sincronización de clientes, productos, precios u otros registros"
+      },
+      {
+       "feature": "Reglas para definir qué sistema actualiza cada dato"
+      },
+      {
+       "feature": "Validaciones para reducir duplicados e inconsistencias"
+      },
+      {
+       "feature": "Actualización programada o basada en eventos"
+      },
+      {
+       "feature": "Registro de errores y procedimientos para corregirlos"
+      }
+     ],
+     "benefit": "Un solo dato actualizado para todas las áreas."
+    }
+   ]
+  },
+  "plataformas": {
+   "platforms_enabled": 1,
+   "platforms_eyebrow": "03 — EJEMPLOS DE INTEGRACIÓN",
+   "platforms_title": "¿Qué plataformas podemos conectar?",
+   "platforms_description": "Estos son ejemplos de plataformas sobre las que puedes consultar una integración. No implican que todas las conexiones estén implementadas, probadas o disponibles de inmediato: revisamos tu caso y las condiciones de acceso de cada sistema.",
+   "platforms": [
+    {
+     "name": "SAP",
+     "example": "Sincronizar inventario o pedidos con un sistema empresarial."
+    },
+    {
+     "name": "Zoho",
+     "example": "Compartir clientes y oportunidades con tu sistema de facturación."
+    },
+    {
+     "name": "Salesforce",
+     "example": "Mantener actualizados clientes y oportunidades comerciales."
+    },
+    {
+     "name": "Shopify",
+     "example": "Enviar pedidos y niveles de inventario entre la tienda y tu operación."
+    },
+    {
+     "name": "Microsoft 365",
+     "example": "Conectar solicitudes, archivos o flujos de trabajo con otros sistemas."
+    },
+    {
+     "name": "WooCommerce",
+     "example": "Sincronizar productos, pedidos y existencias de la tienda en línea."
+    }
+   ],
+   "platforms_cta_title": "¿Tienes otra plataforma en mente?",
+   "platforms_cta_text": "¿No sabes si podemos conectar el sistema que utilizas? Cuéntanos cuál es y qué necesitas hacer. Revisaremos tu caso y te orientaremos sobre las posibilidades de integración.",
+   "platforms_cta_label": "Consultar mi integración",
+   "platforms_cta_url": "/contact"
+  },
+  "proceso": {
+   "approach_eyebrow": "04 — CÓMO TRABAJAMOS",
+   "approach_title": "Conexiones diseñadas para manejar los datos correctamente",
+   "approach_description": "Antes de conectar los sistemas definimos qué información se mueve, cómo debe transformarse y qué hacer cuando ocurre un error.",
+   "approach": [
+    {
+     "title": "Analizar",
+     "description": "Identificamos las herramientas, los datos y las tareas que hoy se realizan manualmente."
+    },
+    {
+     "title": "Diseñar",
+     "description": "Definimos el flujo de información, las reglas de validación y el tratamiento de errores."
+    },
+    {
+     "title": "Conectar",
+     "description": "Implementamos la integración y probamos los escenarios de operación acordados."
+    },
+    {
+     "title": "Supervisar",
+     "description": "Configuramos registros y mecanismos de seguimiento para detectar fallas y facilitar su diagnóstico."
+    }
+   ]
+  },
+  "faq": {
+   "faq_eyebrow": "05 — DUDAS FRECUENTES",
+   "faq_items": [
+    {
+     "pregunta": "¿Qué sistemas puedo conectar?",
+     "respuesta": "Podemos evaluar tiendas en línea, facturación, CRM, inventarios, hojas de cálculo y otras aplicaciones. La viabilidad depende de los accesos y mecanismos de integración que ofrezca cada sistema."
+    },
+    {
+     "pregunta": "¿Se pueden conectar programas antiguos?",
+     "respuesta": "En algunos casos, sí. Revisamos las interfaces disponibles y las alternativas técnicas antes de definir cómo realizar la conexión."
+    },
+    {
+     "pregunta": "¿Qué pasa si falla una transferencia de información?",
+     "respuesta": "Podemos implementar validaciones, reintentos, registros y alertas para detectar el problema y facilitar su recuperación. El comportamiento depende de las capacidades de los sistemas involucrados."
+    },
+    {
+     "pregunta": "¿Qué ocurre si uno de los sistemas cambia?",
+     "respuesta": "Una actualización puede requerir ajustes en la integración. Podemos revisar y adaptar las conexiones mediante un servicio de mantenimiento acordado."
+    },
+    {
+     "pregunta": "¿Puedo saber qué información se transfirió?",
+     "respuesta": "Podemos incluir un historial de operaciones y errores para consultar qué datos se procesaron y detectar transferencias que requieren atención."
+    },
+    {
+     "pregunta": "¿Cuánto cuesta conectar mis sistemas?",
+     "respuesta": "Depende del número de aplicaciones, la complejidad de los datos y las reglas de negocio. Revisamos el escenario para definir una propuesta económica."
+    }
+   ]
+  },
+  "cierre": {
+   "cta": {
+    "eyebrow": "06 — INICIA TU INTEGRACIÓN",
+    "title": "Deja que tus sistemas hagan el trabajo repetitivo",
+    "description": "Cuéntanos qué programas utilizas y qué información tienes que pasar de uno a otro. Revisaremos cómo automatizar ese proceso.",
+    "button_text": "Conectemos tus sistemas",
+    "button_url": "/contact",
+    "secondary_text": "Ver todos los servicios",
+    "secondary_url": "/servicios"
+   }
+  },
+  "relacionados": {
+   "related_eyebrow": "SIGUE EXPLORANDO",
+   "related_title": "Otros servicios que pueden ayudarte",
+   "related": [
+    {
+     "category": "SOFTWARE",
+     "name": "Desarrollo a medida",
+     "description": "Tu empresa no debería tener que adaptarse a un software que no le funciona.",
+     "url": "/servicios/desarrollo-a-medida"
+    },
+    {
+     "category": "WEB",
+     "name": "Diseño de sitios web y tiendas en línea",
+     "description": "Tu sitio web debe conseguir algo más que verse bien.",
+     "url": "/servicios/diseno-sitios-web-tiendas-en-linea"
+    },
+    {
+     "category": "INFRAESTRUCTURA",
+     "name": "DevOps y Soporte Técnico",
+     "description": "Actualiza tus sistemas sin convertir cada cambio en un riesgo.",
+     "url": "/servicios/devops-y-soporte-tecnico"
+    }
+   ]
+  }
+ },
+ "medida": {
+  "_source": "html_medida.html",
+  "hero": {
+   "intro_eyebrow": "DESARROLLO DE SOFTWARE",
+   "intro_title": "Tu empresa no debería tener que adaptarse a un software que no le funciona",
+   "intro_description": "Si tus procesos dependen de hojas de cálculo, capturas repetidas o herramientas que no se comunican, podemos desarrollar una solución a la medida. Primero revisamos si realmente necesitas software nuevo; si una herramienta existente resuelve el problema, también te lo diremos.",
+   "hero_stats": [
+    {
+     "label": "01",
+     "value": "Menos trabajo manual",
+     "description": "Procesos adaptados a tu operación"
+    },
+    {
+     "label": "02",
+     "value": "Información centralizada",
+     "description": "Menos datos dispersos entre herramientas"
+    },
+    {
+     "label": "03",
+     "value": "Control de tu operación",
+     "description": "Funciones diseñadas para tu equipo"
+    }
+   ],
+   "hero_cta_label": "Hablemos de tu proceso",
+   "hero_cta_url": "/contact",
+   "hero_secondary_label": "Ver soluciones",
+   "hero_secondary_url": "#soluciones"
+  },
+  "problema": {
+   "development_eyebrow": "01 — EL PROBLEMA",
+   "development_title": "Resuelve con software lo que hoy frena a tu equipo",
+   "development_content": "Cuando una herramienta no se adapta a tus procesos, tu equipo termina usando soluciones improvisadas, capturando la misma información varias veces o buscando datos en distintos lugares. El desarrollo a medida permite construir funciones alrededor de las necesidades reales de tu operación. Analizamos qué conviene automatizar, qué información necesitas controlar y si desarrollar una solución propia tiene sentido frente a las alternativas existentes.",
+   "development_situations": [
+    {
+     "number": "01",
+     "situation": "Tu equipo usa hojas de cálculo, correos o registros separados para operar."
+    },
+    {
+     "number": "02",
+     "situation": "La misma información se captura varias veces en distintas herramientas."
+    },
+    {
+     "number": "03",
+     "situation": "Para dar seguimiento, hay que buscar datos en varios lugares."
+    }
+   ],
+   "development_tags": [
+    {
+     "tag": "Software a medida"
+    },
+    {
+     "tag": "Sistemas internos"
+    },
+    {
+     "tag": "Aplicaciones de gestión"
+    },
+    {
+     "tag": "Automatización"
+    },
+    {
+     "tag": "Integraciones"
+    }
+   ]
+  },
+  "soluciones": {
+   "solutions_eyebrow": "02 — NUESTRAS SOLUCIONES",
+   "solutions_title": "Software para resolver problemas concretos de tu empresa",
+   "solutions_description": "Desarrollamos herramientas para organizar la operación, atender mejor a tus clientes y coordinar procesos que requieren funciones específicas.",
+   "solutions": [
+    {
+     "title": "Sistemas internos para tu operación",
+     "description": "Centraliza procesos que hoy administras con hojas de cálculo, correos o registros separados.",
+     "features": [
+      {
+       "feature": "Módulos para pedidos, inventario, incidencias u otros procesos"
+      },
+      {
+       "feature": "Información organizada en un solo sistema"
+      },
+      {
+       "feature": "Automatización de tareas repetitivas"
+      },
+      {
+       "feature": "Usuarios y permisos según las responsabilidades del equipo"
+      },
+      {
+       "feature": "Avisos y recordatorios para dar seguimiento a las actividades"
+      }
+     ],
+     "benefit": "Menos trabajo manual y una operación más ordenada."
+    },
+    {
+     "title": "Portales y aplicaciones para clientes",
+     "description": "Permite que tus clientes consulten información y realicen operaciones sin depender de llamadas o correos para cada solicitud.",
+     "features": [
+      {
+       "feature": "Acceso a pedidos, documentos y datos autorizados"
+      },
+      {
+       "feature": "Formularios para registrar solicitudes y darles seguimiento"
+      },
+      {
+       "feature": "Consulta del estado de trámites u operaciones"
+      },
+      {
+       "feature": "Interfaz con la identidad de tu empresa"
+      },
+      {
+       "feature": "Acceso desde celulares y computadoras"
+      }
+     ],
+     "benefit": "Menos solicitudes repetidas y mejor atención."
+    },
+    {
+     "title": "Soluciones para procesos complejos",
+     "description": "Conecta áreas, información y reglas de negocio en una solución diseñada para la forma en que trabaja tu empresa.",
+     "features": [
+      {
+       "feature": "Procesos que involucran varias áreas o responsables"
+      },
+      {
+       "feature": "Integración con sistemas existentes"
+      },
+      {
+       "feature": "Reglas de negocio adaptadas a tu operación"
+      },
+      {
+       "feature": "Paneles para consultar información y dar seguimiento"
+      },
+      {
+       "feature": "Estructura documentada para facilitar futuras ampliaciones"
+      }
+     ],
+     "benefit": "Áreas coordinadas y reglas claras para operar."
+    }
+   ]
+  },
+  "proceso": {
+   "approach_eyebrow": "03 — CÓMO TRABAJAMOS",
+   "approach_title": "Primero entendemos tu operación; después construimos",
+   "approach_description": "Desarrollamos a partir de tus procesos reales, validando las funciones prioritarias y revisando los avances contigo.",
+   "approach": [
+    {
+     "title": "Entender",
+     "description": "Identificamos dónde se pierde tiempo, qué información necesitas y qué tareas conviene simplificar."
+    },
+    {
+     "title": "Diseñar",
+     "description": "Definimos los procesos, las funciones y la estructura del sistema."
+    },
+    {
+     "title": "Desarrollar",
+     "description": "Construimos por etapas para revisar las funciones y ajustar lo necesario."
+    },
+    {
+     "title": "Evolucionar",
+     "description": "Planificamos mejoras conforme cambien tus procesos y prioridades."
+    }
+   ]
+  },
+  "ficha": {
+   "tech_enabled": 1,
+   "tech_eyebrow": "04 — FICHA TÉCNICA",
+   "tech_title": "Qué puede resolver el software",
+   "tech_description": "Seleccionamos las herramientas técnicas según los procesos, la información y las condiciones de operación de tu empresa.",
+   "tech_groups": [
+    {
+     "title": "TIPO DE SOLUCIÓN",
+     "items": [
+      {
+       "name": "Sistemas internos"
+      },
+      {
+       "name": "Portales de clientes"
+      },
+      {
+       "name": "Aplicaciones de gestión"
+      }
+     ]
+    },
+    {
+     "title": "FUNCIONES",
+     "items": [
+      {
+       "name": "Automatización"
+      },
+      {
+       "name": "Gestión de información"
+      },
+      {
+       "name": "Control de permisos"
+      }
+     ]
+    },
+    {
+     "title": "INTEGRACIÓN Y MANTENIMIENTO",
+     "items": [
+      {
+       "name": "Conexión con otros sistemas"
+      },
+      {
+       "name": "Documentación técnica"
+      },
+      {
+       "name": "Ampliación por etapas"
+      }
+     ]
+    }
+   ]
+  },
+  "faq": {
+   "faq_eyebrow": "05 — DUDAS FRECUENTES",
+   "faq_items": [
+    {
+     "pregunta": "¿Cómo sé si necesito software a medida?",
+     "respuesta": "Revisamos tu proceso y las herramientas que ya existen. Si una solución disponible cubre tus necesidades, te la recomendaremos; si tus procesos requieren funciones específicas, evaluaremos el desarrollo a medida."
+    },
+    {
+     "pregunta": "¿Cuánto tiempo necesito dedicar al proyecto?",
+     "respuesta": "Tu participación será necesaria para explicar los procesos, validar las funciones y revisar los avances. Organizamos esas actividades de acuerdo con las etapas del proyecto."
+    },
+    {
+     "pregunta": "¿El software será mío?",
+     "respuesta": "Antes de comenzar, dejamos por escrito quién tendrá los derechos de uso, qué materiales se entregarán y si el código fuente está incluido. La titularidad del código debe quedar definida expresamente en el acuerdo."
+    },
+    {
+     "pregunta": "¿Qué pasa si mi empresa cambia sus procesos?",
+     "respuesta": "Podemos ampliar o modificar el sistema conforme evolucionen tus necesidades. Revisamos cada cambio para determinar su alcance y la forma de implementarlo."
+    },
+    {
+     "pregunta": "¿Se puede conectar con mis herramientas actuales?",
+     "respuesta": "Sí, cuando existen mecanismos compatibles. Evaluamos los sistemas y definimos cómo intercambiar información antes de implementar la integración."
+    },
+    {
+     "pregunta": "¿Cuánto cuesta desarrollar software a medida?",
+     "respuesta": "Depende de los procesos, las funciones y las integraciones. Primero definimos el alcance para presentarte una propuesta económica."
+    }
+   ]
+  },
+  "cierre": {
+   "cta": {
+    "eyebrow": "06 — INICIA TU PROYECTO",
+    "title": "Deja de adaptar tu operación a herramientas que se quedan cortas",
+    "description": "Cuéntanos qué procesos quieres resolver y cómo trabaja tu equipo. Te ayudaremos a determinar si necesitas una solución a medida o si existe una alternativa más conveniente.",
+    "button_text": "Cuéntanos qué necesitas resolver",
+    "button_url": "/contact",
+    "secondary_text": "Ver todos los servicios",
+    "secondary_url": "/servicios"
+   }
+  },
+  "relacionados": {
+   "related_eyebrow": "SIGUE EXPLORANDO",
+   "related_title": "Otros servicios que pueden ayudarte",
+   "related": [
+    {
+     "category": "CONSULTORÍA",
+     "name": "Consultoría técnica",
+     "description": "Decide cómo construir tu proyecto antes de invertir en construirlo",
+     "url": "/servicios/consultoria-tecnica"
+    },
+    {
+     "category": "WEB",
+     "name": "Diseño de sitios web y tiendas en línea",
+     "description": "Tu sitio web debe conseguir algo más que verse bien",
+     "url": "/servicios/diseno-sitios-web-tiendas-en-linea"
+    },
+    {
+     "category": "SISTEMAS",
+     "name": "Integración de APIs y Servicios Externos",
+     "description": "Deja de copiar datos de un programa a otro",
+     "url": "/servicios/integracion-de-apis-y-servicios-externos"
+    }
+   ]
+  }
+ },
+ "devops": {
+  "_source": "html_devops.html",
+  "hero": {
+   "intro_eyebrow": "DEVOPS Y SOPORTE TÉCNICO",
+   "intro_title": "Actualiza tus sistemas sin convertir cada cambio en un riesgo",
+   "intro_description": "Una actualización mal aplicada o un servidor sin supervisión puede interrumpir tu operación. Automatizamos tareas, organizamos las publicaciones y damos seguimiento a la infraestructura para que puedas administrar tus sistemas con mayor control.",
+   "hero_stats": [
+    {
+     "label": "01",
+     "value": "Cambios controlados",
+     "description": "Publicaciones con validaciones y reversión cuando sea posible"
+    },
+    {
+     "label": "02",
+     "value": "Menos tareas manuales",
+     "description": "Procesos técnicos automatizados"
+    },
+    {
+     "label": "03",
+     "value": "Problemas visibles",
+     "description": "Alertas para detectar fallas a tiempo"
+    }
+   ],
+   "hero_cta_label": "Hablemos de tu operación",
+   "hero_cta_url": "/contact",
+   "hero_secondary_label": "Ver soluciones",
+   "hero_secondary_url": "#soluciones"
+  },
+  "problema": {
+   "development_eyebrow": "01 — EL PROBLEMA",
+   "development_title": "Evita que un problema técnico se convierta en un problema para tu negocio",
+   "development_content": "Los sistemas pueden presentar fallas por actualizaciones, falta de recursos, errores de configuración o copias de seguridad que no funcionan como se esperaba. Cuando no existen procesos claros, resolver esos problemas toma más tiempo y aumenta el riesgo para la operación. Revisamos tu infraestructura, automatizamos las tareas repetitivas y establecemos mecanismos de supervisión, mantenimiento y atención de incidencias adecuados para tus sistemas.",
+   "development_situations": [
+    {
+     "number": "01",
+     "situation": "Una actualización mal aplicada interrumpe la operación."
+    },
+    {
+     "number": "02",
+     "situation": "Nadie revisa los recursos, la configuración o las copias de seguridad hasta que algo falla."
+    },
+    {
+     "number": "03",
+     "situation": "Cuando hay una incidencia, no existe un proceso claro para atenderla."
+    }
+   ],
+   "development_tags": [
+    {
+     "tag": "Infraestructura"
+    },
+    {
+     "tag": "Despliegues"
+    },
+    {
+     "tag": "Copias de seguridad"
+    },
+    {
+     "tag": "Monitorización"
+    },
+    {
+     "tag": "Incidencias"
+    },
+    {
+     "tag": "Mantenimiento técnico"
+    }
+   ]
+  },
+  "soluciones": {
+   "solutions_eyebrow": "02 — NUESTRAS SOLUCIONES",
+   "solutions_title": "Controla las publicaciones, la infraestructura y las incidencias",
+   "solutions_description": "Organizamos los procesos necesarios para actualizar tus sistemas, mantener su infraestructura y detectar problemas antes de que se conviertan en interrupciones mayores.",
+   "solutions": [
+    {
+     "title": "Publicaciones controladas",
+     "description": "Deja atrás las actualizaciones manuales y los cambios difíciles de revertir. Organizamos el proceso para publicar de forma consistente y reducir el riesgo de errores.",
+     "features": [
+      {
+       "feature": "Proceso automatizado para publicar nuevas versiones"
+      },
+      {
+       "feature": "Pruebas antes de aplicar cambios en producción"
+      },
+      {
+       "feature": "Procedimiento de reversión cuando la arquitectura lo permita"
+      },
+      {
+       "feature": "Entornos separados para desarrollo, pruebas y producción"
+      },
+      {
+       "feature": "Registro de las versiones publicadas y sus resultados"
+      }
+     ],
+     "benefit": "Cambios más previsibles y menos riesgo de interrupción."
+    },
+    {
+     "title": "Infraestructura y copias de seguridad",
+     "description": "Administra tus servidores y recursos técnicos con una configuración acorde con las necesidades de tus aplicaciones.",
+     "features": [
+      {
+       "feature": "Configuración y administración de servidores o infraestructura en la nube"
+      },
+      {
+       "feature": "Revisión del consumo de recursos y la capacidad"
+      },
+      {
+       "feature": "Copias de seguridad automáticas con pruebas de restauración"
+      },
+      {
+       "feature": "Actualizaciones de seguridad y mantenimiento técnico"
+      },
+      {
+       "feature": "Procedimientos documentados para la recuperación ante fallas"
+      }
+     ],
+     "benefit": "Una base operativa más ordenada y recuperable."
+    },
+    {
+     "title": "Supervisión y soporte técnico",
+     "description": "Identifica problemas de funcionamiento y cuenta con un proceso definido para atender las incidencias de tus sistemas.",
+     "features": [
+      {
+       "feature": "Alertas ante fallas o comportamientos fuera de los parámetros establecidos"
+      },
+      {
+       "feature": "Supervisión de los servicios y recursos configurados"
+      },
+      {
+       "feature": "Atención de incidencias con horarios y tiempos de respuesta acordados"
+      },
+      {
+       "feature": "Revisiones preventivas de la infraestructura"
+      },
+      {
+       "feature": "Reportes de problemas, acciones realizadas y recomendaciones"
+      }
+     ],
+     "benefit": "Problemas detectados a tiempo y un proceso claro para atenderlos."
+    }
+   ]
+  },
+  "proceso": {
+   "approach_eyebrow": "03 — CÓMO TRABAJAMOS",
+   "approach_title": "Una operación técnica más controlada",
+   "approach_description": "Revisamos el estado de tus sistemas, priorizamos los riesgos y establecemos los procesos necesarios para mantenerlos y actualizarlos.",
+   "approach": [
+    {
+     "title": "Revisar",
+     "description": "Analizamos la infraestructura, los procesos de publicación y las necesidades de operación."
+    },
+    {
+     "title": "Automatizar",
+     "description": "Identificamos tareas repetitivas que pueden ejecutarse con menos intervención manual."
+    },
+    {
+     "title": "Implementar",
+     "description": "Configuramos los procesos, las copias de seguridad y las herramientas de supervisión acordadas."
+    },
+    {
+     "title": "Supervisar",
+     "description": "Revisamos los indicadores definidos y atendemos las incidencias conforme al servicio establecido."
+    }
+   ]
+  },
+  "ficha": {
+   "tech_enabled": 1,
+   "tech_eyebrow": "04 — FICHA TÉCNICA",
+   "tech_title": "Qué utilizamos para operar tus sistemas",
+   "tech_description": "Seleccionamos las herramientas de automatización, administración y supervisión según la infraestructura existente.",
+   "tech_groups": [
+    {
+     "title": "PUBLICACIÓN",
+     "items": [
+      {
+       "name": "Despliegues automatizados"
+      },
+      {
+       "name": "Control de versiones"
+      },
+      {
+       "name": "Entornos de prueba"
+      }
+     ]
+    },
+    {
+     "title": "INFRAESTRUCTURA",
+     "items": [
+      {
+       "name": "Servidores"
+      },
+      {
+       "name": "Nube"
+      },
+      {
+       "name": "Copias de seguridad"
+      },
+      {
+       "name": "Administración de recursos"
+      }
+     ]
+    },
+    {
+     "title": "SUPERVISIÓN",
+     "items": [
+      {
+       "name": "Monitorización"
+      },
+      {
+       "name": "Alertas"
+      },
+      {
+       "name": "Registros"
+      },
+      {
+       "name": "Recuperación ante fallas"
+      }
+     ]
+    }
+   ]
+  },
+  "faq": {
+   "faq_eyebrow": "05 — DUDAS FRECUENTES",
+   "faq_items": [
+    {
+     "pregunta": "¿Qué incluye el servicio?",
+     "respuesta": "Podemos cubrir publicaciones, infraestructura, copias de seguridad, supervisión y atención de incidencias. Definimos las actividades, los sistemas incluidos y la cobertura antes de comenzar."
+    },
+    {
+     "pregunta": "¿Necesito cambiar mis servidores actuales?",
+     "respuesta": "No necesariamente. Primero revisamos lo que tienes y proponemos cambios cuando ayuden a resolver un problema concreto o a mejorar la operación."
+    },
+    {
+     "pregunta": "¿El soporte incluye atención a los usuarios de mi empresa?",
+     "respuesta": "Este servicio se enfoca en la infraestructura y la operación técnica. La atención directa a usuarios se puede evaluar como un servicio independiente."
+    },
+    {
+     "pregunta": "¿Cómo sabré qué está pasando con mis sistemas?",
+     "respuesta": "Podemos establecer reportes con el estado de los servicios supervisados, las incidencias y las acciones realizadas."
+    },
+    {
+     "pregunta": "¿Atienden fallas fuera del horario laboral?",
+     "respuesta": "La cobertura depende del esquema acordado. Antes de iniciar definimos horarios, canales de atención y tiempos de respuesta, incluida cualquier cobertura extraordinaria."
+    },
+    {
+     "pregunta": "¿Cuánto cuesta el servicio?",
+     "respuesta": "Depende de la infraestructura, los sistemas que deben administrarse y la cobertura requerida. Revisamos esos factores para presentarte una propuesta económica."
+    }
+   ]
+  },
+  "cierre": {
+   "cta": {
+    "eyebrow": "06 — INICIA TU PROYECTO",
+    "title": "Deja de resolver las fallas sobre la marcha",
+    "description": "Cuéntanos qué sistemas utilizas, cómo los administras y qué problemas te preocupan. Identificaremos las prioridades para mejorar su operación.",
+    "button_text": "Revisemos tus sistemas",
+    "button_url": "/contact",
+    "secondary_text": "Ver todos los servicios",
+    "secondary_url": "/servicios"
+   }
+  },
+  "relacionados": {
+   "related_eyebrow": "SIGUE EXPLORANDO",
+   "related_title": "Otros servicios que pueden ayudarte",
+   "related": [
+    {
+     "category": "SISTEMAS",
+     "name": "Integración de APIs y Servicios Externos",
+     "description": "Deja de copiar datos de un programa a otro",
+     "url": "/servicios/integracion-de-apis-y-servicios-externos"
+    },
+    {
+     "category": "SOFTWARE",
+     "name": "Desarrollo a medida",
+     "description": "Tu empresa no debería tener que adaptarse a un software que no le funciona",
+     "url": "/servicios/desarrollo-a-medida"
+    },
+    {
+     "category": "CONSULTORÍA",
+     "name": "Consultoría técnica",
+     "description": "Decide cómo construir tu proyecto antes de invertir en construirlo",
+     "url": "/servicios/consultoria-tecnica"
+    }
+   ]
+  }
+ },
+ "consultoria": {
+  "_source": "html_consultoria.html",
+  "hero": {
+   "intro_eyebrow": "CONSULTORÍA TÉCNICA — ESTRATEGIA Y ARQUITECTURA",
+   "intro_title": "Decide cómo construir tu proyecto antes de invertir en construirlo",
+   "intro_description": "No necesitas conocer todas las tecnologías para iniciar un proyecto. Te ayudamos a definir qué necesitas, elegir las herramientas adecuadas y establecer prioridades. Al terminar, tendrás una ruta técnica documentada que podrás utilizar con tu equipo de desarrollo.",
+   "hero_stats": [
+    {
+     "label": "01",
+     "value": "Menos improvisación",
+     "description": "Decisiones tomadas antes de programar"
+    },
+    {
+     "label": "02",
+     "value": "Inversión mejor dirigida",
+     "description": "Prioridades alineadas con tus objetivos"
+    },
+    {
+     "label": "03",
+     "value": "Un plan ejecutable",
+     "description": "Tu equipo sabe qué construir y por qué"
+    }
+   ],
+   "hero_cta_label": "Hablemos de tu idea",
+   "hero_cta_url": "/contact",
+   "hero_secondary_label": "Ver soluciones",
+   "hero_secondary_url": "#soluciones"
+  },
+  "problema": {
+   "development_eyebrow": "01 — EL PROBLEMA",
+   "development_title": "Evita decisiones que después cuestan tiempo y dinero",
+   "development_content": "Empezar a desarrollar sin tener claro qué se necesita puede llevar a elegir herramientas inadecuadas, construir funciones que nadie utiliza o tener que rehacer partes del sistema. Analizamos tu proyecto antes de que esos problemas se conviertan en costos. Si ya tienes un sistema en funcionamiento, también podemos revisar su estructura y ayudarte a decidir qué conviene mejorar, cambiar o conservar.",
+   "development_situations": [
+    {
+     "number": "01",
+     "situation": "No sabes qué construir primero ni qué herramientas elegir."
+    },
+    {
+     "number": "02",
+     "situation": "Eliges tecnología sin comparar alternativas y después cuesta cambiarla."
+    },
+    {
+     "number": "03",
+     "situation": "Ya tienes un sistema y no sabes si conviene mejorarlo, cambiarlo o conservarlo."
+    }
+   ],
+   "development_tags": [
+    {
+     "tag": "Estrategia técnica"
+    },
+    {
+     "tag": "Arquitectura"
+    },
+    {
+     "tag": "Elección de tecnología"
+    },
+    {
+     "tag": "Planificación"
+    },
+    {
+     "tag": "Documentación"
+    },
+    {
+     "tag": "Asesoría técnica"
+    }
+   ]
+  },
+  "soluciones": {
+   "solutions_eyebrow": "02 — NUESTRAS SOLUCIONES",
+   "solutions_title": "De una idea a un plan que puedes ejecutar",
+   "solutions_description": "Definimos la estructura técnica de tu proyecto y te ayudamos a elegir cómo llevarlo a cabo, desde la primera decisión hasta la planificación del desarrollo.",
+   "solutions": [
+    {
+     "title": "Arquitectura y estructura del sistema",
+     "description": "Definimos cómo se organiza tu sistema antes de construirlo, para que cada componente tenga una función clara y las partes trabajen en conjunto.",
+     "features": [
+      {
+       "feature": "Documento de arquitectura explicado en términos claros"
+      },
+      {
+       "feature": "Mapa de componentes y sus relaciones"
+      },
+      {
+       "feature": "Decisiones técnicas justificadas y alternativas evaluadas"
+      },
+      {
+       "feature": "Recomendaciones para ampliar el sistema sin rediseñarlo por completo"
+      }
+     ],
+     "benefit": "Una estructura clara antes de escribir la primera línea."
+    },
+    {
+     "title": "Elección de tecnología y plan de trabajo",
+     "description": "Comparamos las opciones disponibles y definimos una ruta de desarrollo que considere tus objetivos, presupuesto y equipo.",
+     "features": [
+      {
+       "feature": "Comparativa de tecnologías con ventajas y desventajas"
+      },
+      {
+       "feature": "Recomendación de herramientas con argumentos claros"
+      },
+      {
+       "feature": "Plan por etapas con resultados esperados"
+      },
+      {
+       "feature": "Estimación de esfuerzo para organizar tiempo y presupuesto"
+      },
+      {
+       "feature": "Esquema de trabajo y seguimiento del proyecto"
+      }
+     ],
+     "benefit": "Decisiones justificadas y un plan que tu equipo puede ejecutar."
+    }
+   ]
+  },
+  "proceso": {
+   "approach_eyebrow": "03 — CÓMO TRABAJAMOS",
+   "approach_title": "De la incertidumbre a las decisiones claras",
+   "approach_description": "Primero entendemos el problema; después evaluamos las alternativas y documentamos una ruta de trabajo que puedas poner en marcha.",
+   "approach": [
+    {
+     "title": "Entender",
+     "description": "Revisamos tus objetivos, necesidades, recursos y sistemas existentes."
+    },
+    {
+     "title": "Definir",
+     "description": "Proponemos la estructura y las tecnologías, explicando las razones de cada decisión."
+    },
+    {
+     "title": "Planificar",
+     "description": "Organizamos el desarrollo por etapas, con prioridades, entregables y estimaciones."
+    },
+    {
+     "title": "Documentar",
+     "description": "Dejamos las decisiones por escrito para que tu equipo pueda consultarlas y ejecutarlas."
+    }
+   ]
+  },
+  "ficha": {
+   "tech_enabled": 1,
+   "tech_eyebrow": "04 — FICHA TÉCNICA",
+   "tech_title": "Cómo organizamos el proyecto",
+   "tech_description": "Elegimos las herramientas técnicas y la forma de trabajo según la complejidad del proyecto y las necesidades del equipo.",
+   "tech_groups": [
+    {
+     "title": "ORGANIZACIÓN DEL TRABAJO",
+     "items": [
+      {
+       "name": "Scrum (trabajo por ciclos)"
+      },
+      {
+       "name": "Kanban (tablero de tareas)"
+      }
+     ]
+    },
+    {
+     "title": "DISEÑO TÉCNICO",
+     "items": [
+      {
+       "name": "Arquitectura de software"
+      },
+      {
+       "name": "Componentes del sistema"
+      },
+      {
+       "name": "Tecnologías"
+      }
+     ]
+    },
+    {
+     "title": "PLANIFICACIÓN",
+     "items": [
+      {
+       "name": "Prioridades"
+      },
+      {
+       "name": "Documentación técnica"
+      },
+      {
+       "name": "Estimación"
+      }
+     ]
+    }
+   ]
+  },
+  "faq": {
+   "faq_eyebrow": "05 — DUDAS FRECUENTES",
+   "faq_items": [
+    {
+     "pregunta": "¿Qué recibo al terminar la consultoría?",
+     "respuesta": "Una propuesta técnica documentada con la estructura recomendada, las tecnologías evaluadas, las decisiones principales y un plan de trabajo para orientar el desarrollo."
+    },
+    {
+     "pregunta": "¿Puedo contratarla si solo tengo una idea?",
+     "respuesta": "Sí. Partimos del problema que quieres resolver y te ayudamos a convertirlo en requerimientos, prioridades y una primera ruta de trabajo."
+    },
+    {
+     "pregunta": "¿Pueden trabajar con mi equipo de desarrollo?",
+     "respuesta": "Sí. Podemos colaborar con tu equipo actual o con otro proveedor para orientar las decisiones técnicas y resolver dudas durante la planificación."
+    },
+    {
+     "pregunta": "¿Tengo que contratar el desarrollo con GussWare?",
+     "respuesta": "No. Puedes utilizar el plan con el equipo que elijas. Si decides continuar con nosotros, ya contaremos con una base definida."
+    },
+    {
+     "pregunta": "¿Cuánto cuesta una consultoría técnica?",
+     "respuesta": "Depende de la complejidad del proyecto y del análisis necesario. Revisamos tus necesidades y te presentamos una propuesta económica antes de iniciar."
+    },
+    {
+     "pregunta": "¿Qué pasa si ya tengo un sistema y necesito mejorarlo?",
+     "respuesta": "Revisamos su situación actual, identificamos oportunidades de mejora y definimos qué conviene conservar, corregir o ampliar."
+    }
+   ]
+  },
+  "cierre": {
+   "cta": {
+    "eyebrow": "06 — INICIA TU PROYECTO",
+    "title": "Antes de programar, define el camino correcto",
+    "description": "Cuéntanos qué quieres construir o qué problema necesitas resolver. Te ayudaremos a convertirlo en un plan técnico claro.",
+    "button_text": "Cuéntanos tu proyecto",
+    "button_url": "/contact",
+    "secondary_text": "Ver todos los servicios",
+    "secondary_url": "/servicios"
+   }
+  },
+  "relacionados": {
+   "related_eyebrow": "SIGUE EXPLORANDO",
+   "related_title": "Otros servicios que pueden ayudarte",
+   "related": [
+    {
+     "category": "SOFTWARE",
+     "name": "Desarrollo a medida",
+     "description": "Tu empresa no debería tener que adaptarse a un software que no le funciona.",
+     "url": "/servicios/desarrollo-a-medida"
+    },
+    {
+     "category": "WEB",
+     "name": "Diseño de sitios web y tiendas en línea",
+     "description": "Tu sitio web debe conseguir algo más que verse bien.",
+     "url": "/servicios/diseno-sitios-web-tiendas-en-linea"
+    },
+    {
+     "category": "INFRAESTRUCTURA",
+     "name": "DevOps y Soporte Técnico",
+     "description": "Actualiza tus sistemas sin convertir cada cambio en un riesgo.",
+     "url": "/servicios/devops-y-soporte-tecnico"
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GussWare - Web Design & Online Stores (Service Detail - English)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      color: #242126;
+      background-color: #FFFFFF;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    * {
+      border-radius: 0px !important;
+    }
+    .text-ink { color: #242126; }
+    .text-muted { color: #5C6068; }
+    .bg-surface-primary { background-color: #FFFFFF; }
+    .bg-surface-secondary { background-color: #F2F2F2; }
+    .bg-primary { background-color: #004A98; }
+    .text-primary { color: #004A98; }
+    .bg-deep { background-color: #00346E; }
+    .bg-accent { background-color: #FF5000; }
+    .text-accent { color: #FF5000; }
+    .border-rule { border-color: #E2E2E2; }
+    .border-primary { border-color: #004A98; }
+  </style>
+</head>
+<body class="w-full bg-white text-ink">
+
+  <!-- 1. HEADER -->
+  <header class="w-full bg-white border-b border-rule sticky top-0 z-50">
+    <div class="max-w-[1280px] mx-auto px-8 h-20 flex items-center justify-between">
+      <!-- GussWare Wordmark / Brand -->
+      <a href="/" class="flex items-center gap-3" aria-label="GussWare Home">
+        <svg width="28" height="28" viewBox="0 0 1333 1333" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1331.7 0H1.5V328.5H1331.7V0Z" fill="#004A98"/>
+          <path d="M1.5 675.8H321.1V1013.3H658.5V1333.3H1.5V675.8Z" fill="#004A98"/>
+          <path d="M1331.8 1333.3H1011.6V848.2H526.5V528.2H1331.8V1333.3Z" fill="#FF5000"/>
+        </svg>
+        <span class="text-2xl font-bold tracking-tight text-ink">GussWare</span>
+      </a>
+
+      <!-- Navigation -->
+      <nav class="hidden md:flex items-center gap-10 text-base font-semibold">
+        <a href="/services" class="text-primary border-b-2 border-primary pb-1">Services</a>
+        <a href="/how-we-work" class="text-ink hover:text-primary transition-colors">How We Work</a>
+        <a href="/projects" class="text-ink hover:text-primary transition-colors">Projects</a>
+        <a href="/community" class="text-ink hover:text-primary transition-colors">Community</a>
+      </nav>
+
+      <!-- Header CTA -->
+      <div class="flex items-center">
+        <a href="/contact" class="bg-accent hover:bg-[#E04600] text-white px-6 py-2.5 text-base font-bold tracking-normal transition-colors">
+          Let's Talk
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. HERO -->
+  <section class="w-full bg-white pt-12 pb-[120px] border-b border-rule">
+    <div class="max-w-[1280px] mx-auto px-8">
+      
+      <!-- Breadcrumb -->
+      <div class="text-sm font-medium text-muted mb-8 tracking-wide">
+        <a href="/" class="hover:text-primary transition-colors">Home</a>
+        <span class="mx-2">/</span>
+        <a href="/services" class="hover:text-primary transition-colors">Services</a>
+        <span class="mx-2">/</span>
+        <span class="text-ink font-semibold">Web Design & Online Stores</span>
+      </div>
+
+      <!-- Hero Grid -->
+      <div class="grid grid-cols-12 gap-12 items-start">
+        
+        <!-- Left Column: Eyebrow, H1, Lead, CTAs -->
+        <div class="col-span-12 lg:col-span-8 pr-0 lg:pr-8">
+          <div class="inline-flex items-center gap-2 mb-4">
+            <span class="w-2.5 h-2.5 bg-accent"></span>
+            <span class="text-xs font-bold uppercase tracking-widest text-primary">Web Design & Development</span>
+          </div>
+
+          <h1 class="text-5xl lg:text-[64px] font-extrabold text-ink leading-[1.08] tracking-tight mb-8">
+            Your website should do more than look good
+          </h1>
+
+          <p class="text-xl lg:text-2xl text-muted leading-relaxed font-normal mb-10 max-w-2xl">
+            A confusing page can make a customer leave before learning about your services. We design websites and online stores that explain what you offer, make contact or purchase easier, and deliver a clear experience from phone to desktop.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-6 pt-2">
+            <a href="/contact" class="bg-accent hover:bg-[#E04600] text-white px-8 py-4 text-lg font-bold transition-colors inline-flex items-center justify-center">
+              Tell us about your project
+            </a>
+            <a href="#solutions" class="text-primary hover:text-deep text-lg font-semibold inline-flex items-center gap-1.5 transition-colors">
+              See solutions <span>↓</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Column: Three Stacked Stats / Highlights -->
+        <div class="col-span-12 lg:col-span-4 flex flex-col divide-y divide-rule border-t lg:border-t-0 lg:border-l border-rule lg:pl-10 pt-8 lg:pt-0">
+          
+          <div class="py-6 first:pt-0">
+            <div class="text-3xl font-extrabold text-primary mb-1">01</div>
+            <div class="text-lg font-bold text-ink mb-1">More opportunities</div>
+            <div class="text-base text-muted leading-relaxed">Visitors understand what you offer</div>
+          </div>
+
+          <div class="py-6">
+            <div class="text-3xl font-extrabold text-primary mb-1">02</div>
+            <div class="text-lg font-bold text-ink mb-1">Smoother purchasing</div>
+            <div class="text-base text-muted leading-relaxed">Fewer obstacles to contact or pay</div>
+          </div>
+
+          <div class="py-6 last:pb-0">
+            <div class="text-3xl font-extrabold text-primary mb-1">03</div>
+            <div class="text-lg font-bold text-ink mb-1">Ready to grow</div>
+            <div class="text-base text-muted leading-relaxed">Add content and features as you grow</div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 3. SECTION 01: THE PROBLEM -->
+  <section class="w-full bg-surface-secondary py-[120px] border-b border-rule">
+    <div class="max-w-[1280px] mx-auto px-8">
+      
+      <!-- Section Tag -->
+      <div class="text-xs font-bold uppercase tracking-widest text-primary mb-4">
+        01 — The Problem
+      </div>
+
+      <div class="grid grid-cols-12 gap-12 items-start mb-16">
+        <div class="col-span-12 lg:col-span-7">
+          <h2 class="text-3xl lg:text-[42px] font-extrabold text-ink leading-tight tracking-tight">
+            Help your visitors find what they need and know what to do next
+          </h2>
+        </div>
+        <div class="col-span-12 lg:col-span-5">
+          <p class="text-lg text-muted leading-relaxed">
+            If someone visits your site and cannot understand what you sell, how your service works or where to buy, they will probably look for another option.
+          </p>
+        </div>
+      </div>
+
+      <!-- Three Rows -->
+      <div class="divide-y divide-rule border-y border-rule mb-12 bg-white">
+        
+        <div class="py-6 px-8 flex flex-col md:flex-row md:items-baseline gap-4 md:gap-12">
+          <span class="text-2xl font-extrabold text-primary shrink-0 w-12">01</span>
+          <p class="text-lg font-semibold text-ink">
+            Your visitor does not understand what you offer or why choose you.
+          </p>
+        </div>
+
+        <div class="py-6 px-8 flex flex-col md:flex-row md:items-baseline gap-4 md:gap-12">
+          <span class="text-2xl font-extrabold text-primary shrink-0 w-12">02</span>
+          <p class="text-lg font-semibold text-ink">
+            They cannot find how to contact you, request a quote or buy.
+          </p>
+        </div>
+
+        <div class="py-6 px-8 flex flex-col md:flex-row md:items-baseline gap-4 md:gap-12">
+          <span class="text-2xl font-extrabold text-primary shrink-0 w-12">03</span>
+          <p class="text-lg font-semibold text-ink">
+            The site does not work well on mobile or is hard to update.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Tags line -->
+      <div class="text-xs font-bold uppercase tracking-widest text-muted">
+        Web design · Web development · Online stores · User experience · Responsive design · Digital platforms
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4. SECTION 02: WHAT YOU CAN HIRE -->
+  <section id="solutions" class="w-full bg-white py-[120px] border-b border-rule">
+    <div class="max-w-[1280px] mx-auto px-8">
+      
+      <div class="text-xs font-bold uppercase tracking-widest text-primary mb-4">
+        02 — What You Can Hire
+      </div>
+
+      <div class="grid grid-cols-12 gap-12 items-start mb-16">
+        <div class="col-span-12 lg:col-span-6">
+          <h2 class="text-3xl lg:text-[42px] font-extrabold text-ink leading-tight tracking-tight">
+            A digital solution for every goal
+          </h2>
+        </div>
+        <div class="col-span-12 lg:col-span-6">
+          <p class="text-lg text-muted leading-relaxed">
+            From presenting your business to selling online or digitizing processes, we build the solution you need to serve your customers better.
+          </p>
+        </div>
+      </div>
+
+      <!-- Three Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        
+        <!-- Card 01 -->
+        <div class="bg-white border border-rule p-8 flex flex-col justify-between h-full">
+          <div>
+            <div class="text-3xl font-extrabold text-primary mb-6">01</div>
+            <h3 class="text-2xl font-bold text-ink mb-3 leading-snug">
+              Websites that present your business
+            </h3>
+            <p class="text-base text-muted mb-8 leading-relaxed">
+              Help your visitors understand what you do, why choose you and how to get in touch.
+            </p>
+
+            <div class="border-t border-rule pt-6 mb-8">
+              <div class="text-xs font-bold uppercase tracking-wider text-primary mb-4">
+                What you get
+              </div>
+              <ul class="space-y-3 text-sm text-ink font-medium">
+                <li class="flex items-start gap-2.5">
+                  <span class="text-primary font-bold shrink-0">—</span>
+                  <span>Custom design aligned with your brand identity</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-primary font-bold shrink-0">—</span>
+                  <span>Sections and content organized for easy browsing</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-primary font-bold shrink-0">—</span>
+                  <span>Responsive design for phones, tablets and computers</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-primary font-bold shrink-0">—</span>
+                  <span>Structure and metadata prepared for search engines to understand the site</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-primary font-bold shrink-0">—</span>
+                  <span>Admin panel to update text and images</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="border-t border-rule pt-6">
+            <div class="text-xs font-bold uppercase tracking-wider text-muted mb-1">Benefit</div>
+            <p class="text-base font-bold text-ink leading-snug">
+              A clear presence that builds trust and generates inquiries.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 02 -->
+        <div class="bg-white border border-rule p-8 flex flex-col justify-between h-full">
+          <div>
+            <div class="text-3xl font-extrabold text-primary mb-6">02</div>
+            <h3 class="text-2xl font-bold text-ink mb-3 leading-snug">
+              Online stores that make buying easier
+            </h3>
+            <p class="text-base text-muted mb-8 leading-relaxed">
+              Let your customers browse products, choose what they need and place orders from your store.
+            </p>
+
+            <div class="border-t border-rule pt-6 mb-8">
+              <div class="text-xs font-bold uppercase tracking-wider text-primary mb-4">
+                What you get
+              </div>
+              <ul class="space-y-3 text-sm text-ink font-medium">
+                <li class="flex items-start gap-2.5">
+                  <span class="text-primary font-bold shrink-0">—</span>
+                  <span>Product catalog with categories and search</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-primary font-bold shrink-0">—</span>
+                  <span>Cart and checkout organized in clear steps</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-primary font-bold shrink-0">—</span>
+                  <span>Payment methods and shipping options integrated</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-primary font-bold shrink-0">—</span>
+                  <span>Mobile-friendly shopping experience</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-primary font-bold shrink-0">—</span>
+                  <span>Panel to manage products, prices and orders</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="border-t border-rule pt-6">
+            <div class="text-xs font-bold uppercase tracking-wider text-muted mb-1">Benefit</div>
+            <p class="text-base font-bold text-ink leading-snug">
+              Less friction to buy and more control over your operation.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 03 -->
+        <div class="bg-white border border-rule p-8 flex flex-col justify-between h-full">
+          <div>
+            <div class="text-3xl font-extrabold text-primary mb-6">03</div>
+            <h3 class="text-2xl font-bold text-ink mb-3 leading-snug">
+              Digital platforms for your operation
+            </h3>
+            <p class="text-base text-muted mb-8 leading-relaxed">
+              When you need more than a page, we build platforms to manage information, serve customers or solve specific processes.
+            </p>
+
+            <div class="border-t border-rule pt-6 mb-8">
+              <div class="text-xs font-bold uppercase tracking-wider text-primary mb-4">
+                What you get
+              </div>
+              <ul class="space-y-3 text-sm text-ink font-medium">
+                <li class="flex items-start gap-2.5">
+                  <span class="text-primary font-bold shrink-0">—</span>
+                  <span>Features adapted to your business processes</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-primary font-bold shrink-0">—</span>
+                  <span>Users and permissions to organize access</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-primary font-bold shrink-0">—</span>
+                  <span>Integration with the tools you use</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-primary font-bold shrink-0">—</span>
+                  <span>Panels to view and manage information</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <span class="text-primary font-bold shrink-0">—</span>
+                  <span>Structure ready to add new features</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="border-t border-rule pt-6">
+            <div class="text-xs font-bold uppercase tracking-wider text-muted mb-1">Benefit</div>
+            <p class="text-base font-bold text-ink leading-snug">
+              A tool of your own to operate, not just to present.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Below Link -->
+      <div>
+        <a href="/contact" class="text-primary hover:text-deep font-bold text-lg inline-flex items-center gap-1.5 transition-colors">
+          Let's talk about your project →
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 5. SECTION 03: HOW WE WORK -->
+  <section class="w-full bg-surface-secondary py-[120px] border-b border-rule">
+    <div class="max-w-[1280px] mx-auto px-8">
+      
+      <div class="text-xs font-bold uppercase tracking-widest text-primary mb-4">
+        03 — How We Work
+      </div>
+
+      <div class="grid grid-cols-12 gap-12 items-start mb-16">
+        <div class="col-span-12 lg:col-span-7">
+          <h2 class="text-3xl lg:text-[42px] font-extrabold text-ink leading-tight tracking-tight">
+            From design to a website that fulfills its purpose
+          </h2>
+        </div>
+        <div class="col-span-12 lg:col-span-5">
+          <p class="text-lg text-muted leading-relaxed">
+            We work in stages to validate the proposal, build the features and review the result before launch.
+          </p>
+        </div>
+      </div>
+
+      <!-- Four-step static stepper -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        
+        <div class="bg-white border border-rule p-8 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-6">
+              <span class="text-xs font-bold uppercase tracking-wider text-primary">01 Stage</span>
+              <span class="w-2.5 h-2.5 bg-primary"></span>
+            </div>
+            <h3 class="text-2xl font-bold text-ink mb-4">Understand</h3>
+            <p class="text-base text-muted leading-relaxed">
+              We define what you want to achieve, who will visit the site and what they need to find.
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-white border border-rule p-8 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-6">
+              <span class="text-xs font-bold uppercase tracking-wider text-primary">02 Stage</span>
+              <span class="w-2.5 h-2.5 bg-primary"></span>
+            </div>
+            <h3 class="text-2xl font-bold text-ink mb-4">Design</h3>
+            <p class="text-base text-muted leading-relaxed">
+              We organize content and screens, and review the visual proposal with you.
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-white border border-rule p-8 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-6">
+              <span class="text-xs font-bold uppercase tracking-wider text-primary">03 Stage</span>
+              <span class="w-2.5 h-2.5 bg-primary"></span>
+            </div>
+            <h3 class="text-2xl font-bold text-ink mb-4">Build</h3>
+            <p class="text-base text-muted leading-relaxed">
+              We build the site, test its features and verify how it adapts to different devices.
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-white border border-rule p-8 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-6">
+              <span class="text-xs font-bold uppercase tracking-wider text-primary">04 Stage</span>
+              <span class="w-2.5 h-2.5 bg-primary"></span>
+            </div>
+            <h3 class="text-2xl font-bold text-ink mb-4">Launch and improve</h3>
+            <p class="text-base text-muted leading-relaxed">
+              We prepare the launch and define improvement opportunities based on business needs.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 6. SECTION 04: PROJECT DETAILS (Secondary, Low Emphasis) -->
+  <section class="w-full bg-white py-[80px] border-b border-rule">
+    <div class="max-w-[1280px] mx-auto px-8">
+      
+      <div class="text-xs font-bold uppercase tracking-widest text-primary mb-3">
+        04 — Project Details
+      </div>
+
+      <div class="grid grid-cols-12 gap-8 items-baseline mb-10">
+        <div class="col-span-12 lg:col-span-5">
+          <h2 class="text-2xl lg:text-3xl font-extrabold text-ink leading-tight">
+            What the web solution includes
+          </h2>
+        </div>
+        <div class="col-span-12 lg:col-span-7">
+          <p class="text-base text-muted">
+            We select the tools based on the type of site, the features you need and how you will manage content.
+          </p>
+        </div>
+      </div>
+
+      <!-- Compact 3-Column Strip -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8 border-t border-rule">
+        <div>
+          <div class="text-xs font-bold uppercase tracking-widest text-muted mb-2">Solution Type</div>
+          <div class="text-base font-semibold text-ink">Websites · Online stores · Custom platforms</div>
+        </div>
+        <div>
+          <div class="text-xs font-bold uppercase tracking-widest text-muted mb-2">User Experience</div>
+          <div class="text-base font-semibold text-ink">Custom design · Mobile adaptation · Clear navigation</div>
+        </div>
+        <div>
+          <div class="text-xs font-bold uppercase tracking-widest text-muted mb-2">Technical Base</div>
+          <div class="text-base font-semibold text-ink">Content management · Integrations · Performance and maintenance</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 7. SECTION 05: FREQUENTLY ASKED QUESTIONS -->
+  <section class="w-full bg-surface-secondary py-[120px] border-b border-rule">
+    <div class="max-w-[1280px] mx-auto px-8">
+      
+      <div class="grid grid-cols-12 gap-12 items-start">
+        
+        <!-- Left: Eyebrow + H2 Sticky/Anchor -->
+        <div class="col-span-12 lg:col-span-5">
+          <div class="text-xs font-bold uppercase tracking-widest text-primary mb-4">
+            05 — Frequently Asked Questions
+          </div>
+          <h2 class="text-3xl lg:text-[42px] font-extrabold text-ink leading-tight tracking-tight mb-8">
+            What clients usually ask before starting
+          </h2>
+          <a href="/contact" class="hidden lg:inline-flex items-center gap-1.5 text-primary hover:text-deep font-bold text-base transition-colors">
+            Still have a question? Write to us →
+          </a>
+        </div>
+
+        <!-- Right: Six FAQ Rows -->
+        <div class="col-span-12 lg:col-span-7">
+          <div class="divide-y divide-rule border-y border-rule bg-white">
+            
+            <!-- Row 1: Open -->
+            <div class="p-6 md:p-8">
+              <div class="flex items-start justify-between gap-4 cursor-pointer">
+                <span class="text-lg md:text-xl font-bold text-ink">
+                  How long does it take to build my website?
+                </span>
+                <span class="text-2xl font-bold text-primary shrink-0 leading-none">−</span>
+              </div>
+              <div class="mt-4 text-base text-muted leading-relaxed pr-8">
+                It depends on the size, content and features. Before starting, we define the stages and estimated timelines based on the project requirements.
+              </div>
+            </div>
+
+            <!-- Row 2: Closed -->
+            <div class="p-6 md:p-8">
+              <div class="flex items-center justify-between gap-4 cursor-pointer">
+                <span class="text-lg md:text-xl font-bold text-ink">
+                  Can I update the site without technical help?
+                </span>
+                <span class="text-2xl font-bold text-primary shrink-0 leading-none">+</span>
+              </div>
+            </div>
+
+            <!-- Row 3: Closed -->
+            <div class="p-6 md:p-8">
+              <div class="flex items-center justify-between gap-4 cursor-pointer">
+                <span class="text-lg md:text-xl font-bold text-ink">
+                  Will my site appear on Google?
+                </span>
+                <span class="text-2xl font-bold text-primary shrink-0 leading-none">+</span>
+              </div>
+            </div>
+
+            <!-- Row 4: Closed -->
+            <div class="p-6 md:p-8">
+              <div class="flex items-center justify-between gap-4 cursor-pointer">
+                <span class="text-lg md:text-xl font-bold text-ink">
+                  Can I add features later?
+                </span>
+                <span class="text-2xl font-bold text-primary shrink-0 leading-none">+</span>
+              </div>
+            </div>
+
+            <!-- Row 5: Closed -->
+            <div class="p-6 md:p-8">
+              <div class="flex items-center justify-between gap-4 cursor-pointer">
+                <span class="text-lg md:text-xl font-bold text-ink">
+                  Can you connect the site to my billing or inventory system?
+                </span>
+                <span class="text-2xl font-bold text-primary shrink-0 leading-none">+</span>
+              </div>
+            </div>
+
+            <!-- Row 6: Closed -->
+            <div class="p-6 md:p-8">
+              <div class="flex items-center justify-between gap-4 cursor-pointer">
+                <span class="text-lg md:text-xl font-bold text-ink">
+                  How much does it cost to build a website or online store?
+                </span>
+                <span class="text-2xl font-bold text-primary shrink-0 leading-none">+</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Mobile / Bottom Micro-copy -->
+          <div class="mt-8">
+            <a href="/contact" class="text-primary hover:text-deep font-bold text-base inline-flex items-center gap-1.5 transition-colors">
+              Still have a question? Write to us →
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 8. SECTION 06: CLOSING (Deep Blue #00346E) -->
+  <section class="w-full bg-deep text-white py-[120px]">
+    <div class="max-w-[1280px] mx-auto px-8">
+      
+      <div class="grid grid-cols-12 gap-12 items-center">
+        
+        <div class="col-span-12 lg:col-span-8">
+          <div class="text-xs font-bold uppercase tracking-widest text-[#FF5000] mb-4">
+            06 — Start Your Project
+          </div>
+          <h2 class="text-3xl lg:text-[44px] font-extrabold leading-tight tracking-tight mb-6">
+            Turn your digital presence into a tool for your business
+          </h2>
+          <p class="text-lg lg:text-xl text-gray-300 leading-relaxed font-normal mb-10 max-w-2xl">
+            Tell us what you sell, what services you offer and what you want visitors to do on your site. We will define the best way to bring it online.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-6">
+            <a href="/contact" class="bg-accent hover:bg-[#E04600] text-white px-8 py-4 text-lg font-bold transition-colors inline-flex items-center justify-center">
+              Let's design your website
+            </a>
+            <a href="/services" class="text-white hover:text-gray-300 text-lg font-semibold inline-flex items-center gap-1.5 transition-colors">
+              See all services →
+            </a>
+          </div>
+        </div>
+
+        <!-- Geometric Accent Block -->
+        <div class="col-span-12 lg:col-span-4 hidden lg:flex justify-end">
+          <div class="w-64 h-64 border border-blue-400/20 p-6 flex flex-col justify-between relative">
+            <div class="w-8 h-1 bg-accent"></div>
+            <div class="space-y-2">
+              <div class="h-0.5 w-full bg-blue-300/10"></div>
+              <div class="h-0.5 w-3/4 bg-blue-300/10"></div>
+              <div class="h-0.5 w-1/2 bg-blue-300/10"></div>
+            </div>
+            <div class="flex items-center justify-between text-[11px] font-mono uppercase tracking-widest text-blue-200/50">
+              <span>GussWare</span>
+              <span>Web / Store</span>
+            </div>
+            <div class="absolute bottom-6 right-6 w-8 h-8 border border-accent"></div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 9. SECTION 07: RELATED SERVICES -->
+  <section class="w-full bg-white py-[120px] border-b border-rule">
+    <div class="max-w-[1280px] mx-auto px-8">
+      
+      <div class="text-xs font-bold uppercase tracking-widest text-primary mb-3">
+        Keep Exploring
+      </div>
+      <h2 class="text-3xl lg:text-[40px] font-extrabold text-ink tracking-tight mb-12">
+        Other services that can help
+      </h2>
+
+      <!-- Three Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Service Card 1 -->
+        <div class="border border-rule p-8 flex flex-col justify-between hover:border-primary transition-colors bg-white">
+          <div>
+            <div class="text-xs font-bold uppercase tracking-widest text-primary mb-3">Mobile</div>
+            <h3 class="text-2xl font-bold text-ink mb-3 leading-snug">Mobile Apps</h3>
+            <p class="text-base text-muted leading-relaxed mb-8">
+              An app that solves a need from the phone
+            </p>
+          </div>
+          <div>
+            <a href="/services/mobile-apps" class="text-primary hover:text-deep font-bold text-base inline-flex items-center gap-1 transition-colors">
+              View service →
+            </a>
+          </div>
+        </div>
+
+        <!-- Service Card 2 -->
+        <div class="border border-rule p-8 flex flex-col justify-between hover:border-primary transition-colors bg-white">
+          <div>
+            <div class="text-xs font-bold uppercase tracking-widest text-primary mb-3">Software</div>
+            <h3 class="text-2xl font-bold text-ink mb-3 leading-snug">Custom Development</h3>
+            <p class="text-base text-muted leading-relaxed mb-8">
+              Your company shouldn't have to adapt to software that doesn't work for it
+            </p>
+          </div>
+          <div>
+            <a href="/services/custom-software" class="text-primary hover:text-deep font-bold text-base inline-flex items-center gap-1 transition-colors">
+              View service →
+            </a>
+          </div>
+        </div>
+
+        <!-- Service Card 3 -->
+        <div class="border border-rule p-8 flex flex-col justify-between hover:border-primary transition-colors bg-white">
+          <div>
+            <div class="text-xs font-bold uppercase tracking-widest text-primary mb-3">Integrations</div>
+            <h3 class="text-2xl font-bold text-ink mb-3 leading-snug">API & External Service Integration</h3>
+            <p class="text-base text-muted leading-relaxed mb-8">
+              Stop copying data from one program to another
+            </p>
+          </div>
+          <div>
+            <a href="/services/api-integration" class="text-primary hover:text-deep font-bold text-base inline-flex items-center gap-1 transition-colors">
+              View service →
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 10. FOOTER -->
+  <footer class="w-full bg-surface-secondary py-16 border-t border-rule text-ink">
+    <div class="max-w-[1280px] mx-auto px-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 pb-16 border-b border-rule">
+        
+        <!-- Brand Descriptor -->
+        <div class="md:col-span-4 flex flex-col justify-between">
+          <div>
+            <a href="/" class="flex items-center gap-3 mb-4" aria-label="GussWare Home">
+              <svg width="24" height="24" viewBox="0 0 1333 1333" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1331.7 0H1.5V328.5H1331.7V0Z" fill="#004A98"/>
+                <path d="M1.5 675.8H321.1V1013.3H658.5V1333.3H1.5V675.8Z" fill="#004A98"/>
+                <path d="M1331.8 1333.3H1011.6V848.2H526.5V528.2H1331.8V1333.3Z" fill="#FF5000"/>
+              </svg>
+              <span class="text-xl font-bold tracking-tight text-ink">GussWare</span>
+            </a>
+            <p class="text-base text-muted font-normal">
+              Human technology, global impact
+            </p>
+          </div>
+        </div>
+
+        <!-- Services Column -->
+        <div class="md:col-span-4">
+          <div class="text-xs font-bold uppercase tracking-wider text-muted mb-4">
+            Services
+          </div>
+          <ul class="space-y-2.5 text-sm font-medium">
+            <li><a href="/services/custom-software" class="text-ink hover:text-primary transition-colors">Custom Development</a></li>
+            <li><a href="/services/web-design" class="text-primary font-bold">Web Design & Online Stores</a></li>
+            <li><a href="/services/mobile-apps" class="text-ink hover:text-primary transition-colors">Mobile Applications</a></li>
+            <li><a href="/services/api-integration" class="text-ink hover:text-primary transition-colors">API & External Service Integration</a></li>
+            <li><a href="/services/consulting" class="text-ink hover:text-primary transition-colors">Technical Consulting</a></li>
+            <li><a href="/services/devops" class="text-ink hover:text-primary transition-colors">DevOps & Technical Support</a></li>
+          </ul>
+        </div>
+
+        <!-- Explore Column -->
+        <div class="md:col-span-2">
+          <div class="text-xs font-bold uppercase tracking-wider text-muted mb-4">
+            Explore
+          </div>
+          <ul class="space-y-2.5 text-sm font-medium">
+            <li><a href="/how-we-work" class="text-ink hover:text-primary transition-colors">How We Work</a></li>
+            <li><a href="/projects" class="text-ink hover:text-primary transition-colors">Projects</a></li>
+            <li><a href="/community" class="text-ink hover:text-primary transition-colors">Community</a></li>
+            <li><a href="/contact" class="text-ink hover:text-primary transition-colors">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Legal Column -->
+        <div class="md:col-span-2">
+          <div class="text-xs font-bold uppercase tracking-wider text-muted mb-4">
+            Legal
+          </div>
+          <ul class="space-y-2.5 text-sm font-medium">
+            <li><a href="/privacy-policy" class="text-ink hover:text-primary transition-colors">Privacy Policy</a></li>
+            <li><a href="/terms-and-conditions" class="text-ink hover:text-primary transition-colors">Terms and Conditions</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Copyright Bar -->
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-muted">
+        <div>© 2026 GussWare</div>
+        <div class="mt-2 sm:mt-0 font-mono text-[11px] uppercase tracking-wider text-muted/80">
+          Constructivist Architecture & Modular Engineering
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+---
+/**
+ * RGW-031 — Página de Contacto (estructura base).
+ *
+ * Utiliza `Layout` (Header + Footer existentes) y `ContactSection`
+ * (sección de contacto compartida es/en sobre `Section`). El split reproduce el layout de
+ * Stitch `GussWare Contact-V0.1.0`: apilado en mobile, dos columnas en
+ * desktop (`lg:flex-row`, `gap-16`/`lg:gap-24`, mitades `lg:w-1/2`).
+ * El contenido específico (info RGW-032, formulario RGW-033) se incorpora
+ * en sus historias correspondientes.
+ */
+
+import Layout from '../layouts/Layout.astro';
+import ContactSection from '../components/contact/ContactSection.astro';
+import ContactForm from '../components/contact/ContactForm.astro';
+import { getSocialMedia } from '../lib/wordpress/socialMedia';
+import { getContact } from '../lib/wordpress/contact';
+// RGW-271: configuración del formulario vía GET (Pavel Silinskii CF).
+import {
+  CONTACT_FORM_ID,
+  getContactForm,
+  getContactFormSubmitUrl,
+} from '../lib/contact/forms';
+
+const [socialMedia, contact, contactForm] = await Promise.all([
+  getSocialMedia(),
+  getContact(Astro.currentLocale ?? undefined),
+  getContactForm(),
+]);
+
+const contactFormSubmitUrl = getContactFormSubmitUrl(
+  contactForm.id !== 'fallback' ? contactForm.id : CONTACT_FORM_ID,
+);
+---
+
+<Layout
+  title="Contact — GussWare"
+  description="Contact GussWare — Start a conversation about your project."
+>
+  <ContactSection
+    eyebrow={contact?.contenido_de_la_seccion?.eyebrow ?? undefined}
+    title={contact?.contenido_de_la_seccion?.titulo ?? undefined}
+    description={contact?.contenido_de_la_seccion?.descripcion ?? undefined}
+    socialText={contact?.contenido_de_la_seccion?.texto_de_redes_sociales ?? undefined}
+    socialMedia={(socialMedia ?? []).map((social) => ({
+      name: social.nombre,
+      url: social.url,
+      icon: social.icono,
+    }))}
+  >
+    {/* RGW-271: campos dinámicos desde la API (mismo diseño). */}
+    <ContactForm
+      fields={contactForm.fields}
+      submitUrl={contactFormSubmitUrl}
+    />
+  </ContactSection>
+</Layout>
+{/* RGW-271: la validación vive en `ContactForm` (sin POST todavía). */}

@@ -1,0 +1,32 @@
+---
+/**
+ * RGW-99 — Section global reutilizable.
+ *
+ * Estructura general de sección con spacing vertical responsive mediante
+ * tokens existentes (`layout.css`, sin valores hardcodeados):
+ * - `py-[var(--section-padding-mobile)]` → 64px;
+ * - `md:py-[var(--section-padding-desktop)]` → 120px.
+ *
+ * Integra `Container` (ancho, centrado y gutter). No impone colores,
+ * fondos ni tipografías para no limitar sus usos.
+ */
+import Container from './Container.astro';
+
+interface Props {
+  /** Identificador para anclas (`#servicios`, etc.). */
+  id?: string;
+  /** Clases adicionales sobre el `<section>` (no sustituyen la base). */
+  class?: string;
+}
+
+const { id = undefined, class: className = '' } = Astro.props;
+---
+
+<section
+  id={id}
+  class={`py-[var(--section-padding-mobile)] md:py-[var(--section-padding-desktop)] ${className}`}
+>
+  <Container>
+    <slot />
+  </Container>
+</section>

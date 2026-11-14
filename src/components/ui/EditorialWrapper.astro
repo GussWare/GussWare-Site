@@ -1,0 +1,25 @@
+---
+/**
+ * RGW-301 — Wrapper editorial centralizado (hallazgo #11 del tree RGW-288).
+ *
+ * Centraliza en un único punto el patrón `article` editorial
+ * (`max-w-[800px]`, ritmo `pt-16 md:pt-24 pb-16 md:pb-24`) duplicado en
+ * `LegalView`, `BlogArticleView`, `pages/index` y `pages/[...uri]`.
+ * Se usa dentro de `Container` (o de `Section`, que ya lo integra),
+ * igual que los 4 sitios originales.
+ *
+ * Diferencia documentada: 800px no tiene token equivalente
+ * (vs `--container-max` 1280px); se centraliza aquí en lugar de
+ * mantener 4 duplicaciones con el valor crudo.
+ */
+interface Props {
+  /** Clases adicionales (no sustituyen la base). */
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<article class={`mx-auto w-full max-w-[800px] pt-16 md:pt-24 pb-16 md:pb-24 ${className}`}>
+  <slot />
+</article>

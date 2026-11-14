@@ -1,0 +1,18 @@
+---
+/**
+ * RGW-273 — Nodos de navegación desktop (recursivo con
+ * `DesktopMenuNode`: N niveles sin límite impuesto por Astro).
+ */
+import DesktopMenuNode from './DesktopMenuNode.astro';
+import type { ResolvedMenuTreeItem } from '../../lib/wordpress/menu';
+
+interface Props {
+  nodes: ResolvedMenuTreeItem[];
+  /** Profundidad (0 = barra principal; ≥1 = dentro de un desplegable). */
+  depth?: number;
+}
+
+const { nodes, depth = 0 } = Astro.props;
+---
+
+{nodes.map((node) => <DesktopMenuNode node={node} depth={depth} />)}

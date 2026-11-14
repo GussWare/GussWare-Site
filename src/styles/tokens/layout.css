@@ -1,0 +1,6 @@
+:root {
+  --container-max: 1280px;
+  --layout-gutter: 24px;
+  --section-padding-desktop: 120px;
+  --section-padding-mobile: 64px;
+}
