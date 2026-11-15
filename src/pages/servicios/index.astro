@@ -5,6 +5,10 @@
  * Encabezado desde `Home.acf.services` (título/descripción); tarjetas
  * desde el CPT `service` (`getServices('es')`) con enlace al detalle.
  * Sin contenido hardcodeado.
+ *
+ * La imagen destacada de cada tarjeta sale de WordPress
+ * (`featured_media` → `getServiceImage`, el mismo resolvedor que usa el
+ * detalle): sin ella la tarjeta cae en el bloque de maquetación neutro.
  */
 import Layout from '../../layouts/Layout.astro';
 import Section from '../../components/ui/Section.astro';
@@ -12,7 +16,7 @@ import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Breadcrumbs from '../../components/ui/Breadcrumbs.astro';
 import Card from '../../components/ui/Card.astro';
 import { getFrontPage } from '../../lib/wordpress/pages';
-import { getServices } from '../../lib/wordpress/services';
+import { getServiceImage, getServices } from '../../lib/wordpress/services';
 import {
   routes,
   servicesBaseUrl,
@@ -25,6 +29,14 @@ export const prerender = true;
 const page = await getFrontPage('es').catch(() => null);
 const header = page?.acf?.services ?? null;
 const services = await getServices('es');
+
+// Imagen destacada de cada servicio (WordPress `featured_media`).
+const cards = await Promise.all(
+  services.map(async (service) => ({
+    service,
+    image: await getServiceImage(service),
+  })),
+);
 
 const localeUrls = {
   es: servicesBaseUrl('es'),
@@ -55,8 +67,9 @@ const localeUrls = {
     )}
     {services.length > 0 && (
       <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 mt-12">
-        {services.map((service) => (
+        {cards.map(({ service, image }) => (
           <Card
+            image={image ?? undefined}
             title={stripHtml(service.title.rendered)}
             description={stripHtml(
               service.excerpt?.rendered || service.acf?.hero?.intro_description || '',
