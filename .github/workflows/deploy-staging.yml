@@ -43,9 +43,7 @@ jobs:
     env:
       WORDPRESS_URL: ${{ vars.WORDPRESS_URL }}
       SITE_URL: ${{ vars.SITE_URL }}
-      POSTMAN_APP_USERNAME: ${{ secrets.POSTMAN_APP_USERNAME }}
-      POSTMAN_APP_PASSWORD: ${{ secrets.POSTMAN_APP_PASSWORD }}
-      WP_BUILD_STRICT: 'true'
+      WP_BUILD_STRICT: "true"
       SSH_PRIVATE_KEY: ${{ secrets.HOSTINGER_SSH_PRIVATE_KEY }}
       SSH_KNOWN_HOSTS: ${{ secrets.HOSTINGER_SSH_KNOWN_HOSTS }}
       SFTP_USER: ${{ secrets.HOSTINGER_SFTP_USER }}
@@ -72,7 +70,7 @@ jobs:
       - name: Node
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: "22"
           cache: npm
 
       - name: Instalar dependencias
