@@ -24,6 +24,8 @@ name: Deploy production
 #   secrets.HOSTINGER_SSH_PRIVATE_KEY  Clave privada SSH
 #   secrets.HOSTINGER_SSH_KNOWN_HOSTS  Clave pública del host
 #                                      (ssh-keyscan -p <puerto> <host>)
+#   secrets.POSTMAN_APP_USERNAME       Basic Auth del CMS
+#   secrets.POSTMAN_APP_PASSWORD       Basic Auth del CMS
 #
 # IMPORTANTE:
 # - El mecanismo de transferencia es rsync sobre SSH, no el protocolo SFTP.
@@ -49,6 +51,8 @@ jobs:
     env:
       WORDPRESS_URL: ${{ vars.WORDPRESS_URL }}
       SITE_URL: ${{ vars.SITE_URL }}
+      POSTMAN_APP_USERNAME: ${{ secrets.POSTMAN_APP_USERNAME }}
+      POSTMAN_APP_PASSWORD: ${{ secrets.POSTMAN_APP_PASSWORD }}
       WP_BUILD_STRICT: "true"
       SSH_PRIVATE_KEY: ${{ secrets.HOSTINGER_SSH_PRIVATE_KEY }}
       SSH_KNOWN_HOSTS: ${{ secrets.HOSTINGER_SSH_KNOWN_HOSTS }}

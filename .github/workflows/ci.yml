@@ -39,6 +39,8 @@ jobs:
       # resuelven en el Environment `staging`).
       WORDPRESS_URL: ${{ vars.WORDPRESS_URL }}
       SITE_URL: ${{ vars.SITE_URL }}
+      POSTMAN_APP_USERNAME: ${{ secrets.POSTMAN_APP_USERNAME }}
+      POSTMAN_APP_PASSWORD: ${{ secrets.POSTMAN_APP_PASSWORD }}
       # El build debe fallar si WordPress no entrega el contenido.
       WP_BUILD_STRICT: "true"
 
