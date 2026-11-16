@@ -5,6 +5,12 @@ import { buildMenuTree, resolveMenuTreeHrefs } from '../lib/wordpress/menu';
 import Header from '../components/layout/Header.astro';
 import '../styles/global.css';
 
+/**
+ * RGW-361 — Página de fixture de pruebas del Header. Se conserva en
+ * desarrollo y en entornos de prueba para que las pruebas de navegación
+ * sigan pudiendo ejecutarse contra ella. Queda excluida del build de
+ * producción mediante el hook `astro:build:done` de `astro.config.mjs`.
+ */
 export const prerender = true;
 
 const base = (o: any) => ({ id: 0, title: 'T', url: '/x', parent: 0, menu_order: 0, target: '', attrTitle: '', classes: [], description: '', rel: '', type: 'custom', object: 'custom', objectId: '0', ...o });
