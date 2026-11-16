@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+
+<html lang="es-MX">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GussWare - Diseño de sitios web y tiendas en línea</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;0,900;1,400&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              primary: '#004A98',
+              deep: '#00346E',
+              secondary: '#2164A6',
+              accent: '#FF5000',
+              ink: '#242126',
+              muted: '#5C6068',
+              surface: '#FFFFFF',
+              alt: '#F2F2F2',
+              highlight: '#FFD8D8'
+            }
+          },
+          fontFamily: {
+            sans: ['"Source Sans 3"', 'sans-serif'],
+          },
+          maxWidth: {
+            'container': '1280px',
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    * {
+      border-radius: 0px !important;
+      box-shadow: none !important;
+    }
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      color: #242126;
+      background-color: #FFFFFF;
+      -webkit-font-smoothing: antialiased;
+    }
+    .grid-constructivist {
+      background-size: 32px 32px;
+      background-image: 
+        linear-gradient(to right, rgba(0, 74, 152, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 74, 152, 0.04) 1px, transparent 1px);
+    }
+  </style>
+</head>
+<body class="min-h-screen text-brand-ink bg-brand-surface selection:bg-brand-primary selection:text-white">
+<!-- 1. HEADER / NAVIGATION GLOBAL -->
+<header class="sticky top-0 z-50 bg-brand-surface border-b border-[#dadada] w-full">
+<div class="max-w-container mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
+<!-- Logo GussWare -->
+<a aria-label="GussWare Home" class="flex items-center gap-3" href="/">
+<img alt="GussWare Logo" class="w-8 h-8 flex-shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1WHCu1-VseZBh2h9T3GIapd4J0FRGYPSZS3Vo4V5rKwjUSbnIB8vDlZFAth-qreFi4I-A01BvxE554LxfN5BSTubSnQt8d5R548uEBC8evFkdv75H38Isn0cMLuxo4_ar3XZhS53EH3yC3VDgxoHou58UaCcyaQYcMTEftl0W6z_TZSa0xtEyU1KTCjobfH3KBG_BvEC8gTjFMdd2Ibt0Jf7sW4jjOomrjk0iUpnUE3zo-HZXYk5RFFlGU"/>
+<span class="font-bold text-[24px] text-brand-ink tracking-tight">GussWare</span>
+</a>
+<!-- Navigation links -->
+<nav class="hidden md:flex items-center gap-8 text-[15px] font-semibold text-brand-muted tracking-tight">
+<a class="text-brand-primary border-b-2 border-brand-primary pb-1" href="/servicios">Servicios</a>
+<a class="hover:text-brand-primary transition-colors" href="/como-trabajamos">Cómo trabajamos</a>
+<a class="hover:text-brand-primary transition-colors" href="/proyectos">Proyectos</a>
+<a class="hover:text-brand-primary transition-colors" href="/comunidad">Comunidad</a>
+</nav>
+<!-- Primary Action -->
+<div class="flex items-center gap-4">
+<a class="inline-flex items-center justify-center bg-brand-accent hover:bg-[#e04600] text-white px-6 py-2.5 text-[15px] font-bold tracking-normal transition-colors" href="/contacto">
+          Hablemos
+        </a>
+</div>
+</div>
+</header>
+<!-- 2. HERO SECTION -->
+<section class="bg-brand-surface pt-8 pb-24 border-b border-[#dadada]">
+<div class="max-w-container mx-auto px-6 lg:px-12">
+<!-- Breadcrumb -->
+<nav aria-label="Miga de pan" class="mb-8 text-[14px] text-brand-muted font-normal">
+<ol class="flex items-center gap-2">
+<li><a class="hover:text-brand-primary transition-colors" href="/">Inicio</a></li>
+<li>/</li>
+<li><a class="hover:text-brand-primary transition-colors" href="/servicios">Servicios</a></li>
+<li>/</li>
+<li aria-current="page" class="text-brand-ink font-medium">Diseño de sitios web y tiendas en línea</li>
+</ol>
+</nav>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+<!-- Hero Left Column (7 cols) -->
+<div class="lg:col-span-7">
+<div class="inline-flex items-center gap-2 mb-4">
+<span class="w-2.5 h-2.5 bg-brand-accent"></span>
+<span class="text-[12px] font-bold tracking-wider text-brand-primary uppercase">DISEÑO Y DESARROLLO WEB</span>
+</div>
+<h1 class="text-[44px] md:text-[56px] lg:text-[64px] font-black leading-[1.06] tracking-tight text-brand-ink mb-6">
+            Tu sitio web debe conseguir algo más que verse bien
+          </h1>
+<p class="text-[18px] md:text-[20px] leading-relaxed text-brand-muted max-w-[620px] mb-8 font-normal">
+            Una página confusa puede hacer que un cliente se vaya antes de conocer tus servicios. Diseñamos sitios y tiendas que explican lo que ofreces, facilitan el contacto o la compra y ofrecen una experiencia clara desde el celular hasta la computadora.
+          </p>
+<div class="flex flex-wrap items-center gap-6 pt-2">
+<a class="inline-flex items-center justify-center bg-brand-accent hover:bg-[#e04600] text-white px-8 py-4 text-[16px] font-bold tracking-tight transition-colors" href="/contacto">
+              Cuéntanos tu proyecto
+            </a>
+<a class="inline-flex items-center gap-2 text-[16px] font-bold text-brand-primary hover:text-brand-deep transition-colors py-2" href="#soluciones">
+              Ver soluciones <span>↓</span>
+</a>
+</div>
+</div>
+<!-- Hero Right Column: Three Stacked Stats (5 cols) -->
+<div class="lg:col-span-5 bg-brand-surface lg:pl-8 lg:border-l border-[#dadada] flex flex-col divide-y divide-[#dadada]">
+<!-- Stat 01 -->
+<div class="py-6 first:pt-0 last:pb-0">
+<div class="flex items-baseline gap-4 mb-2">
+<span class="text-[32px] font-black tracking-tight text-brand-primary">01</span>
+<h3 class="text-[18px] font-bold text-brand-ink tracking-tight">Más oportunidades</h3>
+</div>
+<p class="text-[15px] leading-relaxed text-brand-muted pl-12 font-normal">
+              Tus visitantes entienden qué ofreces
+            </p>
+</div>
+<!-- Stat 02 -->
+<div class="py-6">
+<div class="flex items-baseline gap-4 mb-2">
+<span class="text-[32px] font-black tracking-tight text-brand-primary">02</span>
+<h3 class="text-[18px] font-bold text-brand-ink tracking-tight">Compra sin complicaciones</h3>
+</div>
+<p class="text-[15px] leading-relaxed text-brand-muted pl-12 font-normal">
+              Menos obstáculos para contactar o pagar
+            </p>
+</div>
+<!-- Stat 03 -->
+<div class="py-6">
+<div class="flex items-baseline gap-4 mb-2">
+<span class="text-[32px] font-black tracking-tight text-brand-primary">03</span>
+<h3 class="text-[18px] font-bold text-brand-ink tracking-tight">Listo para evolucionar</h3>
+</div>
+<p class="text-[15px] leading-relaxed text-brand-muted pl-12 font-normal">
+              Agrega contenido y funciones conforme crezcas
+            </p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. SECTION 01: EL PROBLEMA (White, 120px vertical padding) -->
+<section class="bg-brand-surface py-[120px] border-b border-[#dadada]">
+<div class="max-w-container mx-auto px-6 lg:px-12">
+<!-- Section Header -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16 items-start">
+<div class="lg:col-span-4">
+<div class="inline-flex items-center gap-2 mb-3">
+<span class="text-[12px] font-bold tracking-wider text-brand-primary uppercase">01 — EL PROBLEMA</span>
+</div>
+<h2 class="text-[36px] md:text-[42px] font-black leading-[1.12] tracking-tight text-brand-ink">
+            Que tus visitantes encuentren lo que necesitan y sepan qué hacer
+          </h2>
+</div>
+<div class="lg:col-span-8 lg:pl-12 flex items-center">
+<p class="text-[18px] leading-relaxed text-brand-muted max-w-[680px]">
+            Si una persona entra a tu sitio y no entiende qué vendes, cómo funciona tu servicio o dónde comprar, es probable que busque otra opción.
+          </p>
+</div>
+</div>
+<!-- Three Numbered Rows -->
+<div class="border-t border-[#dadada] divide-y divide-[#dadada] mb-12">
+<div class="py-6 grid grid-cols-1 md:grid-cols-12 gap-4 items-baseline">
+<div class="md:col-span-2">
+<span class="text-[24px] font-black text-brand-primary">01</span>
+</div>
+<div class="md:col-span-10">
+<p class="text-[18px] font-semibold text-brand-ink">
+              Tu visitante no entiende qué ofreces ni por qué elegirte.
+            </p>
+</div>
+</div>
+<div class="py-6 grid grid-cols-1 md:grid-cols-12 gap-4 items-baseline">
+<div class="md:col-span-2">
+<span class="text-[24px] font-black text-brand-primary">02</span>
+</div>
+<div class="md:col-span-10">
+<p class="text-[18px] font-semibold text-brand-ink">
+              No encuentra cómo contactarte, cotizar o comprar.
+            </p>
+</div>
+</div>
+<div class="py-6 grid grid-cols-1 md:grid-cols-12 gap-4 items-baseline">
+<div class="md:col-span-2">
+<span class="text-[24px] font-black text-brand-primary">03</span>
+</div>
+<div class="md:col-span-10">
+<p class="text-[18px] font-semibold text-brand-ink">
+              El sitio no se ve bien en el celular o es difícil de actualizar.
+            </p>
+</div>
+</div>
+</div>
+<!-- Low-emphasis tags -->
+<div class="pt-4 border-t border-[#eaeaea]">
+<p class="text-[13px] tracking-wide text-brand-muted uppercase font-semibold">
+          Diseño web · Desarrollo web · Tiendas en línea · Experiencia de usuario · Diseño adaptable · Plataformas digitales
+        </p>
+</div>
+</div>
+</section>
+<!-- 4. SECTION 02: QUÉ PUEDES CONTRATAR (#F2F2F2, 120px vertical padding) -->
+<section class="bg-brand-alt py-[120px] border-b border-[#dadada]" id="soluciones">
+<div class="max-w-container mx-auto px-6 lg:px-12">
+<!-- Section Header -->
+<div class="mb-16">
+<div class="inline-flex items-center gap-2 mb-3">
+<span class="text-[12px] font-bold tracking-wider text-brand-primary uppercase">02 — QUÉ PUEDES CONTRATAR</span>
+</div>
+<h2 class="text-[36px] md:text-[44px] font-black leading-[1.12] tracking-tight text-brand-ink mb-4">
+          Una solución digital para cada objetivo
+        </h2>
+<p class="text-[18px] leading-relaxed text-brand-muted max-w-[760px]">
+          Desde presentar tu negocio hasta vender por internet o digitalizar procesos, desarrollamos la solución que necesitas para atender mejor a tus clientes.
+        </p>
+</div>
+<!-- Three Equal White Cards (Square, 1px border) -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+<!-- Card 01 -->
+<div class="bg-brand-surface border border-[#dadada] p-8 flex flex-col justify-between">
+<div>
+<!-- Number & Title -->
+<div class="mb-6">
+<span class="text-[28px] font-black text-brand-primary block mb-2">01</span>
+<h3 class="text-[22px] font-bold text-brand-ink leading-snug">
+                Sitios web que presentan tu negocio
+              </h3>
+</div>
+<p class="text-[16px] leading-relaxed text-brand-muted mb-6">
+              Haz que tus visitantes entiendan qué haces, por qué elegirte y cómo ponerse en contacto contigo.
+            </p>
+<div class="w-full h-px bg-[#dadada] mb-6"></div>
+<div class="mb-8">
+<span class="text-[12px] font-bold tracking-wider text-brand-primary uppercase block mb-4">QUÉ RECIBES</span>
+<ul class="space-y-3">
+<li class="flex items-start gap-2.5 text-[15px] text-brand-ink">
+<span class="text-brand-accent font-bold mt-0.5">•</span>
+<span>Diseño personalizado alineado con la identidad de tu marca</span>
+</li>
+<li class="flex items-start gap-2.5 text-[15px] text-brand-ink">
+<span class="text-brand-accent font-bold mt-0.5">•</span>
+<span>Secciones y contenidos organizados para facilitar la consulta</span>
+</li>
+<li class="flex items-start gap-2.5 text-[15px] text-brand-ink">
+<span class="text-brand-accent font-bold mt-0.5">•</span>
+<span>Diseño adaptable a celulares, tabletas y computadoras</span>
+</li>
+<li class="flex items-start gap-2.5 text-[15px] text-brand-ink">
+<span class="text-brand-accent font-bold mt-0.5">•</span>
+<span>Estructura y metadatos preparados para que los buscadores entiendan el sitio</span>
+</li>
+<li class="flex items-start gap-2.5 text-[15px] text-brand-ink">
+<span class="text-brand-accent font-bold mt-0.5">•</span>
+<span>Panel de administración para actualizar textos e imágenes</span>
+</li>
+</ul>
+</div>
+</div>
+<div class="pt-6 border-t border-[#dadada]">
+<p class="text-[14px] font-semibold text-brand-ink">
+<span class="text-brand-muted font-normal">Beneficio:</span> Una presencia clara que genera confianza y contactos.
+            </p>
+</div>
+</div>
+<!-- Card 02 -->
+<div class="bg-brand-surface border border-[#dadada] p-8 flex flex-col justify-between">
+<div>
+<!-- Number & Title -->
+<div class="mb-6">
+<span class="text-[28px] font-black text-brand-primary block mb-2">02</span>
+<h3 class="text-[22px] font-bold text-brand-ink leading-snug">
+                Tiendas en línea que facilitan la compra
+              </h3>
+</div>
+<p class="text-[16px] leading-relaxed text-brand-muted mb-6">
+              Permite que tus clientes consulten productos, elijan lo que necesitan y realicen sus pedidos desde tu tienda.
+            </p>
+<div class="w-full h-px bg-[#dadada] mb-6"></div>
+<div class="mb-8">
+<span class="text-[12px] font-bold tracking-wider text-brand-primary uppercase block mb-4">QUÉ RECIBES</span>
+<ul class="space-y-3">
+<li class="flex items-start gap-2.5 text-[15px] text-brand-ink">
+<span class="text-brand-accent font-bold mt-0.5">•</span>
+<span>Catálogo de productos con categorías y búsqueda</span>
+</li>
+<li class="flex items-start gap-2.5 text-[15px] text-brand-ink">
+<span class="text-brand-accent font-bold mt-0.5">•</span>
+<span>Carrito y proceso de compra organizado en pasos claros</span>
+</li>
+<li class="flex items-start gap-2.5 text-[15px] text-brand-ink">
+<span class="text-brand-accent font-bold mt-0.5">•</span>
+<span>Integración de métodos de pago y opciones de envío</span>
+</li>
+<li class="flex items-start gap-2.5 text-[15px] text-brand-ink">
+<span class="text-brand-accent font-bold mt-0.5">•</span>
+<span>Experiencia de compra adaptada a celulares</span>
+</li>
+<li class="flex items-start gap-2.5 text-[15px] text-brand-ink">
+<span class="text-brand-accent font-bold mt-0.5">•</span>
+<span>Panel para administrar productos, precios y pedidos</span>
+</li>
+</ul>
+</div>
+</div>
+<div class="pt-6 border-t border-[#dadada]">
+<p class="text-[14px] font-semibold text-brand-ink">
+<span class="text-brand-muted font-normal">Beneficio:</span> Menos fricción para comprar y más control de tu operación.
+            </p>
+</div>
+</div>
+<!-- Card 03 -->
+<div class="bg-brand-surface border border-[#dadada] p-8 flex flex-col justify-between">
+<div>
+<!-- Number & Title -->
+<div class="mb-6">
+<span class="text-[28px] font-black text-brand-primary block mb-2">03</span>
+<h3 class="text-[22px] font-bold text-brand-ink leading-snug">
+                Plataformas digitales para tu operación
+              </h3>
+</div>
+<p class="text-[16px] leading-relaxed text-brand-muted mb-6">
+              Cuando necesitas más que una página, desarrollamos plataformas para administrar información, atender clientes o resolver procesos específicos.
+            </p>
+<div class="w-full h-px bg-[#dadada] mb-6"></div>
+<div class="mb-8">
+<span class="text-[12px] font-bold tracking-wider text-brand-primary uppercase block mb-4">QUÉ RECIBES</span>
+<ul class="space-y-3">
+<li class="flex items-start gap-2.5 text-[15px] text-brand-ink">
+<span class="text-brand-accent font-bold mt-0.5">•</span>
+<span>Funciones adaptadas a los procesos de tu negocio</span>
+</li>
+<li class="flex items-start gap-2.5 text-[15px] text-brand-ink">
+<span class="text-brand-accent font-bold mt-0.5">•</span>
+<span>Usuarios y permisos para organizar el acceso</span>
+</li>
+<li class="flex items-start gap-2.5 text-[15px] text-brand-ink">
+<span class="text-brand-accent font-bold mt-0.5">•</span>
+<span>Integración con las herramientas que utilizas</span>
+</li>
+<li class="flex items-start gap-2.5 text-[15px] text-brand-ink">
+<span class="text-brand-accent font-bold mt-0.5">•</span>
+<span>Paneles para consultar y administrar información</span>
+</li>
+<li class="flex items-start gap-2.5 text-[15px] text-brand-ink">
+<span class="text-brand-accent font-bold mt-0.5">•</span>
+<span>Estructura preparada para incorporar nuevas funciones</span>
+</li>
+</ul>
+</div>
+</div>
+<div class="pt-6 border-t border-[#dadada]">
+<p class="text-[14px] font-semibold text-brand-ink">
+<span class="text-brand-muted font-normal">Beneficio:</span> Una herramienta propia para operar, no solo para presentar.
+            </p>
+</div>
+</div>
+</div>
+<!-- Ghost text link below cards -->
+<div class="pt-4">
+<a class="inline-flex items-center gap-2 text-[16px] font-bold text-brand-primary hover:text-brand-deep transition-colors" href="/contacto">
+          Hablemos de tu proyecto <span>→</span>
+</a>
+</div>
+</div>
+</section>
+<!-- 5. SECTION 03: CÓMO TRABAJAMOS (#F2F2F2, 120px vertical padding) -->
+<section class="bg-brand-alt py-[120px] border-b border-[#dadada]">
+<div class="max-w-container mx-auto px-6 lg:px-12">
+<!-- Section Header -->
+<div class="mb-16">
+<div class="inline-flex items-center gap-2 mb-3">
+<span class="text-[12px] font-bold tracking-wider text-brand-primary uppercase">03 — CÓMO TRABAJAMOS</span>
+</div>
+<h2 class="text-[36px] md:text-[44px] font-black leading-[1.12] tracking-tight text-brand-ink mb-4">
+          Del diseño a un sitio que cumple su propósito
+        </h2>
+<p class="text-[18px] leading-relaxed text-brand-muted max-w-[760px]">
+          Trabajamos por etapas para validar la propuesta, desarrollar las funciones y revisar el resultado antes de publicarlo.
+        </p>
+</div>
+<!-- Static horizontal four-step stepper -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+<!-- Connecting Line for desktop -->
+<div class="hidden lg:block absolute top-[18px] left-[20px] right-[20px] h-px bg-[#dadada] z-0"></div>
+<!-- Step 01 -->
+<div class="relative z-10 flex flex-col">
+<div class="flex items-center gap-3 mb-6">
+<span class="w-9 h-9 bg-brand-primary text-white font-black text-[14px] flex items-center justify-center">01</span>
+<span class="text-[12px] font-bold tracking-widest text-brand-muted uppercase">ETAPA</span>
+</div>
+<h3 class="text-[20px] font-bold text-brand-ink mb-3">Entender</h3>
+<p class="text-[15px] leading-relaxed text-brand-muted">
+            Definimos qué quieres conseguir, quién visitará el sitio y qué necesita encontrar.
+          </p>
+</div>
+<!-- Step 02 -->
+<div class="relative z-10 flex flex-col">
+<div class="flex items-center gap-3 mb-6">
+<span class="w-9 h-9 bg-brand-surface border border-brand-primary text-brand-primary font-black text-[14px] flex items-center justify-center">02</span>
+<span class="text-[12px] font-bold tracking-widest text-brand-muted uppercase">ETAPA</span>
+</div>
+<h3 class="text-[20px] font-bold text-brand-ink mb-3">Diseñar</h3>
+<p class="text-[15px] leading-relaxed text-brand-muted">
+            Organizamos los contenidos y las pantallas, y revisamos contigo la propuesta visual.
+          </p>
+</div>
+<!-- Step 03 -->
+<div class="relative z-10 flex flex-col">
+<div class="flex items-center gap-3 mb-6">
+<span class="w-9 h-9 bg-brand-surface border border-[#dadada] text-brand-muted font-black text-[14px] flex items-center justify-center">03</span>
+<span class="text-[12px] font-bold tracking-widest text-brand-muted uppercase">ETAPA</span>
+</div>
+<h3 class="text-[20px] font-bold text-brand-ink mb-3">Desarrollar</h3>
+<p class="text-[15px] leading-relaxed text-brand-muted">
+            Construimos el sitio, probamos sus funciones y verificamos su adaptación a diferentes dispositivos.
+          </p>
+</div>
+<!-- Step 04 -->
+<div class="relative z-10 flex flex-col">
+<div class="flex items-center gap-3 mb-6">
+<span class="w-9 h-9 bg-brand-surface border border-[#dadada] text-brand-muted font-black text-[14px] flex items-center justify-center">04</span>
+<span class="text-[12px] font-bold tracking-widest text-brand-muted uppercase">ETAPA</span>
+</div>
+<h3 class="text-[20px] font-bold text-brand-ink mb-3">Publicar y mejorar</h3>
+<p class="text-[15px] leading-relaxed text-brand-muted">
+            Preparamos el lanzamiento y definimos oportunidades de mejora a partir de las necesidades del negocio.
+          </p>
+</div>
+</div>
+</div>
+</section>
+<!-- 6. SECTION 04: FICHA DEL PROYECTO (White, secondary, low emphasis) -->
+<section class="bg-brand-surface py-[90px] border-b border-[#dadada]">
+<div class="max-w-container mx-auto px-6 lg:px-12">
+<!-- Section Header -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 items-baseline">
+<div class="lg:col-span-5">
+<div class="inline-flex items-center gap-2 mb-2">
+<span class="text-[12px] font-bold tracking-wider text-brand-muted uppercase">04 — FICHA DEL PROYECTO</span>
+</div>
+<h2 class="text-[28px] md:text-[34px] font-bold leading-tight tracking-tight text-brand-ink">
+            Qué incluye la solución web
+          </h2>
+</div>
+<div class="lg:col-span-7">
+<p class="text-[16px] leading-relaxed text-brand-muted">
+            Seleccionamos las herramientas según el tipo de sitio, las funciones necesarias y la forma en que administrarás los contenidos.
+          </p>
+</div>
+</div>
+<!-- Compact three-column strip with thin top rule -->
+<div class="pt-8 border-t border-[#dadada] grid grid-cols-1 md:grid-cols-3 gap-8">
+<div>
+<span class="text-[12px] font-bold tracking-wider text-brand-primary uppercase block mb-2">TIPO DE SOLUCIÓN</span>
+<p class="text-[15px] text-brand-ink font-semibold leading-relaxed">
+            Sitios web · Tiendas en línea · Plataformas a medida
+          </p>
+</div>
+<div>
+<span class="text-[12px] font-bold tracking-wider text-brand-primary uppercase block mb-2">EXPERIENCIA DE USO</span>
+<p class="text-[15px] text-brand-ink font-semibold leading-relaxed">
+            Diseño personalizado · Adaptación a celulares · Navegación clara
+          </p>
+</div>
+<div>
+<span class="text-[12px] font-bold tracking-wider text-brand-primary uppercase block mb-2">BASE TÉCNICA</span>
+<p class="text-[15px] text-brand-ink font-semibold leading-relaxed">
+            Gestión de contenidos · Integraciones · Rendimiento y mantenimiento
+          </p>
+</div>
+</div>
+</div>
+</section>
+<!-- 7. SECTION 05: DUDAS FRECUENTES (#F2F2F2, 120px vertical padding) -->
+<section class="bg-brand-alt py-[120px] border-b border-[#dadada]">
+<div class="max-w-container mx-auto px-6 lg:px-12">
+<!-- Section Header (Strict: only H2, no intro sentence) -->
+<div class="mb-12">
+<div class="inline-flex items-center gap-2 mb-3">
+<span class="text-[12px] font-bold tracking-wider text-brand-primary uppercase">05 — DUDAS FRECUENTES</span>
+</div>
+<h2 class="text-[36px] md:text-[44px] font-black leading-[1.12] tracking-tight text-brand-ink">
+          Lo que suele preguntarse antes de empezar
+        </h2>
+</div>
+<!-- Six Accordion Rows (First open, other 5 closed) -->
+<div class="border-t border-[#dadada] divide-y divide-[#dadada] mb-8 bg-brand-surface border-x">
+<!-- Row 01 (OPEN) -->
+<div class="p-6 md:p-8">
+<div class="flex items-center justify-between cursor-pointer">
+<h3 class="text-[18px] md:text-[20px] font-bold text-brand-ink pr-6">
+              ¿Cuánto tarda el desarrollo de mi sitio web?
+            </h3>
+<span class="text-[20px] font-bold text-brand-primary flex-shrink-0">−</span>
+</div>
+<div class="mt-4 pt-4 border-t border-[#f0f0f0]">
+<p class="text-[16px] leading-relaxed text-brand-muted max-w-[800px]">
+              Depende del tamaño, los contenidos y las funciones. Antes de iniciar definimos las etapas y los tiempos estimados con base en los requerimientos del proyecto.
+            </p>
+</div>
+</div>
+<!-- Row 02 (CLOSED) -->
+<div class="p-6 md:p-8 hover:bg-[#fafafa] transition-colors">
+<div class="flex items-center justify-between cursor-pointer">
+<h3 class="text-[18px] md:text-[20px] font-bold text-brand-ink pr-6">
+              ¿Podré actualizar el sitio sin ayuda técnica?
+            </h3>
+<span class="text-[20px] font-bold text-brand-primary flex-shrink-0">+</span>
+</div>
+</div>
+<!-- Row 03 (CLOSED) -->
+<div class="p-6 md:p-8 hover:bg-[#fafafa] transition-colors">
+<div class="flex items-center justify-between cursor-pointer">
+<h3 class="text-[18px] md:text-[20px] font-bold text-brand-ink pr-6">
+              ¿Mi sitio aparecerá en Google?
+            </h3>
+<span class="text-[20px] font-bold text-brand-primary flex-shrink-0">+</span>
+</div>
+</div>
+<!-- Row 04 (CLOSED) -->
+<div class="p-6 md:p-8 hover:bg-[#fafafa] transition-colors">
+<div class="flex items-center justify-between cursor-pointer">
+<h3 class="text-[18px] md:text-[20px] font-bold text-brand-ink pr-6">
+              ¿Podré agregar funciones después?
+            </h3>
+<span class="text-[20px] font-bold text-brand-primary flex-shrink-0">+</span>
+</div>
+</div>
+<!-- Row 05 (CLOSED) -->
+<div class="p-6 md:p-8 hover:bg-[#fafafa] transition-colors">
+<div class="flex items-center justify-between cursor-pointer">
+<h3 class="text-[18px] md:text-[20px] font-bold text-brand-ink pr-6">
+              ¿Pueden conectar el sitio con mi sistema de facturación o inventario?
+            </h3>
+<span class="text-[20px] font-bold text-brand-primary flex-shrink-0">+</span>
+</div>
+</div>
+<!-- Row 06 (CLOSED) -->
+<div class="p-6 md:p-8 hover:bg-[#fafafa] transition-colors">
+<div class="flex items-center justify-between cursor-pointer">
+<h3 class="text-[18px] md:text-[20px] font-bold text-brand-ink pr-6">
+              ¿Cuánto cuesta desarrollar un sitio web o una tienda?
+            </h3>
+<span class="text-[20px] font-bold text-brand-primary flex-shrink-0">+</span>
+</div>
+</div>
+</div>
+<!-- Micro-copy after list -->
+<div>
+<a class="inline-flex items-center gap-2 text-[16px] font-bold text-brand-primary hover:text-brand-deep transition-colors" href="/contacto">
+          ¿Te queda otra duda? Escríbenos <span>→</span>
+</a>
+</div>
+</div>
+</section>
+<!-- 8. SECTION 06: CIERRE (Deep Blue #00346E) -->
+<section class="bg-brand-deep text-white py-[120px]">
+<div class="max-w-container mx-auto px-6 lg:px-12">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<div class="lg:col-span-8">
+<div class="inline-flex items-center gap-2 mb-4">
+<span class="w-2.5 h-2.5 bg-brand-accent"></span>
+<span class="text-[12px] font-bold tracking-wider text-[#FFD8D8] uppercase">06 — INICIA TU PROYECTO</span>
+</div>
+<h2 class="text-[36px] md:text-[46px] font-black leading-[1.12] tracking-tight mb-6">
+            Convierte tu presencia digital en una herramienta para tu negocio
+          </h2>
+<p class="text-[18px] md:text-[20px] leading-relaxed text-[#c7d8ee] max-w-[680px] mb-8 font-normal">
+            Cuéntanos qué vendes, qué servicios ofreces y qué quieres que tus visitantes hagan en tu sitio. Definiremos contigo la mejor forma de llevarlo a internet.
+          </p>
+<div class="flex flex-wrap items-center gap-6">
+<a class="inline-flex items-center justify-center bg-brand-accent hover:bg-[#e04600] text-white px-8 py-4 text-[16px] font-bold tracking-tight transition-colors" href="/contacto">
+              Diseñemos tu sitio web
+            </a>
+<a class="inline-flex items-center gap-2 text-[16px] font-bold text-white hover:text-[#c7d8ee] transition-colors py-2" href="/servicios">
+              Ver todos los servicios <span>→</span>
+</a>
+</div>
+</div>
+<!-- Subtle geometric brand constructivist accent on right (strictly no photos) -->
+<div class="lg:col-span-4 hidden lg:flex justify-end">
+<div class="w-64 h-64 border border-[#2164A6] p-6 relative flex flex-col justify-between">
+<div class="w-12 h-1 bg-brand-accent"></div>
+<div class="space-y-2">
+<div class="w-full h-px bg-[#2164A6]"></div>
+<div class="w-3/4 h-px bg-[#2164A6]"></div>
+</div>
+<div class="text-[12px] font-mono tracking-widest text-[#8eb6e2] uppercase">
+              GUSSWARE · CORE
+            </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 9. SECTION 07: SERVICIOS RELACIONADOS (White, 120px vertical padding) -->
+<section class="bg-brand-surface py-[120px] border-b border-[#dadada]">
+<div class="max-w-container mx-auto px-6 lg:px-12">
+<!-- Section Header -->
+<div class="mb-14">
+<span class="text-[12px] font-bold tracking-wider text-brand-primary uppercase block mb-3">SIGUE EXPLORANDO</span>
+<h2 class="text-[36px] md:text-[42px] font-black leading-tight tracking-tight text-brand-ink">
+          Otros servicios que pueden ayudarte
+        </h2>
+</div>
+<!-- Three Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<div class="border border-[#dadada] p-8 flex flex-col justify-between hover:border-brand-primary transition-colors bg-brand-surface">
+<div>
+<span class="text-[12px] font-bold tracking-wider text-brand-muted uppercase block mb-3">MÓVIL</span>
+<h3 class="text-[22px] font-bold text-brand-ink mb-3 leading-snug">
+              Aplicaciones móviles
+            </h3>
+<p class="text-[16px] leading-relaxed text-brand-muted mb-8">
+              Una aplicación que resuelve una necesidad desde el celular
+            </p>
+</div>
+<a class="inline-flex items-center gap-2 text-[15px] font-bold text-brand-primary hover:text-brand-deep transition-colors" href="/servicios/aplicaciones-moviles">
+            Ver servicio <span>→</span>
+</a>
+</div>
+<!-- Card 2 -->
+<div class="border border-[#dadada] p-8 flex flex-col justify-between hover:border-brand-primary transition-colors bg-brand-surface">
+<div>
+<span class="text-[12px] font-bold tracking-wider text-brand-muted uppercase block mb-3">SOFTWARE</span>
+<h3 class="text-[22px] font-bold text-brand-ink mb-3 leading-snug">
+              Desarrollo a medida
+            </h3>
+<p class="text-[16px] leading-relaxed text-brand-muted mb-8">
+              Tu empresa no debería tener que adaptarse a un software que no le funciona
+            </p>
+</div>
+<a class="inline-flex items-center gap-2 text-[15px] font-bold text-brand-primary hover:text-brand-deep transition-colors" href="/servicios/desarrollo-a-medida">
+            Ver servicio <span>→</span>
+</a>
+</div>
+<!-- Card 3 -->
+<div class="border border-[#dadada] p-8 flex flex-col justify-between hover:border-brand-primary transition-colors bg-brand-surface">
+<div>
+<span class="text-[12px] font-bold tracking-wider text-brand-muted uppercase block mb-3">SISTEMAS</span>
+<h3 class="text-[22px] font-bold text-brand-ink mb-3 leading-snug">
+              Integración de APIs y Servicios Externos
+            </h3>
+<p class="text-[16px] leading-relaxed text-brand-muted mb-8">
+              Deja de copiar datos de un programa a otro
+            </p>
+</div>
+<a class="inline-flex items-center gap-2 text-[15px] font-bold text-brand-primary hover:text-brand-deep transition-colors" href="/servicios/integracion-de-apis">
+            Ver servicio <span>→</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- 10. FOOTER (Strict) -->
+<footer class="bg-brand-alt border-t border-[#dadada] py-16 text-brand-ink">
+<div class="max-w-container mx-auto px-6 lg:px-12">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-12 pb-16 border-b border-[#dadada]">
+<!-- GussWare Wordmark & Slogan (4 cols) -->
+<div class="md:col-span-4">
+<div class="flex items-center gap-3 mb-4">
+<svg class="h-6 w-auto" fill="none" viewbox="0 0 1333.33 217.33" xmlns="http://www.w3.org/2000/svg">
+<g>
+<rect fill="#004A98" height="7" width="28" x="0" y="4"></rect>
+<polygon fill="#004A98" points="0,15 14,15 14,22 7,22 7,29 0,29"></polygon>
+<polygon fill="#FF5000" points="28,11 14,11 14,18 21,18 21,29 28,29"></polygon>
+<text fill="#242126" font-family="'Source Sans 3', sans-serif" font-size="24" font-weight="900" letter-spacing="-0.03em" x="38" y="24">GussWare</text>
+</g>
+</svg>
+</div>
+<p class="text-[15px] font-medium text-brand-muted">
+            Tecnología humana, impacto global
+          </p>
+</div>
+<!-- Columna Servicios (3 cols) -->
+<div class="md:col-span-3">
+<h4 class="text-[13px] font-bold uppercase tracking-wider text-brand-primary mb-4">Servicios</h4>
+<ul class="space-y-2.5 text-[15px] text-brand-muted">
+<li><a class="text-brand-ink font-semibold" href="/servicios/desarrollo-web">Diseño de sitios web y tiendas en línea</a></li>
+<li><a class="hover:text-brand-ink transition-colors" href="/servicios/aplicaciones-moviles">Aplicaciones móviles</a></li>
+<li><a class="hover:text-brand-ink transition-colors" href="/servicios/integracion-de-apis">Integración de APIs y Servicios Externos</a></li>
+<li><a class="hover:text-brand-ink transition-colors" href="/servicios/desarrollo-a-medida">Desarrollo a medida</a></li>
+<li><a class="hover:text-brand-ink transition-colors" href="/servicios/consultoria-tecnica">Consultoría técnica</a></li>
+<li><a class="hover:text-brand-ink transition-colors" href="/servicios/devops-infraestructura">DevOps e infraestructura</a></li>
+</ul>
+</div>
+<!-- Columna Explorar (3 cols) -->
+<div class="md:col-span-3">
+<h4 class="text-[13px] font-bold uppercase tracking-wider text-brand-primary mb-4">Explorar</h4>
+<ul class="space-y-2.5 text-[15px] text-brand-muted">
+<li><a class="hover:text-brand-ink transition-colors" href="/como-trabajamos">Cómo trabajamos</a></li>
+<li><a class="hover:text-brand-ink transition-colors" href="/proyectos">Proyectos</a></li>
+<li><a class="hover:text-brand-ink transition-colors" href="/comunidad">Comunidad</a></li>
+<li><a class="hover:text-brand-ink transition-colors" href="/contacto">Contacto</a></li>
+</ul>
+</div>
+<!-- Columna Legal (2 cols) -->
+<div class="md:col-span-2">
+<h4 class="text-[13px] font-bold uppercase tracking-wider text-brand-primary mb-4">Legal</h4>
+<ul class="space-y-2.5 text-[15px] text-brand-muted">
+<li><a class="hover:text-brand-ink transition-colors" href="/aviso-de-privacidad">Aviso de privacidad</a></li>
+<li><a class="hover:text-brand-ink transition-colors" href="/terminos-y-condiciones">Términos y condiciones</a></li>
+</ul>
+</div>
+</div>
+<!-- Copyright Bar -->
+<div class="pt-8 flex flex-col md:flex-row justify-between items-center text-[13px] text-brand-muted">
+<div>
+          © 2026 GussWare
+        </div>
+<div class="mt-4 md:mt-0 text-[12px] tracking-widest uppercase font-semibold text-[#8a8e96]">
+          Constructivist Architecture &amp; Modular Engineering
+        </div>
+</div>
+</div>
+</footer>
+</body>
+</html>

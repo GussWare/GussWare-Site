@@ -1,0 +1,66 @@
+---
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Seo from '../components/layout/Seo.astro';
+import { getSiteIcon } from '../lib/wordpress/favicon';
+import { canonicalUrl } from '../lib/seo';
+import type { LocaleUrls } from '../lib/routes';
+import type { SeoData } from '../lib/seo';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  localeUrls?: LocaleUrls;
+  lang?: string;
+  seo?: SeoData;
+}
+
+const {
+  title,
+  description = 'GussWare — Soluciones tecnológicas',
+  localeUrls = undefined,
+  lang = 'es',
+  seo = undefined,
+} = Astro.props;
+
+const favicon = await getSiteIcon();
+
+// URL canónica de la página: la del sitio publicado (el `site` de la
+// configuración), nunca la del CMS que declara Yoast.
+const canonical = canonicalUrl(Astro.site, Astro.url.pathname);
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    {favicon && <link rel="icon" type="image/png" href={favicon} />}
+    {favicon && <link rel="shortcut icon" href={favicon} />}
+    {canonical && <link rel="canonical" href={canonical} />}
+    {seo ? (
+      <Seo {...seo} />
+    ) : (
+      <>
+        <meta name="description" content={description} />
+        <title>{title}</title>
+      </>
+    )}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+  </head>
+
+  <body class="flex min-h-screen flex-col">
+    <Header localeUrls={localeUrls} />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

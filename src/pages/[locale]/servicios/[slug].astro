@@ -1,0 +1,91 @@
+---
+/**
+ * RGW-EP09-06-01 — Detalle de servicio por locale (`/en/servicios/[slug]`).
+ *
+ * Ruta fina: resuelve el servicio (`getServiceBySlug`, con `lang`) y lo
+ * renderiza con `ServiceDetail` (compartido con `/servicios`, sin
+ * duplicar lógica). Sin servicio, reescribe a `/404`
+ * (render nativo de la 404 con HTTP 404, sin redirect).
+ */
+import Layout from '../../../layouts/Layout.astro';
+import ServiceDetail from '../../../components/services/ServiceDetail.astro';
+import {
+  getServiceBySlug,
+  getServiceImage,
+  getServices,
+} from '../../../lib/wordpress/services';
+import { wpFetch } from '../../../lib/wordpress/client';
+import { wpRoutes } from '../../../lib/wordpress/routes';
+import { routes, servicesBaseUrl, serviceDetailUrl } from '../../../lib/routes';
+import { stripHtml } from '../../../lib/wordpress/text';
+import type { WpService } from '../../../lib/wordpress/types';
+
+export const prerender = true;
+
+/**
+ * Rutas estáticas: una por servicio publicado en inglés. El prefijo
+ * `/en` lo aporta el locale de la ruta (el español lo sirve
+ * `/servicios/[slug]` sin prefijo).
+ */
+export async function getStaticPaths() {
+  const services = await getServices('en');
+
+  return services.map((service) => ({
+    params: { locale: 'en', slug: service.slug },
+  }));
+}
+
+const locale = Astro.params.locale ?? 'es';
+const { slug } = Astro.params;
+const service =
+  typeof slug === 'string'
+    ? await getServiceBySlug(slug, locale).catch(() => null)
+    : null;
+
+if (!service) {
+  Astro.response.status = 404;
+  return Astro.rewrite(routes.notFound);
+}
+
+const image = await getServiceImage(service);
+
+const otherLocale = locale === 'es' ? 'en' : 'es';
+let otherSlug = service.slug;
+const otherId = service.translations?.[otherLocale];
+
+if (typeof otherId === 'number' && otherId !== service.id) {
+  const translated = await wpFetch<WpService>(wpRoutes.service(otherId)).catch(
+    () => null,
+  );
+
+  if (translated?.slug) {
+    otherSlug = translated.slug;
+  }
+}
+
+const localeUrls = {
+  es:
+    locale === 'es'
+      ? serviceDetailUrl('es', service.slug)
+      : serviceDetailUrl('es', otherSlug),
+  en:
+    locale === 'en'
+      ? serviceDetailUrl('en', service.slug)
+      : serviceDetailUrl('en', otherSlug),
+};
+---
+
+<Layout
+  title={`${stripHtml(service.title.rendered)} — GussWare`}
+  description={stripHtml(service.excerpt?.rendered ?? '').slice(0, 160) || undefined}
+  localeUrls={localeUrls}
+  lang={service.lang}
+>
+  <ServiceDetail
+    service={service}
+    image={image}
+    locale={locale}
+    indexUrl={servicesBaseUrl(locale)}
+    indexLabel={locale === 'en' ? 'Services' : 'Servicios'}
+  />
+</Layout>

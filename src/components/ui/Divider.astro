@@ -1,0 +1,20 @@
+---
+/**
+ * RGW-101 — Divider global reutilizable.
+ *
+ * Línea divisoria horizontal con tokens existentes:
+ * - grosor 1px por defecto del navegador (equivale a
+ *   `--stroke-width-default`, sin imponer estilos);
+ * - color `border-gw-border-subtle` (`supporting.css` vía `semantic.css`).
+ *
+ * Sin márgenes propios para no limitar sus usos.
+ */
+interface Props {
+  /** Clases adicionales (no sustituyen la base). */
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<hr class={`border-gw-border-subtle ${className}`} />

@@ -1,51 +1,922 @@
-export interface WPPostRaw {
+/**
+ * Tipos de las respuestas de WordPress REST API usadas por el Header
+ * (logo y menú principal).
+ */
+
+export interface WpSettings {
+  title: string;
+  description: string;
+  url: string;
+  site_logo: number | null;
+  site_icon: number;
+  show_on_front: string;
+  page_on_front: number;
+}
+
+export interface WpMedia {
+  id: number;
+
+  /** Relación al contenido original (p. ej. el SVG del que deriva el logo). */
+  post?: number;
+  parent?: number;
+
+  source_url: string;
+  alt_text: string;
+  mime_type: string;
+
+  title: {
+    rendered: string;
+  };
+}
+
+/** Menú de `/gussware/v1/menus` (ítems embebidos). */
+export interface WpCustomMenu {
+  id: number;
+  name: string;
+  slug: string;
+  /** Idioma del menú (ACF `menu_language`), fuente de verdad. */
+  language: string;
+  items: WpCustomMenuItem[];
+}
+
+/** Ítem embebido de `/gussware/v1/menus` (estructura exacta del endpoint). */
+export interface WpCustomMenuItem {
+  ID: number;
+  /** ID del ítem padre como cadena (`"0"` = nivel superior). */
+  menu_item_parent: string;
+  title: string;
+  url: string;
+  target: string;
+  /** Atributo HTML `title` configurado en WordPress. */
+  attr_title: string;
+  /** Clases CSS configuradas en WordPress. */
+  classes: string[];
+  /** Descripción del elemento configurada en WordPress. */
+  description: string;
+  /** Relación del enlace (`rel`) configurada en WordPress. */
+  xfn: string;
+  /** Tipo de objeto enlazado en WordPress (`custom`, `post_type`, ...). */
+  type: string;
+  /** Objeto enlazado (`custom`, `page`, ...) e ID informativo. */
+  object: string;
+  object_id: string;
+  menu_order: number;
+  post_status: string;
+}
+
+/** Logo del Header listo para renderizar. */
+export interface HeaderLogo {
+  src: string;
+  alt: string;
+}
+
+/** Ítem del menú del Header listo para renderizar (propiedades de WP conservadas). */
+export interface HeaderMenuItem {
+  id: number;
+  title: string;
+  url: string;
+  parent: number;
+  menu_order: number;
+  target: string;
+  /** Atributo HTML `title` (`attr_title` de WordPress, vacío si no hay). */
+  attrTitle: string;
+  /** Clases CSS de WordPress (sin vacíos); se suman a las del diseño. */
+  classes: string[];
+  /** Descripción de WordPress (sin slot en el diseño actual: se conserva, no se renderiza). */
+  description: string;
+  /** Relación del enlace (`xfn` de WordPress → `rel`, vacío si no hay). */
+  rel: string;
+  /** Tipo/objeto enlazado en WordPress (informativo, sin uso en render). */
+  type: string;
+  object: string;
+  objectId: string;
+}
+
+export interface Header {
+  button_text: string;
+  url: string;
+  status: boolean;
+}
+
+/** Medio de logo de `logo_section` (`/gussware/v1/header`). */
+export interface HeaderLogoMedia {
+  id: number;
+  url: string;
+  alt: string | null;
+  width: number;
+  height: number;
+  mime_type: string;
+}
+
+/** Sección de logos del Header (`logo_section`). */
+export interface HeaderLogoSection {
+  logo: HeaderLogoMedia | null;
+  mobile_logo: HeaderLogoMedia | null;
+}
+
+/** Respuesta de `/gussware/v1/header`. */
+export interface HeaderResponse {
+  button_section: Header | null;
+  logo_section: HeaderLogoSection | null;
+}
+
+/** Header listo para renderizar: CTA + logos. */
+export interface HeaderData extends Header {
+  logo: HeaderLogo | null;
+  mobileLogo: HeaderLogo | null;
+}
+
+export interface FooterDescription {
+  footer_description: string;
+  footer_copyright: string;
+}
+
+/** Respuesta de `/gussware/v1/footer`. */
+export interface FooterResponse {
+  footer_section: FooterDescription | null;
+}
+
+export interface SocialMedia {
+  social_media: SocialMediaItem[];
+}
+
+export interface SocialMediaItem {
+  name: string;
+  url: string;
+  status: boolean;
+  icon: string;
+  order: string;
+}
+
+/**
+ * Configuración global de Contact (`/gussware/v1/contact`).
+ * No mezclar con el contenido editorial de la Page Contact, que vive
+ * en `/wp/v2/pages` (`acf.section_content`).
+ */
+export interface Contact {
+  phone: string | null;
+  email: string | null;
+  business_hours: string | null;
+}
+
+/** Respuesta de `/gussware/v1/contact` (`null` si no hay configuración). */
+export interface ContactResponse {
+  contact_information: Contact | null;
+}
+
+/**
+ * RGW-268 — Estructura exacta de `/gussware/v1/legal_information`
+ * (Configuración del sitio → Información legal). No renombrar campos:
+ * deben coincidir con la API.
+ */
+export interface LegalInformationApi {
+  legal_entity_name: string | null;
+  legal_responsible_name: string | null;
+  legal_address: string | null;
+  privacy_email: string | null;
+  contact_phone: string | null;
+  site_name: string | null;
+  personal_data_name_label: string | null;
+  personal_data_email_label: string | null;
+  personal_data_phone_label: string | null;
+}
+
+/** Respuesta de `/gussware/v1/legal_information` (`null` si no hay configuración). */
+export interface LegalInformationResponse {
+  legal_information: LegalInformationApi | null;
+}
+
+export interface WpListPost {
   id: number;
   date: string;
+  slug: string;
+  link: string;
+
+  title: WpPostRendered;
+  excerpt: WpPostRendered;
+
+  featured_media: number;
+  categories: number[];
+  tags: number[];
+}
+
+export interface WpCategory {
+  id: number;
+  name: string;
+  slug: string;
+  count: number;
+}
+
+export interface WpTag {
+  id: number;
+  name: string;
+  slug: string;
+  count: number;
+}
+
+export interface WpUser {
+  id: number;
+  name: string;
+  slug: string;
+  avatar_urls?: Record<string, string>;
+}
+
+/** Tarjeta del listado del Blog lista para renderizar. */
+export interface BlogCard {
+  id: number;
+  badge: string | null;
+  title: string;
+  href: string;
+}
+
+/** Grupo ACF `informacion_del_articulo` expuesto por la REST API. */
+export interface WpArticleInfo {
+  minutos_de_lectura: number;
+}
+
+/** Campo `acf` de la respuesta del endpoint destacado del Blog. */
+export interface WpFeaturedAcf {
+  informacion_del_articulo: WpArticleInfo;
+}
+
+/** Respuesta del endpoint destacado (`/gussware/v1/blog/featured`). */
+export interface WpFeaturedPost extends WpListPost {
+  acf?: WpFeaturedAcf;
+}
+
+/** Artículo destacado del Blog listo para renderizar. */
+export interface FeaturedPost {
+  badge: string;
+  /**
+   * Minutos de lectura desde WordPress
+   * (`acf.informacion_del_articulo.minutos_de_lectura`); `null` si el
+   * endpoint no lo proporciona.
+   */
+  readingTime: number | null;
+  title: string;
+  description: string;
+  url: string;
+}
+
+/** Imagen del artículo destacado lista para renderizar. */
+export interface FeaturedPostImage {
+  src: string;
+  alt: string;
+}
+
+/** Page de WordPress con campos Polylang (`lang`, `translations`). */
+export interface WpPage {
+  id: number;
+  slug: string;
+  status: string;
+
+  title: WpPostRendered;
+  content: WpPostProtectedContent;
+  excerpt: WpPostProtectedContent;
+
+  acf: WpPageAcf;
+
+  lang: string;
+  translations: Record<string, number>;
+
+  yoast_head_json: WpPostYoastHeadJson;
+}
+
+/** Contenido editorial de una Page (`acf.section_content`). */
+export interface WpSectionContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  social_media_text: string;
+}
+
+/** Campo `acf` de una Page de WordPress. */
+export interface WpPageAcf {
+  section_content?: WpSectionContent;
+  /**
+   * RGW-268 — Custom Field `Fecha de actualización` de la página de
+   * Política de Privacidad (`YYYYMMDD`). Proviene de la misma respuesta
+   * REST de la Page (`page.acf`); el resto de Pages no lo trae.
+   */
+  privacy_last_updated?: string | null;
+}
+
+/** Botón opcional del Hero (`primary_button` / `secondary_button`). */
+export interface WpHomeButton {
+  button_text: string;
+  button_url: string;
+}
+
+export interface WpHomeHero {
+  eyebrow: string;
+  title: string;
+  description: string;
+  image: number | null;
+  primary_button?: WpHomeButton | null;
+  secondary_button?: WpHomeButton | null;
+}
+
+export interface WpExpertiseItem {
+  icon: string;
+  title: string;
+  description: string;
+}
+
+export interface WpFiabilityItem {
+  icon: string;
+  text: string;
+}
+
+export interface WpFiability {
+  title: string;
+  description: string;
+  fiability_items: WpFiabilityItem[];
+}
+
+export interface WpExpertise {
+  eyebrow: string;
+  title: string;
+  description: string;
+  expertice_items: WpExpertiseItem[];
+  fiability: WpFiability;
+}
+
+export interface WpValuePoint {
+  icon: string;
+  title: string;
+  description: string;
+}
+
+export interface WpTechnology {
+  eyebrow: string;
+  title: string;
+  description: string;
+  value_points: WpValuePoint[];
+}
+
+export interface WpServiceItem {
+  title: string;
+  description: string;
+  /** URL opcional al detalle (RGW-EP09-07-03; ausente en ACF legacy). */
+  url?: string;
+  /**
+   * Nombre del icono del catálogo de `Icon.astro` (`acf.hero.icono`).
+   * Ausente o vacío: el componente aplica su fallback por palabra clave
+   * del título.
+   */
+  icon?: string;
+}
+
+export interface WpServices {
+  eyebrow: string;
+  title: string;
+  description: string;
+  items: WpServiceItem[];
+}
+
+export interface WpProcessStep {
+  label: string;
+  title: string;
+  description: string;
+  image: number | null;
+}
+
+export interface WpProcess {
+  eyebrow: string;
+  title: string;
+  description: string;
+  steps: WpProcessStep[];
+  footnote?: string;
+}
+
+export interface WpFaqItem {
+  pregunta: string;
+  respuesta: string;
+}
+
+export interface WpFaq {
+  eyebrow: string;
+  titulo: string;
+  descripcion: string;
+  preguntas: WpFaqItem[];
+}
+
+export interface WpFinalCta {
+  title: string;
+  description: string;
+  button_text: string;
+  button_url: string;
+}
+
+/** Campo `acf` de la Page portada del Home. */
+export interface WpHomeAcf {
+  hero: WpHomeHero;
+  expertise: WpExpertise;
+  technology: WpTechnology;
+  services: WpServices;
+  process: WpProcess;
+  faq: WpFaq;
+  final_cta: WpFinalCta;
+}
+
+/**
+ * Configuración global de visibilidad de las secciones de la Landing Page.
+ * Proviene de la Options Page «Configuración del Sitio Web → Landing Page»
+ * (`/gussware/v1/landing-page`), no de `page.acf`.
+ */
+export interface LandingPageVisibility {
+  show_hero: boolean;
+  show_expertise: boolean;
+  show_technology: boolean;
+  show_process: boolean;
+  show_projects: boolean;
+  show_faq: boolean;
+  show_final_cta: boolean;
+}
+
+/** Page portada del Home (mismos campos base que `WpPage`). */
+export interface WpHomePage extends Omit<WpPage, 'acf'> {
+  acf: WpHomeAcf;
+}
+
+/** Stat del rail del Header (`hero_stats[]`). */
+export interface WpHeroStat {
+  label: string;
+  value: string;
+  description?: string;
+}
+
+/** Enlace opcional `{text, url}` (patrón `WpHomeButton`). */
+export interface WpServiceLink {
+  text: string;
+  url: string;
+}
+
+/** Feature de una solución (`solutions[].features[]`). */
+export interface WpSolutionFeature {
+  feature: string;
+}
+
+/** Solución de un servicio (`solutions[]`). */
+export interface WpSolutionItem {
+  title: string;
+  description: string;
+  features: WpSolutionFeature[];
+  /** Beneficio resumido de la solución (`benefit`). */
+  benefit?: string;
+  link: WpServiceLink | null;
+}
+
+/** Situación del problema (`development_situations[]`). */
+export interface WpProblemSituation {
+  number: string;
+  situation: string;
+}
+
+/** Elemento del acordeón de enfoque (`approach[]`). */
+export interface WpApproachItem {
+  title: string;
+  description: string;
+}
+
+/** Grupo de tecnologías (`tech_groups[]`). */
+export interface WpTechGroup {
+  title: string;
+  items: { name: string }[];
+}
+
+/** CTA del servicio (forma de `WpFinalCta`). */
+export interface WpServiceCta {
+  /** Etiqueta superior (`06 — …`); opcional en el modelo. */
+  eyebrow?: string;
+  title: string;
+  description: string;
+  button_text: string;
+  button_url: string;
+  /** Acción secundaria (`Ver todos los servicios`). */
+  secondary_text?: string;
+  secondary_url?: string;
+}
+
+/** Sección Hero del servicio (campo `Group` `hero`). */
+export interface WpServiceHeroAcf {
+  intro_eyebrow: string;
+  intro_eyebrow_suffix: string;
+  intro_title: string;
+  intro_description: string;
+  hero_stats: WpHeroStat[];
+  /** Acción principal del hero (`hero_cta_*`). */
+  hero_cta_label?: string;
+  hero_cta_url?: string;
+  /** Acción secundaria del hero (`hero_secondary_*`). */
+  hero_secondary_label?: string;
+  hero_secondary_url?: string;
+  /**
+   * Nombre del icono del catálogo de `Icon.astro` para el servicio
+   * (p. ej. `web-development`). Vacío: el frontend usa su fallback.
+   */
+  icono?: string;
+}
+
+/** Sección Problema del servicio (campo `Group` `problema`). */
+export interface WpServiceProblemAcf {
+  development_eyebrow: string;
+  development_title: string;
+  development_content: string;
+  development_situations?: WpProblemSituation[];
+  development_tags: { tag: string }[];
+}
+
+/** Sección Soluciones del servicio (campo `Group` `soluciones`). */
+export interface WpServiceSolutionsAcf {
+  solutions_title: string;
+  solutions_description: string;
+  solutions_eyebrow: string;
+  solutions: WpSolutionItem[];
+}
+
+/** Sección Cómo trabajamos del servicio (campo `Group` `proceso`). */
+export interface WpServiceProcessAcf {
+  approach_eyebrow?: string;
+  approach_title: string;
+  approach_description: string;
+  approach: WpApproachItem[];
+}
+
+/** Sección Ficha técnica del servicio (campo `Group` `ficha`). */
+export interface WpServiceTechAcf {
+  /** Interruptor del bloque: en Integración el diseño no muestra la ficha. */
+  tech_enabled: boolean;
+  tech_eyebrow?: string;
+  tech_title: string;
+  tech_description: string;
+  tech_groups: WpTechGroup[];
+}
+
+/** Sección FAQ del servicio (campo `Group` `faq`). */
+export interface WpServiceFaqAcf {
+  faq_eyebrow?: string;
+  faq_items: WpFaqItem[];
+}
+
+/** Sección Cierre del servicio (campo `Group` `cierre`). */
+export interface WpServiceClosingAcf {
+  cta: WpServiceCta;
+}
+
+/** Plataforma del bloque de plataformas (`platforms[]`). */
+export interface WpServicePlatform {
+  name: string;
+  /** Ejemplo de uso de la plataforma. */
+  example?: string;
+}
+
+/**
+ * Sección Plataformas del servicio (campo `Group` `plataformas`).
+ * El interruptor `platforms_enabled` decide si el bloque se muestra.
+ */
+export interface WpServicePlatformsAcf {
+  platforms_enabled: boolean;
+  platforms_eyebrow?: string;
+  platforms_title?: string;
+  platforms_description?: string;
+  platforms: WpServicePlatform[];
+  /** Bloque de consulta al final del bloque. */
+  platforms_cta_title?: string;
+  platforms_cta_text?: string;
+  platforms_cta_label?: string;
+  platforms_cta_url?: string;
+}
+
+/** Servicio relacionado del bloque final (`related[]`). */
+export interface WpServiceRelatedItem {
+  category?: string;
+  name: string;
+  description?: string;
+  url: string;
+}
+
+/** Sección Servicios relacionados del servicio (campo `Group` `relacionados`). */
+export interface WpServiceRelatedAcf {
+  related_eyebrow?: string;
+  related_title?: string;
+  related: WpServiceRelatedItem[];
+}
+
+/**
+ * Campo `acf` del CPT `service` (grupo `Service Detail`): un campo
+ * `Group` de ACF por sección de la plantilla, por lo que REST devuelve
+ * la estructura anidada (`acf.hero.intro_title`).
+ * Preguntas reutilizan `WpFaqItem` (`{pregunta, respuesta}`).
+ */
+export interface WpServiceAcf {
+  hero: WpServiceHeroAcf;
+  problema: WpServiceProblemAcf;
+  soluciones: WpServiceSolutionsAcf;
+  plataformas: WpServicePlatformsAcf;
+  proceso: WpServiceProcessAcf;
+  ficha: WpServiceTechAcf;
+  faq: WpServiceFaqAcf;
+  cierre: WpServiceClosingAcf;
+  relacionados: WpServiceRelatedAcf;
+}
+
+/** Ítem del CPT `service` (`/wp/v2/services`). */
+export interface WpService {
+  id: number;
+  slug: string;
+  status: string;
+  title: WpPostRendered;
+  content: WpPostProtectedContent;
+  excerpt: WpPostRendered;
+  featured_media: number;
+  acf: WpServiceAcf;
+  lang: string;
+  translations: Record<string, number>;
+}
+
+/**
+ * RGW-321 — Campo `acf` del CPT `projects` (grupo `Proyectos - CPT`,
+ * `show_in_rest: true`). Solo los campos consumidos por las vistas
+ * Astro; el modelo completo vive en la skill `gussware-projects-import`
+ * (diccionario RGW-315). Sin contenido inventado: opcionales ausentes
+ * se tratan como vacíos en la vista.
+ */
+export interface WpProjectAcf {
+  project_code?: string;
+  short_description?: string | null;
+  /** Marca de destacado para la sección de Home (RGW-321). */
+  is_featured?: boolean;
+  /** Orden de presentación; ausente = orden estable por id (RGW-321). */
+  display_order?: number | null;
+  /** RGW-323 — Campos del detalle (solo los consumidos por la vista). */
+  description?: string | null;
+  executive_summary?: string | null;
+  role_performed?: string;
+  client_company?: Array<number | { ID?: number }> | null;
+  industry_sector?: number[];
+  context_objective?: string | null;
+  problem_need?: string | null;
+  implemented_solution?: string | null;
+  funcionalidades_desarrolladas?: WpProjectFeature[] | null;
+  responsibilities_contributions?: WpProjectResponsibility[] | null;
+  results_achievements?: WpProjectAchievement[] | null;
+  verifiable_metrics?: WpProjectMetric[] | null;
+}
+
+/**
+ * RGW-321 — Ítem del CPT `projects` (`/wp/v2/projects`, `rest_base:
+ * projects`). Sin `content`/`excerpt` nativos escribibles: las
+ * descripciones viven en ACF (`description`, `short_description`).
+ */
+export interface WpProject {
+  id: number;
+  slug: string;
+  status: string;
+  /** Fecha nativa de publicación (criterio «Más recientes», RGW-322). */
+  date: string;
+  title: WpPostRendered;
+  content?: WpPostRendered;
+  excerpt?: WpPostRendered;
+  featured_media: number;
+  acf?: WpProjectAcf | null;
+  projects_type?: number[];
+  technologies?: number[];
+  industries_sector?: number[];
+  lang: string;
+  translations: Record<string, number>;
+}
+
+/** Término de la taxonomía `technology` (`/wp/v2/technologies`). */
+export interface WpTechnology {
+  id: number;
+  name: string;
+  slug: string;
+  /**
+   * RGW-322 — Idioma Polylang del término (`false` = legado sin idioma,
+   * válido en todos los idiomas según la skill de importación).
+   */
+  lang: string | false;
+}
+
+/** Término de la taxonomía `projects_type` (`/wp/v2/projects_type`). */
+export interface WpProjectType {
+  id: number;
+  name: string;
+  slug: string;
+  /** RGW-322 — Idioma Polylang (`false` = legado sin idioma). */
+  lang: string | false;
+}
+
+/** Término de `industry_sector` (`/wp/v2/industries_sector`). */
+export interface WpIndustry {
+  id: number;
+  name: string;
+  slug: string;
+  lang: string | false;
+}
+
+/** Relación `client_company` (título nativo = nombre del cliente). */
+export interface WpClientCompanyRef {
+  id: number;
+  slug: string;
+  title: WpPostRendered;
+}
+
+/** Ítem de `funcionalidades_desarrolladas` (subcampos del grupo vivo). */
+export interface WpProjectFeature {
+  feature_name?: string;
+  feature_description?: string;
+}
+
+/** Ítem de `responsibilities_contributions`. */
+export interface WpProjectResponsibility {
+  responsibility?: string;
+  responsibility_description?: string;
+}
+
+/** Ítem de `results_achievements`. */
+export interface WpProjectAchievement {
+  achievement_name?: string;
+  achievement_description?: string;
+}
+
+/** Ítem de `verifiable_metrics`. */
+export interface WpProjectMetric {
+  nombre_de_la_metrica?: string;
+  metric_value?: string | number;
+  metric_unit?: string;
+  metric_description?: string;
+}
+
+/** Idioma de Polylang (`/pll/v1/languages`). */
+export interface WpLanguage {
+  slug: string;
+  locale: string;
+  name: string;
+  w3c: string;
+  home_url: string;
+  is_default: boolean;
+  page_on_front: number;
+}
+
+export interface WpPostRendered {
+  rendered: string;
+}
+
+export interface WpPostProtectedContent extends WpPostRendered {
+  protected: boolean;
+}
+
+export interface WpPostGuid extends WpPostRendered {}
+
+/** Ítem mínimo del CPT `service` para listados (RGW-EP09-04-03). */
+export interface WpServiceSummary {
+  id: number;
+  slug: string;
+  status: string;
+  title: WpPostRendered;
+  excerpt: WpPostRendered;
+  lang: string;
+  translations: Record<string, number>;
+  /**
+   * RGW-272 — Descripción del servicio en el catálogo. El extracto del
+   * CPT puede venir nulo; la lista REST expone `acf` (`show_in_rest`)
+   * con la descripción dentro del grupo `hero` (`hero.intro_description`).
+   */
+  acf?: {
+    hero?: { intro_description?: string | null; icono?: string | null } | null;
+    /** Forma legacy (no presente en el REST actual del CPT). */
+    intro_description?: string | null;
+  } | null;
+}
+
+export interface WpPostMeta {
+  _acf_changed: boolean;
+  inline_featured_image: boolean;
+  footnotes: string;
+}
+
+export interface WpPostYoastRobots {
+  index: string;
+  follow: string;
+  'max-snippet': string;
+  'max-image-preview': string;
+  'max-video-preview': string;
+}
+
+export interface WpPostYoastTwitterMisc {
+  'Written by': string;
+  'Est. reading time': string;
+}
+
+export interface WpPostYoastHeadJson {
+  title: string;
+  description?: string;
+  robots: WpPostYoastRobots;
+  canonical: string;
+  og_locale: string;
+  og_type: string;
+  og_title: string;
+  og_description: string;
+  og_url: string;
+  og_site_name: string;
+  og_image?: WpYoastImage[];
+  article_published_time: string;
+  article_modified_time: string;
+  author: string;
+  twitter_card: string;
+  twitter_title?: string;
+  twitter_description?: string;
+  twitter_image?: string;
+  twitter_misc: WpPostYoastTwitterMisc;
+
+  schema: {
+    '@context': string;
+    '@graph': unknown[];
+  };
+}
+
+/** Imagen de `og_image` en `yoast_head_json`. */
+export interface WpYoastImage {
+  url: string;
+  width: number;
+  height: number;
+  type: string;
+}
+
+export interface WpPostLink {
+  href: string;
+
+  targetHints?: {
+    allow: string[];
+  };
+}
+
+export interface WpPostLinks {
+  self: WpPostLink[];
+  collection: WpPostLink[];
+  about: WpPostLink[];
+  author: WpPostLink[];
+  replies: WpPostLink[];
+  'version-history': WpPostLink[];
+  'predecessor-version': WpPostLink[];
+  'wp:attachment': WpPostLink[];
+
+  'wp:term': Array<{
+    taxonomy: string;
+    embeddable: boolean;
+    href: string;
+  }>;
+
+  curies: Array<{
+    name: string;
+    href: string;
+    templated: boolean;
+  }>;
+}
+
+export interface WpPost {
+  id: number;
+  date: string;
+  date_gmt: string;
+
+  guid: WpPostGuid;
+
+  modified: string;
+  modified_gmt: string;
   slug: string;
   status: string;
   type: string;
   link: string;
-  title: {
-    rendered: string;
-  };
-  content: {
-    rendered: string;
-    protected: boolean;
-  };
-  excerpt: {
-    rendered: string;
-    protected: boolean;
-  };
+
+  title: WpPostRendered;
+  content: WpPostProtectedContent;
+  excerpt: WpPostProtectedContent;
+
   author: number;
   featured_media: number;
-  _embedded?: {
-    author?: Array<{
-      id: number;
-      name: string;
-      description: string;
-      avatar_urls?: Record<string, string>;
-    }>;
-    'wp:featuredmedia'?: Array<{
-      id: number;
-      source_url: string;
-      alt_text?: string;
-    }>;
-    'wp:term'?: Array<
-      Array<{
-        id: number;
-        name: string;
-        slug: string;
-        taxonomy: string;
-      }>
-    >;
-  };
-}
 
-export interface WPCategory {
-  id: number;
-  count: number;
-  description: string;
-  link: string;
-  name: string;
-  slug: string;
+  comment_status: string;
+  ping_status: string;
+  sticky: boolean;
+  template: string;
+  format: string;
+
+  meta: WpPostMeta;
+
+  categories: number[];
+  tags: number[];
+  class_list: string[];
+
+  acf: unknown[];
+
+  yoast_head: string;
+  yoast_head_json: WpPostYoastHeadJson;
+
+  lang: string;
+  translations: Record<string, number>;
+  pll_sync_post: unknown[];
+
+  _links: WpPostLinks;
 }

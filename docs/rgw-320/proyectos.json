@@ -1,0 +1,248 @@
+{
+  "version": 1,
+  "type": "proyectos",
+  "items": [
+    {
+      "project_code": "TEST-RGW321-A",
+      "es": {
+        "titulo": "TEST — Proyecto de integración RGW-A",
+        "slug": "test-proyecto-integracion-rgw-a",
+        "tipos": [
+          "Sistemas empresariales"
+        ],
+        "tecnologias": [
+          "Php"
+        ],
+        "sectores": [
+          "Comercio"
+        ],
+        "empresa": "Empresa Demo Inventario",
+        "acf": {
+          "additional_images": null,
+          "client_company": [
+            596
+          ],
+          "context_objective": "<p>Objetivo ficticio de prueba.</p>",
+          "demo_url": "",
+          "description": "<p>Proyecto ficticio de prueba para validar la integración RGW-321/322/323. Sin datos comerciales reales.</p>",
+          "display_order": 1,
+          "end_date": "20261012",
+          "executive_summary": "<p>Resumen ficticio de prueba.</p>",
+          "funcionalidades_desarrolladas": [
+            {
+              "feature_name": "Funcionalidad de prueba 1",
+              "feature_description": "Desc ficticia"
+            }
+          ],
+          "implemented_solution": "<p>Solución ficticia de prueba.</p>",
+          "industry_sector": [
+            64
+          ],
+          "is_featured": true,
+          "is_ongoing": false,
+          "problem_need": "<p>Necesidad ficticia de prueba.</p>",
+          "project_code": "TEST-RGW321-A",
+          "project_type": [
+            62
+          ],
+          "project_url": "",
+          "repository_url": "",
+          "responsibilities_contributions": [
+            {
+              "responsibility": "Responsabilidad de prueba",
+              "responsibility_description": "Desc ficticia"
+            }
+          ],
+          "results_achievements": [
+            {
+              "achievement_name": "Logro de prueba",
+              "achievement_description": "Desc ficticia"
+            }
+          ],
+          "role_performed": "Rol de prueba",
+          "short_description": "Resumen corto de prueba A. (Contenido ficticio de prueba RGW-321.)",
+          "start_date": "20261001",
+          "status": "completed",
+          "technology": [
+            71
+          ],
+          "verifiable_metrics": [
+            {
+              "nombre_de_la_metrica": "Métrica de prueba",
+              "metric_value": "1",
+              "metric_unit": "ud",
+              "metric_description": "Desc ficticia"
+            }
+          ]
+        },
+        "taxonomia_ids": {
+          "projects_type": [
+            62
+          ],
+          "technologies": [
+            71
+          ],
+          "industries_sector": [
+            64
+          ]
+        }
+      },
+      "en": {
+        "titulo": "TEST — Integration project RGW-A",
+        "slug": "test-integration-project-rgw-a",
+        "tipos": [],
+        "tecnologias": [],
+        "sectores": [],
+        "empresa": "Empresa Demo Inventario",
+        "acf": {
+          "additional_images": null,
+          "client_company": [
+            597
+          ],
+          "context_objective": "<p>Objetivo ficticio de prueba.</p>",
+          "demo_url": "",
+          "description": "<p>Proyecto ficticio de prueba para validar la integración RGW-321/322/323. Sin datos comerciales reales.</p>",
+          "display_order": 1,
+          "end_date": "20261012",
+          "executive_summary": "<p>Resumen ficticio de prueba.</p>",
+          "funcionalidades_desarrolladas": [
+            {
+              "feature_name": "Funcionalidad de prueba 1",
+              "feature_description": "Desc ficticia"
+            }
+          ],
+          "implemented_solution": "<p>Solución ficticia de prueba.</p>",
+          "industry_sector": [
+            64
+          ],
+          "is_featured": true,
+          "is_ongoing": false,
+          "problem_need": "<p>Necesidad ficticia de prueba.</p>",
+          "project_code": "TEST-RGW321-A",
+          "project_type": [
+            62
+          ],
+          "project_url": "",
+          "repository_url": "",
+          "responsibilities_contributions": [
+            {
+              "responsibility": "Responsabilidad de prueba",
+              "responsibility_description": "Desc ficticia"
+            }
+          ],
+          "results_achievements": [
+            {
+              "achievement_name": "Logro de prueba",
+              "achievement_description": "Desc ficticia"
+            }
+          ],
+          "role_performed": "Rol de prueba",
+          "short_description": "Test short summary A. (Contenido ficticio de prueba RGW-321.)",
+          "start_date": "20261001",
+          "status": "completed",
+          "technology": [
+            34
+          ],
+          "verifiable_metrics": [
+            {
+              "nombre_de_la_metrica": "Métrica de prueba",
+              "metric_value": "1",
+              "metric_unit": "ud",
+              "metric_description": "Desc ficticia"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "project_code": "TEST-RGW321-B",
+      "es": {
+        "titulo": "TEST — Proyecto de integración RGW-B",
+        "slug": "test-proyecto-integracion-rgw-b",
+        "tipos": [
+          "Sistemas empresariales"
+        ],
+        "tecnologias": [
+          "MySQL",
+          "Php"
+        ],
+        "sectores": [
+          "Comercio"
+        ],
+        "empresa": "Empresa Demo Inventario",
+        "acf": {
+          "additional_images": null,
+          "client_company": [
+            596
+          ],
+          "context_objective": "<p>Objetivo ficticio de prueba.</p>",
+          "demo_url": "",
+          "description": "<p>Proyecto ficticio de prueba para validar la integración RGW-321/322/323. Sin datos comerciales reales.</p>",
+          "display_order": 2,
+          "end_date": "20261012",
+          "executive_summary": "<p>Resumen ficticio de prueba.</p>",
+          "funcionalidades_desarrolladas": [
+            {
+              "feature_name": "Funcionalidad de prueba 1",
+              "feature_description": "Desc ficticia"
+            }
+          ],
+          "implemented_solution": "<p>Solución ficticia de prueba.</p>",
+          "industry_sector": [
+            64
+          ],
+          "is_featured": true,
+          "is_ongoing": false,
+          "problem_need": "<p>Necesidad ficticia de prueba.</p>",
+          "project_code": "TEST-RGW321-B",
+          "project_type": [
+            62
+          ],
+          "project_url": "",
+          "repository_url": "",
+          "responsibilities_contributions": [
+            {
+              "responsibility": "Responsabilidad de prueba",
+              "responsibility_description": "Desc ficticia"
+            }
+          ],
+          "results_achievements": [
+            {
+              "achievement_name": "Logro de prueba",
+              "achievement_description": "Desc ficticia"
+            }
+          ],
+          "role_performed": "Rol de prueba",
+          "short_description": "Resumen corto de prueba B. (Contenido ficticio de prueba RGW-321.)",
+          "start_date": "20261001",
+          "status": "completed",
+          "technology": [
+            66,
+            71
+          ],
+          "verifiable_metrics": [
+            {
+              "nombre_de_la_metrica": "Métrica de prueba",
+              "metric_value": "1",
+              "metric_unit": "ud",
+              "metric_description": "Desc ficticia"
+            }
+          ]
+        },
+        "taxonomia_ids": {
+          "projects_type": [
+            62
+          ],
+          "technologies": [
+            66,
+            71
+          ],
+          "industries_sector": [
+            64
+          ]
+        }
+      },
+      "en": null
+    }
+  ]
+}

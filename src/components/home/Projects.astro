@@ -1,0 +1,172 @@
+---
+/**
+ * Proyectos del Home (RGW-311) según Stitch `GussWare Home-V0.1.0`
+ * (`GussWare Home - Complete Final Flow`, sección "Enterprise Resource
+ * Planner") y la variante `GussWare Projects - Variant C (Showcase)`.
+ *
+ * Split en grid de 12 columnas (contenido 5 + visual 7, apilado en
+ * mobile): distintivo `Badge`, título `display`, descripción
+ * `body-lg`, bloque "Core Capabilities" (`label-bold` + `Badge`s en
+ * `flex-wrap`), fila de navegación (botones circulares Previous/Next
+ * + contador + enlace "View All Projects" con patrón de fila de
+ * enlace de `Card.astro`) y bloque visual con capa desplazada
+ * (`bg-gw-surface-dim`) detrás de la imagen.
+ * Solo visualización: sin navegación real ni lógica dinámica
+ * (el carrusel Stitch `02 / 08` se muestra estático).
+ *
+ * Contenido estático de referencia Stitch (EN) pendiente del CPT
+ * Proyectos del épico RGW-325: las props opcionales dejan la sección
+ * preparada para recibir datos de WordPress/i18n sin cambiar la
+ * estructura; `image: null` renderiza el bloque neutro de
+ * maquetación (patrón de `Card.astro`, sin assets inventados).
+ * `linkHref` es la URL de Stitch (`/projects`, ruta del épico).
+ *
+ * Mapeo Stitch → tokens existentes (sin valores nuevos):
+ * - `Badge` estándar para distintivo y capacidades (variante única;
+ *   Stitch usa 12px y texto naranja en el distintivo del Home:
+ *   se usa el token `label-bold` más cercano, como documenta
+ *   `Badge.astro`);
+ * - título con el patrón `display` de `Expertise.astro`
+ *   (`text-display-lg-mobile md:text-display-lg`);
+ * - fila de enlace `text-label-bold text-supporting-blue-dark`
+ *   con hover `brand-accent` e icono `arrow-right` (patrón de
+ *   `Card.astro`);
+ * - nodos circulares `rounded-full` (patrón del stepper de
+ *   `Process.astro`; el sistema usa capas tonales, sin sombras:
+ *   no se replica el `shadow-sm` de Stitch).
+ */
+import Section from '../ui/Section.astro';
+import Badge from '../ui/Badge.astro';
+import Icon from '../ui/Icon.astro';
+import Image from '../ui/Image.astro';
+
+interface Props {
+  /**
+   * RGW-273 — Identificador de ancla de la sección. El nombre lo
+   * define WordPress; Astro solo lo expone. Sin `id` no hay ancla.
+   */
+  id?: string;
+  /** Distintivo sobre el título (Stitch: "Featured Project"). */
+  eyebrow?: string;
+  /** Título del proyecto destacado. */
+  title?: string;
+  /** Descripción del proyecto destacado. */
+  description?: string;
+  /** Título del bloque de capacidades (Stitch: "Core Capabilities"). */
+  capabilitiesTitle?: string;
+  /** Capacidades del proyecto (Stitch: React, Node.js, …). */
+  capabilities?: string[];
+  /** Contador estático del carrusel (Stitch: "02 / 08"). */
+  counter?: string;
+  /** Etiqueta del enlace al listado (Stitch: "View All Projects"). */
+  linkLabel?: string;
+  /** URL del listado (Stitch: "/projects", ruta del épico RGW-325). */
+  linkHref?: string;
+  /**
+   * Imagen del proyecto (futura: resuelta desde WordPress como en
+   * `Hero.astro`). `null` (defecto) = bloque neutro de maquetación,
+   * sin assets inventados.
+   */
+  image?: { src: string; alt: string } | null;
+}
+
+const {
+  id = undefined,
+  eyebrow = 'Featured Project',
+  title = 'Enterprise Resource Planner',
+  description = 'A comprehensive, modular ERP system designed to streamline complex supply chain operations. Built with a focus on real-time data visibility and automated compliance reporting.',
+  capabilitiesTitle = 'Core Capabilities',
+  capabilities = ['React', 'Node.js', 'PostgreSQL', 'AWS Cloud'],
+  counter = '02 / 08',
+  linkLabel = 'View All Projects',
+  linkHref = '/projects',
+  image = null,
+} = Astro.props;
+---
+
+<Section
+  id={id}
+  class={`border-gw-border-subtle border-t${id ? ' scroll-mt-24' : ''}`}
+>
+  <div data-projects class="grid grid-cols-1 items-center gap-8 md:grid-cols-12">
+    <div
+      class="col-span-12 flex h-full flex-col justify-center md:col-span-5 md:pr-8"
+    >
+      <div class="mb-6">
+        {eyebrow && (
+          <div class="mb-4">
+            <Badge>{eyebrow}</Badge>
+          </div>
+        )}
+        {title && (
+          <h2
+            class="text-gw-text-primary text-display-lg-mobile md:text-display-lg mb-6"
+          >
+            {title}
+          </h2>
+        )}
+        {description && (
+          <p class="text-gw-text-secondary text-body-lg mb-8">{description}</p>
+        )}
+      </div>
+      {capabilities.length > 0 && (
+        <div class="mb-12">
+          {capabilitiesTitle && (
+            <h3 class="text-gw-text-primary text-label-bold mb-4">
+              {capabilitiesTitle}
+            </h3>
+          )}
+          <div class="flex flex-wrap gap-2">
+            {capabilities.map((capability) => (
+              <Badge>{capability}</Badge>
+            ))}
+          </div>
+        </div>
+      )}
+      <div
+        class="mt-auto flex flex-col items-start gap-6 sm:flex-row sm:items-center"
+      >
+        <div class="flex items-center gap-4">
+          <button
+            type="button"
+            aria-label="Previous project"
+            class="border-gw-border-subtle text-gw-text-muted hover:border-brand-secondary hover:text-brand-secondary flex h-12 w-12 items-center justify-center rounded-full border transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+          >
+            <Icon name="arrow-left" size={6} />
+          </button>
+          <span class="text-gw-text-muted text-label-bold">{counter}</span>
+          <button
+            type="button"
+            aria-label="Next project"
+            class="border-gw-border-subtle text-gw-text-muted hover:border-brand-secondary hover:text-brand-secondary flex h-12 w-12 items-center justify-center rounded-full border transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+          >
+            <Icon name="arrow-right" size={6} />
+          </button>
+        </div>
+        <a
+          href={linkHref}
+          class="text-label-bold text-supporting-blue-dark hover:text-brand-accent inline-flex items-center gap-2 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+        >
+          {linkLabel}
+          <Icon name="arrow-right" size={4} />
+        </a>
+      </div>
+    </div>
+    <div class="relative col-span-12 mt-8 md:col-span-7 md:mt-0">
+      <div
+        aria-hidden="true"
+        class="bg-gw-surface-dim absolute inset-0 -z-10 translate-x-2 translate-y-2 md:translate-x-4 md:translate-y-4"
+      ></div>
+      {image ? (
+        <div class="border-gw-border-subtle overflow-hidden border">
+          <Image src={image.src} alt={image.alt} ratio="4/3" />
+        </div>
+      ) : (
+        <div
+          aria-hidden="true"
+          class="bg-gw-surface-secondary border-gw-border-subtle aspect-[4/3] w-full overflow-hidden border"
+        ></div>
+      )}
+    </div>
+  </div>
+</Section>

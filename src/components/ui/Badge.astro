@@ -1,0 +1,28 @@
+---
+/**
+ * RGW-106 — Badge global reutilizable.
+ *
+ * Única variante de Stitch con tokens existentes:
+ * - fondo `bg-gw-surface-secondary` (gris claro del sistema);
+ * - texto `text-gw-text-primary` (tinta del sistema) + `uppercase`;
+ * - tipografía `text-label-bold` (700; su tracking 0.7px equivale al
+ *   0.05em de Stitch);
+ * - padding `px-3 py-1` (12px/4px exactos);
+ * - `rounded-none` (esquinas rectas del sistema).
+ *
+ * Diferencia documentada: Stitch usa 12px y el token más cercano y
+ * coherente es `label-bold` de 14px → se utiliza ese token.
+ * Sin variantes adicionales ni estados (Stitch no los define).
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<span
+  class={`bg-gw-surface-secondary text-gw-text-primary text-label-bold inline-block rounded-none px-3 py-1 uppercase ${className}`}
+>
+  <slot />
+</span>

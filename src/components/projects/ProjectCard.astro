@@ -1,0 +1,111 @@
+---
+/**
+ * RGW-312 — ProjectCard de dominio (listado de Proyectos).
+ *
+ * Tarjeta del listado según Stitch `Proyectos - Listado`: bloque visual
+ * (`4/3`, proporción del sistema como en `Card.astro`) con `Badge`
+ * superpuesto, título, descripción, fila de tags técnicos y pie con
+ * enlace + código del proyecto.
+ *
+ * Componente específico (no extensión de `Card.astro`): la anatomía
+ * (badge superpuesto, tags, código) es de un solo uso del listado y
+ * `Card` mantiene su contrato de tarjeta editorial en sus 5 usos
+ * (blog grid/skeleton/carrusel, servicios ×2). Compone `Badge`,
+ * `Image` e `Icon` existentes con tokens del sistema, sin sombras.
+ *
+ * Diferencias documentadas frente a Stitch (sin equivalente):
+ * - sin `image` se muestra el bloque neutro de maquetación (SPEC: no
+ *   inventar assets; las fotos de Stitch son mocks externos); con
+ *   `image` se renderiza vía `Image` (`4/3`, Stitch usa `16/10` sin
+ *   token equivalente);
+ * - título `headline-md` del sistema (jerarquía de tarjetas; Stitch
+ *   ~20-24px sin token equivalente);
+ * - tags con `Badge` (variante única; Stitch ~12px, token más cercano
+ *   `label-bold`);
+ * - código con `text-xs` + `font-mono` (precedente
+ *   `ServiceHeader.astro`; Stitch mono ~12px sin token equivalente).
+ */
+import Badge from '../ui/Badge.astro';
+import Icon from '../ui/Icon.astro';
+import Image from '../ui/Image.astro';
+
+interface Props {
+  image?: { src: string; alt: string };
+  badge?: string;
+  title: string;
+  description?: string;
+  tags?: string[];
+  code?: string;
+  href?: string;
+  linkLabel?: string;
+  class?: string;
+}
+
+const {
+  image = undefined,
+  badge = undefined,
+  title,
+  description = undefined,
+  tags = [],
+  code = undefined,
+  href = undefined,
+  linkLabel = 'Ver proyecto',
+  class: className = '',
+} = Astro.props;
+---
+
+<article
+  class={`bg-gw-surface-primary border-gw-border-subtle group flex h-full flex-col overflow-hidden rounded-none border ${className}`}
+>
+  <div class="relative">
+    {image ? (
+      <Image
+        src={image.src}
+        alt={image.alt}
+        ratio="4/3"
+        class="transition-transform duration-500 group-hover:scale-105"
+      />
+    ) : (
+      <div
+        aria-hidden="true"
+        class="bg-gw-surface-secondary aspect-[4/3] w-full overflow-hidden rounded-none"
+      />
+    )}
+    {badge && <Badge class="absolute top-3 left-3">{badge}</Badge>}
+  </div>
+  <div class="flex flex-grow flex-col p-6">
+    <h3
+      class={`text-gw-text-primary text-headline-md group-hover:text-supporting-blue-dark mb-4 transition-colors duration-200 ${href ? 'flex-grow' : ''}`}
+    >
+      {title}
+    </h3>
+    {description && (
+      <p class="text-gw-text-secondary text-body-md mb-4">{description}</p>
+    )}
+    {tags.length > 0 && (
+      <div class="mb-6 flex flex-wrap gap-2">
+        {tags.map((tag) => (
+          <Badge>{tag}</Badge>
+        ))}
+      </div>
+    )}
+    {(href || code) && (
+      <div
+        class={`border-gw-border-subtle mt-auto flex items-center gap-4 border-t pt-4 ${href && code ? 'justify-between' : code ? 'justify-end' : 'justify-start'}`}
+      >
+        {href && (
+          <a
+            href={href}
+            class="text-label-bold text-supporting-blue-dark hover:text-brand-accent inline-flex items-center gap-2 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+          >
+            {linkLabel}
+            <Icon name="arrow-right" size={4} />
+          </a>
+        )}
+        {code && (
+          <span class="text-gw-text-muted font-mono text-xs">{code}</span>
+        )}
+      </div>
+    )}
+  </div>
+</article>

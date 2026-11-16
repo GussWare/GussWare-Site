@@ -1,0 +1,197 @@
+---
+/**
+ * FAQ del Home según Stitch `GussWare Home-V0.1.0`
+ * (`GussWare Home - Complete Final Flow`, bloque FAQ).
+ *
+ * Grid intro (4) + acordeón (8): `faq.eyebrow`, `faq.titulo`
+ * (`headline-lg`) y `faq.descripcion` (`body-lg`) con tokens
+ * existentes (la composición de Stitch no corresponde a
+ * `SectionHeading`: tamaños y color de eyebrow distintos).
+ * `faq.preguntas[]` se renderiza dinámicamente con numeración
+ * automática (`01`, `02`, …), divisores `border-b`, pregunta
+ * `headline-md` con hover a `supporting-blue-dark` y toggle textual
+ * `+`/`−` (sin glifo apropiado en `Icon.astro`, según Stitch
+ * `add`/`remove`). Respuesta `body-md` (`pb-8 pl-16 pr-4`).
+ *
+ * Todo el contenido llega de WordPress; sin fallbacks de contenido.
+ * Lista vacía: solo intro, sin errores (script con guards).
+ * Interacción encapsulada en el `script` del componente:
+ * `aria-expanded`, `hidden`, icono y control asociados por id.
+ * RGW-296: apertura/cierre con transición de altura suave
+ * (`grid-template-rows` 0fr → 1fr), sin cambios de contenido ni de
+ * diseño; `prefers-reduced-motion` desactiva la transición.
+ */
+import Section from '../ui/Section.astro';
+import type { WpFaq } from '../../lib/wordpress/types';
+
+interface Props {
+  faq: WpFaq;
+  /**
+   * RGW-337 — Identificador de ancla para navegación desde el menú.
+   * Permite enlaces como `/#preguntas` o `/en/#preguntas`.
+   */
+  id?: string;
+}
+
+const { faq, id = undefined } = Astro.props;
+
+const preguntas = faq.preguntas ?? [];
+const pad = (n: number): string => String(n).padStart(2, '0');
+---
+
+<Section id={id} class={id ? 'scroll-mt-24' : ''}>
+  <div data-faq>
+    <div class="grid grid-cols-1 items-start gap-12 md:grid-cols-12">
+      <div class="md:col-span-4 md:sticky md:top-28 md:self-start">
+        {faq.eyebrow && (
+          <p
+            class="text-label-bold text-supporting-blue-dark mb-4 block uppercase tracking-widest"
+          >
+            {faq.eyebrow}
+          </p>
+        )}
+        {faq.titulo && (
+          <h2 class="text-gw-text-primary text-headline-lg mb-6">
+            {faq.titulo}
+          </h2>
+        )}
+        {faq.descripcion && (
+          <p class="text-gw-text-secondary text-body-lg">{faq.descripcion}</p>
+        )}
+      </div>
+      {preguntas.length > 0 && (
+        <div data-faq-list class="space-y-4 md:col-span-8">
+          {preguntas.map((item, index) => (
+            <div
+              data-faq-item
+              class="border-gw-border-subtle border-b"
+            >
+              <button
+                type="button"
+                data-faq-button
+                id={`faq-button-${index}`}
+                aria-expanded="false"
+                aria-controls={`faq-panel-${index}`}
+                class="group flex w-full items-center justify-between py-6 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark"
+              >
+                <span class="flex items-center gap-6">
+                  <span class="text-gw-text-muted text-headline-md opacity-50">
+                    {pad(index + 1)}
+                  </span>
+                  <span class="text-gw-text-primary text-headline-md transition-colors duration-200 group-hover:text-supporting-blue-dark">
+                    {item.pregunta}
+                  </span>
+                </span>
+                <span
+                  data-faq-icon
+                  aria-hidden="true"
+                  class="text-supporting-blue-dark text-body-lg font-bold"
+                >
+                  +
+                </span>
+              </button>
+              <div
+                data-faq-panel
+                id={`faq-panel-${index}`}
+                role="region"
+                aria-labelledby={`faq-button-${index}`}
+                hidden
+                class="faq-panel"
+              >
+                <div class="faq-content pr-4 pl-16">
+                  <p class="text-gw-text-secondary text-body-md pb-8">
+                    {item.respuesta}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</Section>
+
+<style>
+  /*
+   * RGW-296 — Animación del acordeón: transición de altura vía
+   * grid-template-rows (0fr → 1fr); duración y easing alineados con la
+   * receta de transición del sistema (200ms). El atributo `hidden` sigue
+   * mandando (`display: none`) para conservar el estado inicial y el
+   * comportamiento sin JavaScript.
+   */
+  .faq-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 200ms ease-in-out;
+  }
+
+  .faq-panel[hidden] {
+    display: none;
+  }
+
+  .faq-panel.is-open {
+    grid-template-rows: 1fr;
+  }
+
+  .faq-content {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq-panel {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const root = document.querySelector('[data-faq]');
+
+  if (root instanceof HTMLElement) {
+    root.querySelectorAll('[data-faq-button]').forEach((button) => {
+      if (!(button instanceof HTMLButtonElement)) return;
+
+      const panelId = button.getAttribute('aria-controls');
+      const panel = panelId ? root.querySelector(`#${panelId}`) : null;
+
+      button.addEventListener('click', () => {
+        const next =
+          button.getAttribute('aria-expanded') !== 'true';
+        button.setAttribute('aria-expanded', String(next));
+
+        if (panel instanceof HTMLElement) {
+          if (next) {
+            panel.hidden = false;
+            // Reflow forzado: el navegador registra el estado colapsado
+            // (0fr) antes de abrir; si no, la transición de altura no corre
+            // desde `display: none`.
+            void panel.offsetHeight;
+            panel.classList.add('is-open');
+          } else {
+            panel.classList.remove('is-open');
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+              panel.hidden = true;
+            } else {
+              panel.addEventListener(
+                'transitionend',
+                () => {
+                  if (!panel.classList.contains('is-open')) {
+                    panel.hidden = true;
+                  }
+                },
+                { once: true },
+              );
+            }
+          }
+        }
+
+        const icon = button.querySelector('[data-faq-icon]');
+        if (icon instanceof HTMLElement) {
+          icon.textContent = next ? '−' : '+';
+        }
+      });
+    });
+  }
+</script>

@@ -1,0 +1,103 @@
+---
+/**
+ * Bloque de servicios relacionados del detalle de servicio (sección
+ * `relacionados`).
+ *
+ * Consume exclusivamente el grupo ACF `relacionados` del CPT `service`:
+ * encabezado (`related_eyebrow`, `related_title`) y tarjetas
+ * (`related[]` con `category`, `name`, `description` y `url`).
+ *
+ * La maquetación sigue la referencia de Stitch (`docs/services/html/`,
+ * bloque «RELATED SERVICES»): encabezado a la izquierda y retícula 3×1
+ * de tarjetas con categoría en versal, nombre, descripción y enlace de
+ * fila inferior. Solo tokens y patrones existentes del proyecto
+ * (`border-gw-border-subtle`, escalas `headline-*`/`body-md`/`label-bold`).
+ *
+ * Diferencias documentadas respecto de la referencia: Stitch fija el
+ * nombre de la tarjeta a 24 px y la categoría a 11 px; el proyecto no
+ * tiene token equivalente, por lo que se usa `headline-md` y `label-bold`.
+ * El separador de Stitch es `#E2E4E8`; se usa `border-gw-border-subtle`.
+ *
+ * La etiqueta de interfaz del enlace («VER SERVICIO») se resuelve por
+ * locale, como el resto de etiquetas del template.
+ */
+import Section from '../ui/Section.astro';
+import Icon from '../ui/Icon.astro';
+
+interface RelatedItem {
+  category?: string;
+  name: string;
+  description?: string;
+  url: string;
+}
+
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  items: RelatedItem[];
+  locale: string;
+}
+
+const {
+  eyebrow = undefined,
+  title = undefined,
+  items = [],
+  locale,
+} = Astro.props;
+
+const viewServiceLabel = locale === 'en' ? 'View service' : 'Ver servicio';
+
+const visibleItems = items.filter(
+  (item) =>
+    typeof item?.name === 'string' &&
+    item.name.trim().length > 0 &&
+    typeof item?.url === 'string' &&
+    item.url.trim().length > 0,
+);
+---
+
+<Section id="relacionados" class="bg-gw-surface-primary border-b border-gw-border-subtle">
+  <div class="mb-12">
+    {eyebrow && (
+      <p class="text-label-bold uppercase text-brand-primary mb-3">{eyebrow}</p>
+    )}
+    {title && (
+      <h2 class="text-gw-text-primary text-headline-lg font-bold leading-tight">
+        {title}
+      </h2>
+    )}
+  </div>
+
+  {visibleItems.length > 0 && (
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+      {visibleItems.map((item) => (
+        <article class="bg-gw-surface-primary border border-gw-border-subtle hover:border-brand-primary flex flex-col justify-between p-8 transition-colors">
+          <div>
+            {item.category && (
+              <span class="text-label-bold uppercase text-brand-primary block mb-3">
+                {item.category}
+              </span>
+            )}
+            <h3 class="text-gw-text-primary text-headline-md font-bold mb-4 leading-snug">
+              {item.name}
+            </h3>
+            {item.description && (
+              <p class="text-gw-text-secondary text-body-md leading-relaxed mb-8">
+                {item.description}
+              </p>
+            )}
+          </div>
+          <div class="border-t border-gw-border-subtle pt-5">
+            <a
+              href={item.url}
+              class="text-label-bold text-brand-primary hover:text-brand-accent inline-flex items-center gap-2 transition-colors"
+            >
+              <span>{viewServiceLabel}</span>
+              <Icon name="arrow-right" size={4} />
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+  )}
+</Section>

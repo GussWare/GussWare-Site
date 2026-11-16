@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Detalle de Servicio — Análisis y propuesta | GussWare</title>
+<style>
+  :root{
+    --primary:#004a98; --primary-dark:#00346e; --secondary:#2164a6; --accent:#ff5000;
+    --highlight:#ffd8d8; --ink:#242126; --muted:#737782; --body:#424751;
+    --surface:#f2f2f2; --border:#dadada; --white:#fff;
+  }
+  *{box-sizing:border-box;border-radius:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:#fff;color:var(--ink);
+    font-family:"Source Sans 3",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:16px;line-height:1.55;
+  }
+  .wrap{max-width:1040px;margin:0 auto;padding:48px 32px 96px}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--primary)}
+  h1{font-size:40px;line-height:1.1;letter-spacing:-.02em;margin:12px 0 12px;font-weight:800}
+  .lead{font-size:18px;color:var(--body);max-width:74ch}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .chip{font-size:12px;font-weight:600;padding:4px 10px;border:1px solid var(--border);background:#fafafa;color:var(--body)}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);margin-top:36px}
+  .kpi{padding:20px;border-right:1px solid var(--border)}
+  .kpi:last-child{border-right:none}
+  .kpi .v{font-size:30px;font-weight:800;color:var(--primary-dark);line-height:1}
+  .kpi .l{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:8px}
+  h2{font-size:24px;font-weight:700;text-transform:uppercase;letter-spacing:-.01em;margin:56px 0 4px;padding-top:28px;border-top:2px solid var(--ink)}
+  h3{font-size:17px;font-weight:700;margin:0 0 10px;text-transform:uppercase;letter-spacing:.02em}
+  p{margin:12px 0}
+  .sub{color:var(--body);max-width:80ch}
+  .verdict{border-left:5px solid var(--accent);background:var(--surface);padding:20px 24px;margin-top:28px}
+  .verdict b{color:var(--primary-dark)}
+  table{width:100%;border-collapse:collapse;margin-top:20px;font-size:14.5px}
+  th{background:var(--primary-dark);color:#fff;text-align:left;padding:11px 12px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;vertical-align:bottom}
+  td{padding:11px 12px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--body)}
+  tr:nth-child(even) td{background:#fafafa}
+  td strong{color:var(--ink)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-top:20px}
+  ul.bul{margin:0;padding:0;list-style:none}
+  ul.bul li{position:relative;padding-left:16px;margin:9px 0;color:var(--body);font-size:15px}
+  ul.bul li:before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;background:var(--primary)}
+  .ok li:before{background:var(--secondary)}
+  .bad li:before{background:var(--accent)}
+  /* wireframe */
+  .wire{margin-top:24px;border:1px solid var(--border);background:#fff}
+  .wire-head{padding:10px 16px;border-bottom:1px solid var(--border);background:var(--surface);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--primary-dark);display:flex;justify-content:space-between}
+  .wire-body{padding:16px;display:flex;flex-direction:column;gap:8px}
+  .wb{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--border);background:#fafafa;padding:10px 14px}
+  .wb.a{border-color:var(--primary);background:#f4f8fd}
+  .wb .n{font-size:11px;font-weight:700;color:var(--muted);min-width:20px;padding-top:2px}
+  .wb .t{font-size:14px;font-weight:700;color:var(--ink)}
+  .wb .d{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .note{border:1px solid var(--border);border-left:5px solid var(--primary);background:#fafafa;padding:16px 20px;margin-top:24px;font-size:14.5px;color:var(--body)}
+  .src{font-size:12px;color:var(--muted);margin-top:48px;border-top:1px solid var(--border);padding-top:16px}
+  .tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border:1px solid var(--border);background:#fff}
+  .tag.re{color:#1b5e20;border-color:#bfd8c0;background:#f2f8f2}
+  .tag.nw{color:#8a3b00;border-color:#f0cdb4;background:#fdf4ee}
+  @media (max-width:820px){
+    .kpis{grid-template-columns:1fr 1fr}
+    .kpi{border-bottom:1px solid var(--border)}
+    .two{grid-template-columns:1fr;gap:24px}
+    h1{font-size:30px}
+    .wrap{padding:32px 20px 64px}
+    table{font-size:13px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">Análisis y propuesta · Solo lectura</div>
+  <h1>Detalle de Servicio — análisis y propuesta</h1>
+  <p class="lead">Pantalla «Servicio Detalle - Integración de Apis y Servicios Externos» del proyecto <strong>GussWare Design System</strong>. Página de escritorio de 7 bloques que renderiza el CPT <strong>service</strong> mediante el grupo ACF <strong>Service Detail</strong>.</p>
+  <div class="meta">
+    <span class="chip">Stitch · screens/e4d35917…</span>
+    <span class="chip">1280 × 5.765 px (desktop)</span>
+    <span class="chip">Astro · ServiceDetail.astro</span>
+    <span class="chip">WordPress · CPT service</span>
+    <span class="chip">6 servicios comparten la plantilla</span>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="v">7</div><div class="l">Bloques en la pantalla actual</div></div>
+    <div class="kpi"><div class="v">5 / 7</div><div class="l">Mapean al ACF existente</div></div>
+    <div class="kpi"><div class="v">0</div><div class="l">Imágenes o diagramas</div></div>
+    <div class="kpi"><div class="v">9</div><div class="l">Bloques en la propuesta</div></div>
+  </div>
+
+  <div class="verdict">
+    <p style="margin:0"><strong>Veredicto.</strong> La pantalla <strong>no es todavía el detalle de un servicio</strong>: funciona como una <strong>landing de capacidad</strong> (“integraciones”). Explica el tema, presenta dos sub-soluciones y dedica su bloque más largo a una metodología genérica, pero no responde a las preguntas de compra: qué se entrega, hasta dónde llega el alcance, cómo se contrata, en qué se ha hecho antes y qué hago ahora.</p>
+  </div>
+
+  <h2>1 · Qué es hoy la pantalla</h2>
+  <p class="sub">Es la plantilla compartida de detalle de servicio: la misma estructura de 7 bloques aparece en «Service Detail - Aplicaciones móviles» y en «Variant B (Editorial Timeline)», y coincide 1:1 con los componentes Astro en producción (<em>ServiceHeader → development → solutions → ServiceApproach → tech_groups → ServiceFaq → CTA</em>). El diagnóstico aplica, por tanto, a <strong>los seis servicios del sitio</strong>, no solo a esta pantalla.</p>
+  <table>
+    <thead><tr><th style="width:40px">#</th><th>Bloque actual</th><th>Mapeo al modelo ACF</th><th style="width:110px">¿Detalla el servicio?</th></tr></thead>
+    <tbody>
+      <tr><td>01</td><td><strong>Presentación</strong> — H1 + intro + 4 stats 2×2</td><td>intro_eyebrow · intro_title · intro_description · hero_stats[]</td><td>Parcial</td></tr>
+      <tr><td>02</td><td><strong>“Software que se conecta”</strong> — 3 párrafos</td><td>development_title · development_content</td><td>Parcial</td></tr>
+      <tr><td>03</td><td><strong>“Soluciones”</strong> — 2 tarjetas con features + CTA</td><td>solutions[] {title, description, features[], link}</td><td>Sí</td></tr>
+      <tr><td>04</td><td><strong>“Metodología”</strong> — timeline de 5 fases</td><td>approach_title · approach_description · approach[]</td><td>No</td></tr>
+      <tr><td>05</td><td><strong>“Stack &amp; Capacidades”</strong> — 4 grupos de badges</td><td>tech_title · tech_description · tech_groups[]</td><td>Sí</td></tr>
+      <tr><td>06</td><td><strong>FAQ</strong> — 5 preguntas</td><td>faq_items[]</td><td>Sí</td></tr>
+      <tr><td>07</td><td><strong>CTA final</strong></td><td>cta {title, description, button_text, button_url}</td><td>Sí</td></tr>
+    </tbody>
+  </table>
+  <div class="note"><strong>Detalles detectados:</strong> se omite <span class="tag">development_tags</span>, que sí existe en ACF y en la plantilla Astro · los dos CTA «Conocer la solución» apuntan ambos a <span class="tag">/contacto</span> (callejón sin salida) · el bloque de metodología duplica el mensaje de la página global «How We Work» · navegación y CTA están en inglés con contenido en español.</div>
+
+  <h2>2 · Qué falta para ser un detalle de servicio</h2>
+  <div class="two">
+    <div>
+      <h3>Lo que ya cubre bien</h3>
+      <ul class="bul ok">
+        <li>Identidad visual fuerte y coherente con el design system (azul #004A98, acento #FF5000, Source Sans 3, cero radios).</li>
+        <li>Narrativa de contexto, propuesta de valor y stack técnico.</li>
+        <li>Contenido 100% gobernado por ACF: intro, desarrollo, soluciones, enfoque, tecnologías, FAQ y CTA.</li>
+        <li>Estado responsive y componentes ya implementados en Astro.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Lo que falta (decisiones de compra)</h3>
+      <ul class="bul bad">
+        <li><strong>Alcance y entregables</strong>: qué recibe el cliente, qué incluye y qué no.</li>
+        <li><strong>Modelo de contratación</strong>: equipo dedicado, alcance fijo, discovery o bolsa de horas; y base de cotización.</li>
+        <li><strong>Prueba social</strong>: casos, proyectos reales, métricas, testimonios.</li>
+        <li><strong>Referencias cruzadas</strong>: otros servicios y de dónde vengo (breadcrumb real, no solo un eyebrow).</li>
+        <li><strong>Siguiente paso claro</strong>: CTA primario y secundario con expectativa.</li>
+        <li><strong>Un referente visual</strong>: hoy la página es un muro de texto sin ningún diagrama.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>3 · Propuesta de estructura</h2>
+  <p class="sub">Reordenar y reforzar la plantilla existente para responder “qué es, qué incluye, cómo trabajamos, con qué, quién más lo usa y qué hago ahora”, maximizando la reutilización del modelo ACF actual.</p>
+  <table>
+    <thead><tr><th style="width:40px">#</th><th>Bloque propuesto</th><th>Objetivo</th><th>Fuente de datos</th><th style="width:120px">Modelo</th></tr></thead>
+    <tbody>
+      <tr><td>01</td><td><strong>Breadcrumb + Service Header</strong></td><td>Ubicar al usuario y prometer un resultado concreto</td><td>intro_* + hero_stats[] + rutas</td><td><span class="tag re">Reutiliza</span></td></tr>
+      <tr><td>02</td><td><strong>Qué resuelve</strong> (problema → resultado)</td><td>Explicar el problema de negocio en 2–3 párrafos</td><td>development_* + development_tags[]</td><td><span class="tag re">Reutiliza</span></td></tr>
+      <tr><td>03</td><td><strong>Alcance y entregables</strong></td><td>Mostrar qué recibe el cliente y hasta dónde llega el servicio</td><td>solutions[] (features = entregables)</td><td><span class="tag re">Reutiliza</span></td></tr>
+      <tr><td>04</td><td><strong>Enfoque de trabajo</strong></td><td>Cómo se trabaja, en 4 pasos cortos (no 5 fases técnicas)</td><td>approach[]</td><td><span class="tag re">Reutiliza</span></td></tr>
+      <tr><td>05</td><td><strong>Stack y capacidades</strong></td><td>Validación técnica: con qué se construye</td><td>tech_groups[]</td><td><span class="tag re">Reutiliza</span></td></tr>
+      <tr><td>06</td><td><strong>Casos / proyectos relacionados</strong></td><td>Prueba: resultados reales y contexto</td><td>CPT projects</td><td><span class="tag nw">Nuevo enlace</span></td></tr>
+      <tr><td>07</td><td><strong>Otros servicios</strong></td><td>Navegación cruzada y descubrimiento</td><td>CPT service (misma locale)</td><td><span class="tag re">Reutiliza</span></td></tr>
+      <tr><td>08</td><td><strong>FAQ</strong></td><td>Resolver objeciones frecuentes</td><td>faq_items[]</td><td><span class="tag re">Reutiliza</span></td></tr>
+      <tr><td>09</td><td><strong>CTA final</strong></td><td>Cierre con acción primaria + secundaria</td><td>cta{}</td><td><span class="tag re">Reutiliza</span></td></tr>
+    </tbody>
+  </table>
+
+  <h2>4 · Wireframe propuesto</h2>
+  <div class="wire">
+    <div class="wire-head"><span>Estructura de página (desktop, 12 columnas)</span><span>9 bloques</span></div>
+    <div class="wire-body">
+      <div class="wb a"><span class="n">01</span><div><div class="t">Breadcrumb + Service Header</div><div class="d">eyebrow · H1 · lead · 3–4 stats · CTA primario + secundario</div></div></div>
+      <div class="wb"><span class="n">02</span><div><div class="t">Qué resuelve</div><div class="d">problema → resultado (2–3 párrafos) + chips de tags</div></div></div>
+      <div class="wb"><span class="n">03</span><div><div class="t">Alcance y entregables — 2–3 módulos</div><div class="d">cada módulo: descripción + lista de entregables</div></div></div>
+      <div class="wb"><span class="n">04</span><div><div class="t">Enfoque de trabajo — stepper de 4 pasos</div><div class="d">enlace a «How We Work» para el detalle largo</div></div></div>
+      <div class="wb"><span class="n">05</span><div><div class="t">Stack y capacidades</div><div class="d">grupos con badges (sin cambios)</div></div></div>
+      <div class="wb"><span class="n">06</span><div><div class="t">Casos / proyectos relacionados</div><div class="d">2–3 tarjetas del CPT projects</div></div></div>
+      <div class="wb"><span class="n">07</span><div><div class="t">Otros servicios</div><div class="d">3–5 enlaces cruzados (misma locale)</div></div></div>
+      <div class="wb"><span class="n">08</span><div><div class="t">FAQ</div><div class="d">acordeón (sin cambios)</div></div></div>
+      <div class="wb a"><span class="n">09</span><div><div class="t">CTA final</div><div class="d">acción primaria + secundaria · micro-confianza</div></div></div>
+    </div>
+  </div>
+
+  <h2>5 · Reutilización frente a cambios de modelo</h2>
+  <p class="sub">Ocho de los nueve bloques se resuelven con el grupo ACF actual. Solo uno necesita una decisión de modelado, y no debería crearse sin aprobación explícita.</p>
+  <table>
+    <thead><tr><th>Bloque</th><th>Campo(s)</th><th>Estado</th></tr></thead>
+    <tbody>
+      <tr><td>Breadcrumb + header</td><td>intro_eyebrow(+suffix), intro_title, intro_description, hero_stats[]</td><td>Reutiliza (existe <strong>Breadcrumbs.astro</strong>)</td></tr>
+      <tr><td>Qué resuelve</td><td>development_title, development_content, development_tags[]</td><td>Reutiliza — hoy se omite development_tags</td></tr>
+      <tr><td>Alcance y entregables</td><td>solutions[].title/description/features[]/link</td><td>Reutiliza — solo cambia la redacción del contenido</td></tr>
+      <tr><td>Enfoque</td><td>approach[]</td><td>Reutiliza — acortar a 4 pasos</td></tr>
+      <tr><td>Stack</td><td>tech_groups[]</td><td>Reutiliza sin cambios</td></tr>
+      <tr><td>Casos relacionados</td><td>—</td><td><strong>Requiere relación servicio→proyecto (taxonomía o campo)</strong></td></tr>
+      <tr><td>Otros servicios</td><td>—</td><td>Reutiliza la lista de servicios (sin campo nuevo)</td></tr>
+      <tr><td>FAQ</td><td>faq_items[]</td><td>Reutiliza sin cambios</td></tr>
+      <tr><td>CTA</td><td>cta{}</td><td>Reutiliza (+ acción secundaria opcional)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>6 · Mejoras inmediatas sin tocar el modelo</h2>
+  <div class="two">
+    <div>
+      <ul class="bul">
+        <li>Recuperar <strong>development_tags</strong>: el campo existe en ACF y Astro, pero esta pantalla no lo muestra.</li>
+        <li>Arreglar los CTA «Conocer la solución»: hoy apuntan a /contacto, un callejón sin salida.</li>
+        <li>Reemplazar el eyebrow por un <strong>breadcrumb real</strong> (Inicio / Servicios / Servicio).</li>
+      </ul>
+    </div>
+    <div>
+      <ul class="bul">
+        <li>Acortar el bloque de metodología y mover el detalle a «How We Work».</li>
+        <li>Unificar idioma (navegación/CTA en inglés vs. contenido en español) y revisar mayúsculas en títulos largos.</li>
+        <li>Usar <strong>featured_media</strong> (existe y está vacío) para un diagrama de arquitectura.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>7 · Decisiones abiertas antes de rediseñar</h2>
+  <ul class="bul">
+    <li>¿Esta URL es el detalle de <strong>un</strong> servicio o de una familia? Hoy el título y el bloque «Soluciones» apuntan a dos servicios distintos.</li>
+    <li>¿El bloque «Alcance y entregables» se redacta dentro de <strong>solutions[]</strong> (sin campo nuevo) o requiere un repetidor propio?</li>
+    <li>¿Queremos prueba social real? Si sí, hay que definir la relación servicio → proyectos antes de diseñar el bloque.</li>
+    <li>¿Se mantiene la plantilla única para los seis servicios o se admiten variantes por tipo de servicio?</li>
+  </ul>
+
+  <p class="src">Fuente: Stitch «GussWare Design System» · pantalla e4d35917… · comparada con las pantallas hermanas de Service Detail, el modelo ACF «Service Detail» y los componentes Astro en producción. Documento de solo análisis: no se ha modificado nada en Stitch, Astro ni WordPress.</p>
+
+</div>
+</body>
+</html>

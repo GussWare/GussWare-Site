@@ -1,0 +1,28 @@
+---
+/**
+ * Listado del Blog en español (`/blog`).
+ *
+ * Ruta fina: resuelve el locale actual, obtiene el listado normalizado
+ * (`getBlogListing`) y lo renderiza con `BlogListView` (compartida con
+ * `/en/blog`, sin duplicar lógica).
+ */
+import Layout from '../../layouts/Layout.astro';
+import BlogListView from '../../components/blog/BlogListView.astro';
+import { getBlogListing } from '../../lib/wordpress/post';
+
+export const prerender = false;
+
+const locale = Astro.currentLocale ?? 'es';
+const data = await getBlogListing({
+  locale,
+  baseUrl: import.meta.env.WORDPRESS_URL as string | undefined,
+  searchParams: Astro.url.searchParams,
+});
+---
+
+<Layout
+  title="Blog — GussWare"
+  description="GussWare blog and insights on technology and development."
+>
+  <BlogListView locale={locale} {...data} />
+</Layout>

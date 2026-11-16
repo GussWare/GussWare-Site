@@ -1,0 +1,67 @@
+---
+/**
+ * RGW-140 — Campo de formulario (label + input underline de Stitch).
+ *
+ * Composición de Stitch `GussWare Contact-V0.1.0` con tokens existentes:
+ * - contenedor `flex flex-col gap-2` (`spacing.css`);
+ * - label `text-label-bold` + `text-gw-text-primary` (ink `#242126`);
+ * - input `text-body-md` + `text-gw-text-secondary` (on-surface `#1a1c1c`),
+ *   línea inferior `border-b border-gw-border-subtle`, `py-3`,
+ *   `bg-transparent` y foco `focus:border-gw-action-secondary`
+ *   (azul secundario, sin `outline` por defecto).
+ * - error opcional `text-body-md text-gw-state-error` bajo el campo,
+ *   asociado con `aria-describedby` y anunciado con `aria-live`
+ *   (RGW-141, solo presentación; la regla la define el esquema Zod).
+ * Stitch no define otros estados → no se implementan.
+ */
+interface Props {
+  id: string;
+  label: string;
+  type?: 'text' | 'email' | 'tel';
+  name?: string;
+  required?: boolean;
+  placeholder?: string;
+  autocomplete?: string;
+  error?: string;
+  class?: string;
+}
+
+const {
+  id,
+  label,
+  type = 'text',
+  name = id,
+  required = false,
+  placeholder = '',
+  autocomplete = undefined,
+  error = undefined,
+  class: className = '',
+} = Astro.props;
+
+const errorId = `${id}-error`;
+---
+
+<div class={`flex flex-col gap-2 ${className}`}>
+  <label for={id} class="text-label-bold text-gw-text-primary">
+    {label}
+  </label>
+  <input
+    id={id}
+    name={name}
+    type={type}
+    required={required || undefined}
+    placeholder={placeholder || undefined}
+    autocomplete={autocomplete}
+    aria-invalid={error ? 'true' : undefined}
+    aria-describedby={errorId}
+    class="text-body-md text-gw-text-secondary border-gw-border-subtle w-full border-b bg-transparent py-3 focus:border-gw-action-secondary focus:outline-none"
+  />
+  <p
+    id={errorId}
+    aria-live="polite"
+    hidden={!error}
+    class="text-body-md text-gw-state-error mt-2"
+  >
+    {error ?? ''}
+  </p>
+</div>

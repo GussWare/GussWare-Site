@@ -1,0 +1,1302 @@
+---
+/**
+ * RGW-268 — Vista de página legal (Política de Privacidad).
+ *
+ * Consume el contenido Gutenberg de la Page (`content.rendered`, fuente
+ * WordPress) y lo presenta con el diseño de Stitch `GussWare - Aviso de
+ * Privacidad (Rediseño Editorial)`. Sin lógica de obtención de datos
+ * (la resuelve `[...uri].astro` con `getPageBySlug` + Polylang) y sin
+ * tocar el contenido editorial: solo reordena envoltorios mediante
+ * ganchos `gw-*` ya presentes en el HTML y aplica presentación con
+ * tokens existentes (precedente: `BlogArticleView` + `.article-content`).
+ *
+ * Transformaciones (todas con respaldo: si un patrón no aparece, el
+ * contenido se renderiza sin ese envoltorio, nunca se rompe la página):
+ * - encabezado (eyebrow, fecha, lede) antes del H1 (título de la Page);
+ * - `gw-fact` ×5 de sec-01 envueltos en `.gw-facts-box`;
+ * - procedimiento de sec-06 envuelto en `.gw-procedure-box`;
+ * - bloque de sec-08 envuelto en `.gw-info-box`;
+ * - email suelto de sec-06 como chip `.gw-email-chip`;
+ * - enlaces del índice divididos en número + etiqueta.
+ *
+ * Iconos (calendar, mail, person, phone, verified_user, lock, shield,
+ * update) como presentación CSS (data-URI SVG estilo Lucide): el
+ * contenido WP no trae nodos de icono y `Icon.astro` no puede inyectarse
+ * dentro de `set:html`.
+ *
+ * Fuentes de datos (RGW-268, sin mezclar):
+ * - etiquetas `{{TOKEN}}` generales → `legalInfo` (Configuración del
+ *   sitio → Información legal), resueltas antes de los transforms;
+ * - `{{PRIVACY_LAST_UPDATED}}` → `updatedLabel` (Custom Field `Fecha de
+ *   actualización` de la propia Page, ya formateado por la ruta).
+ * Las etiquetas sin valor en WordPress se dejan intactas (dato faltante,
+ * nunca inventado). Sin emails hardcodeados: el chip envuelve el párrafo
+ * de email suelto cualquiera que sea su dirección.
+ */
+import Container from '../ui/Container.astro';
+import EditorialWrapper from '../ui/EditorialWrapper.astro';
+import Icon from '../ui/Icon.astro';
+import Breadcrumbs from '../ui/Breadcrumbs.astro';
+import { getBreadcrumbHome } from '../../lib/routes';
+import {
+  resolveLegalTokens,
+  type LegalInfo,
+} from '../../lib/wordpress/legal';
+
+interface Props {
+  /** Título de la Page (`page.title`, renderizado como H1). */
+  title: string;
+  /** HTML renderizado de la Page (`page.content.rendered`). */
+  content: string;
+  /** Datos legales generales (`Información legal`) o `null` si WP no los expone. */
+  legalInfo?: LegalInfo | null;
+  /** Fecha del Custom Field de la página, formateada (o `null`). */
+  updatedLabel?: string | null;
+  /** URL del sitio desde la configuración de WordPress (o `null`). */
+  siteUrl?: string | null;
+  /** Locale en curso para la raíz de la migaja de pan (`Inicio`/`Home`). */
+  locale?: string;
+  /** Variante editorial de la página legal. */
+  variant?: 'privacy' | 'terms';
+}
+
+const {
+  title,
+  content,
+  legalInfo = null,
+  updatedLabel = null,
+  siteUrl = null,
+  locale = 'es',
+  variant = 'privacy',
+} = Astro.props;
+
+/** Contenido con etiquetas legales resueltas desde su fuente correcta. */
+const resolvedContent = resolveLegalTokens(content, {
+  legalInfo,
+  updatedLabel,
+  siteUrl,
+});
+
+/** Primer `<p class="...">` encontrado (o null si no existe). */
+function pickParagraph(html: string, cls: string): string | null {
+  const match = html.match(
+    new RegExp(`<p class="${cls}[^"]*">[\\s\\S]*?</p>`),
+  );
+  return match ? match[0] : null;
+}
+
+const eyebrowHtml = pickParagraph(resolvedContent, 'gw-eyebrow');
+const metaHtml = pickParagraph(resolvedContent, 'gw-update-meta');
+const ledeHtml = pickParagraph(resolvedContent, 'gw-lede');
+
+let bodyHtml = resolvedContent;
+
+// Retira el grupo de encabezado (solo contiene los 3 <p>, sin divs
+// anidados) para reordenarlo delante del H1.
+const headerGroup = bodyHtml.match(
+  /<div class="[^"]*gw-legal-header[^"]*">[\s\S]*?<\/div>/,
+);
+
+if (headerGroup && eyebrowHtml && metaHtml && ledeHtml) {
+  bodyHtml = bodyHtml.replace(headerGroup[0], '');
+}
+
+// Envuelve las 5 filas de sec-01 (grupos consecutivos de un solo <p>)
+// en la caja de datos. Sin envoltura si no hay exactamente 5 seguidas.
+const factsRun = bodyHtml.match(
+  /(<div class="[^"]*\bgw-fact\b[^"]*"><p>[\s\S]*?<\/p><\/div>(?:\s*<div class="[^"]*\bgw-fact\b[^"]*"><p>[\s\S]*?<\/p><\/div>){4})/,
+);
+
+if (factsRun) {
+  bodyHtml = bodyHtml.replace(
+    factsRun[0],
+    `<div class="gw-facts-box">${factsRun[1]}</div>`,
+  );
+}
+
+// Envuelve el procedimiento de sec-06 (h3 "Procedimiento de Solicitud ARCO"
+  // y sus elementos siguientes) en su panel. Busca el h3 específico
+  // que viene después de los subbloques ARCO.
+const procedureMatch = bodyHtml.match(
+  /<h3 class="wp-block-heading">Procedimiento de Solicitud ARCO<\/h3>([\s\S]*?)(?=<\/div>|<h2 class="wp-block-heading">)/,
+);
+
+if (procedureMatch && procedureMatch[1].includes('<ol')) {
+  bodyHtml = bodyHtml.replace(
+    procedureMatch[1],
+    `<div class="gw-procedure-box">${procedureMatch[1]}</div>`,
+  );
+}
+
+// Envuelve el bloque final de sec-08 (h3 "Deshabilitación de Cookies" + su
+  // último párrafo) en panel. Se aísla primero la sección para no cruzar
+  // hacia otras secciones con un `[\s\S]*?` demasiado amplio.
+const sec08Match = bodyHtml.match(/<div id="sec-08"[\s\S]*?<\/div>/);
+
+if (sec08Match) {
+  const sec08 = sec08Match[0];
+  const sec08Inner = sec08.replace(
+    /(<h3 class="wp-block-heading">[\s\S]*?<\/h3>\s*<p class="wp-block-paragraph">[\s\S]*?<\/p>)(\s*<\/div>)$/,
+    '<div class="gw-info-box">$1</div>$2',
+  );
+  bodyHtml = bodyHtml.replace(sec08, sec08Inner);
+}
+
+// Email suelto de sec-06 como chip (cualquier dirección, ambos idiomas;
+// la dirección proviene de `Información legal`, nunca hardcodeada aquí).
+bodyHtml = bodyHtml.replace(
+  /<p[^>]*>([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})<\/p>/,
+  '<p class="gw-email-chip-row"><span class="gw-email-chip">$1</span></p>',
+);
+
+// Divide los 10 enlaces del índice en número + etiqueta.
+const indexLinks = bodyHtml.match(
+  /<li><a href="(#[^"]+)">(\d+)\.\s([^<]*)<\/a><\/li>/g,
+);
+
+if (indexLinks && indexLinks.length > 0) {
+  bodyHtml = bodyHtml.replace(
+    /<li><a href="(#[^"]+)">(\d+)\.\s([^<]*)<\/a><\/li>/g,
+    '<li><a href="$1"><span class="gw-index-num">$2.</span><span>$3</span></a></li>',
+  );
+}
+
+const hasHeader = Boolean(headerGroup && eyebrowHtml && metaHtml && ledeHtml);
+
+/** Migaja de pan homologada (mismo componente y raíz que el resto del sitio). */
+const crumbs = [getBreadcrumbHome(locale), { label: title }];
+---
+
+<div
+  class:list={[
+    'legal-page bg-gw-surface-primary text-gw-text-primary',
+    variant === 'terms' && 'legal-page--terms',
+  ]}
+>
+  {hasHeader ? (
+    <div class="legal-hero">
+      <div class="legal-hero-deco" aria-hidden="true" />
+      <Container>
+        <div class="legal-hero-inner">
+          <Breadcrumbs items={crumbs} class="mb-8" />
+          <h1 class="legal-h1">{title}</h1>
+          <div class="legal-bars" aria-hidden="true">
+            <span class="legal-bars-primary" />
+            <span class="legal-bars-accent" />
+          </div>
+          <div class="legal-meta-row">
+            <Icon name="calendar" size={4} class="legal-meta-icon" />
+            <div set:html={metaHtml} />
+          </div>
+          <div class="legal-lede-box">
+            <div set:html={ledeHtml} />
+          </div>
+        </div>
+      </Container>
+    </div>
+    <Container>
+      <div class="legal-body-inner">
+        <div class="legal-content" set:html={bodyHtml} />
+      </div>
+    </Container>
+  ) : (
+    <Container>
+      <EditorialWrapper>
+        <Breadcrumbs items={crumbs} class="mb-8" />
+        <h1 class="text-display-lg-mobile md:text-display-lg text-gw-text-primary mb-6">
+          {title}
+        </h1>
+        <div set:html={content} />
+      </EditorialWrapper>
+    </Container>
+  )}
+</div>
+
+<script>
+  // RGW-268 — Scrollspy del índice lateral: resalta el enlace de la
+  // sección visible (`aria-current` + clase, solo presentación).
+  const indexLinks = Array.from(
+    document.querySelectorAll('.gw-index a[href^="#sec-"]'),
+  );
+  const sections = indexLinks
+    .map((link) => {
+      const id = link.getAttribute('href');
+      return id ? document.querySelector(id) : null;
+    })
+    .filter((el): el is Element => el !== null);
+
+  if (indexLinks.length > 0 && sections.length > 0 && 'IntersectionObserver' in window) {
+    const setActive = (id: string | null) => {
+      for (const link of indexLinks) {
+        const active = link.getAttribute('href') === id;
+        link.classList.toggle('is-active', active);
+
+        if (active) {
+          link.setAttribute('aria-current', 'true');
+        } else {
+          link.removeAttribute('aria-current');
+        }
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActive(`#${entry.target.id}`);
+          }
+        }
+      },
+      { rootMargin: '-30% 0px -60% 0px' },
+    );
+
+    for (const section of sections) {
+      observer.observe(section);
+    }
+  }
+</script>
+
+<style is:global>
+  /* El cuerpo legal se inyecta con `set:html`, por lo que Astro no le añade
+     su atributo de scope. Estas reglas deben ser globales para aplicar. */
+  .legal-page {
+    background: var(--color-surface-primary);
+  }
+
+  /* ---------- Cabecera editorial ---------- */
+  .legal-hero {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-surface-auxiliary);
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .legal-hero-deco {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 6rem;
+    height: 6rem;
+    margin: -2rem -2rem 0 0;
+    background: var(--color-surface-secondary);
+    pointer-events: none;
+  }
+
+  .legal-hero-inner {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .legal-eyebrow-row {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin-bottom: 1rem;
+  }
+
+  .legal-eyebrow-sq {
+    width: 0.625rem;
+    height: 0.625rem;
+    flex-shrink: 0;
+    background: var(--color-brand-primary);
+  }
+
+  .legal-eyebrow-row .gw-eyebrow {
+    margin: 0;
+    font-size: var(--font-size-label-bold);
+    font-weight: var(--font-weight-label);
+    letter-spacing: var(--letter-spacing-label-bold);
+    text-transform: uppercase;
+    color: var(--color-brand-primary);
+  }
+
+  .legal-h1 {
+    margin: 0 0 1rem;
+    font-size: var(--font-size-display-lg-mobile);
+    line-height: var(--line-height-display-lg-mobile);
+    font-weight: var(--font-weight-display-lg);
+    letter-spacing: var(--letter-spacing-display-lg-mobile);
+    color: var(--color-text-secondary);
+  }
+
+  .legal-bars {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .legal-bars-primary {
+    width: 5rem;
+    height: 0.25rem;
+    background: var(--color-brand-primary);
+  }
+
+  .legal-bars-accent {
+    width: 2rem;
+    height: 0.25rem;
+    background: var(--color-brand-accent);
+  }
+
+  .legal-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    font-size: var(--font-size-label-bold);
+    font-weight: var(--font-weight-label);
+    letter-spacing: var(--letter-spacing-label-bold);
+    color: var(--color-text-muted);
+  }
+
+  .legal-meta-icon {
+    flex-shrink: 0;
+    color: var(--color-brand-primary);
+  }
+
+  .legal-meta-row .gw-update-meta {
+    margin: 0;
+  }
+
+  .legal-lede-box {
+    max-width: 56rem;
+    padding: 0.5rem 0 0.5rem 1.25rem;
+    background: var(--color-surface-primary);
+    border: 1px solid var(--color-border-subtle);
+    border-left: 4px solid var(--color-brand-accent);
+  }
+
+  .legal-lede-box .gw-lede {
+    margin: 0;
+    font-size: var(--font-size-body-lg);
+    line-height: var(--line-height-body-lg);
+    color: var(--color-text-primary);
+  }
+
+  /* ---------- Cuerpo en dos columnas ---------- */
+  .legal-body-inner {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  .legal-content .gw-legal-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .legal-content .gw-sidebar {
+    display: contents;
+  }
+
+  .legal-content .gw-sidebar > .gw-eyebrow {
+    order: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 1.5rem 1.5rem 0.875rem;
+    background: var(--color-surface-primary);
+    border: 1px solid var(--color-border-subtle);
+    border-bottom: 0;
+    font-size: var(--font-size-label-bold);
+    font-weight: var(--font-weight-label);
+    letter-spacing: var(--letter-spacing-label-bold);
+    text-transform: uppercase;
+    color: var(--color-text-primary);
+  }
+
+  /* Marca geométrica del encabezado del índice (como en Stitch). */
+  .legal-content .gw-sidebar > .gw-eyebrow::after {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    flex-shrink: 0;
+    background: var(--color-brand-accent);
+  }
+
+  /* Índice compartido: el mismo patrón en ambas páginas (con 19
+     enlaces, Términos usa el desplazamiento; con 10, Privacidad no
+     desborda y se ve igual). */
+  .legal-content .gw-index {
+    order: 2;
+    margin: 0 0 2rem;
+    padding: 1rem 1.5rem 1.5rem;
+    list-style: none;
+    background: var(--color-surface-primary);
+    border: 1px solid var(--color-border-subtle);
+    border-top: 0;
+    max-height: 36.25rem;
+    overflow-y: auto;
+  }
+
+  .legal-content .gw-index li {
+    margin: 0;
+  }
+
+  .legal-content .gw-index a {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    padding: 0.5rem 0.625rem;
+    font-size: var(--font-size-navigation);
+    line-height: var(--line-height-navigation);
+    font-weight: var(--font-weight-navigation);
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition:
+      color 0.2s,
+      background-color 0.2s;
+  }
+
+  .legal-content .gw-index a:hover {
+    color: var(--color-brand-primary);
+    background: var(--color-surface-secondary);
+  }
+
+  .legal-content .gw-index a.is-active {
+    color: var(--color-brand-primary);
+    background: var(--color-surface-secondary);
+    font-weight: 700;
+  }
+
+  .legal-content .gw-index-num {
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-label-bold);
+    font-weight: 700;
+    color: var(--color-brand-primary);
+  }
+
+  .legal-content .gw-main {
+    order: 4;
+    min-width: 0;
+  }
+
+  .legal-content .gw-card-channel {
+    order: 3;
+    margin: 0 0 2rem;
+    padding: 1rem;
+    background: var(--color-surface-auxiliary);
+    border: 1px solid var(--color-border-subtle);
+  }
+
+  /* Etiqueta del canal: la misma definición en ambas páginas (en
+     Términos aloja el icono de escudo; sin icono se ve igual). */
+  .legal-content .gw-card-channel .gw-label {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    margin: 0 0 0.25rem;
+    font-size: var(--font-size-label-bold);
+    font-weight: var(--font-weight-label);
+    letter-spacing: var(--letter-spacing-label-bold);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .legal-content .gw-card-channel p {
+    margin: 0 0 0.25rem;
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-body-md);
+    color: var(--color-text-primary);
+  }
+
+  .legal-content .gw-card-channel a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-weight: 600;
+    color: var(--color-brand-secondary);
+    overflow-wrap: anywhere;
+  }
+
+  .legal-content .gw-card-channel a:hover {
+    color: var(--color-brand-primary);
+  }
+
+  .legal-content .gw-card-channel a::before {
+    content: '';
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    background: no-repeat center / contain
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232164a6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='20' height='16' x='2' y='4' rx='2'/%3E%3Cpath d='m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7'/%3E%3C/svg%3E");
+  }
+
+  .legal-content .gw-card-channel .gw-caption {
+    margin: 0.375rem 0 0;
+    font-size: var(--font-size-label-bold);
+    font-weight: var(--font-weight-label);
+    letter-spacing: var(--letter-spacing-label-bold);
+    color: var(--color-text-muted);
+  }
+
+  /* ---------- Secciones ---------- */
+  .legal-content .gw-section {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 1rem;
+    margin: 0 0 3.5rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+    scroll-margin-top: 7rem;
+  }
+
+  .legal-content .gw-section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 1rem;
+    border-bottom: 0;
+  }
+
+  .legal-content .gw-main .gw-section-number {
+    flex: 0 0 auto;
+    margin: 0 0 1rem;
+    padding: 0.125rem 0.5rem;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-label-bold);
+    font-weight: 700;
+    color: var(--color-brand-surface);
+    background: var(--color-brand-primary);
+  }
+
+  .legal-content .gw-section > h2 {
+    flex: 1 1 16rem;
+    margin: 0 0 1rem;
+    font-size: var(--font-size-headline-md);
+    line-height: var(--line-height-headline-md);
+    font-weight: var(--font-weight-headline);
+    letter-spacing: -0.025em;
+    color: var(--color-text-primary);
+  }
+
+  .legal-content .gw-section > p:not(.gw-section-number),
+  .legal-content .gw-section > div,
+  .legal-content .gw-section > ul,
+  .legal-content .gw-section > ol {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .legal-content .gw-main p {
+    margin: 0 0 1rem;
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-body-md);
+    color: var(--color-text-primary);
+  }
+
+  .legal-content .gw-main p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Listas sin patrón propio: la misma voz tipográfica del cuerpo en
+     ambas páginas. Las listas con patrón (`gw-purposes`,
+     `gw-procedure-box`, `gw-index`) conservan sus reglas específicas. */
+  .gw-main ul,
+  .gw-main ol {
+    margin: 0 0 1rem;
+    padding-left: 1.25rem;
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-body-md);
+    color: var(--color-text-primary);
+  }
+
+  .gw-main ul li,
+  .gw-main ol li {
+    margin-bottom: 0.25rem;
+  }
+
+  .gw-main ul li:last-child,
+  .gw-main ol li:last-child {
+    margin-bottom: 0;
+  }
+
+  .legal-content .gw-main a {
+    font-weight: 600;
+    color: var(--color-brand-secondary);
+  }
+
+  .legal-content .gw-main a:hover {
+    color: var(--color-brand-primary);
+    text-decoration: underline;
+  }
+
+  /* Subtítulos de tercer nivel: 16px en cards, etiqueta xs en bloques. */
+  .legal-content .gw-main h3 {
+    margin: 0 0 0.375rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+  }
+
+  .legal-content .gw-section > h3 {
+    margin-bottom: 0.5rem;
+    font-size: var(--font-size-label-bold);
+    line-height: var(--line-height-label-bold);
+    font-weight: var(--font-weight-label);
+    letter-spacing: var(--letter-spacing-label-bold);
+    text-transform: uppercase;
+  }
+
+  .legal-content .gw-subblock h3 {
+    color: var(--color-brand-primary);
+  }
+
+  /* ---------- Caja de datos sec-01 ---------- */
+  .legal-content .gw-facts-box {
+    margin-bottom: 1.5rem;
+    padding: 1.25rem 1.25rem 0.75rem;
+    background: var(--color-surface-auxiliary);
+    border: 1px solid var(--color-border-subtle);
+    border-left: 4px solid var(--color-brand-primary);
+  }
+
+  .legal-content .gw-fact p {
+    display: grid;
+    gap: 0.5rem;
+    margin-bottom: 0;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .legal-content .gw-fact:last-child p {
+    border-bottom: 0;
+  }
+
+  .legal-content .gw-fact strong {
+    font-size: var(--font-size-label-bold);
+    font-weight: var(--font-weight-label);
+    letter-spacing: var(--letter-spacing-label-bold);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .legal-content .gw-fact a {
+    font-family: var(--font-family-mono);
+    overflow-wrap: anywhere;
+  }
+
+  /* ---------- Cards de datos sec-02 ---------- */
+  /* Card de datos: definición única reutilizada por `gw-card-data`
+     (Privacidad) y `gw-terms-card` (Términos). */
+  .legal-content .gw-card-data,
+  .legal-page--terms .gw-terms-card {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: var(--color-surface-primary);
+    border: 1px solid var(--color-border-subtle);
+    border-top: 2px solid var(--color-brand-primary);
+  }
+
+  .legal-content .gw-card-data h3,
+  .legal-page--terms .gw-terms-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .legal-content .gw-card-data p,
+  .legal-page--terms .gw-terms-card p {
+    margin: 0;
+    font-size: var(--font-size-label-bold);
+    line-height: var(--line-height-label-bold);
+    font-weight: var(--font-weight-label);
+    color: var(--color-text-muted);
+  }
+
+  /* RGW-304 — Mecanismo de iconos para contenido WP: el cuerpo legal
+     se inyecta con `set:html`, fuera del alcance de `Icon.astro` (uso
+     obligatorio en el marcado del proyecto). Aquí los iconos son
+     data-URIs SVG con colores equivalentes a tokens
+     (`#004a98` brand-primary, `#2164a6` brand-secondary,
+     `#ff5000` brand-accent, `#ffffff` brand-surface); no introducir
+     otros colores ni otro mecanismo en este bloque. */
+  .legal-content .gw-icon-person h3::before,
+  .legal-content .gw-icon-mail h3::before,
+  .legal-content .gw-icon-phone h3::before {
+    content: '';
+    width: 1.125rem;
+    height: 1.125rem;
+    flex-shrink: 0;
+    background: no-repeat center / contain var(--gw-icon, none);
+  }
+
+  .legal-content .gw-icon-person {
+    --gw-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004a98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E");
+  }
+
+  .legal-content .gw-icon-mail {
+    --gw-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004a98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='20' height='16' x='2' y='4' rx='2'/%3E%3Cpath d='m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7'/%3E%3C/svg%3E");
+  }
+
+  .legal-content .gw-icon-phone {
+    --gw-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004a98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z'/%3E%3C/svg%3E");
+  }
+
+  /* Bloque destacado con icono: definición única reutilizada por
+     `gw-note` (Privacidad) y `gw-terms-highlight` (Términos). El icono
+     lo aporta cada marcado (`::before` o icono hijo). */
+  .legal-content .gw-note,
+  .legal-page--terms .gw-terms-highlight {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: var(--color-surface-auxiliary);
+    border: 1px solid var(--color-border-subtle);
+    border-left: 4px solid var(--color-brand-primary);
+  }
+
+  .legal-content .gw-note::before {
+    content: '';
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+    background: no-repeat center / contain
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004a98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E");
+  }
+
+  .legal-content .gw-note p,
+  .legal-page--terms .gw-terms-highlight p {
+    margin: 0;
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-body-md);
+    color: var(--color-text-muted);
+  }
+
+  /* ---------- Finalidades sec-03 ---------- */
+  .legal-content .gw-purposes {
+    margin: 0 0 1.5rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .legal-content .gw-purposes li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0 0.875rem;
+    margin: 0 0 0.75rem;
+    padding: 1rem;
+    background: var(--color-surface-primary);
+    border: 1px solid var(--color-border-subtle);
+  }
+
+  .legal-content .gw-purposes li:last-child {
+    margin-bottom: 0;
+  }
+
+  .legal-content .gw-badge {
+    grid-row: span 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: 0;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-label-bold);
+    font-weight: 700;
+    color: var(--color-brand-primary);
+    background: var(--color-surface-secondary);
+  }
+
+  .legal-content .gw-purposes h3 {
+    margin-bottom: 0.125rem;
+  }
+
+  .legal-content .gw-purposes p:not(.gw-badge) {
+    margin: 0;
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-body-md);
+    color: var(--color-text-muted);
+  }
+
+  /* ---------- Medidas sec-04 ---------- */
+  .legal-content .gw-card-measure {
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    background: var(--color-surface-auxiliary);
+    border: 1px solid var(--color-border-subtle);
+    border-top: 2px solid var(--color-brand-primary);
+  }
+
+  .legal-content .gw-card-measure:last-child,
+  .legal-page--terms #sec-11 .gw-terms-card {
+    border-top-color: var(--color-brand-secondary);
+  }
+
+  .legal-content .gw-card-measure h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .legal-content .gw-card-measure p {
+    margin: 0;
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-body-md);
+    color: var(--color-text-muted);
+  }
+
+  .legal-content .gw-icon-lock h3::before,
+  .legal-content .gw-icon-shield h3::before {
+    content: '';
+    width: 1.125rem;
+    height: 1.125rem;
+    flex-shrink: 0;
+    background: no-repeat center / contain var(--gw-icon, none);
+  }
+
+  .legal-content .gw-icon-lock {
+    --gw-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004a98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='18' height='11' x='3' y='11' rx='2' ry='2'/%3E%3Cpath d='M7 11V7a5 5 0 0 1 10 0v4'/%3E%3C/svg%3E");
+  }
+
+  .legal-content .gw-icon-shield {
+    --gw-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232164a6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- ARCO sec-06 ---------- */
+  .legal-content .gw-subblock {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: var(--color-surface-primary);
+    border: 1px solid var(--color-border-subtle);
+    border-left: 2px solid var(--color-brand-primary);
+  }
+
+  .legal-content .gw-subblock + .gw-subblock {
+    border-left-color: var(--color-brand-secondary);
+  }
+
+  .legal-content .gw-subblock + .gw-subblock h3 {
+    color: var(--color-brand-secondary);
+  }
+
+  .legal-content .gw-subblock p {
+    margin: 0;
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-body-md);
+    color: var(--color-text-muted);
+  }
+
+  .legal-content .gw-procedure-box {
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    background: var(--color-surface-auxiliary);
+    border: 1px solid var(--color-border-subtle);
+  }
+
+  .legal-content .gw-procedure-box h3 {
+    margin-bottom: 0.5rem;
+    font-size: var(--font-size-label-bold);
+    line-height: var(--line-height-label-bold);
+    font-weight: var(--font-weight-label);
+    letter-spacing: var(--letter-spacing-label-bold);
+    text-transform: uppercase;
+  }
+
+  .legal-content .gw-procedure-box > p {
+    margin-bottom: 0.75rem;
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-body-md);
+    color: var(--color-text-muted);
+  }
+
+  .legal-content .gw-email-chip-row {
+    margin-bottom: 1rem;
+  }
+
+  .legal-content .gw-email-chip {
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-label-bold);
+    font-weight: 700;
+    letter-spacing: var(--letter-spacing-label-bold);
+    color: var(--color-brand-primary);
+    background: var(--color-surface-primary);
+    border: 1px solid var(--color-border-subtle);
+    overflow-wrap: anywhere;
+  }
+
+  .legal-content .gw-procedure-box > p:last-of-type {
+    margin-bottom: 0.5rem;
+    font-size: var(--font-size-label-bold);
+    line-height: var(--line-height-label-bold);
+    font-weight: var(--font-weight-label);
+    letter-spacing: var(--letter-spacing-label-bold);
+    text-transform: uppercase;
+    color: var(--color-text-primary);
+  }
+
+  .legal-content .gw-procedure-box ol {
+    margin: 0;
+    padding-left: 1.25rem;
+    list-style: decimal;
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-body-md);
+    color: var(--color-text-muted);
+  }
+
+  .legal-content .gw-procedure-box ol li {
+    margin-bottom: 0.25rem;
+  }
+
+  .legal-content .gw-procedure-box ol li:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ---------- Cookies sec-08 ---------- */
+  .legal-content .gw-info-box {
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    background: var(--color-surface-auxiliary);
+    border: 1px solid var(--color-border-subtle);
+  }
+
+  .legal-content .gw-info-box h3 {
+    margin-bottom: 0.375rem;
+    font-size: var(--font-size-label-bold);
+    line-height: var(--line-height-label-bold);
+    font-weight: var(--font-weight-label);
+    letter-spacing: var(--letter-spacing-label-bold);
+    text-transform: uppercase;
+  }
+
+  .legal-content .gw-info-box p {
+    margin: 0;
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-body-md);
+    color: var(--color-text-muted);
+  }
+
+  /* ---------- Actualización sec-10 ---------- */
+  .legal-content .gw-card-doc {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    background: var(--color-surface-auxiliary);
+    border: 1px solid var(--color-border-subtle);
+  }
+
+  .legal-content .gw-card-doc::before {
+    content: '';
+    width: 1.75rem;
+    height: 1.75rem;
+    flex-shrink: 0;
+    background: no-repeat center / contain
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004a98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8'/%3E%3Cpath d='M3 3v5h5'/%3E%3C/svg%3E");
+  }
+
+  .legal-content .gw-card-doc .gw-label {
+    display: block;
+    margin: 0;
+    font-size: var(--font-size-label-bold);
+    line-height: var(--line-height-label-bold);
+    font-weight: var(--font-weight-label);
+    letter-spacing: var(--letter-spacing-label-bold);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .legal-content .gw-card-doc p:not(.gw-label) {
+    margin: 0;
+    font-size: var(--font-size-body-md);
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  .legal-content .gw-card-contact {
+    position: relative;
+    margin-bottom: 0;
+    padding: 1.5rem;
+    background: var(--color-surface-secondary);
+    border: 1px solid var(--color-border-subtle);
+  }
+
+  .legal-content .gw-card-contact::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0.75rem;
+    height: 0.75rem;
+    background: var(--color-brand-accent);
+  }
+
+  /* Etiqueta de tarjeta/bloque: definición única reutilizada por el
+     canal de contacto (Privacidad) y la ficha de plataforma (Términos). */
+  .legal-content .gw-card-contact .gw-label,
+  .legal-page--terms .gw-platform-info > .gw-label {
+    display: block;
+    margin: 0 0 0.5rem;
+    font-size: var(--font-size-label-bold);
+    line-height: var(--line-height-label-bold);
+    font-weight: var(--font-weight-label);
+    letter-spacing: var(--letter-spacing-label-bold);
+    text-transform: uppercase;
+    color: var(--color-brand-primary);
+  }
+
+  .legal-content .gw-card-contact h3 {
+    margin-bottom: 0.75rem;
+    font-size: var(--font-size-headline-md);
+    line-height: var(--line-height-headline-md);
+    font-weight: var(--font-weight-headline);
+    letter-spacing: -0.025em;
+  }
+
+  .legal-content .gw-card-contact > p {
+    margin-bottom: 1.5rem;
+    max-width: 42rem;
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-body-md);
+    color: var(--color-text-muted);
+  }
+
+  .legal-content .gw-card-contact > p:has(> a:only-child) {
+    margin-bottom: 0.75rem;
+  }
+
+  /* Botón-enlace de tarjeta: definición única reutilizada por el
+     enlace del canal de contacto (Privacidad) y el enlace del bloque
+     informativo final (Términos). El icono de correo sigue siendo
+     exclusivo del canal de contacto. */
+  .legal-content .gw-card-contact a,
+  .legal-page--terms #sec-14 .gw-info-box > a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.75rem 1.5rem;
+    font-size: var(--font-size-label-bold);
+    line-height: var(--line-height-label-bold);
+    font-weight: var(--font-weight-label);
+    letter-spacing: var(--letter-spacing-label-bold);
+    color: var(--color-brand-surface);
+    background: var(--color-brand-primary);
+    text-decoration: none;
+    transition: background-color 0.2s;
+  }
+
+  .legal-content .gw-card-contact a:hover,
+  .legal-page--terms #sec-14 .gw-info-box > a:hover {
+    color: var(--color-brand-surface);
+    background: var(--color-supporting-blue-dark);
+    text-decoration: none;
+  }
+
+  .legal-content .gw-card-contact a::before {
+    content: '';
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    background: no-repeat center / contain
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='20' height='16' x='2' y='4' rx='2'/%3E%3Cpath d='m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7'/%3E%3C/svg%3E");
+  }
+
+  .legal-content .gw-card-contact .gw-caption {
+    margin: 0;
+    font-size: var(--font-size-label-bold);
+    line-height: var(--line-height-label-bold);
+    font-weight: var(--font-weight-label);
+    letter-spacing: var(--letter-spacing-label-bold);
+    color: var(--color-text-muted);
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (min-width: 640px) {
+    .legal-content .gw-fact p {
+      grid-template-columns: 1fr 2fr;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .legal-content .gw-fact strong {
+      padding-top: 0.125rem;
+    }
+
+    .legal-content .gw-card-contact {
+      padding: 2rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .legal-hero-inner {
+      padding-top: 4.5rem;
+      padding-bottom: 4.5rem;
+    }
+
+    .legal-h1 {
+      font-size: var(--font-size-display-lg);
+      line-height: var(--line-height-display-lg);
+      letter-spacing: var(--letter-spacing-display-lg);
+    }
+
+    .legal-content .gw-section > .gw-card-data,
+    .legal-content .gw-section > .gw-card-measure,
+    .legal-content .gw-section > .gw-subblock {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .legal-content #sec-02 > .gw-card-data {
+      align-self: stretch;
+    }
+
+    .legal-content #sec-06 > h3 {
+      flex: 0 0 100%;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .legal-body-inner {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+
+    .legal-content .gw-legal-layout {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .legal-content .gw-sidebar {
+      display: block;
+      grid-column: span 4 / span 4;
+      position: sticky;
+      top: 7rem;
+    }
+
+    .legal-content .gw-sidebar > .gw-eyebrow,
+    .legal-content .gw-index,
+    .legal-content .gw-card-channel,
+    .legal-content .gw-main {
+      order: initial;
+    }
+
+    .legal-content .gw-index {
+      margin-bottom: 0;
+    }
+
+    .legal-content .gw-card-channel {
+      margin-top: 1.5rem;
+      margin-bottom: 0;
+    }
+
+    .legal-content .gw-main {
+      grid-column: span 8 / span 8;
+    }
+  }
+
+  /* ---------- Términos y Condiciones (RGW-269, homologación) ----------
+     Esta variante NO define un lenguaje propio: consume las
+     definiciones únicas de arriba (cabecera, índice, canal, columnas,
+     secciones, ficha de datos, cards, bloque destacado y botón).
+     Solo quedan aquí los ganchos del marcado de Términos sin
+     contraparte en Privacidad, con los mismos tokens del sistema. */
+  .legal-page--terms .gw-terms-version {
+    white-space: nowrap;
+  }
+
+  .legal-page--terms .gw-terms-version::before,
+  .legal-page--terms .gw-terms-shield {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.25rem;
+    background: no-repeat center / contain
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004a98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E");
+    content: '';
+    vertical-align: -0.125rem;
+  }
+
+  /* Ficha de información legal: envoltorio neutro; la ficha visible la
+     aportan `.gw-facts-box` / `.gw-fact` (la misma definición única
+     que en Privacidad). La etiqueta usa el patrón de etiqueta de
+     tarjeta y el párrafo introductorio hereda `.gw-main p`. */
+  .legal-page--terms .gw-platform-info {
+    margin: 0 0 1.5rem;
+  }
+
+  /* El enlace del canal conserva su glifo de flecha (lleva a una página,
+     no a un correo) dentro del mismo sistema de iconos de presentación
+     (trazo estilo Lucide 2px, color de marca secundaria). */
+  .legal-page--terms .gw-card-channel a::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232164a6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3Cpath d='m12 5 7 7-7 7'/%3E%3C/svg%3E");
+  }
+
+  /* Icono del bloque destacado: mismo tamaño que el icono de
+     `gw-note` (1.25rem) y color de marca primaria del sistema. */
+  .legal-page--terms .gw-terms-community-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: 0 0 1.25rem;
+    background: no-repeat center / contain
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23004a98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='9' cy='7' r='4'/%3E%3Cpath d='M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75'/%3E%3C/svg%3E");
+  }
+
+  /* Parrilla de cards: una columna en móvil y varias columnas desde
+     768px, el mismo lenguaje responsive que las cards en fila de
+     Privacidad (mismo gap de 1rem). */
+  .legal-page--terms .gw-terms-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+
+  /* Icono de card: mismo tamaño que los iconos de card del sistema
+     (1.125rem); el glifo usa el color de acento de marca existente. */
+  .legal-page--terms .gw-terms-offense-icon {
+    display: block;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-bottom: 0.375rem;
+    background: no-repeat center / contain;
+  }
+
+  .legal-page--terms .gw-icon-mark_email_unread {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='14' rx='1'/%3E%3Cpath d='m3 7 9 6 9-6'/%3E%3Ccircle cx='18' cy='5' r='3' fill='%23ffffff'/%3E%3C/svg%3E");
+  }
+
+  .legal-page--terms .gw-icon-bug_report {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 8h8v9a4 4 0 0 1-8 0zM9 4l3 4 3-4M4 10h4m8 0h4M4 15h4m8 0h4'/%3E%3C/svg%3E");
+  }
+
+  .legal-page--terms .gw-icon-copyright {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M15 9a4 4 0 1 0 0 6'/%3E%3C/svg%3E");
+  }
+
+  .legal-page--terms .gw-icon-person_cancel {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='10' cy='8' r='4'/%3E%3Cpath d='M3 21a7 7 0 0 1 14 0m1-9 5 5m0-5-5 5'/%3E%3C/svg%3E");
+  }
+
+  .legal-page--terms .gw-icon-fingerprint {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 11a2 2 0 0 0-2 2c0 3-.5 5-1.5 7M14 13c0 4-.5 6-1.5 8M6 13a6 6 0 0 1 12 0c0 4-.6 7-1.5 9M4 13a8 8 0 0 1 16 0'/%3E%3C/svg%3E");
+  }
+
+  .legal-page--terms .gw-icon-device_reset {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 12a9 9 0 1 0 2.6-6.4L3 8'/%3E%3Cpath d='M3 3v5h5m4-1v5l3 2'/%3E%3C/svg%3E");
+  }
+
+  /* Parrilla de cards en escritorio: varias columnas desde 768px,
+     igual que las cards en fila de Privacidad (mismo breakpoint). */
+  @media (min-width: 768px) {
+    .legal-page--terms #sec-08 .gw-terms-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .legal-page--terms #sec-11 .gw-terms-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

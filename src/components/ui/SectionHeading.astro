@@ -1,0 +1,47 @@
+---
+/**
+ * RGW-100 — SectionHeading global reutilizable.
+ *
+ * Encabezado de sección con la estructura visual de Stitch representada
+ * solo con tokens existentes:
+ * - eyebrow → `text-label-bold` (14px/700, tracking incluido) + `uppercase`,
+ *   color `text-brand-secondary`;
+ * - título → `text-headline-md` (32px/600/40px), color `text-gw-text-primary`;
+ * - descripción → `text-body-md` (16px/400/24px), color `text-gw-text-secondary`;
+ * - spacing → `mb-4` (16px) y `mb-6` (24px) (`spacing.css`).
+ */
+interface Props {
+  /** Etiqueta superior opcional (eyebrow). */
+  eyebrow?: string;
+  /** Título de la sección. */
+  title: string;
+  /** Nivel del encabezado (`h2` por defecto). */
+  level?: 1 | 2 | 3;
+  /** Descripción opcional bajo el título. */
+  description?: string;
+  /** Alineación del bloque. */
+  align?: 'left' | 'center';
+}
+
+const {
+  eyebrow = undefined,
+  title,
+  level = 2,
+  description = undefined,
+  align = 'left',
+} = Astro.props;
+
+const Tag = `h${level}` as 'h1' | 'h2' | 'h3';
+const alignClass =
+  align === 'center' ? 'items-center text-center' : 'items-start text-left';
+---
+
+<div class={`flex flex-col ${alignClass}`}>
+  {eyebrow && (
+    <p class="text-label-bold text-brand-secondary mb-4 uppercase">{eyebrow}</p>
+  )}
+  <Tag class="text-gw-text-primary text-headline-md mb-6">{title}</Tag>
+  {description && (
+    <p class="text-gw-text-secondary text-body-md">{description}</p>
+  )}
+</div>

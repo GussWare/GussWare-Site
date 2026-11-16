@@ -1,0 +1,22 @@
+# Configuración del sitio estático (Hostinger Premium / LiteSpeed).
+#
+# El build de Astro genera páginas HTML reales en el sitio; este archivo
+# solo configura cómo las sirve el servidor web.
+
+# Página de error: el servidor web sirve el HTML generado por Astro
+# (`404.html` y `500.html`) manteniendo el status HTTP correcto.
+ErrorDocument 404 /404.html
+ErrorDocument 500 /500.html
+
+# Las rutas se generan con formato de directorio (`/servicios/web/`),
+# por lo que `index.html` es el documento por defecto de cada carpeta.
+DirectoryIndex index.html
+
+# URL canónica: las rutas del sitio se sirven con barra final. Cualquier
+# enlace sin barra (por ejemplo, los que configura WordPress en el menú
+# o en los servicios relacionados) redirige a su forma canónica, que es
+# la que usan el canonical, el hreflang y el sitemap.
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteCond %{REQUEST_URI} !/$
+RewriteRule ^(.*)$ /$1/ [R=301,L]

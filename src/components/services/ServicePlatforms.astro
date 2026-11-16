@@ -1,0 +1,129 @@
+---
+/**
+ * Bloque de plataformas del detalle de servicio (sección `plataformas`).
+ *
+ * Consume exclusivamente el grupo ACF `plataformas` del CPT `service`:
+ * encabezado (`platforms_eyebrow`, `platforms_title`,
+ * `platforms_description`), listado de plataformas (`platforms[]` con
+ * `name` y `example`) y bloque de consulta (`platforms_cta_title`,
+ * `platforms_cta_text`, `platforms_cta_label`, `platforms_cta_url`).
+ *
+ * La maquetación sigue la referencia de Stitch (`docs/services/html/`,
+ * bloque «EJEMPLOS DE INTEGRACIÓN»): encabezado a 3/12, retícula 3×2 de
+ * tarjetas tipográficas (sin logotipos) y bloque destacado de consulta.
+ * Solo tokens y patrones existentes del proyecto (`border-gw-border-subtle`,
+ * `bg-gw-surface-secondary`, escalas `headline-*`/`body-md`/`label-bold`).
+ *
+ * Diferencias documentadas respecto de la referencia: Stitch fija la
+ * plataforma a 24 px y la etiqueta a 11 px; el proyecto no tiene token
+ * equivalente, por lo que se usa `headline-md` y `label-bold`. El
+ * separador de Stitch es `#E2E4E8` y el bloque destacado `#F0F4F8`; se
+ * usan `border-gw-border-subtle` y `bg-gw-surface-secondary`.
+ *
+ * Las etiquetas de interfaz («EJEMPLO DE USO», «¿NO ENCUENTRAS TU
+ * PLATAFORMA?») se resuelven por locale, como el resto de etiquetas del
+ * template. El interruptor `platforms_enabled` lo aplica el componente
+ * contenedor: aquí solo se presenta lo recibido de WordPress.
+ */
+import Section from '../ui/Section.astro';
+import Icon from '../ui/Icon.astro';
+import { formatSectionEyebrow } from '../../lib/services/section-number';
+
+interface Platform {
+  name: string;
+  example?: string;
+}
+
+interface Props {
+  /** Número de sección (dinámico, según lo que se renderiza). */
+  number?: string | null;
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  platforms: Platform[];
+  ctaTitle?: string;
+  ctaText?: string;
+  ctaLabel?: string;
+  ctaUrl?: string;
+  locale: string;
+}
+
+const {
+  number = null,
+  eyebrow = undefined,
+  title = undefined,
+  description = undefined,
+  platforms = [],
+  ctaTitle = undefined,
+  ctaText = undefined,
+  ctaLabel = undefined,
+  ctaUrl = undefined,
+  locale,
+} = Astro.props;
+
+const isEn = locale === 'en';
+const exampleLabel = isEn ? 'EXAMPLE OF USE' : 'EJEMPLO DE USO';
+const ctaEyebrow = isEn ? "CAN'T FIND YOUR PLATFORM?" : '¿NO ENCUENTRAS TU PLATAFORMA?';
+
+const visiblePlatforms = platforms.filter(
+  (platform) => typeof platform.name === 'string' && platform.name.trim().length > 0,
+);
+const hasCta = Boolean(ctaTitle && ctaLabel && ctaUrl);
+---
+
+<Section id="plataformas" class="bg-gw-surface-primary border-b border-gw-border-subtle">
+  <div class="max-w-3xl mb-12">
+    <p class="text-label-bold uppercase text-brand-primary mb-3">
+      {formatSectionEyebrow(number, eyebrow)}
+    </p>
+    {title && (
+      <h2 class="text-gw-text-primary text-headline-lg font-bold leading-tight mb-5">
+        {title}
+      </h2>
+    )}
+    {description && (
+      <p class="text-gw-text-secondary text-body-md leading-relaxed">{description}</p>
+    )}
+  </div>
+
+  {visiblePlatforms.length > 0 && (
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {visiblePlatforms.map((platform) => (
+        <div class="bg-gw-surface-primary border border-gw-border-subtle p-6">
+          <h3 class="text-gw-text-primary text-headline-md font-bold tracking-tight mb-4">
+            {platform.name}
+          </h3>
+          {platform.example && (
+            <div class="border-t border-gw-border-subtle pt-4">
+              <span class="text-label-bold uppercase text-brand-primary block mb-1">
+                {exampleLabel}
+              </span>
+              <p class="text-gw-text-secondary text-body-md leading-snug">
+                {platform.example}
+              </p>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  )}
+
+  {hasCta && (
+    <div class="bg-gw-surface-secondary border border-gw-border-subtle mt-12 p-8 md:p-10">
+      <p class="text-label-bold uppercase text-brand-primary mb-2">{ctaEyebrow}</p>
+      <h3 class="text-gw-text-primary text-headline-md font-bold mb-3">{ctaTitle}</h3>
+      {ctaText && (
+        <p class="text-gw-text-secondary text-body-md leading-relaxed mb-6 max-w-3xl">
+          {ctaText}
+        </p>
+      )}
+      <a
+        href={ctaUrl}
+        class="text-label-bold text-brand-primary hover:text-brand-accent inline-flex items-center gap-2 transition-colors"
+      >
+        <span>{ctaLabel}</span>
+        <Icon name="arrow-right" size={4} />
+      </a>
+    </div>
+  )}
+</Section>
