@@ -42,7 +42,7 @@ jobs:
       POSTMAN_APP_USERNAME: ${{ secrets.POSTMAN_APP_USERNAME }}
       POSTMAN_APP_PASSWORD: ${{ secrets.POSTMAN_APP_PASSWORD }}
       # El build debe fallar si WordPress no entrega el contenido.
-      WP_BUILD_STRICT: 'true'
+      WP_BUILD_STRICT: "true"
 
     steps:
       - name: Checkout
@@ -51,7 +51,7 @@ jobs:
       - name: Node
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: "22"
           cache: npm
 
       - name: Instalar dependencias
