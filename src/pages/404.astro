@@ -15,10 +15,13 @@
 
 import Layout from '../layouts/Layout.astro';
 import Button from '../components/ui/Button.astro';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import { routes } from '../lib/routes';
 
-// Página estática (pre-renderizada): en un sitio estático el servidor
-// web sirve `404.html` ante una URL inexistente, sin render en runtime.
+// RGW-362 — La página 404 se emite como `404.html` y no tiene versión en
+// inglés. El selector de idioma apunta al archivo real en español y, en
+// inglés, al fallback definido (inicio en inglés) para no generar
+// destinos inexistentes.
 export const prerender = true;
 
 Astro.response.status = 404;
@@ -27,6 +30,12 @@ Astro.response.status = 404;
 <Layout
   title="404 — Página no encontrada | GussWare"
   description="La página que buscas no existe o ya no está disponible."
+  lang="es"
+  canonical="/404.html"
+  localeUrls={{
+    es: '/404.html',
+    en: getRelativeLocaleUrl('en', '/'),
+  }}
 >
   <div class="bg-gw-surface-primary flex w-full flex-col items-center justify-center px-4 md:px-6 py-[var(--section-padding-mobile)] md:py-[var(--section-padding-desktop)]">
     <div class="mx-auto flex w-full max-w-2xl flex-col items-center text-center">
