@@ -1,0 +1,233 @@
+{
+ "reload": [
+  {
+   "url": "https://gussware.dev/",
+   "status": 200,
+   "mainBefore": 10166,
+   "mainAfter": 10166,
+   "stable": true
+  },
+  {
+   "url": "https://gussware.dev/en/",
+   "status": 200,
+   "mainBefore": 9590,
+   "mainAfter": 9590,
+   "stable": true
+  },
+  {
+   "url": "https://gussware.dev/contact/",
+   "status": 200,
+   "mainBefore": 2509,
+   "mainAfter": 2509,
+   "stable": true
+  },
+  {
+   "url": "https://gussware.dev/contacto/",
+   "status": 200,
+   "mainBefore": 2831,
+   "mainAfter": 2831,
+   "stable": true
+  },
+  {
+   "url": "https://gussware.dev/en/contact/",
+   "status": 200,
+   "mainBefore": 2815,
+   "mainAfter": 2815,
+   "stable": true
+  },
+  {
+   "url": "https://gussware.dev/servicios/",
+   "status": 200,
+   "mainBefore": 1797,
+   "mainAfter": 1797,
+   "stable": true
+  },
+  {
+   "url": "https://gussware.dev/en/servicios/",
+   "status": 200,
+   "mainBefore": 1675,
+   "mainAfter": 1675,
+   "stable": true
+  },
+  {
+   "url": "https://gussware.dev/politica-de-privacidad/",
+   "status": 200,
+   "mainBefore": 6623,
+   "mainAfter": 6623,
+   "stable": true
+  },
+  {
+   "url": "https://gussware.dev/terminos-y-condiciones/",
+   "status": 200,
+   "mainBefore": 11037,
+   "mainAfter": 11037,
+   "stable": true
+  },
+  {
+   "url": "https://gussware.dev/en/privacy-policy/",
+   "status": 200,
+   "mainBefore": 6088,
+   "mainAfter": 6088,
+   "stable": true
+  }
+ ],
+ "history": {
+  "afterAnchor": "https://gussware.dev/#servicios",
+  "backUrl": "https://gussware.dev/#servicios",
+  "fwdUrl": "https://gussware.dev/servicios/"
+ },
+ "fragment": {
+  "hash": "#preguntas",
+  "scrollY": 5304,
+  "targetExists": true,
+  "targetTop": 97
+ },
+ "queries": [
+  {
+   "url": "https://gussware.dev/servicios/?page=2",
+   "status": 200,
+   "finalUrl": "https://gussware.dev/servicios/?page=2",
+   "mainLen": 1797,
+   "h1": ""
+  },
+  {
+   "url": "https://gussware.dev/en/servicios/?page=2",
+   "status": 200,
+   "finalUrl": "https://gussware.dev/en/servicios/?page=2",
+   "mainLen": 1675,
+   "h1": ""
+  },
+  {
+   "url": "https://gussware.dev/servicios/?search=dev",
+   "status": 200,
+   "finalUrl": "https://gussware.dev/servicios/?search=dev",
+   "mainLen": 1797,
+   "h1": ""
+  },
+  {
+   "url": "https://gussware.dev/blog/?page=2",
+   "status": 404,
+   "finalUrl": "https://gussware.dev/blog/?page=2",
+   "mainLen": 122,
+   "h1": "404"
+  },
+  {
+   "url": "https://gussware.dev/proyectos/?page=2",
+   "status": 404,
+   "finalUrl": "https://gussware.dev/proyectos/?page=2",
+   "mainLen": 122,
+   "h1": "404"
+  },
+  {
+   "url": "https://gussware.dev/?utm_source=test",
+   "status": 200,
+   "finalUrl": "https://gussware.dev/?utm_source=test",
+   "mainLen": 10166,
+   "h1": "Construye Mejor Tecnología con una Comunidad Dedicada"
+  },
+  {
+   "url": "https://gussware.dev/en/?utm_source=test",
+   "status": 200,
+   "finalUrl": "https://gussware.dev/en/?utm_source=test",
+   "mainLen": 9590,
+   "h1": "Build Better Technology with a Dedicated Community"
+  }
+ ],
+ "direct": [
+  {
+   "url": "https://gussware.dev/",
+   "status": 200,
+   "finalUrl": "https://gussware.dev/"
+  },
+  {
+   "url": "https://gussware.dev/en/",
+   "status": 200,
+   "finalUrl": "https://gussware.dev/en/"
+  },
+  {
+   "url": "https://gussware.dev/contact/",
+   "status": 200,
+   "finalUrl": "https://gussware.dev/contact/"
+  },
+  {
+   "url": "https://gussware.dev/contacto/",
+   "status": 200,
+   "finalUrl": "https://gussware.dev/contacto/"
+  },
+  {
+   "url": "https://gussware.dev/en/contact/",
+   "status": 200,
+   "finalUrl": "https://gussware.dev/en/contact/"
+  },
+  {
+   "url": "https://gussware.dev/servicios/",
+   "status": 200,
+   "finalUrl": "https://gussware.dev/servicios/"
+  },
+  {
+   "url": "https://gussware.dev/en/servicios/",
+   "status": 200,
+   "finalUrl": "https://gussware.dev/en/servicios/"
+  },
+  {
+   "url": "https://gussware.dev/politica-de-privacidad/",
+   "status": 200,
+   "finalUrl": "https://gussware.dev/politica-de-privacidad/"
+  },
+  {
+   "url": "https://gussware.dev/terminos-y-condiciones/",
+   "status": 200,
+   "finalUrl": "https://gussware.dev/terminos-y-condiciones/"
+  },
+  {
+   "url": "https://gussware.dev/en/privacy-policy/",
+   "status": 200,
+   "finalUrl": "https://gussware.dev/en/privacy-policy/"
+  },
+  {
+   "url": "https://gussware.dev/blog/",
+   "status": 404,
+   "finalUrl": "https://gussware.dev/blog/"
+  },
+  {
+   "url": "https://gussware.dev/en/blog/",
+   "status": 404,
+   "finalUrl": "https://gussware.dev/en/blog/"
+  },
+  {
+   "url": "https://gussware.dev/proyectos/",
+   "status": 404,
+   "finalUrl": "https://gussware.dev/proyectos/"
+  },
+  {
+   "url": "https://gussware.dev/en/proyectos/",
+   "status": 404,
+   "finalUrl": "https://gussware.dev/en/proyectos/"
+  },
+  {
+   "url": "https://gussware.dev/navfixturetest/",
+   "status": 200,
+   "finalUrl": "https://gussware.dev/navfixturetest/"
+  },
+  {
+   "url": "https://gussware.dev/404.html",
+   "status": 200,
+   "finalUrl": "https://gussware.dev/404.html"
+  },
+  {
+   "url": "https://gussware.dev/500.html",
+   "status": 200,
+   "finalUrl": "https://gussware.dev/500.html"
+  },
+  {
+   "url": "https://gussware.dev/en/term-of-service/",
+   "status": 404,
+   "finalUrl": "https://gussware.dev/en/term-of-service/"
+  },
+  {
+   "url": "https://gussware.dev/en/terminos-y-condiciones/",
+   "status": 404,
+   "finalUrl": "https://gussware.dev/en/terminos-y-condiciones/"
+  }
+ ]
+}
