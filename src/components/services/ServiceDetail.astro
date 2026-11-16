@@ -30,6 +30,12 @@ import ServicePlatforms from './ServicePlatforms.astro';
 import ServiceRelated from './ServiceRelated.astro';
 import { stripHtml } from '../../lib/wordpress/text';
 import { formatSectionEyebrow } from '../../lib/services/section-number';
+// RGW-357 — Los CTA de WordPress guardan la ruta del destino en un
+// idioma (a veces en español) y las secciones se identifican con el
+// `id` de cada idioma: aquí se resuelven ambos en el idioma de la
+// página.
+import { localizeCtaUrl } from '../../lib/cta';
+import { serviceAnchors } from '../../lib/services/anchors';
 import type { WpService } from '../../lib/wordpress/types';
 
 interface Props {
@@ -44,6 +50,9 @@ const { service, locale, indexUrl, indexLabel } = Astro.props;
 
 const acf = service.acf;
 const pad = (n: number): string => String(n).padStart(2, '0');
+
+// RGW-357 — Identificadores de las secciones en el idioma de la página.
+const anchors = serviceAnchors(locale);
 
 const capabilitiesLabel = locale === 'en' ? 'WHAT YOU GET' : 'QUÉ RECIBES';
 const benefitLabel = locale === 'en' ? 'BENEFIT' : 'BENEFICIO';
@@ -126,7 +135,7 @@ const heroPrimaryCta =
   hasText(acf.hero.hero_cta_label) && hasText(acf.hero.hero_cta_url)
     ? {
         label: acf.hero.hero_cta_label,
-        href: acf.hero.hero_cta_url,
+        href: localizeCtaUrl(acf.hero.hero_cta_url, locale),
       }
     : null;
 
@@ -134,7 +143,7 @@ const heroSecondaryCta =
   hasText(acf.hero.hero_secondary_label) && hasText(acf.hero.hero_secondary_url)
     ? {
         label: acf.hero.hero_secondary_label,
-        href: acf.hero.hero_secondary_url,
+        href: localizeCtaUrl(acf.hero.hero_secondary_url, locale),
       }
     : null;
 
@@ -249,7 +258,7 @@ const closingNumber = hasClosing ? nextSectionNumber() : null;
 {/* S03 · Soluciones: tarjetas con número, capacidades y beneficio. */}
 {hasSolutions && (
   <Section
-    id="soluciones"
+    id={anchors.solutions}
     class="bg-gw-surface-secondary border-b border-gw-border-subtle"
   >
     <div class="max-w-3xl mb-12">
@@ -322,7 +331,8 @@ const closingNumber = hasClosing ? nextSectionNumber() : null;
             {hasText(solution.link?.text) && (
               <div class="border-t border-gw-border-subtle pt-6 mt-6">
                 <a
-                  href={solution.link?.url || undefined}
+                  href={localizeCtaUrl(solution.link?.url ?? '', locale) ||
+                    undefined}
                   class="inline-flex items-center gap-2 text-label-bold uppercase text-brand-primary transition-colors hover:text-brand-secondary"
                 >
                   <span>{solution.link?.text}</span>
@@ -348,7 +358,8 @@ const closingNumber = hasClosing ? nextSectionNumber() : null;
     ctaTitle={acf.plataformas.platforms_cta_title}
     ctaText={acf.plataformas.platforms_cta_text}
     ctaLabel={acf.plataformas.platforms_cta_label}
-    ctaUrl={acf.plataformas.platforms_cta_url}
+    ctaUrl={localizeCtaUrl(acf.plataformas.platforms_cta_url ?? '', locale)}
+    id={anchors.platforms}
     locale={locale}
   />
 )}
@@ -356,7 +367,7 @@ const closingNumber = hasClosing ? nextSectionNumber() : null;
 {/* S04 · Cómo trabajamos: tarjetas numeradas en retícula. */}
 {hasApproach && (
   <ServiceApproach
-    id="metodologia"
+    id={anchors.methodology}
     number={approachNumber ?? undefined}
     eyebrow={acf.proceso.approach_eyebrow}
     title={acf.proceso.approach_title}
@@ -368,7 +379,7 @@ const closingNumber = hasClosing ? nextSectionNumber() : null;
 {/* S05 · Ficha técnica: encabezado 5/7 y grupos en 3 columnas. */}
 {hasTech && (
   <Section
-    id="tecnologias"
+    id={anchors.technologies}
     class="bg-gw-surface-primary border-b border-gw-border-subtle"
   >
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start mb-12">
@@ -415,7 +426,7 @@ const closingNumber = hasClosing ? nextSectionNumber() : null;
 {/* S06 · FAQ del servicio (contenido dinámico). */}
 {hasFaq && (
   <ServiceFaq
-    id="faq"
+    id={anchors.faq}
     number={faqNumber ?? undefined}
     eyebrow={acf.faq.faq_eyebrow}
     items={faqItems}
@@ -425,7 +436,7 @@ const closingNumber = hasClosing ? nextSectionNumber() : null;
 
 {/* S07 · Cierre sobre superficie oscura. */}
 {hasClosing && (
-  <Section id="contacto" class="bg-supporting-blue-dark">
+  <Section id={anchors.contact} class="bg-supporting-blue-dark">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
       <div class="lg:col-span-8">
         <p class="text-label-bold uppercase text-brand-accent mb-4">
@@ -444,12 +455,14 @@ const closingNumber = hasClosing ? nextSectionNumber() : null;
         {(closingPrimary || closingSecondary) && (
           <div class="flex flex-wrap items-center gap-6">
             {closingPrimary && (
-              <Button href={cta.button_url}>{cta.button_text}</Button>
+              <Button href={localizeCtaUrl(cta.button_url, locale)}>
+                {cta.button_text}
+              </Button>
             )}
             {closingSecondary && (
               <Button
                 variant="outline-light"
-                href={cta.secondary_url}
+                href={localizeCtaUrl(cta.secondary_url, locale)}
                 class="gap-3"
               >
                 {cta.secondary_text}
@@ -469,6 +482,7 @@ const closingNumber = hasClosing ? nextSectionNumber() : null;
     eyebrow={acf.relacionados.related_eyebrow}
     title={acf.relacionados.related_title}
     items={visibleRelated}
+    id={anchors.related}
     locale={locale}
   />
 )}

@@ -121,7 +121,9 @@ describe('Detalle de servicio — sección `relacionados`', () => {
 
   test('la versión en inglés también renderiza la sección', async () => {
     const en = await html(CASES.enConRelacionados);
-    assert.ok(section(en, 'relacionados'), 'La sección #relacionados no aparece en EN');
+    // RGW-357 — Las anclas de las secciones usan el identificador del
+    // idioma de la página: en inglés no se conserva `relacionados`.
+    assert.ok(section(en, 'related'), 'La sección #related no aparece en EN');
   });
 });
 
@@ -146,15 +148,18 @@ describe('Detalle de servicio — interruptor `platforms_enabled`', () => {
 
   test('la traducción EN con el interruptor activo renderiza la sección', async () => {
     const page = await html(CASES.enConPlataformas);
+    // RGW-357 — La ancla de la sección usa el identificador del idioma
+    // de la página (`platforms` en inglés).
     assert.ok(
-      section(page, 'plataformas'),
-      'No se encontró la sección #plataformas en la traducción EN',
+      section(page, 'platforms'),
+      'No se encontró la sección #platforms en la traducción EN',
     );
   });
 
   test('la traducción EN muestra las plataformas recibidas de WordPress', async () => {
     const page = await html(CASES.enConPlataformas);
-    const block = section(page, 'plataformas');
+    // RGW-357 — En inglés la sección se identifica como `platforms`.
+    const block = section(page, 'platforms');
     for (const name of ['SAP', 'Zoho', 'Salesforce']) {
       assert.ok(
         block.includes(name),
@@ -165,7 +170,7 @@ describe('Detalle de servicio — interruptor `platforms_enabled`', () => {
 
   test('la traducción EN usa el contenido de la traducción, no el de español', async () => {
     const page = await html(CASES.enConPlataformas);
-    const block = section(page, 'plataformas');
+    const block = section(page, 'platforms');
     assert.ok(
       block.includes('Which platforms can we connect?'),
       'Falta el título de plataformas de la traducción EN',

@@ -45,6 +45,11 @@ interface Props {
   ctaText?: string;
   ctaLabel?: string;
   ctaUrl?: string;
+  /**
+   * RGW-357 — Identificador de la sección para anclas: lo resuelve la
+   * plantilla según el idioma de la página.
+   */
+  id?: string;
   locale: string;
 }
 
@@ -58,6 +63,7 @@ const {
   ctaText = undefined,
   ctaLabel = undefined,
   ctaUrl = undefined,
+  id = undefined,
   locale,
 } = Astro.props;
 
@@ -71,7 +77,7 @@ const visiblePlatforms = platforms.filter(
 const hasCta = Boolean(ctaTitle && ctaLabel && ctaUrl);
 ---
 
-<Section id="plataformas" class="bg-gw-surface-primary border-b border-gw-border-subtle">
+<Section id={id} class="bg-gw-surface-primary border-b border-gw-border-subtle">
   <div class="max-w-3xl mb-12">
     <p class="text-label-bold uppercase text-brand-primary mb-3">
       {formatSectionEyebrow(number, eyebrow)}
