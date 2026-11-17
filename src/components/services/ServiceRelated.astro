@@ -35,6 +35,11 @@ interface Props {
   eyebrow?: string;
   title?: string;
   items: RelatedItem[];
+  /**
+   * RGW-357 — Identificador de la sección para anclas: lo resuelve la
+   * plantilla según el idioma de la página.
+   */
+  id?: string;
   locale: string;
 }
 
@@ -42,6 +47,7 @@ const {
   eyebrow = undefined,
   title = undefined,
   items = [],
+  id = undefined,
   locale,
 } = Astro.props;
 
@@ -56,7 +62,7 @@ const visibleItems = items.filter(
 );
 ---
 
-<Section id="relacionados" class="bg-gw-surface-primary border-b border-gw-border-subtle">
+<Section id={id} class="bg-gw-surface-primary border-b border-gw-border-subtle">
   <div class="mb-12">
     {eyebrow && (
       <p class="text-label-bold uppercase text-brand-primary mb-3">{eyebrow}</p>

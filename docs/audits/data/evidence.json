@@ -1,0 +1,287 @@
+{
+ "contactMain": {
+  "mainHtml": "<section id=\"contact\" class=\"py-[var(--section-padding-mobile)] md:py-[var(--section-padding-desktop)] bg-gw-surface-auxiliary\"><div class=\"mx-auto w-full max-w-[var(--container-max)] px-4 md:px-6 \"><div class=\"flex flex-col gap-16 lg:flex-row lg:gap-24\"><div class=\"flex flex-col justify-center lg:w-1/2\"><div class=\"border-gw-border-subtle mt-8 border-t pt-8\"><div class=\"flex gap-4\"><a href=\"https://www.facebook.com/enduser87\" target=\"_blank\" class=\"bg-brand-primary text-brand-surface flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 hover:bg-supporting-blue-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-supporting-blue-dark\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"size-4 \" aria-hidden=\"true\"></svg></a></div></div></div><div class=\"bg-gw-surface-primary rounded-none p-8 md:p-12 lg:w-1/2\"><form id=\"contact-form\" novalidate=\"\" class=\"flex flex-col gap-8\" data-submit-url=\"https://cms.gussware.dev/wp-json/pavelsilinskii-cf/v1/forms/1/submit\"><div class=\"flex flex-col gap-2 \"><label for=\"name\" class=\"text-label-bold text-gw-text-primar",
+  "leftColumnText": "",
+  "leftColumnChildren": 1
+ },
+ "enServiceCtas": [
+  {
+   "href": "/en/servicios/",
+   "text": "Services"
+  },
+  {
+   "href": "/contact",
+   "text": "Let's talk about your idea"
+  },
+  {
+   "href": "#soluciones",
+   "text": "View solutions"
+  },
+  {
+   "href": "/contact",
+   "text": "Learn more"
+  },
+  {
+   "href": "/contact",
+   "text": "Learn more"
+  },
+  {
+   "href": "/contact",
+   "text": "Tell us about your project"
+  },
+  {
+   "href": "/servicios",
+   "text": "See all services"
+  },
+  {
+   "href": "/en/servicios/custom-software-development",
+   "text": "View service"
+  },
+  {
+   "href": "/en/servicios/website-and-online-store-design",
+   "text": "View service"
+  },
+  {
+   "href": "/en/servicios/devops-technical-support",
+   "text": "View service"
+  }
+ ],
+ "esServiceCtas": [
+  {
+   "href": "/servicios/",
+   "text": "Servicios"
+  },
+  {
+   "href": "/contacto",
+   "text": "Hablemos de tu idea"
+  },
+  {
+   "href": "#soluciones",
+   "text": "Ver soluciones"
+  },
+  {
+   "href": "/contacto",
+   "text": "Conoce más"
+  },
+  {
+   "href": "/contacto",
+   "text": "Conoce más"
+  },
+  {
+   "href": "/contact",
+   "text": "Cuéntanos tu proyecto"
+  },
+  {
+   "href": "/servicios",
+   "text": "Ver todos los servicios"
+  },
+  {
+   "href": "/servicios/desarrollo-a-medida",
+   "text": "Ver servicio"
+  },
+  {
+   "href": "/servicios/diseno-sitios-web-tiendas-en-linea",
+   "text": "Ver servicio"
+  },
+  {
+   "href": "/servicios/devops-y-soporte-tecnico",
+   "text": "Ver servicio"
+  }
+ ],
+ "enFooterLinks": [
+  {
+   "href": "/",
+   "text": ""
+  },
+  {
+   "href": "/contact",
+   "text": "Start a Conversation"
+  },
+  {
+   "href": "/en/#services",
+   "text": "Services"
+  },
+  {
+   "href": "/en/#our-process",
+   "text": "Our Process"
+  },
+  {
+   "href": "/en/#our-model",
+   "text": "Our Model"
+  },
+  {
+   "href": "/en/#questions",
+   "text": "Faq"
+  },
+  {
+   "href": "/en/servicios/website-and-online-store-design/",
+   "text": "Web Development"
+  },
+  {
+   "href": "/en/servicios/mobile-applications/",
+   "text": "Mobile Development"
+  },
+  {
+   "href": "/en/servicios/custom-software-development/",
+   "text": "Custom Software"
+  },
+  {
+   "href": "/en/servicios/api-and-external-service-integration/",
+   "text": "APIs & Integrations"
+  },
+  {
+   "href": "/en/servicios/devops-technical-support/",
+   "text": "DevOps"
+  },
+  {
+   "href": "/en/servicios/technical-consulting/",
+   "text": "Consulting"
+  },
+  {
+   "href": "/en/contact",
+   "text": "Start a Conversation"
+  },
+  {
+   "href": "/en/#services",
+   "text": "Services"
+  },
+  {
+   "href": "/en/#our-process",
+   "text": "Our Process"
+  },
+  {
+   "href": "/en/#our-model",
+   "text": "Our Model"
+  },
+  {
+   "href": "/en/#questions",
+   "text": "Faq"
+  },
+  {
+   "href": "/en/servicios/website-and-online-store-design/",
+   "text": "Web Development"
+  },
+  {
+   "href": "/en/servicios/mobile-applications/",
+   "text": "Mobile Development"
+  },
+  {
+   "href": "/en/servicios/custom-software-development/",
+   "text": "Custom Software"
+  },
+  {
+   "href": "/en/servicios/api-and-external-service-integration/",
+   "text": "APIs & Integrations"
+  },
+  {
+   "href": "/en/servicios/devops-technical-support/",
+   "text": "DevOps"
+  },
+  {
+   "href": "/en/servicios/technical-consulting/",
+   "text": "Consulting"
+  },
+  {
+   "href": "/en/contact",
+   "text": "Start a Conversation"
+  },
+  {
+   "href": "/en/privacy-policy",
+   "text": "Privacy Policy"
+  },
+  {
+   "href": "/en/term-of-service",
+   "text": "Term of Service"
+  }
+ ],
+ "terminosLangSelector": [
+  {
+   "href": "/terminos-y-condiciones/",
+   "pressed": "true",
+   "text": "ES"
+  },
+  {
+   "href": "/en/terminos-y-condiciones/",
+   "pressed": "false",
+   "text": "EN"
+  },
+  {
+   "href": "/terminos-y-condiciones/",
+   "pressed": "true",
+   "text": "ES"
+  },
+  {
+   "href": "/en/terminos-y-condiciones/",
+   "pressed": "false",
+   "text": "EN"
+  }
+ ],
+ "navFixture": {
+  "title": "Fixture",
+  "mainText": "N1N2N3N4Hoja",
+  "canonical": null
+ },
+ "privacyEN": [
+  "[Name]",
+  "[Email address]",
+  "[Phone number]"
+ ],
+ "privacyES": [
+  "privacidad@gmail.com",
+  "818776482"
+ ],
+ "mobileCtaEN": {
+  "href": "/contact",
+  "text": "Start a Conversation"
+ },
+ "headerCtaEN": [
+  {
+   "tag": "A",
+   "href": "/contacto",
+   "text": "Iniciar Conversación"
+  }
+ ],
+ "footerEN": {
+  "text": "Tecnología construida por personas. Una comunidad colaborativa de profesionales independientes que ofrece soluciones digitales de alto impacto con precisión industrial y un enfoque humano y cercano.Start a ConversationExploreServicesOur ProcessOur ModelFaqServicesWeb DevelopmentMobile DevelopmentCustom SoftwareAPIs & IntegrationsDevOpsConsultingContactStart a ConversationExploreServicesOur Process"
+ },
+ "route500": {
+  "url": "https://gussware.dev/500/",
+  "title": "404 — Página no encontrada | GussWare"
+ },
+ "notFoundLang": [
+  {
+   "href": "/404/",
+   "text": "ES"
+  },
+  {
+   "href": "/en/404/",
+   "text": "EN"
+  },
+  {
+   "href": "/404/",
+   "text": "ES"
+  },
+  {
+   "href": "/en/404/",
+   "text": "EN"
+  }
+ ],
+ "homeSectionOrder": {
+  "/": [
+   "py-[var(--section-padding-mobi",
+   "servicios",
+   "como-trabajamos",
+   "nuestro-modelo",
+   "preguntas",
+   "py-[var(--section-padding-mobi"
+  ],
+  "/en/": [
+   "py-[var(--section-padding-mobi",
+   "services",
+   "our-model",
+   "our-process",
+   "questions",
+   "py-[var(--section-padding-mobi"
+  ]
+ }
+}
