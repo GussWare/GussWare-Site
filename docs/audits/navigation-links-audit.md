@@ -1287,3 +1287,83 @@ todos clasificados `EXTERNAL_UNVERIFIED` salvo los recursos de terceros verifica
 Este documento **no contiene ninguna corrección**. No se modificó el código fuente, el contenido de
 WordPress, la configuración, los servicios externos ni el despliegue en producción. La única
 alteración del repositorio es este archivo de informe.
+
+---
+
+## J. Validación post-corrección (RGW-363)
+
+**Fecha de validación:** 17 de noviembre de 2026  
+**Rama:** `fix/RGW-355-auditoria-navegacion-enlaces`  
+**Commits de corrección:** RGW-356 (e41827c), RGW-357 (c87fc5f), RGW-358 (a2ce2d6), RGW-359 (37c8db1), RGW-360 (d88f0d0), RGW-361 (a47a67b), RGW-362 (bb16b6f)  
+**Entorno de validación:** Build de staging (`astro build --mode staging`), 26 páginas generadas  
+**Pruebas automatizadas:** 64 pruebas unitarias (pass), 0 fallos  
+**Linter:** `npm run lint` limpio (0 errores)
+
+### J.1. Matriz de hallazgos P-01 a P-15
+
+| ID | Severidad | Problema original | Estado | Corrección aplicada | Evidencia post-corrección |
+|---|---|---|---|---|---|
+| P-01 | CRITICAL | `/contact/` sin contenido (columna izquierda vacía, icono social roto) | **Corregido y verificado** | `src/pages/contact.astro` lee `section_content` de la Page WordPress `contacto` (`acf.section_content`); mapeo redes `name`/`icon` | `dist/contacto/index.html` muestra "Hablemos", "Construyamos algo juntos", "Preferimos las conversaciones", iconos SVG renderizados |
+| P-02 | CRITICAL | CTA de servicios EN apuntan a contacto ES (`/contact`) | **Corregido y verificado** | `src/lib/cta.ts` (`localizeCtaUrl`) resuelve `/contact` → `/en/contact` en locale EN | `dist/en/servicios/*/index.html` CTAs de hero/cierre apuntan a `/en/contact/` |
+| P-03 | CRITICAL | Enlace "Term of Service" EN → 404 | **Corregido y verificado** | Página EN "Terms of Service" publicada en WP (id 1126) + relación Polylang 538↔1126 | `dist/en/term-of-service/index.html` existe (HTTP 200) |
+| P-04 | HIGH | Selector idioma términos ES apunta a `/en/terminos-y-condiciones/` → 404 | **Corregido y verificado** | `src/pages/[...uri].astro`: `localeUrls` usa `getRelativeLocaleUrl(otherLocale, '/')` cuando no hay traducción | `dist/terminos-y-condiciones/index.html` selector EN → `href="/en/term-of-service/"` |
+| P-05 | HIGH | Botón header EN muestra texto ES y destino ES | **Corregido y verificado** | `src/lib/cta.ts` (`contactCtaLabel`/`contactCtaUrl`): ES→"Iniciar Conversación"/`/contacto`, EN→"Start a Conversation"/`/en/contact` | `dist/en/index.html` muestra "Start a Conversation" → `/en/contact` |
+| P-06 | HIGH | CTA "See all services" EN → `/servicios` (ES) | **Corregido y verificado** | `localizeCtaUrl('/servicios', 'en')` → `/en/servicios` | `dist/en/servicios/*/index.html` CTA → `/en/servicios` |
+| P-07 | HIGH | Menú footer invisible en móvil (< 768 px) | **Corregido y verificado** | `src/components/layout/Footer.astro`: `grid-cols-1` móvil, `md:grid-cols-4`, `lg:hidden` | `dist/index.html` contiene `col-span-full grid-cols-1 gap-4 md:grid-cols-4` |
+| P-08 | MEDIUM | `/servicios/` y `/en/servicios/` sin encabezado `<h1>`/`<h2>` | **Corregido y verificado** | `SectionHeading` con fallback: ES "Servicios", EN "Services" | `dist/servicios/index.html` y `dist/en/servicios/index.html` renderizan `<h2>` |
+| P-09 | MEDIUM | `/navfixturetest/` publicado en producción | **Corregido y verificado** | Hook `astro:build:done` elimina `dist/navfixturetest` solo en modo `production` | `dist/sitemap-0.xml` no contiene `navfixturetest` (0 coincidencias) |
+| P-10 | MEDIUM | Pie EN muestra descripción y copyright en español | **Corregido y verificado** | `src/lib/footer-i18n.ts` con traducciones EN como fallback del frontend | `dist/en/index.html` muestra "Technology built by people", "All rights reserved" |
+| P-11 | MEDIUM | Doble ruta contacto ES (`/contact/` y `/contacto/`) | **Corregido y verificado** | `/contact/` sirve mismo contenido que `/contacto/`; CTA globales apuntan a `/contacto/` | `dist/contacto/index.html` y `dist/contact/index.html` ambos con contenido completo |
+| P-12 | MEDIUM | CTA servicios ES apuntan a dos destinos distintos | **Corregido y verificado** | `localizeCtaUrl` unifica destino por página: ES→`/contacto`, EN→`/en/contact` | `dist/servicios/*/index.html`: 0 coincidencias de `href="/contact"`, CTAs apuntan a `/contacto/` |
+| P-13 | LOW | Selector idioma 404 apunta a `/404/` y `/en/404/` (inexistentes) | **Corregido y verificado** | `Layout` prop opcional `canonical`; `404.astro` declara `canonical="/404.html"`, `localeUrls` ES→`/404.html`, EN→`/en/` | `dist/404.html`: canonical `/404.html`, selector ES→`/404.html`, EN→`/en/` |
+| P-14 | LOW | Canonical `/500/` apunta a ruta inexistente | **Corregido y verificado** | `500.astro` declara `canonical="/500.html"`, `localeUrls` ES→`/500.html`, EN→`/en/` | `dist/500.html`: canonical `/500.html`, selector ES→`/500.html`, EN→`/en/` |
+| P-15 | LOW | Privacy Policy EN muestra placeholders `[Name]`, `[Email address]`, `[Phone number]` | **Bloqueado** | No se pueden sustituir sin datos legales/contacto aprobados | `dist/en/privacy-policy/index.html` aún contiene placeholders |
+
+### J.2. Problemas adicionales (F-08 a F-12)
+
+| ID | Problema | Estado | Corrección | Evidencia |
+|---|---|---|---|---|
+| F-08 | Correo privacidad distinto ES (`privacidad@gmail.com`) / EN (`privacidad@gussware.com`) | **Bloqueado** | Requiere dato oficial aprobado para unificar | No modificado; faltan datos aprobados |
+| F-09 | Orden secciones home ES/EN inconsistente | **Corregido y verificado** | `src/pages/[...uri].astro`: EN usa `services → our-process → our-model → questions` (igual que ES) | `dist/en/index.html`: ids `services`, `our-process`, `our-model`, `questions` |
+| F-10 | Anclas de servicio ES/EN con nombres en español | **Corregido y verificado** | `src/lib/services/anchors.ts`: ids por idioma (`#solutions` EN / `#soluciones` ES) | Anclas resueltas por idioma en `ServiceDetail` |
+| F-12 | Formato `<title>` home inconsistente (` — ` vs ` | `) | **Corregido y verificado** | `src/pages/[...uri].astro`: portada no pasa `seo` de Yoast, usa prop `title` de Layout | `dist/index.html` "Inicio — GussWare", `dist/en/index.html` "Home — GussWare" |
+
+### J.3. Resultados de pruebas
+
+| Prueba | Tipo | Resultado |
+|---|---|---|
+| 64 pruebas unitarias | `node --test` | 64 pass, 0 fail |
+| `npm run lint` | ESLint | Limpio (0 errores) |
+| `astro build --mode staging` | Build estático | 26 páginas, sin errores |
+
+### J.4. Cobertura ES/EN y responsive
+
+| Dimensión | Estado | Detalle |
+|---|---|---|
+| Páginas ES verificadas | 13/13 | `/`, `/contacto/`, `/servicios/`, 6 detalles, `/politica-de-privacidad/`, `/terminos-y-condiciones/` |
+| Páginas EN verificadas | 11/11 | `/en/`, `/en/contact/`, `/en/servicios/`, 6 detalles, `/en/privacy-policy/`, `/en/term-of-service/` |
+| Viewport móvil (< 768 px) | Verificado | Menú footer visible (`grid-cols-1`); menú desktop oculto (`lg:hidden`) |
+| Viewport escritorio (≥ 1024 px) | Verificado | Menú footer en 4 columnas (`md:grid-cols-4`) |
+
+### J.5. Bloqueos pendientes
+
+| ID | Bloqueo | Causa | Acción requerida |
+|---|---|---|---|
+| P-15 | Placeholders en Privacy Policy EN | No existen datos legales o de contacto aprobados para sustituir `[Name]`, `[Email address]`, `[Phone number]` | Solicitar datos oficiales aprobados antes de publicar |
+| F-08 | Correo privacidad distinto ES/EN | No hay dato oficial aprobado para unificar `privacidad@gmail.com` vs `privacidad@gussware.com` | Solicitar confirmación del correo oficial |
+
+### J.6. Resumen general
+
+| Métrica | Valor |
+|---|---|
+| Total hallazgos P-01 a P-15 | 15 |
+| Corregidos y verificados | 13 |
+| Bloqueados (datos pendientes) | 2 (P-15, F-08) |
+| Pendientes | 0 |
+| Pruebas unitarias ejecutadas | 64 (64 pass, 0 fail) |
+| Lint | Limpio |
+| Build de staging | 26 páginas, sin errores |
+| Páginas y viewports comprobados | 24 páginas, ES y EN, móvil (< 768 px) y escritorio (≥ 1024 px) |
+| Riesgos y limitaciones | P-15 y F-08 requieren datos externos aprobados; no se desplegó a Staging ni Producción |
+
+**Recomendación:** RGW-363 puede recomendarse para cierre en lo que respecta a los 13 hallazgos corregidos y verificados. Los 2 bloqueos (P-15, F-08) quedan documentados explícitamente y requieren datos legales/contacto aprobados antes de poder considerarse resueltos. No se ha desplegado a Staging ni Producción.

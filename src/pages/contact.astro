@@ -8,13 +8,22 @@
  * desktop (`lg:flex-row`, `gap-16`/`lg:gap-24`, mitades `lg:w-1/2`).
  * El contenido específico (info RGW-032, formulario RGW-033) se incorpora
  * en sus historias correspondientes.
+ *
+ * RGW-356 — El contenido de la sección se obtiene de la Page de WordPress
+ * `contacto` (`acf.section_content`), no del endpoint `/gussware/v1/contact`
+ * (que devuelve `contact_information: null`). El mapeo de redes sociales
+ * usa `name`/`icon` (forma de la API) en lugar de `nombre`/`icono`.
+ *
+ * RGW-356/P-11 — `/contact/` y `/contacto/` sirven el mismo contenido en ES.
+ * Los CTA globales (header y pie) apuntan a `/contacto/` como ruta canónica
+ * (corregido en RGW-357).
  */
 
 import Layout from '../layouts/Layout.astro';
 import ContactSection from '../components/contact/ContactSection.astro';
 import ContactForm from '../components/contact/ContactForm.astro';
 import { getSocialMedia } from '../lib/wordpress/socialMedia';
-import { getContact } from '../lib/wordpress/contact';
+import { getPageBySlug } from '../lib/wordpress/pages';
 // RGW-271: configuración del formulario vía GET (Pavel Silinskii CF).
 import {
   CONTACT_FORM_ID,
@@ -22,15 +31,17 @@ import {
   getContactFormSubmitUrl,
 } from '../lib/contact/forms';
 
-const [socialMedia, contact, contactForm] = await Promise.all([
+const [socialMedia, contactForm, contactPage] = await Promise.all([
   getSocialMedia(),
-  getContact(Astro.currentLocale ?? undefined),
   getContactForm(),
+  getPageBySlug('contacto', Astro.currentLocale ?? 'es').catch(() => null),
 ]);
 
 const contactFormSubmitUrl = getContactFormSubmitUrl(
   contactForm.id !== 'fallback' ? contactForm.id : CONTACT_FORM_ID,
 );
+
+const sectionContent = contactPage?.acf?.section_content ?? null;
 ---
 
 <Layout
@@ -38,14 +49,14 @@ const contactFormSubmitUrl = getContactFormSubmitUrl(
   description="Contact GussWare — Start a conversation about your project."
 >
   <ContactSection
-    eyebrow={contact?.contenido_de_la_seccion?.eyebrow ?? undefined}
-    title={contact?.contenido_de_la_seccion?.titulo ?? undefined}
-    description={contact?.contenido_de_la_seccion?.descripcion ?? undefined}
-    socialText={contact?.contenido_de_la_seccion?.texto_de_redes_sociales ?? undefined}
+    eyebrow={sectionContent?.eyebrow ?? undefined}
+    title={sectionContent?.title ?? undefined}
+    description={sectionContent?.description ?? undefined}
+    socialText={sectionContent?.social_media_text ?? undefined}
     socialMedia={(socialMedia ?? []).map((social) => ({
-      name: social.nombre,
+      name: social.name,
       url: social.url,
-      icon: social.icono,
+      icon: social.icon,
     }))}
   >
     {/* RGW-271: campos dinámicos desde la API (mismo diseño). */}
