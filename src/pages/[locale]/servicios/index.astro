@@ -71,11 +71,13 @@ const localeUrls = {
       ]}
       class="mb-8"
     />
-    {header && (
+    {header ? (
       <SectionHeading
-        title={header.title}
-        description={header.description}
+        title={stripHtml(header.title)}
+        description={stripHtml(header.description)}
       />
+    ) : (
+      <SectionHeading title="Services" />
     )}
     {services.length > 0 && (
       <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 mt-12">
