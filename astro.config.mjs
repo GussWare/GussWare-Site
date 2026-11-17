@@ -1,6 +1,8 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import { loadEnv } from 'vite';
+import { existsSync, rmSync } from 'node:fs';
+import { join } from 'node:path';
 
 import tailwindcss from '@tailwindcss/vite';
 
@@ -296,6 +298,24 @@ function wordpressContentGuard() {
       'astro:build:start': async () => {
         verifySiteUrl();
         await verifyWordPressReady();
+      },
+      // RGW-361 — La página de fixture de pruebas (`src/pages/navfixturetest.astro`)
+      // se conserva en desarrollo y en entornos de prueba, pero no debe
+      // formar parte del despliegue público de producción. Como Astro
+      // siempre emite una página estática de `src/pages/`, se elimina el
+      // directorio generado tras el build cuando el modo es producción.
+      'astro:build:done': async ({ settings }) => {
+        if (resolveMode() === 'production') {
+          const outDir = settings?.outDir?.pathname ?? 'dist';
+          const fixture = join(outDir, 'navfixturetest');
+
+          if (existsSync(fixture)) {
+            rmSync(fixture, { recursive: true, force: true });
+            console.log(
+              '[build] Fixture de pruebas excluida de la producción: dist/navfixturetest',
+            );
+          }
+        }
       },
     },
   };

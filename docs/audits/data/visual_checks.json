@@ -1,0 +1,1298 @@
+{
+ "images": [
+  {
+   "page": "https://gussware.dev/",
+   "total": 5,
+   "broken": [],
+   "pending": [],
+   "imgs": [
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 0,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/09/hero-es.jpg",
+     "alt": "hero-es",
+     "complete": true,
+     "naturalWidth": 512,
+     "naturalHeight": 286,
+     "displayW": 532.796875,
+     "loading": "eager"
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/09/process-discover.jpg",
+     "alt": "Analisis",
+     "complete": true,
+     "naturalWidth": 512,
+     "naturalHeight": 286,
+     "displayW": 526,
+     "loading": "lazy"
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/logo-full-color.png",
+     "alt": "logo-full-color",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    }
+   ]
+  },
+  {
+   "page": "https://gussware.dev/en/",
+   "total": 5,
+   "broken": [],
+   "pending": [
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/09/process-discover.jpg",
+     "alt": "Analysis",
+     "complete": false,
+     "naturalWidth": 0,
+     "naturalHeight": 0,
+     "displayW": 526,
+     "loading": "lazy"
+    }
+   ],
+   "imgs": [
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 0,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/09/hero-en.jpg",
+     "alt": "hero-en",
+     "complete": true,
+     "naturalWidth": 512,
+     "naturalHeight": 286,
+     "displayW": 532.796875,
+     "loading": "eager"
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/09/process-discover.jpg",
+     "alt": "Analysis",
+     "complete": false,
+     "naturalWidth": 0,
+     "naturalHeight": 0,
+     "displayW": 526,
+     "loading": "lazy"
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/logo-full-color.png",
+     "alt": "logo-full-color",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    }
+   ]
+  },
+  {
+   "page": "https://gussware.dev/contact/",
+   "total": 3,
+   "broken": [],
+   "pending": [],
+   "imgs": [
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 0,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/logo-full-color.png",
+     "alt": "logo-full-color",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    }
+   ]
+  },
+  {
+   "page": "https://gussware.dev/contacto/",
+   "total": 3,
+   "broken": [],
+   "pending": [],
+   "imgs": [
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 0,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/logo-full-color.png",
+     "alt": "logo-full-color",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    }
+   ]
+  },
+  {
+   "page": "https://gussware.dev/en/contact/",
+   "total": 3,
+   "broken": [],
+   "pending": [],
+   "imgs": [
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 0,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/logo-full-color.png",
+     "alt": "logo-full-color",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    }
+   ]
+  },
+  {
+   "page": "https://gussware.dev/servicios/",
+   "total": 9,
+   "broken": [],
+   "pending": [],
+   "imgs": [
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 0,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/10/pexels-tranmautritam-326514-scaled.jpg",
+     "alt": "Diseño de sitios web y E-commerce",
+     "complete": true,
+     "naturalWidth": 1600,
+     "naturalHeight": 1067,
+     "displayW": 392.65625,
+     "loading": "lazy"
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/10/pexels-peaky-29445974-scaled.jpg",
+     "alt": "Desarrollo a medida",
+     "complete": true,
+     "naturalWidth": 1600,
+     "naturalHeight": 2335,
+     "displayW": 392.671875,
+     "loading": "lazy"
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/10/pexels-readymade-3850263-scaled.jpg",
+     "alt": "Aplicaciones móviles",
+     "complete": true,
+     "naturalWidth": 1600,
+     "naturalHeight": 1067,
+     "displayW": 392.65625,
+     "loading": "lazy"
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/10/pexels-yankrukov-8866761-scaled.jpg",
+     "alt": "DevOps y Soporte Técnico",
+     "complete": true,
+     "naturalWidth": 1600,
+     "naturalHeight": 1067,
+     "displayW": 392.65625,
+     "loading": "lazy"
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/10/pexels-gustavo-fring-6285066-scaled.jpg",
+     "alt": "Consultoría técnica",
+     "complete": true,
+     "naturalWidth": 1600,
+     "naturalHeight": 1067,
+     "displayW": 392.671875,
+     "loading": "lazy"
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/10/pexels-mikhail-nilov-8284734-scaled.jpg",
+     "alt": "Integracion de Apis y Servicios Externos",
+     "complete": true,
+     "naturalWidth": 1600,
+     "naturalHeight": 1068,
+     "displayW": 392.65625,
+     "loading": "lazy"
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/logo-full-color.png",
+     "alt": "logo-full-color",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    }
+   ]
+  },
+  {
+   "page": "https://gussware.dev/en/servicios/",
+   "total": 9,
+   "broken": [],
+   "pending": [],
+   "imgs": [
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 0,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/pexels-mikhail-nilov-8284734-scaled.jpg",
+     "alt": "API and External Service Integration",
+     "complete": true,
+     "naturalWidth": 1600,
+     "naturalHeight": 1068,
+     "displayW": 392.65625,
+     "loading": "lazy"
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/pexels-yankrukov-8866761-scaled.jpg",
+     "alt": "DevOps And Technical Support",
+     "complete": true,
+     "naturalWidth": 1600,
+     "naturalHeight": 1067,
+     "displayW": 392.671875,
+     "loading": "lazy"
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/pexels-peaky-29445974-scaled.jpg",
+     "alt": "Custom Software Development",
+     "complete": true,
+     "naturalWidth": 1600,
+     "naturalHeight": 2335,
+     "displayW": 392.65625,
+     "loading": "lazy"
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/pexels-readymade-3850263-scaled.jpg",
+     "alt": "Mobile Applications",
+     "complete": true,
+     "naturalWidth": 1600,
+     "naturalHeight": 1067,
+     "displayW": 392.65625,
+     "loading": "lazy"
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/pexels-tranmautritam-326514-scaled.jpg",
+     "alt": "Website and Online Store Design",
+     "complete": true,
+     "naturalWidth": 1600,
+     "naturalHeight": 1067,
+     "displayW": 392.671875,
+     "loading": "lazy"
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/pexels-gustavo-fring-6285066-scaled.jpg",
+     "alt": "Technical Consulting",
+     "complete": true,
+     "naturalWidth": 1600,
+     "naturalHeight": 1067,
+     "displayW": 392.65625,
+     "loading": "lazy"
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/logo-full-color.png",
+     "alt": "logo-full-color",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    }
+   ]
+  },
+  {
+   "page": "https://gussware.dev/servicios/consultoria-tecnica/",
+   "total": 3,
+   "broken": [],
+   "pending": [],
+   "imgs": [
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 0,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/logo-full-color.png",
+     "alt": "logo-full-color",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    }
+   ]
+  },
+  {
+   "page": "https://gussware.dev/en/servicios/technical-consulting/",
+   "total": 3,
+   "broken": [],
+   "pending": [],
+   "imgs": [
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 0,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/logo-full-color.png",
+     "alt": "logo-full-color",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    }
+   ]
+  },
+  {
+   "page": "https://gussware.dev/politica-de-privacidad/",
+   "total": 3,
+   "broken": [],
+   "pending": [],
+   "imgs": [
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 0,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/logo-full-color.png",
+     "alt": "logo-full-color",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    }
+   ]
+  },
+  {
+   "page": "https://gussware.dev/terminos-y-condiciones/",
+   "total": 3,
+   "broken": [],
+   "pending": [],
+   "imgs": [
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 0,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/logo-full-color.png",
+     "alt": "logo-full-color",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    }
+   ]
+  },
+  {
+   "page": "https://gussware.dev/en/privacy-policy/",
+   "total": 3,
+   "broken": [],
+   "pending": [],
+   "imgs": [
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/cropped-logo-full-color.png",
+     "alt": "",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 0,
+     "loading": null
+    },
+    {
+     "src": "https://cms.gussware.dev/wp-content/uploads/2026/11/logo-full-color.png",
+     "alt": "logo-full-color",
+     "complete": true,
+     "naturalWidth": 1000,
+     "naturalHeight": 163,
+     "displayW": 196.3125,
+     "loading": null
+    }
+   ]
+  }
+ ],
+ "anchors": [
+  {
+   "page": "https://gussware.dev/",
+   "href": "#servicios",
+   "text": "Servicios",
+   "exists": true,
+   "targetTag": "SECTION#py-[var(--section-padding-mobile)] md:py-[var(--se"
+  },
+  {
+   "page": "https://gussware.dev/",
+   "href": "#como-trabajamos",
+   "text": "Nuestro Proceso",
+   "exists": true,
+   "targetTag": "SECTION#py-[var(--section-padding-mobile)] md:py-[var(--se"
+  },
+  {
+   "page": "https://gussware.dev/",
+   "href": "#nuestro-modelo",
+   "text": "Nuestro Modelo",
+   "exists": true,
+   "targetTag": "SECTION#py-[var(--section-padding-mobile)] md:py-[var(--se"
+  },
+  {
+   "page": "https://gussware.dev/",
+   "href": "#preguntas",
+   "text": "Faq",
+   "exists": true,
+   "targetTag": "SECTION#py-[var(--section-padding-mobile)] md:py-[var(--se"
+  },
+  {
+   "page": "https://gussware.dev/",
+   "href": "#servicios",
+   "text": "Servicios",
+   "exists": true,
+   "targetTag": "SECTION#py-[var(--section-padding-mobile)] md:py-[var(--se"
+  },
+  {
+   "page": "https://gussware.dev/",
+   "href": "#como-trabajamos",
+   "text": "Nuestro Proceso",
+   "exists": true,
+   "targetTag": "SECTION#py-[var(--section-padding-mobile)] md:py-[var(--se"
+  },
+  {
+   "page": "https://gussware.dev/",
+   "href": "#nuestro-modelo",
+   "text": "Nuestro Modelo",
+   "exists": true,
+   "targetTag": "SECTION#py-[var(--section-padding-mobile)] md:py-[var(--se"
+  },
+  {
+   "page": "https://gussware.dev/",
+   "href": "#preguntas",
+   "text": "Faq",
+   "exists": true,
+   "targetTag": "SECTION#py-[var(--section-padding-mobile)] md:py-[var(--se"
+  },
+  {
+   "page": "https://gussware.dev/en/",
+   "href": "#services",
+   "text": "Services",
+   "exists": true,
+   "targetTag": "SECTION#py-[var(--section-padding-mobile)] md:py-[var(--se"
+  },
+  {
+   "page": "https://gussware.dev/en/",
+   "href": "#our-process",
+   "text": "Our Process",
+   "exists": true,
+   "targetTag": "SECTION#py-[var(--section-padding-mobile)] md:py-[var(--se"
+  },
+  {
+   "page": "https://gussware.dev/en/",
+   "href": "#our-model",
+   "text": "Our Model",
+   "exists": true,
+   "targetTag": "SECTION#py-[var(--section-padding-mobile)] md:py-[var(--se"
+  },
+  {
+   "page": "https://gussware.dev/en/",
+   "href": "#questions",
+   "text": "Faq",
+   "exists": true,
+   "targetTag": "SECTION#py-[var(--section-padding-mobile)] md:py-[var(--se"
+  },
+  {
+   "page": "https://gussware.dev/en/",
+   "href": "#services",
+   "text": "Services",
+   "exists": true,
+   "targetTag": "SECTION#py-[var(--section-padding-mobile)] md:py-[var(--se"
+  },
+  {
+   "page": "https://gussware.dev/en/",
+   "href": "#our-process",
+   "text": "Our Process",
+   "exists": true,
+   "targetTag": "SECTION#py-[var(--section-padding-mobile)] md:py-[var(--se"
+  },
+  {
+   "page": "https://gussware.dev/en/",
+   "href": "#our-model",
+   "text": "Our Model",
+   "exists": true,
+   "targetTag": "SECTION#py-[var(--section-padding-mobile)] md:py-[var(--se"
+  },
+  {
+   "page": "https://gussware.dev/en/",
+   "href": "#questions",
+   "text": "Faq",
+   "exists": true,
+   "targetTag": "SECTION#py-[var(--section-padding-mobile)] md:py-[var(--se"
+  },
+  {
+   "page": "https://gussware.dev/servicios/consultoria-tecnica/",
+   "href": "#soluciones",
+   "text": "Ver soluciones",
+   "exists": true,
+   "targetTag": "SECTION#py-[var(--section-padding-mobile)] md:py-[var(--se"
+  },
+  {
+   "page": "https://gussware.dev/en/servicios/technical-consulting/",
+   "href": "#soluciones",
+   "text": "View solutions",
+   "exists": true,
+   "targetTag": "SECTION#py-[var(--section-padding-mobile)] md:py-[var(--se"
+  }
+ ],
+ "mobile": [
+  {
+   "page": "https://gussware.dev/",
+   "burgerVisible": true,
+   "panelLinks": [
+    {
+     "href": "#servicios",
+     "text": "Servicios",
+     "visible": true
+    },
+    {
+     "href": "#como-trabajamos",
+     "text": "Nuestro Proceso",
+     "visible": true
+    },
+    {
+     "href": "#nuestro-modelo",
+     "text": "Nuestro Modelo",
+     "visible": true
+    },
+    {
+     "href": "#preguntas",
+     "text": "Faq",
+     "visible": true
+    },
+    {
+     "href": "/",
+     "text": "ES",
+     "visible": true
+    },
+    {
+     "href": "/en/",
+     "text": "EN",
+     "visible": true
+    },
+    {
+     "href": "/contact",
+     "text": "Start a Conversation",
+     "visible": true
+    }
+   ],
+   "horizontalOverflowPx": 8,
+   "consoleErrs": [],
+   "screenshot": "screenshots/mobile__root.png"
+  },
+  {
+   "page": "https://gussware.dev/en/",
+   "burgerVisible": true,
+   "panelLinks": [
+    {
+     "href": "#services",
+     "text": "Services",
+     "visible": true
+    },
+    {
+     "href": "#our-process",
+     "text": "Our Process",
+     "visible": true
+    },
+    {
+     "href": "#our-model",
+     "text": "Our Model",
+     "visible": true
+    },
+    {
+     "href": "#questions",
+     "text": "Faq",
+     "visible": true
+    },
+    {
+     "href": "/",
+     "text": "ES",
+     "visible": true
+    },
+    {
+     "href": "/en/",
+     "text": "EN",
+     "visible": true
+    },
+    {
+     "href": "/contact",
+     "text": "Start a Conversation",
+     "visible": true
+    }
+   ],
+   "horizontalOverflowPx": 8,
+   "consoleErrs": [],
+   "screenshot": "screenshots/mobile__en.png"
+  },
+  {
+   "page": "https://gussware.dev/contact/",
+   "burgerVisible": true,
+   "panelLinks": [
+    {
+     "href": "/#servicios",
+     "text": "Servicios",
+     "visible": true
+    },
+    {
+     "href": "/#como-trabajamos",
+     "text": "Nuestro Proceso",
+     "visible": true
+    },
+    {
+     "href": "/#nuestro-modelo",
+     "text": "Nuestro Modelo",
+     "visible": true
+    },
+    {
+     "href": "/#preguntas",
+     "text": "Faq",
+     "visible": true
+    },
+    {
+     "href": "/contact/",
+     "text": "ES",
+     "visible": true
+    },
+    {
+     "href": "/en/contact/",
+     "text": "EN",
+     "visible": true
+    },
+    {
+     "href": "/contact",
+     "text": "Start a Conversation",
+     "visible": true
+    }
+   ],
+   "horizontalOverflowPx": 0,
+   "consoleErrs": [],
+   "screenshot": "screenshots/mobile__contact.png"
+  },
+  {
+   "page": "https://gussware.dev/contacto/",
+   "burgerVisible": true,
+   "panelLinks": [
+    {
+     "href": "/#servicios",
+     "text": "Servicios",
+     "visible": true
+    },
+    {
+     "href": "/#como-trabajamos",
+     "text": "Nuestro Proceso",
+     "visible": true
+    },
+    {
+     "href": "/#nuestro-modelo",
+     "text": "Nuestro Modelo",
+     "visible": true
+    },
+    {
+     "href": "/#preguntas",
+     "text": "Faq",
+     "visible": true
+    },
+    {
+     "href": "/contacto/",
+     "text": "ES",
+     "visible": true
+    },
+    {
+     "href": "/en/contact/",
+     "text": "EN",
+     "visible": true
+    },
+    {
+     "href": "/contact",
+     "text": "Start a Conversation",
+     "visible": true
+    }
+   ],
+   "horizontalOverflowPx": 0,
+   "consoleErrs": [],
+   "screenshot": "screenshots/mobile__contacto.png"
+  },
+  {
+   "page": "https://gussware.dev/en/contact/",
+   "burgerVisible": true,
+   "panelLinks": [
+    {
+     "href": "/en/#services",
+     "text": "Services",
+     "visible": true
+    },
+    {
+     "href": "/en/#our-process",
+     "text": "Our Process",
+     "visible": true
+    },
+    {
+     "href": "/en/#our-model",
+     "text": "Our Model",
+     "visible": true
+    },
+    {
+     "href": "/en/#questions",
+     "text": "Faq",
+     "visible": true
+    },
+    {
+     "href": "/contacto/",
+     "text": "ES",
+     "visible": true
+    },
+    {
+     "href": "/en/contact/",
+     "text": "EN",
+     "visible": true
+    },
+    {
+     "href": "/contact",
+     "text": "Start a Conversation",
+     "visible": true
+    }
+   ],
+   "horizontalOverflowPx": 0,
+   "consoleErrs": [],
+   "screenshot": "screenshots/mobile__en_contact.png"
+  },
+  {
+   "page": "https://gussware.dev/servicios/",
+   "burgerVisible": true,
+   "panelLinks": [
+    {
+     "href": "/#servicios",
+     "text": "Servicios",
+     "visible": true
+    },
+    {
+     "href": "/#como-trabajamos",
+     "text": "Nuestro Proceso",
+     "visible": true
+    },
+    {
+     "href": "/#nuestro-modelo",
+     "text": "Nuestro Modelo",
+     "visible": true
+    },
+    {
+     "href": "/#preguntas",
+     "text": "Faq",
+     "visible": true
+    },
+    {
+     "href": "/servicios/",
+     "text": "ES",
+     "visible": true
+    },
+    {
+     "href": "/en/servicios/",
+     "text": "EN",
+     "visible": true
+    },
+    {
+     "href": "/contact",
+     "text": "Start a Conversation",
+     "visible": true
+    }
+   ],
+   "horizontalOverflowPx": 0,
+   "consoleErrs": [],
+   "screenshot": "screenshots/mobile__servicios.png"
+  },
+  {
+   "page": "https://gussware.dev/en/servicios/",
+   "burgerVisible": true,
+   "panelLinks": [
+    {
+     "href": "/en/#services",
+     "text": "Services",
+     "visible": true
+    },
+    {
+     "href": "/en/#our-process",
+     "text": "Our Process",
+     "visible": true
+    },
+    {
+     "href": "/en/#our-model",
+     "text": "Our Model",
+     "visible": true
+    },
+    {
+     "href": "/en/#questions",
+     "text": "Faq",
+     "visible": true
+    },
+    {
+     "href": "/servicios/",
+     "text": "ES",
+     "visible": true
+    },
+    {
+     "href": "/en/servicios/",
+     "text": "EN",
+     "visible": true
+    },
+    {
+     "href": "/contact",
+     "text": "Start a Conversation",
+     "visible": true
+    }
+   ],
+   "horizontalOverflowPx": 0,
+   "consoleErrs": [],
+   "screenshot": "screenshots/mobile__en_servicios.png"
+  },
+  {
+   "page": "https://gussware.dev/servicios/consultoria-tecnica/",
+   "burgerVisible": true,
+   "panelLinks": [
+    {
+     "href": "/#servicios",
+     "text": "Servicios",
+     "visible": true
+    },
+    {
+     "href": "/#como-trabajamos",
+     "text": "Nuestro Proceso",
+     "visible": true
+    },
+    {
+     "href": "/#nuestro-modelo",
+     "text": "Nuestro Modelo",
+     "visible": true
+    },
+    {
+     "href": "/#preguntas",
+     "text": "Faq",
+     "visible": true
+    },
+    {
+     "href": "/servicios/consultoria-tecnica/",
+     "text": "ES",
+     "visible": true
+    },
+    {
+     "href": "/en/servicios/technical-consulting/",
+     "text": "EN",
+     "visible": true
+    },
+    {
+     "href": "/contact",
+     "text": "Start a Conversation",
+     "visible": true
+    }
+   ],
+   "horizontalOverflowPx": 0,
+   "consoleErrs": [],
+   "screenshot": "screenshots/mobile__servicios_consultoria_tecnica.png"
+  },
+  {
+   "page": "https://gussware.dev/en/servicios/technical-consulting/",
+   "burgerVisible": true,
+   "panelLinks": [
+    {
+     "href": "/en/#services",
+     "text": "Services",
+     "visible": true
+    },
+    {
+     "href": "/en/#our-process",
+     "text": "Our Process",
+     "visible": true
+    },
+    {
+     "href": "/en/#our-model",
+     "text": "Our Model",
+     "visible": true
+    },
+    {
+     "href": "/en/#questions",
+     "text": "Faq",
+     "visible": true
+    },
+    {
+     "href": "/servicios/consultoria-tecnica/",
+     "text": "ES",
+     "visible": true
+    },
+    {
+     "href": "/en/servicios/technical-consulting/",
+     "text": "EN",
+     "visible": true
+    },
+    {
+     "href": "/contact",
+     "text": "Start a Conversation",
+     "visible": true
+    }
+   ],
+   "horizontalOverflowPx": 0,
+   "consoleErrs": [],
+   "screenshot": "screenshots/mobile__en_servicios_technical_consulting.png"
+  },
+  {
+   "page": "https://gussware.dev/politica-de-privacidad/",
+   "burgerVisible": true,
+   "panelLinks": [
+    {
+     "href": "/#servicios",
+     "text": "Servicios",
+     "visible": true
+    },
+    {
+     "href": "/#como-trabajamos",
+     "text": "Nuestro Proceso",
+     "visible": true
+    },
+    {
+     "href": "/#nuestro-modelo",
+     "text": "Nuestro Modelo",
+     "visible": true
+    },
+    {
+     "href": "/#preguntas",
+     "text": "Faq",
+     "visible": true
+    },
+    {
+     "href": "/politica-de-privacidad/",
+     "text": "ES",
+     "visible": true
+    },
+    {
+     "href": "/en/privacy-policy/",
+     "text": "EN",
+     "visible": true
+    },
+    {
+     "href": "/contact",
+     "text": "Start a Conversation",
+     "visible": true
+    }
+   ],
+   "horizontalOverflowPx": 0,
+   "consoleErrs": [],
+   "screenshot": "screenshots/mobile__politica_de_privacidad.png"
+  },
+  {
+   "page": "https://gussware.dev/terminos-y-condiciones/",
+   "burgerVisible": true,
+   "panelLinks": [
+    {
+     "href": "/#servicios",
+     "text": "Servicios",
+     "visible": true
+    },
+    {
+     "href": "/#como-trabajamos",
+     "text": "Nuestro Proceso",
+     "visible": true
+    },
+    {
+     "href": "/#nuestro-modelo",
+     "text": "Nuestro Modelo",
+     "visible": true
+    },
+    {
+     "href": "/#preguntas",
+     "text": "Faq",
+     "visible": true
+    },
+    {
+     "href": "/terminos-y-condiciones/",
+     "text": "ES",
+     "visible": true
+    },
+    {
+     "href": "/en/terminos-y-condiciones/",
+     "text": "EN",
+     "visible": true
+    },
+    {
+     "href": "/contact",
+     "text": "Start a Conversation",
+     "visible": true
+    }
+   ],
+   "horizontalOverflowPx": 0,
+   "consoleErrs": [],
+   "screenshot": "screenshots/mobile__terminos_y_condiciones.png"
+  },
+  {
+   "page": "https://gussware.dev/en/privacy-policy/",
+   "burgerVisible": true,
+   "panelLinks": [
+    {
+     "href": "/en/#services",
+     "text": "Services",
+     "visible": true
+    },
+    {
+     "href": "/en/#our-process",
+     "text": "Our Process",
+     "visible": true
+    },
+    {
+     "href": "/en/#our-model",
+     "text": "Our Model",
+     "visible": true
+    },
+    {
+     "href": "/en/#questions",
+     "text": "Faq",
+     "visible": true
+    },
+    {
+     "href": "/politica-de-privacidad/",
+     "text": "ES",
+     "visible": true
+    },
+    {
+     "href": "/en/privacy-policy/",
+     "text": "EN",
+     "visible": true
+    },
+    {
+     "href": "/contact",
+     "text": "Start a Conversation",
+     "visible": true
+    }
+   ],
+   "horizontalOverflowPx": 0,
+   "consoleErrs": [],
+   "screenshot": "screenshots/mobile__en_privacy_policy.png"
+  }
+ ],
+ "resources": [
+  {
+   "page": "https://gussware.dev/",
+   "failed": [],
+   "bad": []
+  },
+  {
+   "page": "https://gussware.dev/en/",
+   "failed": [],
+   "bad": []
+  },
+  {
+   "page": "https://gussware.dev/contact/",
+   "failed": [],
+   "bad": []
+  },
+  {
+   "page": "https://gussware.dev/contacto/",
+   "failed": [],
+   "bad": []
+  },
+  {
+   "page": "https://gussware.dev/en/contact/",
+   "failed": [],
+   "bad": []
+  },
+  {
+   "page": "https://gussware.dev/servicios/",
+   "failed": [],
+   "bad": []
+  },
+  {
+   "page": "https://gussware.dev/en/servicios/",
+   "failed": [],
+   "bad": []
+  },
+  {
+   "page": "https://gussware.dev/servicios/consultoria-tecnica/",
+   "failed": [],
+   "bad": []
+  },
+  {
+   "page": "https://gussware.dev/en/servicios/technical-consulting/",
+   "failed": [],
+   "bad": []
+  },
+  {
+   "page": "https://gussware.dev/politica-de-privacidad/",
+   "failed": [],
+   "bad": []
+  },
+  {
+   "page": "https://gussware.dev/terminos-y-condiciones/",
+   "failed": [],
+   "bad": []
+  },
+  {
+   "page": "https://gussware.dev/en/privacy-policy/",
+   "failed": [],
+   "bad": []
+  }
+ ]
+}

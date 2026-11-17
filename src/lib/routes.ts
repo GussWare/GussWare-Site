@@ -10,10 +10,16 @@ import { getRelativeLocaleUrl } from 'astro:i18n';
 export const routes = {
   home: '/',
   blog: '/blog',
-  contact: '/contact',
   notFound: '/404',
   blogPost: (slug: string) => `/blog/${encodeURIComponent(slug)}`,
 } as const;
+
+/*
+ * RGW-357 — La ruta de contacto no vive aquí: la Page de contacto tiene
+ * un slug por idioma (`contacto` en español, `contact` en inglés), así
+ * que su destino se resuelve con `contactCtaUrl(locale)`
+ * (`src/lib/cta.ts`), igual que el CTA del header y el de los servicios.
+ */
 
 /** URLs de una misma página en cada locale (para el selector de idioma). */
 export interface LocaleUrls {

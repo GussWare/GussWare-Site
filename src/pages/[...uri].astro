@@ -337,11 +337,11 @@ if (uri === '') {
 } else if (locale === 'es') {
   localeUrls.en = translatedSlug
     ? getRelativeLocaleUrl('en', translatedSlug)
-    : getRelativeLocaleUrl('en', uri);
+    : getRelativeLocaleUrl('en', '/');
 } else {
   localeUrls.es = translatedSlug
     ? getRelativeLocaleUrl('es', translatedSlug)
-    : getRelativeLocaleUrl('es', uri);
+    : getRelativeLocaleUrl('es', '/');
 }
 
 // hreflang: solo traducciones existentes (la actual siempre existe;
@@ -363,12 +363,16 @@ if (translatedSlug) {
   description={description}
   localeUrls={localeUrls}
   lang={page.lang}
-  seo={{
-    lang: page.lang,
-    yoast: page.yoast_head_json,
-    alternateUrls,
-    languages: languages ?? undefined,
-  }}
+  {...(isHomePage
+    ? {}
+    : {
+        seo: {
+          lang: page.lang,
+          yoast: page.yoast_head_json,
+          alternateUrls,
+          languages: languages ?? undefined,
+        },
+      })}
 >
   {isLegalPage ? (
     <LegalView
@@ -392,14 +396,15 @@ if (translatedSlug) {
           }
         />
       )}
-      {technology && showTechnology && (
-        <CommunityModel
-          technology={technology}
+      {process && showProcess && (
+        <Process
+          process={process}
+          images={stepImages}
           id={
             isHomePage
               ? locale === 'en'
-                ? 'our-model'
-                : 'nuestro-modelo'
+                ? 'our-process'
+                : 'como-trabajamos'
               : undefined
           }
         />
@@ -412,15 +417,14 @@ if (translatedSlug) {
           }
         />
       )}
-      {process && showProcess && (
-        <Process
-          process={process}
-          images={stepImages}
+      {technology && showTechnology && (
+        <CommunityModel
+          technology={technology}
           id={
             isHomePage
               ? locale === 'en'
-                ? 'our-process'
-                : 'como-trabajamos'
+                ? 'our-model'
+                : 'nuestro-modelo'
               : undefined
           }
         />

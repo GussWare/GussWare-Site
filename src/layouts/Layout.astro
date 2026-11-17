@@ -11,6 +11,14 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  /**
+   * RGW-362 — URL canónica explícita de la página. Cuando se proporciona
+   * se usa tal cual; esto permite que las páginas de error (404/500),
+   * cuya ruta lógica de Astro no coincide con el archivo emitido
+   * (`404.html` / `500.html`), declaren un canonical válido en lugar de
+   * uno que apunte a una ruta inexistente (`/404/` o `/500/`).
+   */
+  canonical?: string;
   localeUrls?: LocaleUrls;
   lang?: string;
   seo?: SeoData;
@@ -19,6 +27,7 @@ interface Props {
 const {
   title,
   description = 'GussWare — Soluciones tecnológicas',
+  canonical: canonicalProp = undefined,
   localeUrls = undefined,
   lang = 'es',
   seo = undefined,
@@ -27,8 +36,10 @@ const {
 const favicon = await getSiteIcon();
 
 // URL canónica de la página: la del sitio publicado (el `site` de la
-// configuración), nunca la del CMS que declara Yoast.
-const canonical = canonicalUrl(Astro.site, Astro.url.pathname);
+// configuración), nunca la del CMS que declara Yoast. Las páginas de
+// error pueden pasarla explícitamente cuando la ruta lógica no es el
+// archivo real emitido.
+const canonical = canonicalProp ?? canonicalUrl(Astro.site, Astro.url.pathname);
 ---
 
 <!doctype html>
