@@ -337,11 +337,11 @@ if (uri === '') {
 } else if (locale === 'es') {
   localeUrls.en = translatedSlug
     ? getRelativeLocaleUrl('en', translatedSlug)
-    : getRelativeLocaleUrl('en', uri);
+    : getRelativeLocaleUrl('en', '/');
 } else {
   localeUrls.es = translatedSlug
     ? getRelativeLocaleUrl('es', translatedSlug)
-    : getRelativeLocaleUrl('es', uri);
+    : getRelativeLocaleUrl('es', '/');
 }
 
 // hreflang: solo traducciones existentes (la actual siempre existe;
