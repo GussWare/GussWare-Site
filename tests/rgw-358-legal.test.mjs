@@ -12,12 +12,12 @@
  *       bloqueado: no hay dato oficial aprobado para unificar.
  *
  * Requiere el servidor de desarrollo activo (BASE_URL, por defecto
- * http://localhost:4322). Sin dependencias externas: `node --test`.
+ * http://localhost:4321). Sin dependencias externas: `node --test`.
  */
 import { test, before, describe } from 'node:test';
 import assert from 'node:assert/strict';
 
-const BASE = (process.env.BASE_URL ?? 'http://localhost:4322').replace(/\/+$/, '');
+const BASE = (process.env.BASE_URL ?? 'http://localhost:4321').replace(/\/+$/, '');
 
 async function html(path) {
   const res = await fetch(`${BASE}${path}`);
