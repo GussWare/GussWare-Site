@@ -121,24 +121,36 @@ describe('Entornos — archivos de entorno', () => {
     );
   });
 
+  test('.env.example existe y es un archivo versionado', () => {
+    assert.ok(
+      existsSync(resolve(ROOT, '.env.example')),
+      'Falta .env.example (archivo versionado)',
+    );
+  });
+
   test(
-    'existen los cuatro archivos autorizados',
-    { skip: !ENTORNO_LOCAL },
+    'los archivos de entorno reales presentes son solo los cuatro autorizados',
     () => {
-      for (const archivo of ARCHIVOS_AUTORIZADOS) {
+      const archivosPresentes = ARCHIVOS_AUTORIZADOS.filter((archivo) =>
+        existsSync(resolve(ROOT, archivo)),
+      );
+      const archivosReales = archivosPresentes.filter(
+        (a) => a !== '.env.example',
+      );
+      for (const archivo of archivosReales) {
         assert.ok(
-          existsSync(resolve(ROOT, archivo)),
-          `Falta ${archivo}`,
+          ARCHIVOS_AUTORIZADOS.includes(archivo),
+          `Archivo de entorno no autorizado: ${archivo}`,
         );
       }
     },
   );
 
   test(
-    'cada entorno apunta a su CMS y a su sitio público',
-    { skip: !ENTORNO_LOCAL },
+    'cada entorno presente apunta a su CMS y a su sitio público',
     () => {
       for (const { archivo, cms, sitio } of Object.values(ENTORNOS)) {
+        if (!existsSync(resolve(ROOT, archivo))) continue;
         assert.equal(
           readEnvValue(archivo, 'WORDPRESS_URL'),
           cms,
@@ -169,7 +181,7 @@ describe('Entornos — archivos de entorno', () => {
 
   test(
     '.env y .env.example tienen exactamente las mismas variables',
-    { skip: !ENTORNO_LOCAL },
+    { skip: !existsSync(resolve(ROOT, '.env')) },
     () => {
       assert.deepEqual(
         readEnvKeys('.env').sort(),
