@@ -145,6 +145,31 @@ Cuando exista Jira, el ID debe formar parte del nombre del branch.
 
 ---
 
+### Branch roles and deployment boundaries
+
+El repositorio utiliza estos roles de rama:
+
+```text
+feature/fix/<jira-id> → develop → staging → main
+```
+
+`develop` es la rama de integración del trabajo de los
+programadores. No tiene despliegue a servidor, GitHub Environment de
+despliegue ni secretos SFTP/SSH de publicación. Los Pull Requests y
+pushes relacionados con `develop` deben ejecutar toda la validación CI
+requerida por el proyecto.
+
+Solo `staging` y `main` pueden publicar en un servidor:
+
+* `staging` publica en el Environment de staging;
+* `main` publica en el Environment de producción;
+* ningún job puede publicar desde `develop`.
+
+El check estable de CI (actualmente `Build estático y pruebas`) debe
+ser required check en `develop`, `staging` y `main`. Los jobs de
+despliegue no deben ser required checks de Pull Requests cuando esos
+jobs no se ejecutan intencionalmente en Pull Requests.
+
 ## 4. Create Worktree
 
 Crear una nueva tarea desde `origin/develop`:
@@ -294,6 +319,22 @@ Si se necesita incorporar cambios de `origin/develop`, esa acción debe estar ex
 
 No utilizar automáticamente merge, rebase o reset para resolver divergencias.
 
+Si el fetch revela divergencia, commits inesperados, upstream
+incorrecto, cambios remotos no reconocidos o un árbol local ambiguo:
+
+1. detenerse antes de modificar la historia o combinar cambios;
+2. conservar el árbol local y no ejecutar `stash`, `reset`, `clean`,
+   `merge`, `rebase` ni force push;
+3. inspeccionar con `git status`, `git branch -vv`, `git log`,
+   `git diff` y la referencia remota correspondiente;
+4. explicar qué commits y archivos difieren y cuál sería el riesgo;
+5. solicitar instrucciones explícitas antes de elegir entre merge,
+   rebase, cherry-pick, restauración o cualquier otra operación.
+
+Una divergencia no se considera resuelta porque el branch tenga un
+upstream configurado. El destino, la historia y los commits que se
+publicarían deben verificarse por separado.
+
 ---
 
 ## 9. Wrong Upstream
@@ -319,6 +360,11 @@ git push -u origin <branch-name>
 Si existen divergencias, commits inesperados o contenido diferente en el remoto, detenerse y diagnosticar antes de hacer push.
 
 Nunca sobrescribir el remoto para solucionar un upstream incorrecto.
+
+No usar `--force` ni `--force-with-lease` como solución predeterminada.
+Solo podrían ejecutarse con una instrucción explícita, un destino
+verificado y una justificación de por qué no existe una alternativa
+segura.
 
 ---
 
@@ -349,12 +395,23 @@ push
       ↓
 transicionar Jira al estado correspondiente (si aplica, §17)
       ↓
-Pull Request
+      Pull Request de la rama de tarea a `develop`
       ↓
-origin/develop
+      `develop`
+      ↓ PR de promoción
+      `staging`
+      ↓ PR de promoción
+      `main`
 ```
 
 No comenzar una tarea independiente nueva hasta completar el commit de la tarea actual.
+
+Una promoción entre ramas no crea una nueva tarea, rama de trabajo ni
+worktree. Después de fusionar la PR de la rama de tarea en `develop`,
+la promoción se realiza mediante una PR `develop` → `staging`. Después
+de validar staging, la promoción a producción se realiza mediante una
+PR `staging` → `main`. No crear PR directas desde una rama de tarea a
+`staging` o `main`.
 
 Dentro de una tarjeta principal con subtareas: cada subtarea es una
 unidad independiente de trabajo dentro de la tarjeta principal y debe
@@ -467,6 +524,17 @@ base: develop
 head: <branch de la tarea>
 ```
 
+Las PR de promoción deben utilizar estos destinos, en este orden:
+
+```text
+develop → staging
+staging → main
+```
+
+Las PR de promoción no requieren un worktree adicional ni una rama
+temporal. Deben pasar los required checks de la rama destino antes de
+ser fusionadas. No realizar el merge localmente.
+
 Antes de crear o entregar el Pull Request:
 
 ```bash
@@ -475,9 +543,10 @@ git branch -vv
 git log --oneline --decorate -n 5
 ```
 
-El branch debe estar publicado en `origin`.
-
-No realizar el merge localmente.
+El branch de la tarea debe estar publicado en `origin`. Antes de crear
+una PR de promoción, verificar que la rama origen y la rama destino
+corresponden al siguiente paso permitido del flujo. No realizar el
+merge localmente.
 
 ---
 
@@ -535,10 +604,11 @@ otro estado: informarlo en el reporte.
 
 Reglas de estado:
 
-* Subtarea completamente terminada y validada → `Listo`. Nunca
-  `Listo para pruebas`. Terminar una subtarea no cambia el estado de
-  su tarea principal. Antes de cambiar el estado debe existir el
-  commit correspondiente a esa subtarea.
+* Subtarea de desarrollo terminada y validada por el desarrollador →
+  `Tarea terminada`. Solo pasa a `Listo para pruebas` cuando su cambio
+  ya fue desplegado en staging, y a `Listo` después de la aprobación de
+  QA. Antes de cambiar el estado debe existir el commit correspondiente
+  a esa subtarea.
 * Antes de comenzar a trabajar una subtarea, verificar que su tarea
   principal esté en `En curso`; si no lo está, transicionarla a `En
   curso` antes de iniciar la subtarea. Mientras una subtarea esté
@@ -546,22 +616,23 @@ Reglas de estado:
   aunque la implementación se realice específicamente sobre la
   subtarea. Una tarea principal nunca permanece en `Por hacer`
   mientras sus subtareas ya están siendo ejecutadas.
-* Tarea principal completamente terminada y validada → `Listo para
-  pruebas` (queda esperando validación/prueba manual). No mover la
-  tarea principal a `Listo para pruebas` solamente porque terminó una
-  subtarea; solo cuando el trabajo completo de la tarea principal esté
-  terminado y, cuando aplique, sus subtareas necesarias también estén
-  terminadas. Si queda otra subtarea por trabajar, la tarea principal
-  continúa en `En curso`. A partir de `Listo para pruebas` continúa el
-  flujo normal ya definido (§13–§14, §18).
-* Observaciones del usuario sobre una tarea principal en `Listo para
-  pruebas`: al retomar el trabajo, devolver esa tarjeta a `En curso`.
-  Tras corregir las observaciones y pasar nuevamente todas las
-  validaciones, la tarea principal vuelve a `Listo para pruebas`.
+* Tarea principal completamente implementada y validada por el
+  desarrollador → `Tarea terminada`. No moverla a ese estado solamente
+  porque terminó una subtarea: su trabajo propio y todas las subtareas
+  necesarias deben estar terminados. Después de un despliegue exitoso
+  en staging pasa a `Listo para pruebas`; cuando QA inicie pasa a `En
+  pruebas`; tras la aprobación de QA pasa a `Listo`. Si queda otra
+  subtarea por trabajar, la tarea padre continúa en `En curso`.
+* Observaciones del usuario sobre una tarea principal en `Tarea
+  terminada`, `Listo para pruebas`, `En pruebas` o `Listo`: al retomar
+  el trabajo, devolver esa tarjeta a `En curso`. Tras corregir las
+  observaciones y pasar nuevamente la validación del desarrollador,
+  vuelve a `Tarea terminada` y continúa el flujo de staging y QA.
 * Observaciones sobre una subtarea: al retomar el trabajo, devolverla
   a `En curso`. Corregir únicamente las observaciones correspondientes
-  a esa subtarea. Cuando vuelva a terminarse y validarse, regresa a
-  `Listo`.
+  a esa subtarea. Cuando vuelva a terminarse y validarse por el
+  desarrollador, regresa a `Tarea terminada` y continúa el flujo de
+  staging y QA.
 
 Comentario obligatorio en Jira (ver operación en
 [reference.md](reference.md)):
@@ -576,6 +647,42 @@ Comentario obligatorio en Jira (ver operación en
 * El comentario debe indicar de forma breve: qué se realizó;
   resultado; validaciones ejecutadas; commit relacionado, cuando
   corresponda.
+
+### Jira status lifecycle
+
+Los estados de Jira deben reflejar el estado real del trabajo en todo
+momento:
+
+* `Por hacer`: el trabajo todavía no comenzó. No modificar archivos,
+  crear commits, hacer push ni abrir una PR con la tarjeta en este
+  estado.
+* `En curso`: la implementación o corrección está activa. La tarjeta
+  padre debe estar en `En curso` mientras se trabaja cualquiera de sus
+  subtareas.
+* `Tarea terminada`: el desarrollo terminó y el desarrollador aprobó su
+  validación técnica local, incluyendo unit tests y las comprobaciones
+  requeridas de lint, build o CI. El cambio todavía no está disponible
+  en staging.
+* `Listo para pruebas`: el cambio ya fue promovido y desplegado
+  correctamente en staging. QA puede comenzar la prueba manual.
+* `En pruebas`: el tester QA ya inició el ciclo de pruebas manuales en
+  staging. No representa pruebas del desarrollador.
+* `Listo`: QA terminó y aprobó las pruebas, y la evidencia quedó
+  registrada sin defectos pendientes.
+
+Antes de comenzar cada subtarea, verificar su estado y el de su padre.
+Si alguno no refleja el trabajo que comenzará, listar las transiciones
+reales y corregirlo antes de tocar archivos. Una subtarea terminada y
+validada por el desarrollador pasa a `Tarea terminada`; la tarea padre
+solo pasa a ese estado cuando su trabajo propio y todas las subtareas
+necesarias terminaron. El despliegue a staging y el ciclo QA determinan
+las transiciones posteriores.
+
+Si una observación reabre una subtarea o tarea, devolverla a `En curso`
+antes de corregirla. Si falla una prueba del desarrollador, mantener la
+tarjeta en `En curso`; si falla QA, devolverla también a `En curso`.
+No inventar transiciones; solo usar estados y transiciones existentes en
+Jira.
 
 ### Cierre de tareas con subtareas
 
@@ -614,8 +721,18 @@ Antes de finalizar:
 * [ ] El commit fue enviado a `origin`.
 * [ ] El branch remoto está actualizado.
 * [ ] El Pull Request apunta a `develop`.
+* [ ] Si corresponde, la promoción posterior se realizó mediante PR
+  `develop` → `staging` y después `staging` → `main`.
+* [ ] La rama destino y el tipo de ejecución (PR, push o manual) fueron
+  verificados explícitamente.
+* [ ] El required check de CI terminó correctamente en la rama destino.
+* [ ] Si hubo despliegue, el Environment y el resultado del job de
+  publicación fueron verificados.
+* [ ] Si no hubo despliegue por diseño, quedó indicado como no aplicable.
+* [ ] Las validaciones posteriores al despliegue fueron ejecutadas o se
+  documentó por qué no aplicaban.
 * [ ] La tarjeta Jira quedó en el estado correspondiente (§17:
-  subtarea → Listo; tarea principal → Listo para pruebas; o su
+  desarrollo validado → Tarea terminada; QA aprobado → Listo; o su
   ausencia de transición quedó reportada; N/A sin tarjeta Jira).
 * [ ] El comentario obligatorio en Jira fue agregado/actualizado (§17;
   N/A sin tarjeta Jira).
@@ -634,9 +751,18 @@ Commit:
 Remote:
 Upstream:
 Pull Request:
+Target branch:
+CI check:
+Deployment:
 Validation:
 Jira:
 Status:
 ```
 
 El reporte debe contener únicamente información relacionada con la tarea realizada.
+`Target branch`, `CI check` y `Deployment` deben indicar el destino
+verificado, el nombre y resultado del check requerido, y si el
+despliegue fue exitoso, omitido o no aplicaba. `Validation` debe
+enumerar las comprobaciones ejecutadas y sus resultados. `Jira` debe
+incluir la tarjeta, subtarea, transición y comentario de cierre cuando
+corresponda.
