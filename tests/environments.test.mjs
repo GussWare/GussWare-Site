@@ -390,8 +390,8 @@ describe('Entornos — scripts de package.json', () => {
 describe('Entornos — GitHub Actions', () => {
   const workflows = {
     ci: readFileSync(resolve(ROOT, '.github/workflows/ci.yml'), 'utf-8'),
-    staging: readFileSync(
-      resolve(ROOT, '.github/workflows/deploy-staging.yml'),
+    deploy: readFileSync(
+      resolve(ROOT, '.github/workflows/deploy-reusable.yml'),
       'utf-8',
     ),
   };
@@ -405,27 +405,29 @@ describe('Entornos — GitHub Actions', () => {
     }
   });
 
-  test('cada workflow usa exclusivamente el Environment `staging`', () => {
-    for (const [nombre, contenido] of Object.entries(workflows)) {
-      assert.ok(
-        contenido.includes('environment: staging'),
-        `${nombre}.yml debe usar el Environment staging`,
-      );
-      assert.ok(
-        !contenido.includes('production'),
-        `${nombre}.yml no debe seleccionar el Environment de producción`,
-      );
-    }
-  });
-
-  test('CI se ejecuta con push y pull request hacia `staging`', () => {
+  test('CI usa `ci-staging` y deploy selecciona el Environment recibido', () => {
     assert.ok(
-      workflows.ci.includes('push:\n    branches: [staging]'),
-      'ci.yml debe ejecutarse con push a staging',
+      workflows.ci.includes('name: ci-staging'),
+      'ci.yml debe usar el Environment ci-staging',
     );
     assert.ok(
-      workflows.ci.includes('pull_request:\n    branches: [staging]'),
-      'ci.yml debe ejecutarse con pull request hacia staging',
+      workflows.ci.includes('deployment: false'),
+      'ci.yml no debe crear un deployment para CI',
+    );
+    assert.ok(
+      workflows.deploy.includes('environment: ${{ inputs.environment }}'),
+      'deploy-reusable.yml debe seleccionar el Environment mediante input',
+    );
+  });
+
+  test('CI se ejecuta con push y pull request hacia `staging` y `main`', () => {
+    assert.ok(
+      workflows.ci.includes('branches: [staging, main]'),
+      'ci.yml debe ejecutarse con push a staging y main',
+    );
+    assert.ok(
+      workflows.ci.includes('pull_request:'),
+      'ci.yml debe ejecutarse con pull request',
     );
     assert.ok(
       workflows.ci.includes('workflow_dispatch'),
@@ -472,18 +474,26 @@ describe('Entornos — GitHub Actions', () => {
     );
   });
 
-  test('Deploy Staging se ejecuta con push a `staging` y no con pull requests', () => {
+  test('los despliegues dependen de CI y no son workflows independientes', () => {
     assert.ok(
-      workflows.staging.includes('push:\n    branches: [staging]'),
-      'deploy-staging.yml debe desplegar con push a staging',
+      workflows.ci.includes('deploy-staging:'),
+      'ci.yml debe declarar el despliegue de staging',
     );
     assert.ok(
-      workflows.staging.includes('workflow_dispatch'),
-      'deploy-staging.yml debe permitir la ejecución manual',
+      workflows.ci.includes('deploy-production:'),
+      'ci.yml debe declarar el despliegue de producción',
     );
     assert.ok(
-      !/(^|\n)\s*pull_request:/.test(workflows.staging),
-      'deploy-staging.yml no debe desplegar con pull requests',
+      (workflows.ci.match(/needs: build/g) ?? []).length === 2,
+      'ambos despliegues deben depender del job build',
+    );
+    assert.ok(
+      workflows.deploy.includes('workflow_call:'),
+      'deploy-reusable.yml debe ejecutarse mediante workflow_call',
+    );
+    assert.ok(
+      workflows.deploy.includes('ref: ${{ github.sha }}'),
+      'deploy-reusable.yml debe usar el SHA del workflow',
     );
   });
 
