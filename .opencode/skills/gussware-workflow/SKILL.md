@@ -319,6 +319,22 @@ Si se necesita incorporar cambios de `origin/develop`, esa acción debe estar ex
 
 No utilizar automáticamente merge, rebase o reset para resolver divergencias.
 
+Si el fetch revela divergencia, commits inesperados, upstream
+incorrecto, cambios remotos no reconocidos o un árbol local ambiguo:
+
+1. detenerse antes de modificar la historia o combinar cambios;
+2. conservar el árbol local y no ejecutar `stash`, `reset`, `clean`,
+   `merge`, `rebase` ni force push;
+3. inspeccionar con `git status`, `git branch -vv`, `git log`,
+   `git diff` y la referencia remota correspondiente;
+4. explicar qué commits y archivos difieren y cuál sería el riesgo;
+5. solicitar instrucciones explícitas antes de elegir entre merge,
+   rebase, cherry-pick, restauración o cualquier otra operación.
+
+Una divergencia no se considera resuelta porque el branch tenga un
+upstream configurado. El destino, la historia y los commits que se
+publicarían deben verificarse por separado.
+
 ---
 
 ## 9. Wrong Upstream
@@ -344,6 +360,11 @@ git push -u origin <branch-name>
 Si existen divergencias, commits inesperados o contenido diferente en el remoto, detenerse y diagnosticar antes de hacer push.
 
 Nunca sobrescribir el remoto para solucionar un upstream incorrecto.
+
+No usar `--force` ni `--force-with-lease` como solución predeterminada.
+Solo podrían ejecutarse con una instrucción explícita, un destino
+verificado y una justificación de por qué no existe una alternativa
+segura.
 
 ---
 
