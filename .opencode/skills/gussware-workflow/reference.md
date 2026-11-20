@@ -23,6 +23,30 @@ aquí solo el cómo con el MCP de Atlassian.
 3. Si esa transición no existe: no usar otra transición ni cambiar a
    otro estado; informarlo en el campo `Jira:` del reporte (§18).
 
+## Ciclo obligatorio de estados Jira (§17)
+
+Antes de modificar archivos, commits, pushes o Pull Requests:
+
+1. La tarjeta correspondiente debe estar en `En curso`.
+2. Si se trabaja una subtarea, su tarjeta padre también debe estar en
+   `En curso`.
+3. Una tarjeta en `Por hacer` no puede tener cambios activos.
+
+Durante el trabajo:
+
+* `En curso` = implementación o corrección activa.
+* `Listo para pruebas` = implementación terminada con commit, pendiente
+  de validación.
+* `En pruebas` = validación técnica o manual en ejecución.
+* `Listo` = validación aprobada y evidencia registrada.
+
+Una subtarea solo puede pasar a `Listo` después de validar su commit y
+agregar el comentario de cierre. La tarea padre pasa a `Listo para
+pruebas` solo cuando su trabajo propio y todas las subtareas necesarias
+terminaron. Si una observación reabre trabajo, devolver la tarjeta a
+`En curso` antes de modificarla. No inventar transiciones ni usar
+`Tarea terminada` como sustituto de `Listo`.
+
 ## Transicionar al estado correspondiente (§17)
 
 1. Solo después de que todas las validaciones de la tarea pasaron y

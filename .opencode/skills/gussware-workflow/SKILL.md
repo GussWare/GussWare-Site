@@ -646,6 +646,35 @@ Comentario obligatorio en Jira (ver operación en
   resultado; validaciones ejecutadas; commit relacionado, cuando
   corresponda.
 
+### Jira status lifecycle
+
+Los estados de Jira deben reflejar el estado real del trabajo en todo
+momento:
+
+* `Por hacer`: el trabajo todavía no comenzó. No modificar archivos,
+  crear commits, hacer push ni abrir una PR con la tarjeta en este
+  estado.
+* `En curso`: la implementación o corrección está activa. La tarjeta
+  padre debe estar en `En curso` mientras se trabaja cualquiera de sus
+  subtareas.
+* `Listo para pruebas`: la implementación terminó y existe el commit
+  correspondiente, pero la validación todavía no comenzó o está
+  pendiente de asignación.
+* `En pruebas`: la validación técnica o manual está ejecutándose.
+* `Listo`: la validación terminó correctamente y la evidencia quedó
+  registrada.
+
+Antes de comenzar cada subtarea, verificar su estado y el de su padre.
+Si alguno no refleja el trabajo que comenzará, listar las transiciones
+reales y corregirlo antes de tocar archivos. Una subtarea terminada y
+validada pasa a `Listo`; la tarea padre solo pasa a `Listo para pruebas`
+cuando su trabajo propio y todas las subtareas necesarias terminaron.
+
+Si una observación reabre una subtarea o tarea, devolverla a `En curso`
+antes de corregirla. No usar `Tarea terminada` como sustituto de
+`Listo` ni inventar transiciones; solo usar estados y transiciones
+existentes en Jira.
+
 ### Cierre de tareas con subtareas
 
 Cuando una tarea de Jira tenga subtareas:
