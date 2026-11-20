@@ -145,6 +145,31 @@ Cuando exista Jira, el ID debe formar parte del nombre del branch.
 
 ---
 
+### Branch roles and deployment boundaries
+
+El repositorio utiliza estos roles de rama:
+
+```text
+feature/fix/<jira-id> → develop → staging → main
+```
+
+`develop` es la rama de integración del trabajo de los
+programadores. No tiene despliegue a servidor, GitHub Environment de
+despliegue ni secretos SFTP/SSH de publicación. Los Pull Requests y
+pushes relacionados con `develop` deben ejecutar toda la validación CI
+requerida por el proyecto.
+
+Solo `staging` y `main` pueden publicar en un servidor:
+
+* `staging` publica en el Environment de staging;
+* `main` publica en el Environment de producción;
+* ningún job puede publicar desde `develop`.
+
+El check estable de CI (actualmente `Build estático y pruebas`) debe
+ser required check en `develop`, `staging` y `main`. Los jobs de
+despliegue no deben ser required checks de Pull Requests cuando esos
+jobs no se ejecutan intencionalmente en Pull Requests.
+
 ## 4. Create Worktree
 
 Crear una nueva tarea desde `origin/develop`:
