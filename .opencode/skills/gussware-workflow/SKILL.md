@@ -604,10 +604,11 @@ otro estado: informarlo en el reporte.
 
 Reglas de estado:
 
-* Subtarea completamente terminada y validada → `Listo`. Nunca
-  `Listo para pruebas`. Terminar una subtarea no cambia el estado de
-  su tarea principal. Antes de cambiar el estado debe existir el
-  commit correspondiente a esa subtarea.
+* Subtarea de desarrollo terminada y validada por el desarrollador →
+  `Tarea terminada`. Solo pasa a `Listo para pruebas` cuando su cambio
+  ya fue desplegado en staging, y a `Listo` después de la aprobación de
+  QA. Antes de cambiar el estado debe existir el commit correspondiente
+  a esa subtarea.
 * Antes de comenzar a trabajar una subtarea, verificar que su tarea
   principal esté en `En curso`; si no lo está, transicionarla a `En
   curso` antes de iniciar la subtarea. Mientras una subtarea esté
@@ -615,22 +616,23 @@ Reglas de estado:
   aunque la implementación se realice específicamente sobre la
   subtarea. Una tarea principal nunca permanece en `Por hacer`
   mientras sus subtareas ya están siendo ejecutadas.
-* Tarea principal completamente terminada y validada → `Listo para
-  pruebas` (queda esperando validación/prueba manual). No mover la
-  tarea principal a `Listo para pruebas` solamente porque terminó una
-  subtarea; solo cuando el trabajo completo de la tarea principal esté
-  terminado y, cuando aplique, sus subtareas necesarias también estén
-  terminadas. Si queda otra subtarea por trabajar, la tarea principal
-  continúa en `En curso`. A partir de `Listo para pruebas` continúa el
-  flujo normal ya definido (§13–§14, §18).
-* Observaciones del usuario sobre una tarea principal en `Listo para
-  pruebas`: al retomar el trabajo, devolver esa tarjeta a `En curso`.
-  Tras corregir las observaciones y pasar nuevamente todas las
-  validaciones, la tarea principal vuelve a `Listo para pruebas`.
+* Tarea principal completamente implementada y validada por el
+  desarrollador → `Tarea terminada`. No moverla a ese estado solamente
+  porque terminó una subtarea: su trabajo propio y todas las subtareas
+  necesarias deben estar terminados. Después de un despliegue exitoso
+  en staging pasa a `Listo para pruebas`; cuando QA inicie pasa a `En
+  pruebas`; tras la aprobación de QA pasa a `Listo`. Si queda otra
+  subtarea por trabajar, la tarea padre continúa en `En curso`.
+* Observaciones del usuario sobre una tarea principal en `Tarea
+  terminada`, `Listo para pruebas`, `En pruebas` o `Listo`: al retomar
+  el trabajo, devolver esa tarjeta a `En curso`. Tras corregir las
+  observaciones y pasar nuevamente la validación del desarrollador,
+  vuelve a `Tarea terminada` y continúa el flujo de staging y QA.
 * Observaciones sobre una subtarea: al retomar el trabajo, devolverla
   a `En curso`. Corregir únicamente las observaciones correspondientes
-  a esa subtarea. Cuando vuelva a terminarse y validarse, regresa a
-  `Listo`.
+  a esa subtarea. Cuando vuelva a terminarse y validarse por el
+  desarrollador, regresa a `Tarea terminada` y continúa el flujo de
+  staging y QA.
 
 Comentario obligatorio en Jira (ver operación en
 [reference.md](reference.md)):
@@ -657,23 +659,30 @@ momento:
 * `En curso`: la implementación o corrección está activa. La tarjeta
   padre debe estar en `En curso` mientras se trabaja cualquiera de sus
   subtareas.
-* `Listo para pruebas`: la implementación terminó y existe el commit
-  correspondiente, pero la validación todavía no comenzó o está
-  pendiente de asignación.
-* `En pruebas`: la validación técnica o manual está ejecutándose.
-* `Listo`: la validación terminó correctamente y la evidencia quedó
-  registrada.
+* `Tarea terminada`: el desarrollo terminó y el desarrollador aprobó su
+  validación técnica local, incluyendo unit tests y las comprobaciones
+  requeridas de lint, build o CI. El cambio todavía no está disponible
+  en staging.
+* `Listo para pruebas`: el cambio ya fue promovido y desplegado
+  correctamente en staging. QA puede comenzar la prueba manual.
+* `En pruebas`: el tester QA ya inició el ciclo de pruebas manuales en
+  staging. No representa pruebas del desarrollador.
+* `Listo`: QA terminó y aprobó las pruebas, y la evidencia quedó
+  registrada sin defectos pendientes.
 
 Antes de comenzar cada subtarea, verificar su estado y el de su padre.
 Si alguno no refleja el trabajo que comenzará, listar las transiciones
 reales y corregirlo antes de tocar archivos. Una subtarea terminada y
-validada pasa a `Listo`; la tarea padre solo pasa a `Listo para pruebas`
-cuando su trabajo propio y todas las subtareas necesarias terminaron.
+validada por el desarrollador pasa a `Tarea terminada`; la tarea padre
+solo pasa a ese estado cuando su trabajo propio y todas las subtareas
+necesarias terminaron. El despliegue a staging y el ciclo QA determinan
+las transiciones posteriores.
 
 Si una observación reabre una subtarea o tarea, devolverla a `En curso`
-antes de corregirla. No usar `Tarea terminada` como sustituto de
-`Listo` ni inventar transiciones; solo usar estados y transiciones
-existentes en Jira.
+antes de corregirla. Si falla una prueba del desarrollador, mantener la
+tarjeta en `En curso`; si falla QA, devolverla también a `En curso`.
+No inventar transiciones; solo usar estados y transiciones existentes en
+Jira.
 
 ### Cierre de tareas con subtareas
 
@@ -723,7 +732,7 @@ Antes de finalizar:
 * [ ] Las validaciones posteriores al despliegue fueron ejecutadas o se
   documentó por qué no aplicaban.
 * [ ] La tarjeta Jira quedó en el estado correspondiente (§17:
-  subtarea → Listo; tarea principal → Listo para pruebas; o su
+  desarrollo validado → Tarea terminada; QA aprobado → Listo; o su
   ausencia de transición quedó reportada; N/A sin tarjeta Jira).
 * [ ] El comentario obligatorio en Jira fue agregado/actualizado (§17;
   N/A sin tarjeta Jira).
