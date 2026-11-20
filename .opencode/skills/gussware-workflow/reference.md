@@ -23,24 +23,51 @@ aquí solo el cómo con el MCP de Atlassian.
 3. Si esa transición no existe: no usar otra transición ni cambiar a
    otro estado; informarlo en el campo `Jira:` del reporte (§18).
 
+## Ciclo obligatorio de estados Jira (§17)
+
+Antes de modificar archivos, commits, pushes o Pull Requests:
+
+1. La tarjeta correspondiente debe estar en `En curso`.
+2. Si se trabaja una subtarea, su tarjeta padre también debe estar en
+   `En curso`.
+3. Una tarjeta en `Por hacer` no puede tener cambios activos.
+
+Durante el trabajo:
+
+* `En curso` = implementación o corrección activa.
+* `Tarea terminada` = desarrollo terminado y validación técnica del
+  desarrollador aprobada, incluyendo unit tests y comprobaciones locales
+  o CI; todavía no está en staging.
+* `Listo para pruebas` = cambio desplegado correctamente en staging y
+  disponible para QA.
+* `En pruebas` = tester QA inició las pruebas manuales en staging.
+* `Listo` = QA aprobó la tarea y la evidencia quedó registrada.
+
+Una subtarea solo puede pasar a `Tarea terminada` después de validar su
+commit con las pruebas del desarrollador y agregar el comentario
+correspondiente. Solo pasa a `Listo para pruebas` después de un
+despliegue exitoso en staging. Después de que QA inicia, pasa a `En
+pruebas`; tras la aprobación de QA pasa a `Listo` con su evidencia de
+cierre. Si una observación o fallo reabre trabajo, devolver la tarjeta a
+`En curso` antes de modificarla. No inventar transiciones.
+
 ## Transicionar al estado correspondiente (§17)
 
 1. Solo después de que todas las validaciones de la tarea pasaron y
    existe el commit correspondiente a esa subtarea/tarea.
-2. Determinar el destino según el tipo de tarjeta (tipo de issue /
-   padre obtenido con `getJiraIssue`): subtarea → `Listo`; tarea
-   principal → `Listo para pruebas`.
+2. Determinar el destino según la fase real: desarrollo validado →
+   `Tarea terminada`; cambio desplegado en staging → `Listo para
+   pruebas`; QA iniciado → `En pruebas`; QA aprobado → `Listo`.
 3. Terminar una subtarea no cambia el estado de su tarea principal.
-   No mover la tarea principal a `Listo para pruebas` solo porque
-   terminó una subtarea; la finalización de todas las subtareas
-   necesarias solo permite que la principal pase a `Listo para
-   pruebas` cuando su propio trabajo también está terminado y
-   validado.
-4. Observaciones del usuario: al retomar el trabajo sobre una tarea
-   principal en `Listo para pruebas` o una subtarea en `Listo`,
-   devolver esa tarjeta a `En curso`. Tras corregir y validar de
-   nuevo, volver al destino del punto 2 (subtarea → `Listo`;
-   principal → `Listo para pruebas`).
+   No mover la tarea principal a `Tarea terminada` solo porque terminó
+   una subtarea; la finalización de todas las subtareas necesarias solo
+   permite ese estado cuando su propio trabajo también está terminado y
+   validado por el desarrollador.
+4. Observaciones del usuario: al retomar el trabajo sobre una tarea o
+   subtarea en `Tarea terminada`, `Listo para pruebas`, `En pruebas` o
+   `Listo`, devolver esa tarjeta a `En curso`. Tras corregir y validar
+   de nuevo por el desarrollador, volver a `Tarea terminada` y
+   continuar el flujo de staging y QA.
 5. Listar transiciones reales con `listJiraIssueTransitions`.
 6. Si existe la transición al estado destino, aplicarla con
    `transitionJiraIssue` (por `transitionId`, nunca por nombre

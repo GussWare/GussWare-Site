@@ -67,22 +67,29 @@ Fundamental rules:
 * Never work directly on `staging` or `develop`.
 * Task branches originate from `origin/develop`.
 * A task branch must track its corresponding remote task branch.
-* Pull Requests normally target `origin/staging`.
+* Pull Requests from task branches target `origin/develop`.
+* Promotion Pull Requests follow `develop` → `staging` → `main`.
+* Promotion Pull Requests do not require a new task branch or worktree.
 * Never perform destructive Git operations without explicit instruction.
 * Never modify another task's worktree or branch.
 
 ### Staging flow
 
-`staging` is the integration branch for the Staging environment, and the
-GitHub Actions workflows key on it:
+`develop` is the integration branch for programmer work and has no
+server deployment. It must still run the complete CI validation.
 
-* Pull Request targeting `staging` → CI (lint, static build and tests);
-  no deployment.
+`staging` is the integration branch for the Staging environment, and the
+GitHub Actions workflows key on it for publication:
+
+* Pull Request targeting `develop`, `staging` or `main` → CI (lint,
+  static build and tests); no deployment from the Pull Request.
+* Push or merge into `develop` → CI only, with no deployment.
 * Push or merge into `staging` → CI and deployment to Staging (SFTP to
   the hosting of `staging.gussware.dev`).
+* Push or merge into `main` → CI and deployment to Production, subject
+  to the production Environment protections.
 
-`develop` remains the base the task branches originate from; it is not
-the branch that is deployed.
+Task branches originate from `develop`; they are not deployed directly.
 
 ---
 
