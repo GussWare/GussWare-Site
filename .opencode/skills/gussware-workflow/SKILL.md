@@ -374,12 +374,23 @@ push
       ↓
 transicionar Jira al estado correspondiente (si aplica, §17)
       ↓
-Pull Request
+      Pull Request de la rama de tarea a `develop`
       ↓
-origin/develop
+      `develop`
+      ↓ PR de promoción
+      `staging`
+      ↓ PR de promoción
+      `main`
 ```
 
 No comenzar una tarea independiente nueva hasta completar el commit de la tarea actual.
+
+Una promoción entre ramas no crea una nueva tarea, rama de trabajo ni
+worktree. Después de fusionar la PR de la rama de tarea en `develop`,
+la promoción se realiza mediante una PR `develop` → `staging`. Después
+de validar staging, la promoción a producción se realiza mediante una
+PR `staging` → `main`. No crear PR directas desde una rama de tarea a
+`staging` o `main`.
 
 Dentro de una tarjeta principal con subtareas: cada subtarea es una
 unidad independiente de trabajo dentro de la tarjeta principal y debe
@@ -492,6 +503,17 @@ base: develop
 head: <branch de la tarea>
 ```
 
+Las PR de promoción deben utilizar estos destinos, en este orden:
+
+```text
+develop → staging
+staging → main
+```
+
+Las PR de promoción no requieren un worktree adicional ni una rama
+temporal. Deben pasar los required checks de la rama destino antes de
+ser fusionadas. No realizar el merge localmente.
+
 Antes de crear o entregar el Pull Request:
 
 ```bash
@@ -500,9 +522,10 @@ git branch -vv
 git log --oneline --decorate -n 5
 ```
 
-El branch debe estar publicado en `origin`.
-
-No realizar el merge localmente.
+El branch de la tarea debe estar publicado en `origin`. Antes de crear
+una PR de promoción, verificar que la rama origen y la rama destino
+corresponden al siguiente paso permitido del flujo. No realizar el
+merge localmente.
 
 ---
 
