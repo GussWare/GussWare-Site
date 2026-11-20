@@ -662,6 +662,16 @@ Antes de finalizar:
 * [ ] El commit fue enviado a `origin`.
 * [ ] El branch remoto está actualizado.
 * [ ] El Pull Request apunta a `develop`.
+* [ ] Si corresponde, la promoción posterior se realizó mediante PR
+  `develop` → `staging` y después `staging` → `main`.
+* [ ] La rama destino y el tipo de ejecución (PR, push o manual) fueron
+  verificados explícitamente.
+* [ ] El required check de CI terminó correctamente en la rama destino.
+* [ ] Si hubo despliegue, el Environment y el resultado del job de
+  publicación fueron verificados.
+* [ ] Si no hubo despliegue por diseño, quedó indicado como no aplicable.
+* [ ] Las validaciones posteriores al despliegue fueron ejecutadas o se
+  documentó por qué no aplicaban.
 * [ ] La tarjeta Jira quedó en el estado correspondiente (§17:
   subtarea → Listo; tarea principal → Listo para pruebas; o su
   ausencia de transición quedó reportada; N/A sin tarjeta Jira).
@@ -682,9 +692,18 @@ Commit:
 Remote:
 Upstream:
 Pull Request:
+Target branch:
+CI check:
+Deployment:
 Validation:
 Jira:
 Status:
 ```
 
 El reporte debe contener únicamente información relacionada con la tarea realizada.
+`Target branch`, `CI check` y `Deployment` deben indicar el destino
+verificado, el nombre y resultado del check requerido, y si el
+despliegue fue exitoso, omitido o no aplicaba. `Validation` debe
+enumerar las comprobaciones ejecutadas y sus resultados. `Jira` debe
+incluir la tarjeta, subtarea, transición y comentario de cierre cuando
+corresponda.
