@@ -29,7 +29,9 @@
 | Rama | `fix/RGW-353-auditoria-seguridad` |
 | Worktree | `gussware-RGW-353-auditoria-seguridad` |
 | Commit base | `f58352a` (`origin/develop`) |
-| Fecha de auditoría | 21 de noviembre de 2026 |
+| Fecha de auditoría inicial | 21 de noviembre de 2026 |
+| Fecha de validación en entornos | 22 de noviembre de 2026 |
+| Entornos validados | Staging (`https://staging.gussware.dev`), Producción (`https://gussware.dev`) |
 | Alcance | HTTPS/SSL, cabeceras, WordPress, REST API, autenticación, permisos, secretos, dependencias, formularios, infraestructura observable, integridad |
 | Tipo de trabajo | Solo auditoría; sin correcciones |
 
@@ -38,10 +40,10 @@
 | Categoría | Cantidad |
 |---|---|
 | Vulnerabilidades confirmadas (dependencias) | 20 (7 high, 13 moderate) |
-| Hallazgos de configuración confirmados | 5 |
-| Riesgos potenciales | 6 |
+| Hallazgos de configuración confirmados | 6 |
+| Riesgos potenciales | 5 |
 | Observaciones | 4 |
-| Limitaciones / pruebas no ejecutadas | 9 |
+| Limitaciones / pruebas no ejecutadas | 6 |
 
 ### Veredicto
 
@@ -143,18 +145,24 @@ Se revisaron explícitamente, según los criterios de aceptación, las siguiente
 
 ---
 
-### D.2 — Ausencia de cabeceras de seguridad HTTP (confirmado, configuración)
+### D.2 — Ausencia de cabeceras de seguridad HTTP (confirmado, configuración y entorno)
 
 **Severidad:** medio.  
-**Estado:** confirmado por inspección de `public/.htaccess` y `src/layouts/Layout.astro`.
+**Estado:** confirmado por inspección de código y validación directa en Staging y Producción.
 
-**Evidencia:**
+**Evidencia (código):**
 - `public/.htaccess` define únicamente `ErrorDocument 404/500`, `DirectoryIndex index.html` y una regla de barra final (`R=301`). **Ausentes:** `Content-Security-Policy`, `Strict-Transport-Security` (HSTS), `X-Content-Type-Options: nosniff`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`.
 - `src/layouts/Layout.astro` no establece cabeceras mediante `<meta http-equiv>` ni configuración de servidor.
 
-**Riesgo:** sin HSTS el navegador acepta conexiones HTTP (downgrade); sin CSP hay mayor superficie para XSS e inyección de recursos; sin `X-Content-Type-Options` existe riesgo de MIME-sniffing; sin `X-Frame-Options` posible clickjacking.
+**Evidencia (entornos desplegados, 22 de noviembre de 2026):**
+- Staging `https://staging.gussware.dev/` → `200 OK`, `content-security-policy: upgrade-insecure-requests` únicamente. Sin `strict-transport-security`, sin `x-frame-options`, sin `referrer-policy`, sin `x-content-type-options`.
+- Staging `https://staging.gussware.dev/contact/` → misma política débil.
+- Producción `https://gussware.dev/` → `200 OK`, `content-security-policy: upgrade-insecure-requests` únicamente. Sin cabeceras adicionales de seguridad.
+- Producción `https://gussware.dev/contact/` → misma política débil.
 
-**Impacto:** medio (explotación depende de otros vectores; HSTS es crítico si el sitio sirve por HTTPS).
+**Riesgo:** sin HSTS el navegador acepta conexiones HTTP (downgrade); sin CSP hay mayor superficie para XSS e inyección de recursos; sin `X-Content-Type-Options` existe riesgo de MIME-sniffing; sin `X-Frame-Options` posible clickjacking. La política `upgrade-insecure-requests` solo fuerza recursos a HTTPS pero no protege contra ninguno de los vectores anteriores.
+
+**Impacto:** medio (explotación depende de otros vectores; HSTS es crítico si el sitio sirve por HTTPS). Confirmado en ambos entornos.
 
 **Recomendación:** agregar cabeceras de seguridad en `.htaccess` (servidor Hostinger/LiteSpeed) y/o mediante middleware de Astro; incluir `Content-Security-Policy` restrictiva, `Strict-Transport-Security` (si HTTPS está activo), `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`/`SAMEORIGIN`, `Referrer-Policy: no-referrer`. (Solo recomendación; no se implementó.)
 
@@ -218,18 +226,21 @@ Se revisaron explícitamente, según los criterios de aceptación, las siguiente
 
 ---
 
-### D.6 — Endpoint de usuarios de WordPress expuesto (potencial, WordPress REST API)
+### D.6 — Endpoint de usuarios de WordPress expuesto (no reproducido en entornos validados)
 
-**Severidad:** medio (potencial).  
-**Estado:** potencial; ruta definida pero no se confirma uso ni estado en WordPress.
+**Severidad:** medio (potencial en código; no reproducible en entorno).  
+**Estado:** no reproducido en Staging ni Producción. La ruta existe en el código (`src/lib/wordpress/routes.ts:121`) pero el endpoint devuelve 403 sin autenticación en ambos entornos.
 
-**Evidencia:** `src/lib/wordpress/routes.ts:121`: `user: (userId) => /wp/v2/users/${userId}`. El endpoint `/wp/v2/users` está expuesto por defecto en WordPress y permite enumeración de usuarios si no se restringe.
+**Evidencia (código):**
+- `src/lib/wordpress/routes.ts:121`: `user: (userId) => /wp/v2/users/${userId}`. El endpoint `/wp/v2/users` está expuesto por defecto en WordPress y permite enumeración de usuarios si no se restringe.
 
-**Riesgo:** enumeración de nombres de usuario, ataques de fuerza bruta contra cuentas de administración.
+**Evidencia (entornos desplegados, 22 de noviembre de 2026):**
+- Staging `https://staging-cms.gussware.dev/wp-json/wp/v2/users?per_page=5` → `403 Forbidden`.
+- Producción `https://cms.gussware.dev/wp-json/wp/v2/users?per_page=5` → `403 Forbidden`.
 
-**Impacto:** medio (requiere acceso a WP para confirmar si el endpoint está restringido).
+**Conclusión:** el endpoint `/wp/v2/users` está restringido sin autenticación en Staging y Producción. El hallazgo original (riesgo potencial) no se reproduce en los entornos validados. Se mantiene como observación: el código define la ruta pero no se invoca desde el frontend, y WordPress la protege.
 
-**Recomendación:** verificar en WordPress que `/wp/v2/users` esté deshabilitado o restringido a autenticados; no usar el endpoint desde el frontend salvo necesario. (Solo recomendación; no se verificó por falta de acceso a WP.)
+**Recomendación:** mantener la restricción actual; no exponer `/wp/v2/users` sin autenticación; no usar el endpoint desde el frontend salvo necesario. (Solo recomendación; no se implementó.)
 
 ---
 
@@ -249,6 +260,7 @@ Se revisaron explícitamente, según los criterios de aceptación, las siguiente
 | RP-04 | Información de diagnóstico expuesta en 500 | `src/pages/500.astro:144` (`EVENT_REF`, `DISPATCH_ID`) | Divulgación leve de IDs internos al usuario final. | Revisar si estos valores son sensibles; evitar exponerlos en producción. |
 | RP-05 | Sitemap expone URLs públicas | `robots.txt`, `sitemap-index.xml` | Reconocimiento de estructura del sitio (normal en sitios públicos). | No aplicar a URLs públicas; considerar excluir rutas internas si las hubiera. |
 | RP-06 | Sin Subresource Integrity en recursos externos | `src/layouts/Layout.astro:61-66` (Google Fonts) | Si el CDN de fuentes es comprometido, se podría ejecutar CSS/JS malicioso. | Agregar `integrity`/`crossorigin` a recursos externos críticos. |
+| RP-07 | XML-RPC habilitado en el CMS | `https://staging-cms.gussware.dev/xmlrpc.php` y `https://cms.gussware.dev/xmlrpc.php` (405, `Allow: POST`) | El endpoint XML-RPC existe y acepta peticiones POST; superficie potencial para ataques de fuerza bruta o amplificación. | Deshabilitar XML-RPC en WordPress si no se usa, o restringir su acceso. |
 
 ---
 
@@ -265,17 +277,17 @@ Se revisaron explícitamente, según los criterios de aceptación, las siguiente
 
 ## G. Limitaciones y pruebas no ejecutadas
 
-| # | Prueba / aspecto | Por qué no se ejecutó |
-|---|---|---|
-| L-1 | Verificación real de HTTPS/SSL (certificado, validez, renovación) | No hay acceso a los entornos staging/producción desde este entorno; las URLs son `https://` en `.env.staging`/`.env.production` pero no se pueden consultar. Es una prueba contra infraestructura ajena. |
-| L-2 | Redirect HTTP → HTTPS en servidor | El servidor web (Hostinger/LiteSpeed) no está bajo control del repositorio; `.htaccess` no lo define. Requiere acceso al hosting. |
-| L-3 | Estado real de cabeceras HTTP en producción (CSP, HSTS, etc.) | No se puede hacer `curl` contra `gussware.dev`/`staging.gussware.dev` sin credenciales de acceso y sería una prueba contra producción (fuera de alcance de auditoría de solo lectura sobre el repositorio). |
-| L-4 | XML-RPC habilitado/deshabilitado | Configuración de WordPress/servidor; no hay acceso a WP admin ni a `xmlrpc.php`. |
-| L-5 | CORS real de WordPress REST API | Configuración del servidor WordPress; no verificable desde el frontend. |
-| L-6 | Usuarios, roles y contraseñas de WordPress | Requiere acceso a WP admin; fuera del alcance del repositorio frontend. |
-| L-7 | Pruebas intrusivas / denegación de servicio / extracción de datos | Expressamente prohibido por la tarjeta RGW-353 ("No realizar explotación destructiva..."). |
-| L-8 | `npm audit fix` / actualización de dependencias | Prohibido (no modificar dependencias); solo se documentó el estado de `npm audit`. |
-| L-9 | Pruebas contra el sitio desplegado (producción/staging) | No autorizado; el alcance del repositorio es de lectura. La suite `contact.test.mjs` requiere un servidor de desarrollo activo y `WORDPRESS_URL`, no disponibles en este worktree sin `.env`. |
+| # | Prueba / aspecto | Estado | Por qué / nota |
+|---|---|---|---|
+| L-1 | Verificación real de HTTPS/SSL (certificado, validez, renovación) | **Ejecutada parcialmente** | Se confirmó que HTTPS responde (200) en Staging y Producción, y que HTTP también responde sin redirect forzado. No se pudo inspeccionar el certificado SSL (validez, cadena de confianza, fecha de expiración) porque requiere acceso al servidor o herramientas de inspección de certificado no disponibles. |
+| L-2 | Redirect HTTP → HTTPS en servidor | **Ejecutada** | HTTP (`http://staging.gussware.dev/` y `http://gussware.dev/`) devuelve `200 OK` sin redirect a HTTPS. No hay forzado de HTTPS observable. |
+| L-3 | Estado real de cabeceras HTTP en producción (CSP, HSTS, etc.) | **Ejecutada** | Se validaron cabeceras en `https://staging.gussware.dev/` y `https://gussware.dev/`: solo `content-security-policy: upgrade-insecure-requests`. Ausentes `strict-transport-security`, `x-frame-options`, `referrer-policy`. |
+| L-4 | XML-RPC habilitado/deshabilitado | **Ejecutada** | `https://staging-cms.gussware.dev/xmlrpc.php` y `https://cms.gussware.dev/xmlrpc.php` devuelven `405 Method Not Allowed` con `Allow: POST`. XML-RPC está habilitado en ambos entornos. |
+| L-5 | CORS real de WordPress REST API | **Ejecutada** | Preflight `OPTIONS` en ambos entornos devuelve `access-control-allow-origin` con el origen del sitio y `access-control-allow-credentials: true`. |
+| L-6 | Usuarios, roles y contraseñas de WordPress | **No ejecutada** | Requiere acceso a WP admin / credenciales de Basic Auth. Fuera del alcance del repositorio frontend y prohibido sin autorización. |
+| L-7 | Pruebas intrusivas / denegación de servicio / extracción de datos | **No ejecutada** | Expressamente prohibido por la tarjeta RGW-353 ("No realizar explotación destructiva..."). |
+| L-8 | `npm audit fix` / actualización de dependencias | **No ejecutada** | Prohibido (no modificar dependencias); solo se documentó el estado de `npm audit`. |
+| L-9 | Pruebas contra el sitio desplegado (producción/staging) | **Ejecutada** | Se realizaron peticiones HTTP de solo lectura contra Staging y Producción (sección K). No se envió ningún dato ni se generó solicitud que pudiera afectar el servicio. |
 
 Nota: las pruebas unitarias del proyecto sí se ejecutaron (`npm test` sobre `environments.test.mjs` y `cta-navigation.test.mjs`: 41 pass, 0 fail, 1 skip por ausencia de `.env` local). `npm run lint` falló porque ESLint reportó versión 6.4.0 sin configuración flat (`eslint.config.js` requiere ESLint 9+); esto es una observación de configuración de tooling, no un hallazgo de seguridad de la aplicación.
 
@@ -283,15 +295,21 @@ Nota: las pruebas unitarias del proyecto sí se ejecutaron (`npm test` sobre `en
 
 ## H. Resumen priorizado de riesgos
 
-| Prioridad | ID | Título | Severidad | Tipo |
-|---|---|---|---|---|
-| 1 | D.1 | Vulnerabilidades en dependencias (7 high, 13 moderate) | High/Moderate | Dependencias |
-| 2 | D.4 | Inyección de HTML sin sanitizar vía `set:html` (XSS potencial) | Medio-alto | Frontend / XSS |
-| 3 | D.2 | Ausencia de cabeceras de seguridad (CSP, HSTS, etc.) | Medio | Configuración / Cabeceras |
-| 4 | D.5 | Formulario sin CSRF ni rate limiting/CAPTCHA | Medio | Formulario / Abuso |
-| 5 | D.3 | Exposición de `WORDPRESS_URL` al bundle del cliente | Bajo-medio | Secretos / Datos |
-| 6 | D.6 | Endpoint `/wp/v2/users` de WordPress expuesto (potencial) | Medio | WordPress / API |
-| 7 | RP-01..RP-06 | Riesgos potenciales (HTTPS forzado, CORS, SRI, diagnóstico 500, sitemap, XML-RPC) | Medio/bajo | Infraestructura / Configuración |
+| Prioridad | ID | Título | Severidad | Tipo | Estado tras validación |
+|---|---|---|---|---|---|
+| 1 | D.1 | Vulnerabilidades en dependencias (7 high, 13 moderate) | High/Moderate | Dependencias | Confirmado |
+| 2 | D.2 | Ausencia de cabeceras de seguridad (CSP, HSTS, etc.) | Medio | Configuración / Cabeceras | Confirmado (Staging + Producción) |
+| 3 | D.4 | Inyección de HTML sin sanitizar vía `set:html` (XSS potencial) | Medio-alto | Frontend / XSS | Confirmado (código) |
+| 4 | D.5 | Formulario sin CSRF ni rate limiting/CAPTCHA | Medio | Formulario / Abuso | Confirmado (código) |
+| 5 | D.3 | Exposición de `WORDPRESS_URL` al bundle del cliente | Bajo-medio | Secretos / Datos | Confirmado (código) |
+| 6 | D.6 | Endpoint `/wp/v2/users` de WordPress expuesto | Medio | WordPress / API | No reproducido (403 en ambos entornos) |
+| 7 | RP-01 | No hay redirect HTTP → HTTPS | Medio | Infraestructura | Confirmado (Staging + Producción) |
+| 8 | RP-02 | CORS con credenciales en WordPress REST API | Medio/bajo | Infraestructura | Confirmado (Staging + Producción) |
+| 9 | RP-07 | XML-RPC habilitado en el CMS | Medio/bajo | Infraestructura | Confirmado (Staging + Producción) |
+| 10 | RP-03 | Endpoint `/wp/v2/users` expuesto (código) | Medio/bajo | WordPress / API | No reproducible (restringido en entorno) |
+| 11 | RP-04 | Información de diagnóstico expuesta en 500 | Bajo | Frontend | Observación |
+| 12 | RP-05 | Sitemap expone URLs públicas | Bajo | Infraestructura | Observación |
+| 13 | RP-06 | Sin Subresource Integrity en recursos externos | Bajo | Frontend | Observación |
 
 ---
 
@@ -311,6 +329,86 @@ Nota: las pruebas unitarias del proyecto sí se ejecutaron (`npm test` sobre `en
 
 ---
 
+## K. Validación en entornos desplegados (Staging y Producción)
+
+### K.1. Método y fecha
+
+- **Fecha de ejecución:** 22 de noviembre de 2026, entre las 03:01 y 03:02 GMT.
+- **Método:** peticiones HTTP de solo lectura (`GET`, `OPTIONS`) con `redirect: manual`, sin envío de credenciales, sin payloads destructivos, sin extracción de datos, sin pruebas de denegación de servicio.
+- **Herramienta:** cliente HTTP nativo del entorno de ejecución (`fetch`), inspección de cabeceras de respuesta y códigos de estado.
+
+### K.2. Staging — `https://staging.gussware.dev` y `https://staging-cms.gussware.dev`
+
+| Comprobación | URL consultada | Método | Código HTTP | Resultado | Clasificación |
+|---|---|---|---|---|---|
+| Cabeceras de seguridad (sitio) | `https://staging.gussware.dev/` | GET | 200 | `content-security-policy: upgrade-insecure-requests`. **Ausentes:** `Strict-Transport-Security`, `X-Frame-Options`, `Referrer-Policy`. `X-Content-Type-Options` no presente en la respuesta del sitio. | Hallazgo confirmado (D.2) |
+| Cabeceras de seguridad (contacto) | `https://staging.gussware.dev/contact/` | GET | 200 | Misma política: solo `upgrade-insecure-requests`. | Hallazgo confirmado (D.2) |
+| HTTP → HTTPS (redirect) | `http://staging.gussware.dev/` | GET | 200 | HTTP accesible y responde con contenido; no se observó redirect forzado a HTTPS. | Riesgo potencial (RP-01) |
+| CMS `/wp/v2/users` (sin auth) | `https://staging-cms.gussware.dev/wp-json/wp/v2/users?per_page=5` | GET | 403 | **Acceso denegado.** El endpoint de usuarios está restringido sin autenticación. | No reproducido (D.6 mitigado) |
+| CMS `/wp/v2/settings` (sin auth) | `https://staging-cms.gussware.dev/wp-json/wp/v2/settings` | GET | 401 | **No autorizado.** Requiere Basic Auth. | Control cumple (CU-03) |
+| XML-RPC (CMS) | `https://staging-cms.gussware.dev/xmlrpc.php` | GET | 405 | `Allow: POST`. El endpoint XML-RPC **existe y está habilitado** (solo acepta POST). | Riesgo potencial (RP-07, nuevo) |
+| XML-RPC (sitio) | `https://staging.gussware.dev/xmlrpc.php` | GET | 404 | No expuesto en el sitio público. | Observación |
+| CORS preflight (WP API) | `https://staging-cms.gussware.dev/wp-json/wp/v2/users?per_page=1` | OPTIONS (Origin: staging.gussware.dev) | 200 | `access-control-allow-origin: https://staging.gussware.dev`, `access-control-allow-credentials: true`, métodos `OPTIONS, GET, POST, PUT, PATCH, DELETE`. | Riesgo potencial (RP-02) |
+| Versión PHP (CMS) | `https://staging-cms.gussware.dev/wp-json/wp/v2/settings` | GET | 401 | `x-powered-by: PHP/8.5.13`. | Observación (divulgación de versión) |
+| Servidor (CMS) | `https://staging-cms.gussware.dev/wp-json/wp/v2/settings` | GET | 401 | `server: LiteSpeed`. | Observación |
+
+**Evidencia técnica reproducible (staging):**
+- `GET https://staging.gussware.dev/` → `200 OK`, `content-security-policy: upgrade-insecure-requests`, sin `strict-transport-security`, sin `x-frame-options`, sin `referrer-policy`.
+- `GET http://staging.gussware.dev/` → `200 OK` (HTTP sin redirect forzado a HTTPS).
+- `GET https://staging-cms.gussware.dev/wp-json/wp/v2/users?per_page=5` → `403 Forbidden`.
+- `GET https://staging-cms.gussware.dev/xmlrpc.php` → `405 Method Not Allowed`, `Allow: POST`.
+- `OPTIONS https://staging-cms.gussware.dev/wp-json/wp/v2/users?per_page=1` con `Origin: https://staging.gussware.dev` → `200 OK`, `access-control-allow-origin: https://staging.gussware.dev`, `access-control-allow-credentials: true`.
+
+### K.3. Producción — `https://gussware.dev` y `https://cms.gussware.dev`
+
+| Comprobación | URL consultada | Método | Código HTTP | Resultado | Clasificación |
+|---|---|---|---|---|---|
+| Cabeceras de seguridad (sitio) | `https://gussware.dev/` | GET | 200 | `content-security-policy: upgrade-insecure-requests`. **Ausentes:** `Strict-Transport-Security`, `X-Frame-Options`, `Referrer-Policy`. `X-Content-Type-Options` no presente en la respuesta del sitio. | Hallazgo confirmado (D.2) |
+| Cabeceras de seguridad (contacto) | `https://gussware.dev/contact/` | GET | 200 | Misma política: solo `upgrade-insecure-requests`. | Hallazgo confirmado (D.2) |
+| HTTP → HTTPS (redirect) | `http://gussware.dev/` | GET | 200 | HTTP accesible y responde con contenido; no se observó redirect forzado a HTTPS. | Riesgo potencial (RP-01) |
+| CMS `/wp/v2/users` (sin auth) | `https://cms.gussware.dev/wp-json/wp/v2/users?per_page=5` | GET | 403 | **Acceso denegado.** El endpoint de usuarios está restringido sin autenticación. | No reproducido (D.6 mitigado) |
+| CMS `/wp/v2/settings` (sin auth) | `https://cms.gussware.dev/wp-json/wp/v2/settings` | GET | 401 | **No autorizado.** Requiere Basic Auth. | Control cumple (CU-03) |
+| XML-RPC (CMS) | `https://cms.gussware.dev/xmlrpc.php` | GET | 405 | `Allow: POST`. El endpoint XML-RPC **existe y está habilitado** (solo acepta POST). | Riesgo potencial (RP-07, nuevo) |
+| XML-RPC (sitio) | `https://gussware.dev/xmlrpc.php` | GET | 404 | No expuesto en el sitio público. | Observación |
+| CORS preflight (WP API) | `https://cms.gussware.dev/wp-json/wp/v2/users?per_page=1` | OPTIONS (Origin: gussware.dev) | 200 | `access-control-allow-origin: https://gussware.dev`, `access-control-allow-credentials: true`, métodos `OPTIONS, GET, POST, PUT, PATCH, DELETE`. | Riesgo potencial (RP-02) |
+| Versión PHP (CMS) | `https://cms.gussware.dev/wp-json/wp/v2/settings` | GET | 401 | `x-powered-by: PHP/8.3.37`. | Observación (divulgación de versión) |
+| Servidor (CMS) | `https://cms.gussware.dev/wp-json/wp/v2/settings` | GET | 401 | `server: hcdn`. | Observación |
+
+**Evidencia técnica reproducible (producción):**
+- `GET https://gussware.dev/` → `200 OK`, `content-security-policy: upgrade-insecure-requests`, sin `strict-transport-security`, sin `x-frame-options`, sin `referrer-policy`.
+- `GET http://gussware.dev/` → `200 OK` (HTTP sin redirect forzado a HTTPS).
+- `GET https://cms.gussware.dev/wp-json/wp/v2/users?per_page=5` → `403 Forbidden`.
+- `GET https://cms.gussware.dev/xmlrpc.php` → `405 Method Not Allowed`, `Allow: POST`.
+- `OPTIONS https://cms.gussware.dev/wp-json/wp/v2/users?per_page=1` con `Origin: https://gussware.dev` → `200 OK`, `access-control-allow-origin: https://gussware.dev`, `access-control-allow-credentials: true`.
+
+### K.4. Diferencias observadas entre Staging y Producción
+
+| Aspecto | Staging | Producción |
+|---|---|---|
+| CMS servidor | `LiteSpeed` | `hcdn` (Hostinger CDN) |
+| CMS PHP | `PHP/8.5.13` | `PHP/8.3.37` |
+| CMS last-modified | `Fri, 20 Nov 2026` | `Tue, 17 Nov 2026` |
+| Sitio last-modified | `Fri, 20 Nov 2026` | `Tue, 17 Nov 2026` |
+| Cabeceras de seguridad | Idénticas (ambas débiles) | Idénticas (ambas débiles) |
+| `/wp/v2/users` | 403 (restringido) | 403 (restringido) |
+| XML-RPC | 405 (habilitado, solo POST) | 405 (habilitado, solo POST) |
+| CORS `allow-origin` | `https://staging.gussware.dev` | `https://gussware.dev` |
+| HTTP → HTTPS redirect | No observado | No observado |
+
+### K.5. HTML y posibles riesgos XSS (set:html)
+
+Se inspeccionó el HTML renderizado de `https://staging.gussware.dev/` y `https://gussware.dev/`. El contenido proviene de WordPress (favicon, logo, contenido de páginas) y se inyecta mediante `set:html` en los componentes identificados en D.4. No se ejecutaron payloads ni pruebas intrusivas (prohibido por la tarjeta). La presencia de `set:html` sobre contenido de WordPress se confirma por inspección de código fuente; el contenido renderizado en ambos entornos es estático y proviene del CMS publicado.
+
+### K.6. Formulario de contacto
+
+Se accedió a `https://staging.gussware.dev/contact/` y `https://gussware.dev/contact/` (ambos `200 OK`). El formulario está presente en la página. No se envió ningún mensaje ni se generó solicitud que pudiera afectar al servicio. La ausencia de token CSRF y de protección contra abuso se confirma por inspección de código fuente (D.5); no se pudo validar el comportamiento del endpoint de WordPress sin credenciales.
+
+### K.7. Exposición de información (WORDPRESS_URL)
+
+No se observó `WORDPRESS_URL` ni credenciales embebidas en el HTML renderizado de ninguno de los dos entornos. La URL del CMS (`staging-cms.gussware.dev` / `cms.gussware.dev`) solo aparece en cabeceras de respuesta del servidor WordPress (`link`, `access-control-*`), no en el bundle del cliente. La exposición de `WORDPRESS_URL` al bundle del cliente (D.3) se confirma por inspección de código fuente (`import.meta.env.WORDPRESS_URL` en componentes cliente), no por inspección del HTML desplegado.
+
+---
+
 ## J. Evidencias, limitaciones y conclusión
 
 **Evidencias recogidas:**
@@ -318,10 +416,19 @@ Nota: las pruebas unitarias del proyecto sí se ejecutaron (`npm test` sobre `en
 - Código fuente revisado: `astro.config.mjs`, `src/lib/wordpress/{client,routes,favicon,logo,menu,legal,seo}.ts`, `src/lib/contact/{schema,forms,submit}.ts`, `src/components/contact/ContactForm.astro`, `src/layouts/Layout.astro`, `src/pages/{index,[...uri],404,500}.astro`, `public/.htaccess`, `.env.example`, `.gitignore`, `.github/workflows/{ci,deploy-reusable}.yml`, `package.json`, `tests/environments.test.mjs`, `tests/cta-navigation.test.mjs`.
 - `npm audit --audit=moderate`: 20 vulnerabilidades (7 high, 13 moderate), todas con fix disponible.
 - Pruebas unitarias ejecutadas: 41 pass, 0 fail, 1 skip (`environments.test.mjs`, `cta-navigation.test.mjs`).
+- Validación HTTP de solo lectura en Staging y Producción (22 de noviembre de 2026): cabeceras de seguridad, HTTPS/HTTP, `/wp/v2/users`, XML-RPC, CORS, formulario de contacto (sección K).
 
-**Limitaciones:** ver sección G (no se pudo verificar HTTPS real, cabeceras en producción, XML-RPC, CORS de WP, usuarios/roles; no se hicieron pruebas intrusivas ni se aplicaron correcciones).
+**Limitaciones:** ver sección G. No se pudo inspeccionar el certificado SSL (validez, cadena de confianza), no se verificaron usuarios/roles de WordPress (requiere credenciales), no se hicieron pruebas intrusivas ni se aplicaron correcciones.
 
-**Conclusión:** el sitio tiene controles de base adecuados (secretos fuera del repo, CI sin `.env`, formulario validado, build con guarda de WordPress), pero requiere remediación de vulnerabilidades en dependencias, cabeceras de seguridad, sanitización de `set:html` y protección del formulario. Ningún hallazgo fue explotado; todos son documentados con evidencia verificable.
+**Conclusión:** el sitio tiene controles de base adecuados (secretos fuera del repo, CI sin `.env`, formulario validado, build con guarda de WordPress, `/wp/v2/users` restringido en ambos entornos), pero requiere remediación de vulnerabilidades en dependencias (20), ausencia de cabeceras de seguridad (confirmado en Staging y Producción), falta de redirect HTTP→HTTPS (ambos entornos), XML-RPC habilitado (ambos entornos), CORS con credenciales (ambos entornos), sanitización de `set:html` y protección del formulario. Ningún hallazgo fue explotado; todos son documentados con evidencia verificable.
+
+**Estado de hallazgos D.1–D.6 tras validación de entorno:**
+- D.1: Confirmado (20 vulnerabilidades, `npm audit`). Sin cambios.
+- D.2: Confirmado en Staging y Producción (cabeceras débiles, sin HSTS, sin X-Frame-Options, etc.).
+- D.3: Confirmado por inspección de código (`import.meta.env.WORDPRESS_URL` en componentes cliente).
+- D.4: Confirmado por inspección de código (`set:html` sin sanitización). No se ejecutaron payloads XSS (prohibido).
+- D.5: Confirmado por inspección de código (formulario sin CSRF ni rate limiting). No se envió mensaje real (prohibido).
+- D.6: No reproducido en Staging ni Producción (`/wp/v2/users` devuelve `403 Forbidden` sin auth en ambos). Mitigado.
 
 **Ubicación del informe:** `docs/audits/security-technical-audit.md` (rama `fix/RGW-353-auditoria-seguridad`).
 
