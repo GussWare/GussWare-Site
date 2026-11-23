@@ -1,0 +1,46 @@
+# GussWare
+
+> GussWare es una comunidad colaborativa de especialistas independientes que diseña, desarrolla y mantiene plataformas web, aplicaciones móviles, software a medida, integraciones e infraestructura cloud para empresas. GussWare is a collaborative community of independent specialists that designs, builds and maintains web platforms, mobile applications, custom software, integrations and cloud infrastructure for companies.
+
+El sitio es bilingüe: español en `https://gussware.dev/` e inglés bajo `https://gussware.dev/en/`. Solo se incluye contenido público. Este archivo orienta a los agentes hacia las páginas relevantes y no garantiza indexación, posicionamiento ni inclusión en respuestas de sistemas de IA. The site is bilingual, and this file contains public content only. It does not guarantee indexing, ranking or inclusion in AI-system responses.
+
+Última revisión: 2026-11-21.
+
+## Páginas principales / Main pages
+
+- [Inicio (ES)](https://gussware.dev/): portada en español con servicios, proceso de trabajo, modelo de comunidad y preguntas frecuentes.
+- [Home (EN)](https://gussware.dev/en/): English home with services, working process, community model and frequently asked questions.
+- [Servicios (ES)](https://gussware.dev/servicios/): índice de los seis servicios de GussWare en español.
+- [Services (EN)](https://gussware.dev/en/servicios/): index of GussWare's six services in English.
+- [Contacto (ES)](https://gussware.dev/contacto/): formulario e información para iniciar una conversación sobre un proyecto.
+- [Contact (EN)](https://gussware.dev/en/contact/): contact form and information to start a conversation about a project.
+
+## Servicios (ES)
+
+- [Diseño de sitios web y E-commerce](https://gussware.dev/servicios/diseno-sitios-web-tiendas-en-linea/): diseño y desarrollo de sitios web y tiendas en línea que explican la oferta, facilitan el contacto o la compra y funcionan en celular y escritorio.
+- [Desarrollo a medida](https://gussware.dev/servicios/desarrollo-a-medida/): software a la medida para procesos que dependen de hojas de cálculo, capturas repetidas o herramientas que no se comunican.
+- [Aplicaciones móviles](https://gussware.dev/servicios/aplicaciones-moviles/): aplicaciones para iPhone y Android que permiten consultar información, operar o acceder a servicios desde cualquier lugar.
+- [DevOps y Soporte Técnico](https://gussware.dev/servicios/devops-y-soporte-tecnico/): automatización, publicación y seguimiento de infraestructura para actualizar sistemas sin convertir cada cambio en un riesgo.
+- [Consultoría técnica](https://gussware.dev/servicios/consultoria-tecnica/): definición de alcance, herramientas y prioridades, con una ruta técnica documentada antes de invertir en construcción.
+- [Integración de APIs y Servicios Externos](https://gussware.dev/servicios/integracion-de-apis-y-servicios-externos/): conexión de sistemas para que intercambien información con reglas claras y se reduzca la captura repetitiva.
+
+## Services (EN)
+
+- [Website and Online Store Design](https://gussware.dev/en/servicios/website-and-online-store-design/): design and development of websites and online stores that explain the offer, make contact or purchase easy and work on mobile and desktop.
+- [Custom Software Development](https://gussware.dev/en/servicios/custom-software-development/): custom software for processes that depend on spreadsheets, repeated data entry or tools that do not talk to each other.
+- [Mobile Applications](https://gussware.dev/en/servicios/mobile-applications/): iPhone and Android applications to consult information, carry out operations or access services from anywhere.
+- [DevOps and Technical Support](https://gussware.dev/en/servicios/devops-technical-support/): automation, release management and infrastructure monitoring to update systems without turning every change into a risk.
+- [Technical Consulting](https://gussware.dev/en/servicios/technical-consulting/): scope, tooling and priority definition, with a documented technical roadmap before investing in building.
+- [API and External Service Integration](https://gussware.dev/en/servicios/api-and-external-service-integration/): system integration so information is exchanged under clear rules and repetitive data entry is reduced.
+
+## Legal
+
+- [Política de Privacidad (ES)](https://gussware.dev/politica-de-privacidad/): versión en español de la política de privacidad del sitio.
+- [Términos y Condiciones (ES)](https://gussware.dev/terminos-y-condiciones/): versión en español de las condiciones de uso del sitio y de los servicios.
+- [Privacy Policy (EN)](https://gussware.dev/en/privacy-policy/): versión en inglés de la política de privacidad del sitio.
+- [Terms of Service (EN)](https://gussware.dev/en/term-of-service/): versión en inglés de las condiciones de uso; su traducción está pendiente de actualización.
+
+## Recursos técnicos / Technical resources
+
+- [Sitemap](https://gussware.dev/sitemap-index.xml): índice de sitemaps con las URLs públicas generadas por el build.
+- [robots.txt](https://gussware.dev/robots.txt): directivas de rastreo y referencia al sitemap.
