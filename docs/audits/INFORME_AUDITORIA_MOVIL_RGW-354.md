@@ -8,8 +8,9 @@
 **Worktree:** `../gussware-RGW-354-auditoria-experiencia-movil`  
 **Commit base:** `cc1184c` (origin/develop)  
 **Commit original del informe:** `438bd10` — `docs(RGW-354): agregar informe de auditoria de experiencia movil`  
-**Commit correctivo:** `d2bf2be` — `docs(RGW-354): actualizar referencias finales del informe`  
-**Versión actual del informe:** correspondiente al commit `d2bf2be` (último commit de la rama `fix/RGW-354-auditoria-experiencia-movil`).  
+**Commit de corrección documental:** `d2bf2be` — `docs(RGW-354): corregir informe de auditoría móvil`  
+**Commit de cierre documental:** `bf228e35fcab5bde5710164954eb05c275b45770` — `docs(RGW-354): actualizar referencias finales del informe`  
+**Versión actual del informe:** correspondiente al commit `bf228e35fcab5bde5710164954eb05c275b45770` (último commit de la rama `fix/RGW-354-auditoria-experiencia-movil`).  
 
 ---
 
@@ -380,13 +381,17 @@ Total hallazgos: 10 (3 confirmados por inspección estática + 7 observaciones p
 
 Se publicaron dos comentarios en la tarjeta https://gussware.atlassian.net/browse/RGW-354:
 
-**Comentario original (`10426`):** resultados de la auditoría de experiencia móvil (versiones ES/EN), con los 10 hallazgos identificados, páginas y componentes revisados, dispositivos y navegadores probados, limitaciones del entorno, y confirmación de que no se modificó el sitio. Commit relacionado: `438bd10` — `docs(RGW-354): agregar informe de auditoria de experiencia movil`.
+**Comentario original (`10426`):** resultados iniciales de la auditoría de experiencia móvil (versiones ES/EN), con los 10 hallazgos identificados, páginas y componentes revisados, dispositivos y navegadores probados, limitaciones del entorno, y confirmación de que no se modificó el sitio. Commit relacionado: `438bd10` — `docs(RGW-354): agregar informe de auditoria de experiencia movil`.
 
-**Comentario de actualización documental (`10427`):** correcciones al informe derivadas de la revisión del PR #101 (distinción en HM-02 entre icono SVG de 24×24px y área interactiva aproximada de 40×40px, criterio de aceptación de evidencia visual marcado como parcial, y actualización de referencias de commits y comentarios). Commit relacionado: `d2bf2be` — `docs(RGW-354): actualizar referencias finales del informe`.
+**Comentario de actualización documental (`10427`):** correcciones al informe derivadas de la revisión del PR #101 (distinción en HM-02 entre icono SVG de 24×24px y área interactiva aproximada de 40×40px, criterio de aceptación de evidencia visual marcado como parcial, y actualización de referencias de commits y comentarios). Commit relacionado: `d2bf2be` — `docs(RGW-354): corregir informe de auditoría móvil`.
+
+**Actualización documental final:** se creó el commit `bf228e35fcab5bde5710164954eb05c275b45770` — `docs(RGW-354): actualizar referencias finales del informe`, que actualiza la trazabilidad y las referencias finales del informe (cabecera y sección 7.2). Este commit no tiene un comentario Jira asociado; no se inventó ningún identificador de comentario. Los comentarios efectivamente publicados en Jira son `10426` y `10427`.
 
 **Rama remota:** `origin/fix/RGW-354-auditoria-experiencia-movil`
 
 **Estado de Jira RGW-354:** Listo para pruebas (no se modificó).
+
+**Pull Request #101:** abierto y pendiente de revisión (base: `develop`, head: `fix/RGW-354-auditoria-experiencia-movil`, no integrado).
 
 ### 7.3 Validación documental
 
