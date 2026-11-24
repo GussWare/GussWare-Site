@@ -10,7 +10,7 @@
 **Commit original del informe:** `438bd10` — `docs(RGW-354): agregar informe de auditoria de experiencia movil`  
 **Commit de corrección documental:** `d2bf2be` — `docs(RGW-354): corregir informe de auditoría móvil`  
 **Commit de cierre documental:** `bf228e35fcab5bde5710164954eb05c275b45770` — `docs(RGW-354): actualizar referencias finales del informe`  
-**Versión actual del informe:** correspondiente al commit `bf228e35fcab5bde5710164954eb05c275b45770` (último commit de la rama `fix/RGW-354-auditoria-experiencia-movil`).  
+**Actualización documental previa:** `bf228e35fcab5bde5710164954eb05c275b45770` — `docs(RGW-354): actualizar referencias finales del informe`.
 
 ---
 
@@ -385,7 +385,9 @@ Se publicaron dos comentarios en la tarjeta https://gussware.atlassian.net/brows
 
 **Comentario de actualización documental (`10427`):** correcciones al informe derivadas de la revisión del PR #101 (distinción en HM-02 entre icono SVG de 24×24px y área interactiva aproximada de 40×40px, criterio de aceptación de evidencia visual marcado como parcial, y actualización de referencias de commits y comentarios). Commit relacionado: `d2bf2be` — `docs(RGW-354): corregir informe de auditoría móvil`.
 
-**Actualización documental final:** se creó el commit `bf228e35fcab5bde5710164954eb05c275b45770` — `docs(RGW-354): actualizar referencias finales del informe`, que actualiza la trazabilidad y las referencias finales del informe (cabecera y sección 7.2). Este commit no tiene un comentario Jira asociado; no se inventó ningún identificador de comentario. Los comentarios efectivamente publicados en Jira son `10426` y `10427`.
+**Actualización documental previa:** se creó el commit `bf228e35fcab5bde5710164954eb05c275b45770` — `docs(RGW-354): actualizar referencias finales del informe`, que actualizó la trazabilidad y las referencias finales del informe (cabecera y sección 7.2). Este commit no tiene un comentario Jira asociado; no se inventó ningún identificador de comentario. Los comentarios efectivamente publicados en Jira son `10426` y `10427`.
+
+**Commit posterior de cierre de trazabilidad:** `d8fcced21c054abb7448efcb7c81d7081719f02a` — `docs(RGW-354): finalizar trazabilidad del informe`. No tiene un comentario Jira asociado.
 
 **Rama remota:** `origin/fix/RGW-354-auditoria-experiencia-movil`
 
