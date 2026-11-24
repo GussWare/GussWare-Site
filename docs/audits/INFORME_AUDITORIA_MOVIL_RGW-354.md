@@ -7,7 +7,9 @@
 **Branch:** `fix/RGW-354-auditoria-experiencia-movil`  
 **Worktree:** `../gussware-RGW-354-auditoria-experiencia-movil`  
 **Commit base:** `cc1184c` (origin/develop)  
-**Commit actual:** `438bd10`  
+**Commit original del informe:** `438bd10` — `docs(RGW-354): agregar informe de auditoria de experiencia movil`  
+**Commit correctivo:** `d2bf2be` — `docs(RGW-354): actualizar referencias finales del informe`  
+**Versión actual del informe:** correspondiente al commit `d2bf2be` (último commit de la rama `fix/RGW-354-auditoria-experiencia-movil`).  
 
 ---
 
@@ -374,20 +376,17 @@ Total hallazgos: 10 (3 confirmados por inspección estática + 7 observaciones p
 
 **Ruta:** `docs/audits/INFORME_AUDITORIA_MOVIL_RGW-354.md` (dentro del worktree de RGW-354).
 
-### 7.2 Comentario publicado en Jira RGW-354
+### 7.2 Comentarios publicados en Jira RGW-354
 
-Se publicó un comentario en la tarjeta https://gussware.atlassian.net/browse/RGW-354 con el siguiente contenido consolidado:
+Se publicaron dos comentarios en la tarjeta https://gussware.atlassian.net/browse/RGW-354:
 
-- Qué se realizó: auditoría de experiencia móvil de GussWare Site (versiones ES/EN).
-- Resultado: 10 hallazgos identificados (3 confirmados por inspección estática, 7 observaciones pendiente de verificación en dispositivo real).
-- Páginas y componentes revisados: portada, contacto, servicios, blog, proyectos, legal, 404/500, Header, Footer, menú móvil, LanguageSelector, Hero, Process, Faq, Expertise, Services, CommunityModel, ContactForm, cards, CTA.
-- Dispositivos y navegadores probados: emulación de viewport (iPhone SE/13, Pixel 7, iPad); sin dispositivos reales ni navegadores reales disponibles en el entorno.
-- Resultados: problemas de viewport (meta sin initial-scale), área táctil del hamburguesa (40×40px total, icono 24×24px), cierre del menú móvil, y observaciones de hero, Process, enlaces target="_blank", 404/500, iconos sociales, LanguageSelector, formulario de contacto.
-- Limitaciones: no se dispuso de dispositivos físicos, no se ejecutó astro dev/build (sin node_modules ni credenciales WordPress), no se capturaron capturas de pantalla, no se ejecutaron pruebas de accesibilidad ni Core Web Vitals.
-- Commit relacionado: `438bd10` — `docs(RGW-354): agregar informe de auditoria de experiencia movil`.
-- Rama remota: `origin/fix/RGW-354-auditoria-experiencia-movil`.
+**Comentario original (`10426`):** resultados de la auditoría de experiencia móvil (versiones ES/EN), con los 10 hallazgos identificados, páginas y componentes revisados, dispositivos y navegadores probados, limitaciones del entorno, y confirmación de que no se modificó el sitio. Commit relacionado: `438bd10` — `docs(RGW-354): agregar informe de auditoria de experiencia movil`.
 
-Identificador del comentario: `10426`.
+**Comentario de actualización documental (`10427`):** correcciones al informe derivadas de la revisión del PR #101 (distinción en HM-02 entre icono SVG de 24×24px y área interactiva aproximada de 40×40px, criterio de aceptación de evidencia visual marcado como parcial, y actualización de referencias de commits y comentarios). Commit relacionado: `d2bf2be` — `docs(RGW-354): actualizar referencias finales del informe`.
+
+**Rama remota:** `origin/fix/RGW-354-auditoria-experiencia-movil`
+
+**Estado de Jira RGW-354:** Listo para pruebas (no se modificó).
 
 ### 7.3 Validación documental
 
