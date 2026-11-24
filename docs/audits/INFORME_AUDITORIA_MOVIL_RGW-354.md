@@ -3,10 +3,11 @@
 **Tarjeta Jira:** RGW-354 — Auditar la experiencia móvil de GussWare Site  
 **URL de la tarjeta:** https://gussware.atlassian.net/browse/RGW-354  
 **Alcance:** Auditoría únicamente (sin implementación de correcciones)  
-**Estado:** En curso  
+**Estado:** Listo para pruebas  
 **Branch:** `fix/RGW-354-auditoria-experiencia-movil`  
 **Worktree:** `../gussware-RGW-354-auditoria-experiencia-movil`  
 **Commit base:** `cc1184c` (origin/develop)  
+**Commit actual:** `438bd10`  
 
 ---
 
@@ -16,9 +17,9 @@ Se realizó una auditoría de experiencia móvil del sitio GussWare (WordPress h
 
 La auditoría se limitó a revisión de código fuente, componentes, plantillas, estilos, tokens responsive y arquitectura existente; no se implementaron correcciones, no se modificó código, configuración ni producción. No se duplicó la auditoría WCAG 2.2 AA ni las mediciones de Core Web Vitals.
 
-**Resultado global:** El sitio cuenta con una base responsive construida con Tailwind CSS, breakpoints definidos (`sm`, `md`, `lg`, `xl`), tokens de espaciado/tipografía con variantes móviles y un menú móvil con acordeón. No obstante, se identificaron problemas de experiencia móvil en navegación (foco del menú, barra de desplazamiento en hero, cierre del menú), legibilidad (títulos monumentales en 404/500, texto muy pequeño en redes sociales del footer), interacción táctil (targets pequeños de 24px en hamburguesa y botones sociales, carrusel Process sin controles táctiles en mobile) y orientación/viewport (meta viewport sin `initial-scale`, posible zoom automático en iOS).
+**Resultado global:** El sitio cuenta con una base responsive construida con Tailwind CSS, breakpoints definidos (`sm`, `md`, `lg`, `xl`), tokens de espaciado/tipografía con variantes móviles y un menú móvil con acordeón. No obstante, se identificaron problemas de experiencia móvil en navegación (foco del menú, cierre del menú), legibilidad (títulos monumentales en 404/500, tamaño de iconos sociales en footer), interacción táctil (área táctil del hamburguesa, carrusel Process sin controles táctiles en mobile) y orientación/viewport (meta viewport sin `initial-scale`, posible zoom automático en iOS).
 
-**Hallazgos:** X problemas confirmados (distinguidos de observaciones y limitaciones).
+**Hallazgos:** 10 problemas (3 confirmados por inspección estática + 7 observaciones pendiente de verificación en dispositivo real), distinguidos de observaciones y limitaciones.
 
 ---
 
@@ -141,21 +142,21 @@ Todas las pruebas de esta auditoría se realizaron mediante **emulación de view
 **Clasificación:** Problema global (afecta a todas las páginas a través de Layout.astro).  
 **Recomendación:** Cambiar a `<meta name="viewport" content="width=device-width, initial-scale=1.0" />`. Evaluar `maximum-scale` y `user-scalable` según política de accesibilidad del proyecto.
 
-### HM-02 — Menú hamburguesa: target táctil de 24×24px (problema global)
+### HM-02 — Menú hamburguesa: área táctil de 40×40px (icono de 24×24px) (problema global)
 
-**Evidencia:** `src/components/layout/Header.astro` línea 106: `MenuButton` con `class="text-gw-text-secondary p-2 lg:hidden"`; `src/components/ui/MenuButton.astro` renderiza un `<svg width="24" height="24">`. El botón tiene `p-2` (8px de padding) pero el icono trazo es pequeño.
+**Evidencia:** `src/components/layout/Header.astro` línea 106: `MenuButton` con `class="text-gw-text-secondary p-2 lg:hidden"`; `src/components/ui/MenuButton.astro` renderiza un `<svg width="24" height="24">`. El botón aplica `p-2` (8px de padding por lado), por lo que el área interactiva aproximada es 40×40px (24px de icono + 8px de padding en cada lado), mientras que el propio icono mide 24×24px.
 
 **Página/componente afectado:** Header (menú móvil), todas las páginas en móvil/tablet.  
 **URL:** Todas (`/`, `/en/`, `/contacto`, etc.).  
 **Dispositivo/Navegador/Viewport:** Emulación — iPhone 13 (390×844, vertical), Pixel 7 (414×896, vertical).  
 **Pasos para reproducir:** Abrir el sitio en móvil, tocar el botón hamburguesa (`#header-menu-toggle`).  
-**Resultado observado:** El botón hamburguesa tiene un área táctil reducida (icono de 24×24px, padding p-2). En pantallas táctiles puede resultar difícil de accionar con precisión, especialmente con una sola mano o con movilidad reducida.  
-**Comportamiento esperado:** Target táctil mínimo de 44×44px (recomendación de usabilidad móvil) o al menos 40×44px, con el ícono bien dimensionado y suficiente espaciado alrededor.  
-**Evidencia visual:** No disponible (sin dispositivos reales ni entorno de renderizado).  
+**Resultado observado:** El botón hamburguesa tiene un icono de 24×24px y un área interactiva aproximada de 40×40px (debido a `p-2`). Esto está por debajo del target táctil recomendado de 44×44px para pantallas táctiles, lo que puede dificultar su accionamiento con precisión, especialmente con una sola mano o con movilidad reducida.  
+**Comportamiento esperado:** Target táctil mínimo de 44×44px (recomendación de usabilidad móvil), considerando el área interactiva completa (icono + padding), no solo el tamaño del icono.  
+**Evidencia visual:** No disponible (sin dispositivos reales ni entorno de renderizado). La evidencia estática proviene de la inspección de `MenuButton.astro` (SVG 24×24px) y `Header.astro` (clase `p-2`).  
 **Impacto:** Medio. Afecta la navegación principal en móvil/tablet.  
 **Severidad:** Media.  
 **Clasificación:** Problema global (Header aparece en todas las páginas).  
-**Recomendación:** Aumentar el padding del `MenuButton` (ej. `p-3` o `p-4`) y/o el tamaño del SVG para alcanzar un target táctil ≥ 44×44px.
+**Recomendación:** Aumentar el padding del `MenuButton` (ej. `p-3` o `p-4`) y/o el tamaño del SVG para que el área interactiva total alcance ≥ 44×44px.
 
 ### HM-03 — Menú móvil: cierre al pulsar fuera del panel no implementado (problema global)
 
@@ -292,7 +293,7 @@ Todas las pruebas de esta auditoría se realizaron mediante **emulación de view
 | ID | Título | Severidad | Área |
 |---|---|---|---|
 | HM-01 | Meta viewport sin `initial-scale` | Media | Layout global |
-| HM-02 | Menú hamburguesa target táctil 24px | Media | Header / Navegación |
+| HM-02 | Menú hamburguesa área táctil 40×40px (icono 24×24px) | Media | Header / Navegación |
 | HM-03 | Menú móvil sin cierre al tocar fuera | Media-baja | Header / Navegación |
 
 ### 5.2 Problemas específicos de página/componente
@@ -320,7 +321,7 @@ Total hallazgos: 10 (3 confirmados por inspección estática + 7 observaciones p
 
 **Defectos confirmados (verificables por inspección estática de código):**
 - HM-01: meta viewport sin `initial-scale` (código directo en Layout.astro)
-- HM-02: target táctil hamburguesa 24px (código directo en MenuButton.astro + Header.astro)
+- HM-02: área táctil hamburguesa 40×40px (icono 24×24px; código directo en MenuButton.astro + Header.astro)
 - HM-03: menú móvil sin cierre al tocar fuera (código directo en Header.astro JS)
 
 **Observaciones pendiente de verificación en dispositivo real/runtime:**
@@ -360,7 +361,7 @@ Total hallazgos: 10 (3 confirmados por inspección estática + 7 observaciones p
 |---|---|
 | Se cubren páginas y componentes representativos de las versiones ES/EN. | ✅ Cumplido (sección 2.1 y 2.2) |
 | Se documentan los dispositivos, navegadores, viewports y orientaciones probados. | ✅ Cumplido (sección 3.2; todos por emulación) |
-| Cada hallazgo incluye evidencia visual, pasos de reproducción, impacto, severidad y recomendación. | ✅ Cumplido (sección 4; evidencia visual marcada como "No disponible" por limitación del entorno) |
+| Cada hallazgo incluye evidencia visual, pasos de reproducción, impacto, severidad y recomendación. | ⚠️ Parcial (sección 4: pasos de reproducción, impacto, severidad y recomendación incluidos en todos los hallazgos; evidencia visual de renderizado no disponible — todas las capturas marcadas como "No disponible" por limitación del entorno; evidencia estática obtenida únicamente por inspección de código fuente) |
 | Se identifican problemas transversales y problemas específicos de páginas o componentes. | ✅ Cumplido (sección 5.1 y 5.2) |
 | Se entrega un informe priorizado que permite decidir qué correcciones o subtareas crear. | ✅ Cumplido (sección 6.1 y 6.2) |
 | La auditoría concluye sin modificar el sitio. | ✅ Cumplido (no se modificó ningún archivo) |
@@ -373,17 +374,20 @@ Total hallazgos: 10 (3 confirmados por inspección estática + 7 observaciones p
 
 **Ruta:** `docs/audits/INFORME_AUDITORIA_MOVIL_RGW-354.md` (dentro del worktree de RGW-354).
 
-### 7.2 Contenido del comentario obligatorio en Jira RGW-354
+### 7.2 Comentario publicado en Jira RGW-354
 
-Se publicará un comentario en la tarjeta https://gussware.atlassian.net/browse/RGW-354 con el siguiente contenido consolidado:
+Se publicó un comentario en la tarjeta https://gussware.atlassian.net/browse/RGW-354 con el siguiente contenido consolidado:
 
 - Qué se realizó: auditoría de experiencia móvil de GussWare Site (versiones ES/EN).
 - Resultado: 10 hallazgos identificados (3 confirmados por inspección estática, 7 observaciones pendiente de verificación en dispositivo real).
 - Páginas y componentes revisados: portada, contacto, servicios, blog, proyectos, legal, 404/500, Header, Footer, menú móvil, LanguageSelector, Hero, Process, Faq, Expertise, Services, CommunityModel, ContactForm, cards, CTA.
 - Dispositivos y navegadores probados: emulación de viewport (iPhone SE/13, Pixel 7, iPad); sin dispositivos reales ni navegadores reales disponibles en el entorno.
-- Resultados: problemas de viewport (meta sin initial-scale), target táctil del hamburguesa (24px), cierre del menú móvil, y observaciones de hero, Process, enlaces target="_blank", 404/500, iconos sociales, LanguageSelector, formulario de contacto.
+- Resultados: problemas de viewport (meta sin initial-scale), área táctil del hamburguesa (40×40px total, icono 24×24px), cierre del menú móvil, y observaciones de hero, Process, enlaces target="_blank", 404/500, iconos sociales, LanguageSelector, formulario de contacto.
 - Limitaciones: no se dispuso de dispositivos físicos, no se ejecutó astro dev/build (sin node_modules ni credenciales WordPress), no se capturaron capturas de pantalla, no se ejecutaron pruebas de accesibilidad ni Core Web Vitals.
-- Commit relacionado: pendiente de crear tras la entrega del informe.
+- Commit relacionado: `438bd10` — `docs(RGW-354): agregar informe de auditoria de experiencia movil`.
+- Rama remota: `origin/fix/RGW-354-auditoria-experiencia-movil`.
+
+Identificador del comentario: `10426`.
 
 ### 7.3 Validación documental
 
