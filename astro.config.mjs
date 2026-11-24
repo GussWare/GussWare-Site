@@ -8,6 +8,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 import sitemap from '@astrojs/sitemap';
 
+import { sitemapSerialize } from './src/lib/sitemap-lastmod.mjs';
+
 /**
  * Modo de Astro (`development`, `staging`, `production`).
  *
@@ -347,6 +349,8 @@ export default defineConfig({
     // publica en el sitemap.
     sitemap({
       filter: (page) => !page.includes('/navfixturetest'),
+      // RGW-343 — `lastmod` desde el campo nativo `modified` de WordPress.
+      serialize: sitemapSerialize,
     }),
   ],
 });
