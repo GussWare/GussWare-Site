@@ -633,6 +633,11 @@ export interface WpService {
   acf: WpServiceAcf;
   lang: string;
   translations: Record<string, number>;
+  /**
+   * RGW-345 — Metadatos Yoast SEO del servicio.
+   * Disponible cuando Yoast SEO está configurado para el CPT `service`.
+   */
+  yoast_head_json?: WpPostYoastHeadJson | null;
 }
 
 /**
@@ -685,6 +690,11 @@ export interface WpProject {
   industries_sector?: number[];
   lang: string;
   translations: Record<string, number>;
+  /**
+   * RGW-345 — Metadatos Yoast SEO del proyecto.
+   * Disponible cuando Yoast SEO está configurado para el CPT `projects`.
+   */
+  yoast_head_json?: WpPostYoastHeadJson | null;
 }
 
 /** Término de la taxonomía `technology` (`/wp/v2/technologies`). */
