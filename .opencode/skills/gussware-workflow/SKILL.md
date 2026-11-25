@@ -766,3 +766,72 @@ despliegue fue exitoso, omitido o no aplicaba. `Validation` debe
 enumerar las comprobaciones ejecutadas y sus resultados. `Jira` debe
 incluir la tarjeta, subtarea, transición y comentario de cierre cuando
 corresponda.
+
+## 19. Workflow Compliance Checklist (Nuevo)
+
+Este checklist asegura que todos los pasos obligatorios del flujo de trabajo se hayan ejecutado correctamente. **Este checklist es obligatorio** antes de reportar la tarea como completada y antes de cada push.
+
+### Checklist obligatorio de cumplimiento:
+
+* [ ] **Jira en curso verificado**: La tarjeta RGW-377 (o la tarjeta correspondiente) está en estado `En curso`. Si la tarjeta está en `Por hacer`, detenerse y solicitar transición al estado `En curso` antes de continuar. **Después de solicitar la transición, verificar nuevamente que el estado se actualizó a `En curso` antes de proceder.** Si no cambió el estado, no continuar y reportar que la transición no tuvo efecto.
+* [ ] **Consultoría Jira realizada**: Se consultó la tarjeta Jira mediante el MCP de Atlassian antes de crear la rama o worktree (§0).
+* [ ] **Branch desde origin/develop**: El branch se creó explícitamente desde `origin/develop` actualizado (§2), nunca desde `develop` local ni desde otra rama.
+* [ ] **Sin upstream heredado**: El upstream fue anulado después de crear el worktree (`git branch --unset-upstream`) y verificado que no hay upstream antes del primer push autorizado (§4, §6).
+* [ ] **Verificación de destino antes push**: Antes de cada push, se verificó expresamente el destino con `git log --oneline origin/<branch-name>..HEAD` y `git ls-remote --heads origin <branch-name>` (§7, §13).
+* [ ] **Commit con formato Conventional Commits**: El commit sigue el formato `<tipo>(<jira-id>): <descripción>` (§12).
+* [ ] **Diff revisado**: Se revisó `git status`, `git diff` y `git diff --stat` antes del commit (§11).
+* [ ] **Commit enviado a origin**: El commit fue enviado a `origin/<branch-name>` (§13, §14).
+* [ ] **Pull Request con base develop**: La PR apunta a `develop` con head en la rama de la tarea (§14).
+* [ ] **Validación CI exitosa**: El required check de CI (`Build estático y pruebas`) terminó correctamente en la rama destino (§10, §14).
+* [ ] **Despliegue verificado**: Si corresponde, el despliegue a staging o main fue exitoso y verificado (§10).
+* [ ] **Checklist de cierre completado**: Todos los ítems del §17 Checklist están marcados (worktree, branch, upstream, diff, commit, PR, estado Jira, comentario Jira).
+* [ ] **No se modificaron branches ajenos**: No se modificaron branches o worktrees de otras tareas (§15, §16).
+
+### Errores comunes y cómo actuar:
+
+#### CASO 1: Jira no disponible o sin acceso MCP
+Si el MCP de Atlassian no está disponible o no se puede consultar la tarjeta:
+1. Detener todas las operaciones Git relacionadas con la tarea.
+2. Anotar en el reporte: "MCP de Atlassian no disponible, se proceeded con flujo asumiendo criterios estándar de RGW-377".
+3. Documentar la imposibilidad en el campo `Jira:` del reporte final (§18).
+4. Solicitar intervención humana para acceder a Jira antes de continuar.
+
+#### CASO 2: Tarjeta Jira en estado "Por hacer"
+Si la tarjeta Jira está en `Por hacer`:
+1. **No modificar archivos, crear commits, hacer push ni abrir una PR.**
+2. Listar las transiciones reales con `listJiraIssueTransitions`.
+3. Aplicar la transición a `En curso` con `transitionJiraIssue` (por `transitionId`, nunca por nombre inventado).
+4. Si esa transición no existe: no usar otra transición ni cambiar a otro estado; informarlo en el reporte.
+5. Solo después de que la tarjeta esté en `En curso`, continuar con la implementación.
+
+#### CASO 3: Upstream incorrecto (apunta a origin/develop)
+Si el branch muestra `...origin/develop` como upstream:
+1. Detenerse antes de comenzar el trabajo.
+2. Inspeccionar el estado con `git ls-remote --heads origin <branch-name>`.
+3. Si la rama remota corresponde a la esperada, corregir el upstream mediante `git push -u origin <branch-name>`.
+4. Si existen divergencias o contenido diferente, detenerse y diagnosticar antes de hacer push.
+5. **Nunca** sobrescribir el remoto para solucionar un upstream incorrecto.
+6. Usar `--force` ni `--force-with-lease` como solución predeterminada. Solo con instrucción explícita y destino verificado.
+
+#### CASO 4: Divergencia inesperada después fetch
+Si el fetch revela divergencia, commits inesperados, upstream incorrecto:
+1. Detenerse antes de modificar la historia o combinar cambios.
+2. Conservar el árbol local y no ejecutar `stash`, `reset`, `clean`, `merge`, `rebase`, ni force push.
+3. Inspeccionar con `git status`, `git branch -vv`, `git log`, `git diff` y la referencia remota correspondiente.
+4. Explicar qué commits y archivos difieren y cuál sería el riesgo.
+5. Solicitar instrucciones explícitas antes de elegir entre merge, rebase, cherry-pick, restauración o cualquier otra operación.
+6. Una divergencia no se considera resuelta porque el branch tenga un upstream configurado.
+
+#### CASO 5: Antes Commit - Modificaciones accidentales
+Si hay modificaciones que no pertenecen a la tarea:
+1. No incluirlos automáticamente en el commit.
+2. Determinar primero si pertenecen a la tarea actual.
+3. Si no puede determinarse con seguridad, detenerse y solicitar instrucciones.
+4. No modificar archivos únicamente para limpiar el diff.
+
+#### CASO 6: Push sin upstream verificado
+Si el upstream no está configurado o no se puede verificar:
+1. Prohibido `git push` sin argumentos con upstream no verificado.
+2. Si todavía no existe upstream: `git push -u origin <branch-name>`.
+3. Después verificar: `git status --short --branch` y `git branch -vv`.
+4. El upstream debe apuntar a `origin/<mismo branch>`, nunca a `origin/develop`.

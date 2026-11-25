@@ -3,6 +3,50 @@
 Detalle operativo para §0, §10 y §17. Las reglas viven en `SKILL.md`;
 aquí solo el cómo con el MCP de Atlassian.
 
+## ⚠️ Estado inicial obligatorio: "En curso" (Actualizado)
+
+**Regla operativa principal:**
+
+> **Antes de modificar cualquier archivo, crear commits, hacer push o abrir una Pull Request, el agente debe confirmar que la tarjeta Jira correspondiente está en estado `En curso`.**
+>
+> Esta es una guardia **obligatoria y verificable**: no basta con haber intentado una transición ni con asumir que el estado es correcto sin corroborarlo.
+>
+> **Condiciones para proceder:**
+> 1. Si la tarjeta está en `En curso`: **puede proceder** con modificaciones, commits, push y PR.
+> 2. Si la tarjeta está en `Por hacer` o cualquier otro estado distinto de `En curso`: **no** modificar archivos, crear commits, hacer push ni abrir una PR. Aplicar el procedimiento de bloques que se detalla a continuación.
+> 3. **La lectura inicial** necesaria para identificar la tarea, comprender sus condiciones y consultar su estado **no está bloqueada** por esta regla. El agente puede leer la descripción, verificar IDs y consultar el estado actual.
+> 4. **En ningún caso** el agente debe continuar con acciones de implementación sin haber verificado personalmente (leyendo el estado actual de Jira) que la tarjeta está en `En curso`.
+>
+> **Procedimiento de verificación:**
+> 1. Consultar el estado de la tarjeta Jira mediante el MCP de Atlassian.
+> 2. Si el estado es `En curso`: continuar con las operaciones permitidas.
+> 3. Si el estado no es `En curso`: aplicar el procedimiento de bloques (ver tabla abajo).
+> 3. **Después** de solicitar una transición: **volver a consultar Jira** y verificar que el estado realmente cambió a `En curso`. No basta con haber enviado la solicitud de transición.
+
+**Procedimiento ante bloqueos** (para cuando la tarjeta no está en `En curso`):
+
+| Escenario | Comportamiento requerido |
+|---|---|
+| **Jira inaccesible** | No iniciar modificaciones ni implementación. Informar el problema indicando que el MCP de Atlassian no está disponible o no hay conexión. Documentar la imposibilidad en el reporte y solicitar intervención humana antes de continuar. |
+| **Permisos insuficientes** | No intentar eludir los permisos ni usar credenciales ajenas. Informar el bloqueo indicando qué operación no está permitida y solicitar intervención al administrador o al usuario con los permisos adecuados. |
+| **Transición no disponible** | No continuar con la implementación. Informar el estado actual de la tarjeta y especificar qué transición falta (por ejemplo: "La tarjeta está en `Por hacer` pero no hay transición disponible a `En curso`"). Detenerse y solicitar que se configure la transición correcta antes de continuar. |
+| **Estado inesperado** | No asumir que el estado es equivalente a `En curso` por ninguna razón. Detenerse y solicitar aclaración o intervención. Documentar el estado actual observado y por qué no corresponde ni a `En curso` ni a un estado con transición conocida. |
+| **Transición solicitada sin confirmación** | Considerar que el cambio de estado **no está verificado** y **no continuar** con acciones de implementación. Después de solicitar la transición, volver a consultar Jira y comprobar que el estado realmente cambió a `En curso`. Si no cambió, no proceder y reportar que la transición no tuvo efecto. |
+
+**Salida finita para todos los escenarios:**
+1. Identificar el bloqueo
+2. Conservar evidencia (estado observado, mensaje de error, IDs involucrados)
+3. Informar claramente qué intervención se necesita
+4. Detener las acciones dependientes de la autorización
+
+**Durante el trabajo:**
+- `En curso` = implementación o corrección activa.
+- Una tarjeta en `Por hacer` no puede tener cambios activos.
+
+> **Esto es una guardia obligatoria**: el agente debe verificar el estado de Jira
+> antes de tocar cualquier archivo. Si no puede verificar, detenerse y solicitar
+> intervención.
+
 ## Consultar la tarjeta (§0)
 
 1. Resolver `cloudId` una vez por sesión con
@@ -25,12 +69,25 @@ aquí solo el cómo con el MCP de Atlassian.
 
 ## Ciclo obligatorio de estados Jira (§17)
 
-Antes de modificar archivos, commits, pushes o Pull Requests:
+### Guardia de entrada obligatoria: estado "En curso"
 
-1. La tarjeta correspondiente debe estar en `En curso`.
-2. Si se trabaja una subtarea, su tarjeta padre también debe estar en
-   `En curso`.
-3. Una tarjeta en `Por hacer` no puede tener cambios activos.
+**Antes de modificar archivos, commits, pushes o Pull Requests:**
+
+1. **La tarjeta correspondiente debe estar en `En curso`.**
+   - Esta es una guardia obligatoria: si la tarjeta está en `Por hacer`,
+     **no** modificar archivos, crear commits, hacer push ni abrir una PR.
+   - Si la tarjeta está en `Por hacer` y el agente necesita trabajar en ella,
+     debe transicionarse a `En curso` primero usando `transitionJiraIssue`
+     (por `transitionId`, nunca por nombre inventado).
+   - Si la tarjeta no existe o el MCP no está disponible: detenerse y avisar.
+
+2. **Si se trabaja una subtarea, su tarjeta padre también debe estar en `En curso`.**
+   - Una tarea principal nunca permanece en `Por hacer` mientras sus subtareas
+     ya están siendo ejecutadas.
+
+3. **Una tarjeta en `Por hacer` no puede tener cambios activos.**
+   - Este es un punto crítico de cumplimiento: los agentes deben verificar este
+     estado antes de tocar cualquier archivo relacionado con la tarea.
 
 Durante el trabajo:
 
@@ -41,7 +98,11 @@ Durante el trabajo:
 * `Listo para pruebas` = cambio desplegado correctamente en staging y
   disponible para QA.
 * `En pruebas` = tester QA inició las pruebas manuales en staging.
-* `Listo` = QA aprobó la tarea y la evidencia quedó registrada.
+  No representa pruebas del desarrollador.
+* `Listo` = QA aprobó la tarea y la evidencia quedó registrada sin defectos
+  pendientes.
+
+### Transiciones obligatorias y re-apertura
 
 Una subtarea solo puede pasar a `Tarea terminada` después de validar su
 commit con las pruebas del desarrollador y agregar el comentario
@@ -49,7 +110,15 @@ correspondiente. Solo pasa a `Listo para pruebas` después de un
 despliegue exitoso en staging. Después de que QA inicia, pasa a `En
 pruebas`; tras la aprobación de QA pasa a `Listo` con su evidencia de
 cierre. Si una observación o fallo reabre trabajo, devolver la tarjeta a
-`En curso` antes de modificarla. No inventar transiciones.
+`En curso` antes de modificarla. **No inventar transiciones.**
+
+Para reabrir trabajo observado:
+
+* Si una observación reabre una subtarea o tarea: devolverla a `En curso`
+  antes de corregirla.
+* Si falla una prueba del desarrollador: mantener la tarjeta en `En curso`.
+* Si falla QA: devolverla también a `En curso`.
+* No inventar transiciones; solo usar estados y transiciones existentes en Jira.
 
 ## Transicionar al estado correspondiente (§17)
 
