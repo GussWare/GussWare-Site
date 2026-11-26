@@ -19,9 +19,7 @@ const locale = Astro.params.locale ?? 'es';
 const { slug } = Astro.params;
 const result =
   typeof slug === 'string'
-    ? await getProjectDetail(slug, locale, Astro.url.pathname).catch(
-        () => null,
-      )
+    ? await getProjectDetail(slug, locale, Astro.url.pathname).catch(() => null)
     : null;
 
 if (!result) {

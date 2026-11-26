@@ -8,30 +8,50 @@
  * duplicar lógica). Datos reales del CPT Proyectos, solo publicados en
  * `es`; sin resultados o ante error, la vista muestra el estado
  * correspondiente.
+ *
+ * SEO: obtiene metadatos de la página "Proyectos" configurada en WordPress
+ * con Yoast SEO.
  */
 import Layout from '../../layouts/Layout.astro';
 import ProjectListView from '../../components/projects/ProjectListView.astro';
+import { getPageBySlug } from '../../lib/wordpress/pages';
 import { getProjectListing } from '../../lib/wordpress/projects';
 import { proyectosBaseUrl } from '../../lib/routes';
+import { buildSeoFromYoast } from '../../lib/seo';
 
 export const prerender = false;
 
-const data = await getProjectListing({
-  locale: 'es',
-  searchParams: Astro.url.searchParams,
-});
+const locale = 'es';
 
-const localeUrls = {
+// Obtener SEO desde la página de WordPress "Proyectos"
+const projectPage = await getPageBySlug('proyectos', locale).catch(() => null);
+const seoData = buildSeoFromYoast(projectPage?.yoast_head_json);
+const alternateUrls = {
   es: proyectosBaseUrl('es'),
   en: proyectosBaseUrl('en'),
 };
+
+const data = await getProjectListing({
+  locale,
+  searchParams: Astro.url.searchParams,
+});
 ---
 
 <Layout
-  title="Proyectos — GussWare"
-  description="Explora las soluciones tecnológicas, plataformas empresariales y productos digitales que nuestra comunidad de especialistas freelance ha diseñado y desarrollado para clientes en diversos sectores."
-  localeUrls={localeUrls}
-  lang="es"
+  title={seoData.title || 'Proyectos — GussWare'}
+  description={seoData.description}
+  localeUrls={alternateUrls}
+  lang={locale}
+  {...(seoData.yoast
+    ? {
+        seo: {
+          lang: locale,
+          yoast: seoData.yoast,
+          alternateUrls,
+          languages: undefined,
+        },
+      }
+    : {})}
 >
-  <ProjectListView locale="es" {...data} />
+  <ProjectListView locale={locale} {...data} />
 </Layout>

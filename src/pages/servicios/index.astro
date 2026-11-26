@@ -9,25 +9,24 @@
  * La imagen destacada de cada tarjeta sale de WordPress
  * (`featured_media` → `getServiceImage`, el mismo resolvedor que usa el
  * detalle): sin ella la tarjeta cae en el bloque de maquetación neutro.
+ *
+ * SEO: obtiene metadatos de la página "Servicios" configurada en WordPress
+ * con Yoast SEO.
  */
 import Layout from '../../layouts/Layout.astro';
 import Section from '../../components/ui/Section.astro';
 import SectionHeading from '../../components/ui/SectionHeading.astro';
 import Breadcrumbs from '../../components/ui/Breadcrumbs.astro';
 import Card from '../../components/ui/Card.astro';
-import { getFrontPage } from '../../lib/wordpress/pages';
+import { getPageBySlug } from '../../lib/wordpress/pages';
 import { getServiceImage, getServices } from '../../lib/wordpress/services';
-import {
-  routes,
-  servicesBaseUrl,
-  serviceDetailUrl,
-} from '../../lib/routes';
+import { routes, servicesBaseUrl, serviceDetailUrl } from '../../lib/routes';
 import { stripHtml } from '../../lib/wordpress/text';
+import { buildSeoFromYoast } from '../../lib/seo';
 
 export const prerender = true;
 
-const page = await getFrontPage('es').catch(() => null);
-const header = page?.acf?.services ?? null;
+const page = await getPageBySlug('servicios', 'es').catch(() => null);
 const services = await getServices('es');
 
 // Imagen destacada de cada servicio (WordPress `featured_media`).
@@ -42,31 +41,33 @@ const localeUrls = {
   es: servicesBaseUrl('es'),
   en: servicesBaseUrl('en'),
 };
+
+// SEO: obtener metadatos desde la página de WordPress "Servicios"
+const seoData = buildSeoFromYoast(page?.yoast_head_json);
 ---
 
 <Layout
-  title={`Servicios — GussWare`}
-  description={
-    header ? stripHtml(header.description).slice(0, 160) : undefined
-  }
+  title={seoData.title || 'Servicios — GussWare'}
+  description={seoData.description}
   localeUrls={localeUrls}
+  lang="es"
+  {...(seoData.yoast
+    ? {
+        seo: {
+          lang: 'es',
+          yoast: seoData.yoast,
+          alternateUrls: localeUrls,
+          languages: undefined,
+        },
+      }
+    : {})}
 >
   <Section>
     <Breadcrumbs
-      items={[
-        { label: 'Inicio', href: routes.home },
-        { label: 'Servicios' },
-      ]}
+      items={[{ label: 'Inicio', href: routes.home }, { label: 'Servicios' }]}
       class="mb-8"
     />
-    {header ? (
-      <SectionHeading
-        title={stripHtml(header.title)}
-        description={stripHtml(header.description)}
-      />
-    ) : (
-      <SectionHeading title="Servicios" />
-    )}
+    <SectionHeading title="Servicios" />
     {services.length > 0 && (
       <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 mt-12">
         {cards.map(({ service, image }) => (
@@ -74,7 +75,9 @@ const localeUrls = {
             image={image ?? undefined}
             title={stripHtml(service.title.rendered)}
             description={stripHtml(
-              service.excerpt?.rendered || service.acf?.hero?.intro_description || '',
+              service.excerpt?.rendered ||
+                service.acf?.hero?.intro_description ||
+                '',
             )}
             href={serviceDetailUrl('es', service.slug)}
           />

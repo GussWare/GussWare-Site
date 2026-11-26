@@ -5,14 +5,28 @@
  * Ruta fina: resuelve el locale de la URL, obtiene el listado
  * normalizado (`getBlogListing`, con `lang`) y lo renderiza con
  * `BlogListView` (compartida con `/blog`, sin duplicar lógica).
+ *
+ * SEO: obtiene metadatos de la página "Blog" configurada en WordPress
+ * con Yoast SEO.
  */
 import Layout from '../../../layouts/Layout.astro';
 import BlogListView from '../../../components/blog/BlogListView.astro';
+import { getPageBySlug } from '../../../lib/wordpress/pages';
 import { getBlogListing } from '../../../lib/wordpress/post';
+import { buildSeoFromYoast } from '../../../lib/seo';
 
 export const prerender = false;
 
 const locale = Astro.params.locale ?? 'es';
+
+// Obtener SEO desde la página de WordPress "Blog"
+const blogPage = await getPageBySlug('blog', locale).catch(() => null);
+const seoData = buildSeoFromYoast(blogPage?.yoast_head_json);
+const alternateUrls = {
+  es: '/blog',
+  en: '/en/blog',
+};
+
 const data = await getBlogListing({
   locale,
   baseUrl: import.meta.env.WORDPRESS_URL as string | undefined,
@@ -21,8 +35,20 @@ const data = await getBlogListing({
 ---
 
 <Layout
-  title="Blog — GussWare"
-  description="GussWare blog and insights on technology and development."
+  title={seoData.title || 'Blog — GussWare'}
+  description={seoData.description}
+  localeUrls={alternateUrls}
+  lang={locale}
+  {...(seoData.yoast
+    ? {
+        seo: {
+          lang: locale,
+          yoast: seoData.yoast,
+          alternateUrls,
+          languages: undefined,
+        },
+      }
+    : {})}
 >
   <BlogListView locale={locale} {...data} />
 </Layout>

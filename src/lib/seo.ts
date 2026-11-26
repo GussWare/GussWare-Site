@@ -271,3 +271,23 @@ export function fixSchemaLocales(schema: unknown, lang: string): unknown {
 
   return clone;
 }
+
+/**
+ * construye los datos SEO desde `yoast_head_json` de WordPress.
+ *
+ * Fuente única de verdad para metadatos SEO: WordPress + Yoast SEO.
+ * El frontend solo consume y renderiza; nunca inventa valores.
+ */
+export function buildSeoFromYoast(
+  yoast?: WpPostYoastHeadJson | null,
+): { title: string; description?: string; yoast?: WpPostYoastHeadJson | null } {
+  if (!yoast) {
+    return { title: '', yoast: null };
+  }
+
+  return {
+    title: yoast.title,
+    description: yoast.description,
+    yoast,
+  };
+}

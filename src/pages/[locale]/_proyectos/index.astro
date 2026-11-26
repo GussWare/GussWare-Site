@@ -6,36 +6,50 @@
  * renderiza `ProjectListView` (compartida, sin duplicar lógica) con el
  * listado normalizado (`getProjectListing`). Solo publicados del idioma
  * activo, sin mezclar traducciones.
+ *
+ * SEO: obtiene metadatos de la página "Projects" configurada en WordPress
+ * con Yoast SEO.
  */
 import Layout from '../../../layouts/Layout.astro';
 import ProjectListView from '../../../components/projects/ProjectListView.astro';
+import { getPageBySlug } from '../../../lib/wordpress/pages';
 import { getProjectListing } from '../../../lib/wordpress/projects';
 import { proyectosBaseUrl } from '../../../lib/routes';
+import { buildSeoFromYoast } from '../../../lib/seo';
 
 export const prerender = false;
 
 const locale = Astro.params.locale ?? 'es';
 
+// Obtener SEO desde la página de WordPress "Projects"
+const projectPage = await getPageBySlug('projects', locale).catch(() => null);
+const seoData = buildSeoFromYoast(projectPage?.yoast_head_json);
+const alternateUrls = {
+  es: proyectosBaseUrl('es'),
+  en: proyectosBaseUrl('en'),
+};
+
 const data = await getProjectListing({
   locale,
   searchParams: Astro.url.searchParams,
 });
-
-const localeUrls = {
-  es: proyectosBaseUrl('es'),
-  en: proyectosBaseUrl('en'),
-};
 ---
 
 <Layout
-  title={locale === 'en' ? 'Projects — GussWare' : 'Proyectos — GussWare'}
-  description={
-    locale === 'en'
-      ? 'Explore the technology solutions, enterprise platforms, and digital products our community of freelance specialists has designed and built for clients across industries.'
-      : 'Explora las soluciones tecnológicas, plataformas empresariales y productos digitales que nuestra comunidad de especialistas freelance ha diseñado y desarrollado para clientes en diversos sectores.'
-  }
-  localeUrls={localeUrls}
+  title={seoData.title || 'Proyectos — GussWare'}
+  description={seoData.description}
+  localeUrls={alternateUrls}
   lang={locale}
+  {...(seoData.yoast
+    ? {
+        seo: {
+          lang: locale,
+          yoast: seoData.yoast,
+          alternateUrls,
+          languages: undefined,
+        },
+      }
+    : {})}
 >
   <ProjectListView locale={locale} {...data} />
 </Layout>
