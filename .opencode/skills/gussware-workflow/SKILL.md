@@ -216,6 +216,33 @@ Verificar obligatoriamente:
 
 Una rama de trabajo nueva sin rama remota correspondiente debe permanecer sin upstream hasta su primer push autorizado.
 
+### Preparación de archivos de entorno
+
+Después de crear un worktree y antes de ejecutar pruebas o builds:
+
+1. Identificar los archivos de entorno que utiliza el proyecto (`.env`, `.env.local`, `.env.development`, `.env.staging`, `.env.production`, entre otros).
+2. Comprobar cuáles existen en el nuevo worktree.
+3. Comprobar si esos archivos existen en el worktree principal del mismo repositorio.
+4. Si existen en el worktree principal y faltan en el nuevo:
+   - Copiar los archivos faltantes conservando sus permisos.
+   - No sobrescribir archivos que ya existan en el worktree de destino.
+   - No copiar archivos que no correspondan al proyecto o que sean generados temporalmente.
+5. Si un archivo no existe en ninguno de los dos worktrees, informar de su ausencia. No crear archivos `.env` vacíos ni inventar valores.
+6. No mostrar, imprimir, registrar ni incluir en reportes el contenido de los archivos o sus secretos.
+7. Verificar que los archivos copiados estén excluidos de Git y que no aparezcan como cambios versionables.
+8. Nunca agregar archivos `.env` al repositorio, commits o pull requests.
+
+### Verificación independiente de servicios
+
+La preparación de archivos `.env` no sustituye la comprobación de servicios externos o locales.
+
+Antes de ejecutar pruebas de integración:
+
+* Identificar si requieren un servidor local, por ejemplo `localhost:4321`.
+* Comprobar que el servidor esté respondiendo desde el mismo entorno de ejecución de las pruebas.
+* Si no responde, informar el problema y no atribuir automáticamente los fallos a la ausencia de variables de entorno.
+* Distinguir las pruebas unitarias de las pruebas de integración cuando el proyecto lo permita.
+
 Si la rama de trabajo ya existe (local o remota), no recrearla ni cambiarla de base automáticamente. Inspeccionar su estado (divergencia, contenido, upstream) y aplicar el procedimiento seguro correspondiente (§6, §8, §9) antes de modificar archivos.
 
 ---
