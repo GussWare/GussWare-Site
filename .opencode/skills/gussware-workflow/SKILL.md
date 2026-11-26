@@ -47,10 +47,9 @@ Sin ID Jira explícito en la solicitud, continuar con §1.
 
 ## 1. Initial Verification
 
-Antes de realizar operaciones Git, actualizar referencias y verificar el estado actual (paso obligatorio, no opcional):
+Antes de realizar operaciones Git, verificar primero el estado local y después actualizar referencias remotas (paso obligatorio, no opcional):
 
 ```bash
-git fetch origin
 pwd
 git status --short --branch
 git branch --show-current
@@ -58,11 +57,13 @@ git branch -vv
 git worktree list
 git remote -v
 git rev-parse --abbrev-ref --symbolic-full-name '@{upstream}'
+git fetch origin
+git rev-parse origin/develop
 ```
 
 Nunca asumir que el upstream configurado es correcto ni que las referencias remotas están actualizadas.
 
-No sobrescribir, descartar ni incorporar automáticamente cambios existentes. Si el estado es ambiguo, hay cambios que puedan verse afectados o existe una condición insegura (conflictos, árbol sucio inesperado, upstream incorrecto, referencias desactualizadas), detenerse y explicar el problema antes de modificar archivos.
+No sobrescribir, descartar ni incorporar automáticamente cambios existentes. Si el estado es ambiguo, hay cambios que puedan verse afectados o existe una condición insegura (conflictos, árbol sucio inesperado, upstream incorrecto, referencias desactualizadas), detenerse y explicar el problema antes de modificar archivos. El `fetch` no autoriza por sí mismo a combinar, restaurar, limpiar o descartar cambios.
 
 ---
 
@@ -165,8 +166,10 @@ Solo `staging` y `main` pueden publicar en un servidor:
 * `main` publica en el Environment de producción;
 * ningún job puede publicar desde `develop`.
 
-El check estable de CI (actualmente `Build estático y pruebas`) debe
-ser required check en `develop`, `staging` y `main`. Los jobs de
+El check estable de CI configurado en cada rama debe ser un required
+check en `develop`, `staging` y `main`. Antes de reportar o fusionar,
+consultar el nombre y estado reales de los checks del PR y de la rama;
+no asumir un nombre fijo. Los jobs de
 despliegue no deben ser required checks de Pull Requests cuando esos
 jobs no se ejecutan intencionalmente en Pull Requests.
 
@@ -393,9 +396,13 @@ commit
       ↓
 push
       ↓
-transicionar Jira al estado correspondiente (si aplica, §17)
+mantener Jira en `En curso` durante commit, push y PR
       ↓
       Pull Request de la rama de tarea a `develop`
+      ↓
+      required checks y validación técnica
+      ↓
+transicionar Jira al estado correspondiente (si aplica, §17)
       ↓
       `develop`
       ↓ PR de promoción
@@ -592,19 +599,33 @@ Determinar primero si pertenecen a la tarea actual.
 
 Si no puede determinarse con seguridad, detenerse y solicitar instrucciones.
 
+### Separación de cambios mezclados
+
+Si el worktree contiene cambios de varias tarjetas o tareas:
+
+1. No crear un commit con el conjunto completo ni limpiar el árbol automáticamente.
+2. Enumerar archivos rastreados, no rastreados y el diff de cada grupo.
+3. Clasificar cada grupo por tarjeta usando contenido, historial y ramas existentes; no inferir la tarjeta solo por el nombre del archivo.
+4. Crear un respaldo verificable del diff y de los archivos no rastreados antes de mover o restaurar cualquier cosa.
+5. Transferir cada grupo al worktree y branch correctos mediante un parche revisado.
+6. Verificar el estado y el diff de cada worktree antes de hacer commit.
+7. Para limpiar o alinear el worktree original, solicitar autorización explícita y conservar el respaldo hasta confirmar la recuperación.
+
 ---
 
 ## 17. Completion Checklist
 
-Si el flujo incluyó tarjeta Jira, solo después de que todas las
-validaciones pasaron: transicionarla al estado correspondiente según
+Si el flujo incluyó tarjeta Jira, mantenerla en `En curso` hasta que la
+implementación, el commit, el push, la PR y los checks requeridos estén
+verificados. Solo después de que todas las validaciones pasaron,
+transicionarla al estado correspondiente según
 el tipo de tarjeta (ver [reference.md](reference.md)). Si esa
 transición no existe para la tarjeta, no inventar otra ni cambiar a
 otro estado: informarlo en el reporte.
 
 Reglas de estado:
 
-* Subtarea de desarrollo terminada y validada por el desarrollador →
+* Subtarea de desarrollo terminada, publicada en su PR y validada por el desarrollador →
   `Tarea terminada`. Solo pasa a `Listo para pruebas` cuando su cambio
   ya fue desplegado en staging, y a `Listo` después de la aprobación de
   QA. Antes de cambiar el estado debe existir el commit correspondiente
@@ -616,7 +637,7 @@ Reglas de estado:
   aunque la implementación se realice específicamente sobre la
   subtarea. Una tarea principal nunca permanece en `Por hacer`
   mientras sus subtareas ya están siendo ejecutadas.
-* Tarea principal completamente implementada y validada por el
+* Tarea principal completamente implementada, publicada y validada por el
   desarrollador → `Tarea terminada`. No moverla a ese estado solamente
   porque terminó una subtarea: su trabajo propio y todas las subtareas
   necesarias deben estar terminados. Después de un despliegue exitoso
@@ -725,7 +746,7 @@ Antes de finalizar:
   `develop` → `staging` y después `staging` → `main`.
 * [ ] La rama destino y el tipo de ejecución (PR, push o manual) fueron
   verificados explícitamente.
-* [ ] El required check de CI terminó correctamente en la rama destino.
+* [ ] Se consultaron los checks reales y el required check configurado terminó correctamente en la rama destino.
 * [ ] Si hubo despliegue, el Environment y el resultado del job de
   publicación fueron verificados.
 * [ ] Si no hubo despliegue por diseño, quedó indicado como no aplicable.
@@ -782,7 +803,7 @@ Este checklist asegura que todos los pasos obligatorios del flujo de trabajo se 
 * [ ] **Diff revisado**: Se revisó `git status`, `git diff` y `git diff --stat` antes del commit (§11).
 * [ ] **Commit enviado a origin**: El commit fue enviado a `origin/<branch-name>` (§13, §14).
 * [ ] **Pull Request con base develop**: La PR apunta a `develop` con head en la rama de la tarea (§14).
-* [ ] **Validación CI exitosa**: El required check de CI (`Build estático y pruebas`) terminó correctamente en la rama destino (§10, §14).
+* [ ] **Validación CI exitosa**: Se consultaron los checks reales del PR y el required check configurado para la rama destino terminó correctamente; no asumir un nombre fijo (§10, §14).
 * [ ] **Despliegue verificado**: Si corresponde, el despliegue a staging o main fue exitoso y verificado (§10).
 * [ ] **Checklist de cierre completado**: Todos los ítems del §17 Checklist están marcados (worktree, branch, upstream, diff, commit, PR, estado Jira, comentario Jira).
 * [ ] **No se modificaron branches ajenos**: No se modificaron branches o worktrees de otras tareas (§15, §16).
@@ -792,14 +813,14 @@ Este checklist asegura que todos los pasos obligatorios del flujo de trabajo se 
 #### CASO 1: Jira no disponible o sin acceso MCP
 Si el MCP de Atlassian no está disponible o no se puede consultar la tarjeta:
 1. Detener todas las operaciones Git relacionadas con la tarea.
-2. Anotar en el reporte: "MCP de Atlassian no disponible, se proceeded con flujo asumiendo criterios estándar de RGW-377".
+2. Anotar en el reporte: "MCP de Atlassian no disponible; no se realizaron modificaciones, commits, pushes ni PR".
 3. Documentar la imposibilidad en el campo `Jira:` del reporte final (§18).
 4. Solicitar intervención humana para acceder a Jira antes de continuar.
 
 #### CASO 2: Tarjeta Jira en estado "Por hacer"
 Si la tarjeta Jira está en `Por hacer`:
 1. **No modificar archivos, crear commits, hacer push ni abrir una PR.**
-2. Listar las transiciones reales con `listJiraIssueTransitions`.
+2. Listar las transiciones reales con `getTransitionsForJiraIssue`.
 3. Aplicar la transición a `En curso` con `transitionJiraIssue` (por `transitionId`, nunca por nombre inventado).
 4. Si esa transición no existe: no usar otra transición ni cambiar a otro estado; informarlo en el reporte.
 5. Solo después de que la tarjeta esté en `En curso`, continuar con la implementación.
@@ -811,7 +832,7 @@ Si el branch muestra `...origin/develop` como upstream:
 3. Si la rama remota corresponde a la esperada, corregir el upstream mediante `git push -u origin <branch-name>`.
 4. Si existen divergencias o contenido diferente, detenerse y diagnosticar antes de hacer push.
 5. **Nunca** sobrescribir el remoto para solucionar un upstream incorrecto.
-6. Usar `--force` ni `--force-with-lease` como solución predeterminada. Solo con instrucción explícita y destino verificado.
+6. **No usar** `--force` ni `--force-with-lease` como solución predeterminada. Solo podrían ejecutarse con instrucción explícita y destino verificado.
 
 #### CASO 4: Divergencia inesperada después fetch
 Si el fetch revela divergencia, commits inesperados, upstream incorrecto:
