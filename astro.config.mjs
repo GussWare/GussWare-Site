@@ -23,17 +23,24 @@ import { sitemapSerialize } from './src/lib/sitemap-lastmod.mjs';
  * Los archivos por modo tienen prioridad sobre `.env`, que Astro/Vite
  * carga siempre y que aporta las variables comunes (credenciales).
  */
-function resolveMode() {
-  const args = process.argv.slice(2);
-  const modeIndex = args.indexOf('--mode');
+/**
+ * Resuelve el modo de Astro (`development`, `staging`, `production`).
+ *
+ * El modo predeterminado es `development`. `production` y `staging`
+ * deben seleccionarse explícitamente mediante `--mode`.
+ *
+ * @param {string[]} [argv] Argumentos de línea de comandos. Por defecto
+ *   se usa `process.argv.slice(2)`. Se expone para hacer la función
+ *   testeable sin depender del argv del proceso actual.
+ */
+export function resolveMode(argv = process.argv.slice(2)) {
+  const modeIndex = argv.indexOf('--mode');
 
-  if (modeIndex !== -1 && args[modeIndex + 1]) {
-    return args[modeIndex + 1];
+  if (modeIndex !== -1 && argv[modeIndex + 1]) {
+    return argv[modeIndex + 1];
   }
 
-  const command = args.find((arg) => !arg.startsWith('-'));
-
-  return command === 'dev' ? 'development' : 'production';
+  return 'development';
 }
 
 // Variables de entorno (proceso gana sobre `.env`): única fuente para
