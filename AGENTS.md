@@ -9,7 +9,8 @@ GussWare Site is a headless WordPress + Astro website.
 * Styling: Tailwind CSS
 * Content source: WordPress REST API
 * Design sources: Stitch / Penpot when explicitly referenced
-* Integration branch: `origin/staging`
+* Task integration branch: `origin/develop`
+* Staging promotion branch: `origin/staging`
 
 ---
 
@@ -67,7 +68,7 @@ Fundamental rules:
 * Never work directly on `staging` or `develop`.
 * Task branches originate from `origin/develop`.
 * A task branch must track its corresponding remote task branch.
-* Pull Requests from task branches target `origin/develop`.
+* Pull Requests from task branches target `develop`.
 * Promotion Pull Requests follow `develop` → `staging` → `main`.
 * Promotion Pull Requests do not require a new task branch or worktree.
 * Never perform destructive Git operations without explicit instruction.

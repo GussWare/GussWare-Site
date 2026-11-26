@@ -51,8 +51,9 @@ aquí solo el cómo con el MCP de Atlassian.
 
 1. Resolver `cloudId` una vez por sesión con
    `getAccessibleAtlassianResources` y reutilizarlo.
-2. Leer con `getJiraIssue` (`issueIdOrKey: <ID>`, `view: evidence`):
-   Summary, Description, Status y Acceptance Criteria (si existe).
+2. Leer con `getJiraIssue` (`issueIdOrKey: <ID>`, solicitando los campos
+   disponibles de la incidencia): Summary, Description, Status y
+   Acceptance Criteria dentro de la descripción (si existe).
 3. Sin MCP, sin acceso o tarjeta inexistente: detenerse y avisar (§0.4).
 
 ## Tarea principal en curso durante subtareas (§17)
@@ -61,7 +62,7 @@ aquí solo el cómo con el MCP de Atlassian.
    principal (`fields.parent` de la subtarea con `getJiraIssue`) y
    verificar su estado (`fields.status`).
 2. Si la tarea principal no está en `En curso`, listar sus transiciones
-   reales con `listJiraIssueTransitions` y aplicar la transición a
+   reales con `getTransitionsForJiraIssue` y aplicar la transición a
    `En curso` con `transitionJiraIssue` (por `transitionId`, nunca por
    nombre inventado).
 3. Si esa transición no existe: no usar otra transición ni cambiar a
@@ -137,22 +138,22 @@ Para reabrir trabajo observado:
    `Listo`, devolver esa tarjeta a `En curso`. Tras corregir y validar
    de nuevo por el desarrollador, volver a `Tarea terminada` y
    continuar el flujo de staging y QA.
-5. Listar transiciones reales con `listJiraIssueTransitions`.
+5. Listar transiciones reales con `getTransitionsForJiraIssue`.
 6. Si existe la transición al estado destino, aplicarla con
-   `transitionJiraIssue` (por `transitionId`, nunca por nombre
-   inventado).
+   `transitionJiraIssue` pasando `{ transition: { id: <transitionId> } }`;
+   nunca usar un nombre inventado.
 7. Si no existe para esa tarjeta: no usar otra transición ni cambiar
    a otro estado; informarlo en el campo `Jira:` del reporte (§18).
 
 ## Comentario obligatorio en Jira (§17)
 
-1. Con `addOrEditJiraIssueComment` (`issueIdOrKey: <ID>`) agregar el
-   comentario resumido en la subtarea o tarea principal terminada
-   (o tras corregir observaciones, agregar/actualizarlo).
+1. Con `addCommentToJiraIssue` (`issueIdOrKey: <ID>`) agregar el
+   comentario resumido en la subtarea o tarea principal terminada.
+   Para actualizar uno existente, pasar su `commentId` explícito.
 2. Contenido breve: qué se realizó; resultado; validaciones
    ejecutadas; commit relacionado, cuando corresponda.
 3. Comentario de resumen en la tarjeta padre (cierre de tareas con
-   subtareas): con `addOrEditJiraIssueComment`
+   subtareas): con `addCommentToJiraIssue`
    (`issueIdOrKey: <ID-padre>`) agregar el comentario consolidado
    solo cuando todas las subtareas necesarias hayan terminado y la
    tarea padre esté completamente validada. Contenido mínimo:
